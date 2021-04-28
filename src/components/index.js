@@ -1,4 +1,4 @@
-import React from 'react'
+import React , { useEffect } from 'react'
 import DarkModeToggle from './DarkModeToggle'
 
 // import Header from './Header'
@@ -8,8 +8,12 @@ import Features from './Features'
 import Footer from './Footer'
 
 import IndexStyles from './styles/IndexStyles'
+import Section from './Sections'
 
 const Home = ({ themeToggler, theme }) => {
+  useEffect(() => {
+    console.log(theme)
+  })
   return (
     <div {...{ className: IndexStyles }}>
       <div className="navbar">
@@ -18,6 +22,7 @@ const Home = ({ themeToggler, theme }) => {
       <HomeContent {...{ theme }} />
       <Search {...{ theme }} />
       <Features {...{ theme }} />
+      <Section {...{theme}} />
       <Footer {...{ theme }} />
     </div>
   )

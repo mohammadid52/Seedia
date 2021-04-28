@@ -8,6 +8,151 @@ const HeaderStyles = css`
   .right-header-column,
   .left-header-column {
   }
+  .my-rms > li > a:hover{
+    border-left:4px solid #d63384;
+    padding-left:8px;
+
+
+  }
+  .neon-red {
+    --neon: #FF5161;
+    --neon-glow: #D30302;
+    position:relative;
+  }
+  
+  .drakneon{
+    color:white;
+    position:absolute;
+    bottom:-16px;
+    left:11px;
+    font-size:2rem;
+  }
+  
+  .neon-pink {
+    --neon: #FF53cd;
+    --neon-glow: #e10361;
+  }
+  
+  .neon-purple {
+    --neon: #9461fd;
+    --neon-glow: #4003e6;
+  }
+  
+  .neon-blue {
+    --neon: #2dd9fe;
+    --neon-glow: #00a3d5;
+  }
+  
+  .neon-green {
+    --neon: #00fe9b;
+    --neon-glow: #02c435;
+  }
+  
+  .neon-yellow {
+    --neon: #ffdb4e;
+    --neon-glow: #b48505;
+  }
+  
+  .neon-white {
+    --neon: #fefefe;
+    --neon-glow: #ffffff;
+  }
+  
+  @media (dynamic-range: high) {
+    .neon-red {
+      --neon-glow: color(display-p3 1 0 0);
+    }
+  
+    .neon-pink {
+      --neon-glow: color(display-p3 1 0 1);
+    }
+  
+    .neon-purple {
+      --neon-glow: color(display-p3 0 0 1);
+    }
+  
+    .neon-blue {
+      --neon-glow: color(display-p3 0 1 1);
+    }
+  
+    .neon-green {
+      --neon-glow: color(display-p3 0 1 0);
+    }
+  
+    .neon-yellow {
+      --neon-glow: color(display-p3 1 1 0);
+    }
+  
+    .neon-white {
+      --neon-glow: color(display-p3 1 1 1);
+    }
+  }
+  
+  .ring {
+    border: 5px solid var(--neon);
+    box-shadow: 
+      0 0 50px var(--neon-glow), 
+      inset 0 0 60px var(--neon-glow);
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    position: relative;
+    box-sizing: border-box;
+    margin-bottom: 100px;
+  }
+  
+  .power-btn{
+    display: flex;
+    justify-content: space-evenly;
+
+    height: 45px;
+
+  }
+  
+  
+  
+  html {
+    block-size: 100%;
+    inline-size: 100%;
+    background-color: hsl(0 0% 5%);
+  }
+  
+  body {
+    min-block-size: 100%;
+    min-inline-size: 100%;
+    margin: 0;
+    padding: 5vmin;
+    box-sizing: border-box;
+    display: flex;
+    gap: 5vmin;
+    flex-wrap: wrap;
+    place-content: center;
+    font-family: system-ui;
+  }
+  #dark{
+    background: #262d31 !important;
+    color:white;
+  }
+  #dark > li >a{
+    color:white;
+  }
+  #dark > div > li >.dropdown-item{
+    color:white;
+  }
+  .dropdown-menu{
+    box-shadow: 2px 2px 80px #cbcbcb!important;
+    border: none!important;
+  }
+  .darkto{
+    width: 207px;
+  }
+  .dark-mode-toggle{
+    align-items: center;
+    display: flex;
+    height: 72px;
+    justify-content: center;
+
+  }
   .header-container {
     // background-color: #fff;
     min-height: 60px !important;

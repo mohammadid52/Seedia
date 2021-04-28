@@ -2,6 +2,8 @@ import React, { Fragment } from 'react'
 import { Col } from 'reactstrap'
 import useDarkMode from 'use-dark-mode'
 
+
+
 import Toggle from './Toggle'
 
 import { RiShoppingCart2Line } from 'react-icons/ri'
@@ -10,6 +12,7 @@ import { FaRegBell } from 'react-icons/fa'
 import { AiOutlineHome } from 'react-icons/ai'
 import { BsPeople } from 'react-icons/bs'
 import { CgWorkAlt } from 'react-icons/cg'
+
 
 import { adjustColors, my13Rms } from '../values/values'
 
@@ -60,19 +63,12 @@ const Header = ({ themeToggler, theme }) => {
                       <a {...{ className: 'nav-link dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
                         Adjust Colors
                       </a>
-                      <ul {...{ className: 'dropdown-menu' }} aria-labelledby="navbarDropdown">
+                      <ul {...{ className:  'dropdown-menu darkto' }} {...{ id: theme }} aria-labelledby="navbarDropdown">
                         <div className="dark-mode-toggle">
-                          <li>
-                            <button {...{ className: 'dropdown-item', type: 'button' }} onClick={darkMode.disable}>
-                              ☀ Light
-                            </button>
-                          </li>
+                          
+                         
                           <Toggle {...{ checked: darkMode.value, onChange: darkMode.toggle, themeToggler }} />
-                          <li>
-                            <button {...{ className: 'dropdown-item', type: 'button' }} onClick={darkMode.enable}>
-                              ☾ Dark
-                            </button>
-                          </li>
+                          
                         </div>
                         <li>
                           <hr {...{ className: 'dropdown-divider' }} />
@@ -85,12 +81,11 @@ const Header = ({ themeToggler, theme }) => {
                           </span>
                           <div {...{ className: 'power-btn' }}>
                             <span {...{ style: { display: 'inline-grid' } }}>
-                              <img {...{ alt: '', src: off, style: { width: '1.5rem', height: '1.5rem', marginRight: '45px', cursor: 'pointer' } }} />
-                              <span {...{ className: 'power', style: { marginRight: '45px' } }} />
+                            <div {...{ style: {  cursor: 'pointer' } }} className='ring neon-red' onClick={darkMode.disable}></div>
                             </span>
                             <span {...{ style: { display: 'inline-grid' } }}>
-                              <img {...{ alt: '', src: on, style: { width: '1.5rem', height: '1.5rem', cursor: 'pointer' } }} />
-                              <span {...{ className: 'power' }} />
+                            <div {...{ style: {  cursor: 'pointer' } }} className='ring neon-green' onClick={darkMode.enable}></div>
+                              
                             </span>
                           </div>
                         </li>
@@ -165,7 +160,7 @@ const Header = ({ themeToggler, theme }) => {
                       <a {...{ className: 'nav-link dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
                         Sell
                       </a>
-                      <ul {...{ className: 'dropdown-menu sell' }} aria-labelledby="navbarDropdown">
+                      <ul {...{ className: 'dropdown-menu sell' }} {...{ id: theme }} aria-labelledby="navbarDropdown">
                         <li>
                           <a {...{ className: 'dropdown-item', href: '/#' }}>Sell Products</a>
                         </li>
@@ -176,17 +171,19 @@ const Header = ({ themeToggler, theme }) => {
                       <a {...{ className: 'nav-link dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
                         {'My 13RMS'}
                       </a>
-                      <ul {...{ className: 'dropdown-menu end-0 my-rms' }} aria-labelledby="navbarDropdown">
+                      <ul {...{ className: 'dropdown-menu end-0 my-rms' }} {...{ id: theme }} aria-labelledby="navbarDropdown">
+                        
                         {my13Rms.map((item, key) => {
                           return (
                             <Fragment>
                               <li {...{ key }}>
-                                <a {...{ className: 'dropdown-item', href: '/#', key: item.name + key }}>
+                                <a {...{ className: 'dropdown-item rms-item', href: '/#', key: item.name + key }}>
+                                  
                                   {item.name + ' '}
                                   {item.count > 0 ? <span {...{ style: { fontWeight: 'bold' } }}> ({item.count})</span> : null}
                                 </a>
                               </li>
-                              {item.divider ? <hr {...{ className: 'dropdown-divider' }} /> : null}
+                              
                             </Fragment>
                           )
                         })}
@@ -197,7 +194,7 @@ const Header = ({ themeToggler, theme }) => {
                       <a {...{ className: 'nav-link dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
                         Sign In
                       </a>
-                      <ul {...{ className: 'dropdown-menu end-0 sign-in' }} aria-labelledby="navbarDropdown">
+                      <ul {...{ className: 'dropdown-menu end-0 sign-in' }} {...{ id: theme }}aria-labelledby="navbarDropdown">
                         <li>
                           <a {...{ className: 'dropdown-item', href: '/#' }}>Sign In</a>
                         </li>

@@ -16,6 +16,7 @@ const SearchStyles = css`
     width: 75%;
     height: 100%;
     border: none;
+    
   }
   .input-search:focus {
     outline: none !important;
@@ -30,6 +31,7 @@ const SearchStyles = css`
     padding: 14px;
     z-index: 1 !important;
     position: absolute;
+    box-shadow: 2px 2px 80px #cbcbcb;
   }
   .dropdown-menu input {
     margin-right: 8px;

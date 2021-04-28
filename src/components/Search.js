@@ -5,14 +5,29 @@ import SpeechRecognition from 'react-speech-recognition'
 import { compose, pure, lifecycle, withHandlers, withState } from 'recompose'
 import { productsArray, departmentsArray } from '../values/values'
 
+import { withStyles, makeStyles } from '@material-ui/core/styles'
+import Tooltip from '@material-ui/core/Tooltip'
+import Typography from '@material-ui/core/Typography'
+
 import voice from './../public/assets/voice.png'
 import search from './../public/assets/search.png'
 import usa from './../public/assets/countries/usa.png'
 
 import SearchStyles from './styles/SearchStyles'
 
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip)
+
 const Search = ({ theme, product, changeProduct, changeDepartment, voiceSearch, handleChange, text, department, voiceActivated }) => {
   const searchPlaceHolder = ['products', 'bulk'].indexOf(product.value) !== -1 ? 'Search' : 'Find a'
+  
   return (
     <Fragment>
       <Container {...{ className: SearchStyles }}>
@@ -20,8 +35,21 @@ const Search = ({ theme, product, changeProduct, changeDepartment, voiceSearch, 
           <nav {...{ className: 'navbar navbar-expand-lg navbar-light' }}>
             <div {...{ className: 'container-fluid' }}>
               <div {...{ className: 'collapse navbar-collapse search-panel', id: 'navbarSupportedContent' }}>
-                <Col {...{ md: { size: 6 }, lg: { size: 2 }, sm: { size: 3 }, className: 'column mb-md-3 mb-lg-0 product' }}>
-                  <Select
+              <HtmlTooltip
+        title={
+          <React.Fragment>
+            
+            <p class="p1"><span class="s1"><strong>Bulk items<br /> </strong></span>Bulk items are items that are offered in large numbers.</p>
+<p class="p1"><span class="s1"><strong>Commercial agent<br /> </strong></span>A commercial agent acts on your company's behalf.<span class="s1"><strong><br /> </strong></span>Find a commercial agent abroad to sell your products abroad.</p>
+<p class="p1"><span class="s1"><strong>Distributor<br /> </strong></span>A distributor acts for its own account and risk.<span class="s1"><strong><br /> </strong></span>Find a distributor who wants to buy your products.</p>
+<p class="p1"><span class="s1"><strong>Manufacturer<br /> </strong></span>A manufacturer is a company that produces goods.<span class="s1"><strong><br /> </strong></span>Find a manufacturer who wants to produce your product.</p>
+<p class="p1"><span class="s1"><strong>Supplier<br /> </strong></span>A supplier provides goods or services in exchange for money.<span class="s1"><strong><br /> </strong></span>Find a supplier who sells your products for your webshop, for example</p>
+          </React.Fragment>
+        }
+        placement='left'  disableTouchListener
+      >
+          <Col {...{ md: { size: 6 }, lg: { size: 2 }, sm: { size: 3 }, className: 'column mb-md-3 mb-lg-0 product' }}>
+                   <Select
                     {...{
                       className: 'highlite-area search-area products',
                       value: product,
@@ -31,7 +59,10 @@ const Search = ({ theme, product, changeProduct, changeDepartment, voiceSearch, 
                     }}
                   />
                 </Col>
-                <Col {...{ md: { size: 6 }, lg: { size: 6 }, sm: { size: 2 }, className: 'column mb-md-3 mb-lg-0 input-box' }}>
+                
+        
+      </HtmlTooltip>
+              <Col {...{ md: { size: 6 }, lg: { size: 6 }, sm: { size: 2 }, className: 'column mb-md-3 mb-lg-0 input-box' }}>
                   <div
                     {...{
                       className: 'highlite-area search-area item search-place-holder',

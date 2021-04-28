@@ -5,10 +5,13 @@ import ToggleStyles from './styles/ToggleStyles'
 const Toggle = ({ checked, onChange }) => {
   return (
     <span {...{ className: ToggleStyles + ' toggle-control' }}>
-      <label className="switch">
-        <input type="checkbox" checked={checked} onChange={onChange} id="dmcheck" />
-        <span className="slider round"></span>
-      </label>
+       <div className='switch'>
+        <input type='checkbox' className='switch__input' id='Switch' checked={checked} onChange={onChange} />
+        <label className='switch__label' for='Switch'>
+            <span className='switch__indicator'></span>
+            <span className='switch__decoration'></span>
+        </label>
+    </div>
     </span>
   )
 }
