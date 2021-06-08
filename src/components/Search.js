@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import { Row, Col, Container } from 'reactstrap'
+import useDarkMode from 'use-dark-mode'
 import Select from 'react-select'
 import SpeechRecognition from 'react-speech-recognition'
 import { compose, pure, lifecycle, withHandlers, withState } from 'recompose'
@@ -15,18 +16,30 @@ import usa from './../public/assets/countries/usa.png'
 
 import SearchStyles from './styles/SearchStyles'
 
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: 220,
-    fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9',
-  },
-}))(Tooltip)
+
 
 const Search = ({ theme, product, changeProduct, changeDepartment, voiceSearch, handleChange, text, department, voiceActivated }) => {
   const searchPlaceHolder = ['products', 'bulk'].indexOf(product.value) !== -1 ? 'Search' : 'Find a'
+  const darkMode = useDarkMode(false)
+  var color,textColor
+  if(theme=='dark'){
+    color = '#262d31'
+    textColor = '#fff'
+  }else{
+    color='#f5f5f9'
+    textColor = 'rgba(0, 0, 0, 0.87)'
+  }
+  console.log(color)
+
+  const HtmlTooltip = withStyles((theme) => ({
+    tooltip: {
+      backgroundColor: color,
+      color: textColor,
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(12),
+      border: '1px solid #dadde9',
+    },
+  }))(Tooltip)
   
   return (
     <Fragment>
@@ -36,17 +49,17 @@ const Search = ({ theme, product, changeProduct, changeDepartment, voiceSearch, 
             <div {...{ className: 'container-fluid' }}>
               <div {...{ className: 'collapse navbar-collapse search-panel', id: 'navbarSupportedContent' }}>
               <HtmlTooltip
-        title={
-          <React.Fragment>
-            
-            <p class="p1"><span class="s1"><strong>Bulk items<br /> </strong></span>Bulk items are items that are offered in large numbers.</p>
-<p class="p1"><span class="s1"><strong>Commercial agent<br /> </strong></span>A commercial agent acts on your company's behalf.<span class="s1"><strong><br /> </strong></span>Find a commercial agent abroad to sell your products abroad.</p>
-<p class="p1"><span class="s1"><strong>Distributor<br /> </strong></span>A distributor acts for its own account and risk.<span class="s1"><strong><br /> </strong></span>Find a distributor who wants to buy your products.</p>
-<p class="p1"><span class="s1"><strong>Manufacturer<br /> </strong></span>A manufacturer is a company that produces goods.<span class="s1"><strong><br /> </strong></span>Find a manufacturer who wants to produce your product.</p>
-<p class="p1"><span class="s1"><strong>Supplier<br /> </strong></span>A supplier provides goods or services in exchange for money.<span class="s1"><strong><br /> </strong></span>Find a supplier who sells your products for your webshop, for example</p>
-          </React.Fragment>
-        }
-        placement='left'  disableTouchListener
+                title={
+                  <React.Fragment>
+                    
+                    <p class="p1"><span class="s1"><strong>Bulk items<br /> </strong></span>Bulk items are items that are offered in large numbers.</p>
+        <p class="p1"><span class="s1"><strong>Commercial agent<br /> </strong></span>A commercial agent acts on your company's behalf.<span class="s1"><strong><br /> </strong></span>Find a commercial agent abroad to sell your products abroad.</p>
+        <p class="p1"><span class="s1"><strong>Distributor<br /> </strong></span>A distributor acts for its own account and risk.<span class="s1"><strong><br /> </strong></span>Find a distributor who wants to buy your products.</p>
+        <p class="p1"><span class="s1"><strong>Manufacturer<br /> </strong></span>A manufacturer is a company that produces goods.<span class="s1"><strong><br /> </strong></span>Find a manufacturer who wants to produce your product.</p>
+        <p class="p1"><span class="s1"><strong>Supplier<br /> </strong></span>A supplier provides goods or services in exchange for money.<span class="s1"><strong><br /> </strong></span>Find a supplier who sells your products for your webshop, for example</p>
+                  </React.Fragment>
+                }
+                placement='left'  disableTouchListener
       >
           <Col {...{ md: { size: 6 }, lg: { size: 2 }, sm: { size: 3 }, className: 'column mb-md-3 mb-lg-0 product' }}>
                    <Select
@@ -101,7 +114,7 @@ const Search = ({ theme, product, changeProduct, changeDepartment, voiceSearch, 
                       <a {...{ className: 'nav-link dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
                         <img {...{ alt: '', src: usa, style: { width: '2rem', height: '2rem' } }} />
                       </a>
-                      <ul {...{ className: 'dropdown-menu end-0 left-auto' }} aria-labelledby="navbarDropdown">
+                      <ul {...{ className: 'dropdown-menu end-0 left-auto' }} {...{ id: theme }} aria-labelledby="navbarDropdown">
                         <li {...{ className: 'nav-item' }}>
                           <span {...{ style: { marginRight: '45px', fontWeight: 'bold' } }}>Change language </span>
                           <span {...{ style: { cursor: 'pointer' }, className: 'pointer-span' }}>Learn more</span>

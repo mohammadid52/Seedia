@@ -4,7 +4,30 @@ const HeaderStyles = css`
    {
     width: 100%;
   }
+  .rms-item{
+    padding:0px!important;
+  }
+  .flex{
+    display:flex;
+    justify-content: space-evenly;
+    align-items: center;
+  
+  }
 
+  .iconmenu{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding:12px;
+  }
+  
+  .iconmenu span{
+    font-weight: bold!important;
+  }
+  .iconmenu:hover span{
+    color:#dc3545;
+
+  }
   .right-header-column,
   .left-header-column {
   }
@@ -140,8 +163,8 @@ const HeaderStyles = css`
     color:white;
   }
   .dropdown-menu{
-    box-shadow: 2px 2px 80px #cbcbcb!important;
-    border: none!important;
+   
+    border: 1px solid gray!important;
   }
   .darkto{
     width: 207px;
@@ -313,7 +336,8 @@ const HeaderStyles = css`
   .my-rms {
     margin-left: -120px;
     position: absolute;
-    width: 225px;
+    width: 255px!important;
+    padding:14px!important;
   }
   .sign-in {
     margin-left: -100px;

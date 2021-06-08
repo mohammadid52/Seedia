@@ -47,6 +47,16 @@ const LocationStyles = css`
     font-size: 12px !important;
     color: #525452 !important;
   }
+  #dark{
+    background: #262d31 !important;
+    color:white;
+  }
+  #dark > li >a{
+    color:white;
+  }
+  #dark > div > li >.dropdown-item{
+    color:white;
+  }
 `
 
 export default LocationStyles

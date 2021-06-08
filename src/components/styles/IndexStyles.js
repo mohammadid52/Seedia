@@ -1,6 +1,312 @@
 import { css } from 'emotion'
 
 const IndexStyles = css`
+{
+  width: 100%;
+}
+.rms-item{
+  padding:0px!important;
+}
+.flex{
+  display:flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+}
+.my-rms {
+  margin-left: -120px;
+  position: absolute;
+  width: 255px!important;
+  padding:14px!important;
+}
+
+.iconmenu{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:12px;
+}
+
+.iconmenu span{
+  font-weight: bold!important;
+}
+.iconmenu:hover span{
+  color:#dc3545;
+
+}
+.right-header-column,
+.left-header-column {
+}
+.my-rms > li > a:hover{
+  border-left:4px solid #d63384;
+  padding-left:8px;
+
+
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin-top: -12px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+.padding-top{
+  padding-top:40px;
+}
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 20px;
+  width: 20px;
+  left: 1px;
+  bottom: 0px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+  top: 13px;
+  width: 50px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+  height: 21px;
+  width: 22px;
+}
+.switch {
+  display: inline-block;
+  position: relative;
+}
+
+.switchinput {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}
+
+.switchlabel {
+margin-left:-14px;
+position: relative;
+display: inline-block;
+width: 80px;
+height: 42px;
+background-color: #2B2B2B;
+border: 5px solid #5B5B5B;
+border-radius: 9999px;
+cursor: pointer;
+-webkit-transition: all 0.4s cubic-bezier(.46,.03,.52,.96);
+transition: all 0.4s cubic-bezier(.46,.03,.52,.96);
+}
+
+.switchindicator {
+position: absolute;
+  top: 50%;
+  left: 51%;
+  -webkit-transform: translate(-50%,-50%) translateX(-72%);
+  -ms-transform: translate(-50%,-50%) translateX(-72%);
+  -webkit-transform: translate(-50%,-50%) translateX(-72%);
+  -ms-transform: translate(-50%,-50%) translateX(-72%);
+  transform: translate(-50%,-50%) translateX(-72%);
+  display: block;
+  width: 26px;
+  height: 26px;
+  background-color: #7B7B7B;
+  border-radius: 9999px;
+  box-shadow: 10px 0px 0 0 rgba(#000000,0.2) inset;
+
+  &::before,
+  &::after {
+      position: absolute;
+      content: '';
+      display: block;
+      background-color: #FFFFFF;
+      border-radius: 9999px;
+  }
+
+  &::before {
+      top: 7px;
+      left: 7px;
+      width: 9px;
+      height: 9px;
+      background-color: #FFFFFF;
+      opacity: 0.6;
+  }
+
+  &::after {
+      bottom: 8px;
+      right: 6px;
+      width: 6px;
+      height: 6px;
+      background-color: #FFFFFF;
+      opacity: 0.8;
+  }
+}
+
+.switchdecoration {
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  display: block;
+  width: 5px;
+  height: 5px;
+  background-color: #FFFFFF;
+  border-radius: 9999px;
+  animation: twinkle 0.8s infinite -0.6s;
+
+  &::before,
+  &::after {
+      position: absolute;
+      display: block;
+      content: '';
+      width: 5px;
+      height: 5px;
+      background-color: #FFFFFF;
+      border-radius: 9999px;
+  }
+
+  &::before {
+      top: -20px;
+      left: 10px;
+      opacity: 1;
+      animation: twinkle 0.6s infinite;
+  }
+
+  &::after {
+      top: -7px;
+      left: 30px;
+      animation: twinkle 0.6s infinite -0.2s;
+  }
+}
+
+@keyframes twinkle {
+  50% { opacity: 0.2; }
+}
+
+.switchindicator {
+  &,
+  &::before,
+  &::after {
+      transition: all 0.4s cubic-bezier(.46,.03,.52,.96);
+  }
+}
+
+.switchinput:checked + .switchlabel {
+  background-color: #8FB5F5;
+  border-color: #347CF8;
+
+  .switchindicator {
+      background-color: #ECD21F;
+      box-shadow: none;
+      transform: translate(-50%, -50%) translateX(72%);
+
+      &::before,
+      &::after {
+          display: none;
+      }
+  }
+
+  .switchdecoration {
+      top: 50%;
+      transform: translate(0%, -50%);
+      animation: cloud 8s linear infinite;
+
+      width: 20px;
+      height: 20px;
+
+      &::before {
+          width: 10px;
+          height: 10px;
+          top: auto;
+          bottom: 0;
+          left: -8px;
+          animation: none;
+      }
+
+      &::after {
+          width: 15px;
+          height: 15px;
+          top: auto;
+          bottom: 0;
+          left: 16px;
+          animation: none;
+      }
+
+      &,
+      &::before,
+      &::after {
+          border-radius: 9999px 9999px 0 0;
+      }
+
+      &::after {
+          border-bottom-right-radius: 9999px;
+      }
+  }
+}
+.my-rms > li > a:hover{
+  border-left:4px solid #d63384;
+  padding-left:8px;
+
+
+}
+.dropdown-menu{
+  
+  border: 1px silide gray!important;
+}
+.darkto{
+  width: 207px;
+}
+@keyframes cloud {
+  0% {
+      transform: translate(0%, -50%);
+  }
+  50% {
+      transform: translate(-50%, -50%);
+  }
+  100% {
+      transform: translate(0%, -50%);
+  }
+}
   .navbar {
     // position: fixed;
     top: 0;
@@ -10,7 +316,100 @@ const IndexStyles = css`
     padding: 0px !important;
     /*color: #fff !importan;*/
   }
+  .neon-red {
+    --neon: #FF5161;
+    --neon-glow: #D30302;
+    position:relative;
+  }
+  
+  .drakneon{
+    color:white;
+    position:absolute;
+    bottom:-16px;
+    left:11px;
+    font-size:2rem;
+  }
+  
+  .neon-pink {
+    --neon: #FF53cd;
+    --neon-glow: #e10361;
+  }
+  
+  .neon-purple {
+    --neon: #9461fd;
+    --neon-glow: #4003e6;
+  }
+  
+  .neon-blue {
+    --neon: #2dd9fe;
+    --neon-glow: #00a3d5;
+  }
+  
+  .neon-green {
+    --neon: #00fe9b;
+    --neon-glow: #02c435;
+  }
+  
+  .neon-yellow {
+    --neon: #ffdb4e;
+    --neon-glow: #b48505;
+  }
+  
+  .neon-white {
+    --neon: #fefefe;
+    --neon-glow: #ffffff;
+  }
+  
+  @media (dynamic-range: high) {
+    .neon-red {
+      --neon-glow: color(display-p3 1 0 0);
+    }
+  
+    .neon-pink {
+      --neon-glow: color(display-p3 1 0 1);
+    }
+  
+    .neon-purple {
+      --neon-glow: color(display-p3 0 0 1);
+    }
+  
+    .neon-blue {
+      --neon-glow: color(display-p3 0 1 1);
+    }
+  
+    .neon-green {
+      --neon-glow: color(display-p3 0 1 0);
+    }
+  
+    .neon-yellow {
+      --neon-glow: color(display-p3 1 1 0);
+    }
+  
+    .neon-white {
+      --neon-glow: color(display-p3 1 1 1);
+    }
+  }
+  
+  .ring {
+    border: 5px solid var(--neon);
+    box-shadow: 
+      0 0 50px var(--neon-glow), 
+      inset 0 0 60px var(--neon-glow);
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    position: relative;
+    box-sizing: border-box;
+    margin-bottom: 100px;
+  }
+  
+  .power-btn{
+    display: flex;
+    justify-content: space-evenly;
 
+    height: 45px;
+
+  }
   .content {
     padding: 20px;
     margin: 0 auto;
@@ -254,8 +653,13 @@ const IndexStyles = css`
     background-color: #fff !important;
     font-weight: bold;
   }
+  .flex{
+    padding:5px;
+  }
+  
   .dark-mode-toggle {
     display: flex;
+    height:140px!important;
     margin: 0 auto;
     & > button {
       font-size: 1.2em;
@@ -432,11 +836,40 @@ const IndexStyles = css`
   .power {
     marginright: '45px';
   }
+  .flex{
+    display:flex;
+    justify-content: space-evenly;
+    align-items: center;
+  
+  }
   .item-list:hover {
     background-image: linear-gradient(to right, rgb(178, 188, 75), rgb(254, 198, 78), rgb(226, 17, 142), rgb(86, 75, 143));
     we: text;
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
+  }
+  .dark-mode-toggle{
+    align-items: center;
+    display: flex;
+    height: 72px;
+    justify-content: center;
+
+  }
+  .nav-link{
+    font-weight: normal!important;
+  }
+  #dark{
+    background: #262d31 !important;
+    color:white;
+  }
+  #dark > li >a{
+    color:white;
+  }
+  #dark > div > li >.dropdown-item{
+    color:white;
+  }
+  .dropdown-item{
+    font-weight:normal!important;
   }
 `
 

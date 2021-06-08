@@ -31,7 +31,7 @@ const SearchStyles = css`
     padding: 14px;
     z-index: 1 !important;
     position: absolute;
-    box-shadow: 2px 2px 80px #cbcbcb;
+    border: 1px solid gray!important;
   }
   .dropdown-menu input {
     margin-right: 8px;

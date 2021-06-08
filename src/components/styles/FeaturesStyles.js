@@ -1,6 +1,9 @@
 import { css } from 'emotion'
 
 const FeaturesStyles = css`
+.padding-top{
+  padding-top:40px;
+}
   .justify-content {
     justify-content: center;
   }

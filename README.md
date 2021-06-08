@@ -11,3 +11,16 @@
 ## Running
 
 -   npm start
+
+
+## Build the static app
+
+- npm run build
+
+## Start the server
+
+- npm run server
+
+## Deploy
+
+- npm run deploy

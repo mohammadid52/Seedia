@@ -8,7 +8,13 @@ const ToggleStyles = css`
     height: 34px;
     margin-top: -12px;
   }
+  
+.flex{
+  display:flex;
+  justify-content: space-evenly;
+  align-items: center;
 
+}
   .switch input {
     opacity: 0;
     width: 0;
@@ -70,7 +76,7 @@ const ToggleStyles = css`
     position: relative;
 }
 
-.switch__input {
+.switchinput {
     clip: rect(1px, 1px, 1px, 1px);
     clip-path: inset(50%);
     height: 1px;
@@ -81,7 +87,7 @@ const ToggleStyles = css`
     position: absolute;
 }
 
-.switch__label {
+.switchlabel {
   margin-left:-14px;
   position: relative;
   display: inline-block;
@@ -95,7 +101,7 @@ const ToggleStyles = css`
   transition: all 0.4s cubic-bezier(.46,.03,.52,.96);
 }
 
-.switch__indicator {
+.switchindicator {
   position: absolute;
     top: 50%;
     left: 51%;
@@ -139,7 +145,7 @@ const ToggleStyles = css`
     }
 }
 
-.switch__decoration {
+.switchdecoration {
     position: absolute;
     top: 65%;
     left: 50%;
@@ -179,7 +185,7 @@ const ToggleStyles = css`
     50% { opacity: 0.2; }
 }
 
-.switch__indicator {
+.switchindicator {
     &,
     &::before,
     &::after {
@@ -187,11 +193,11 @@ const ToggleStyles = css`
     }
 }
 
-.switch__input:checked + .switch__label {
+.switchinput:checked + .switchlabel {
     background-color: #8FB5F5;
     border-color: #347CF8;
 
-    .switch__indicator {
+    .switchindicator {
         background-color: #ECD21F;
         box-shadow: none;
         transform: translate(-50%, -50%) translateX(72%);
@@ -202,7 +208,7 @@ const ToggleStyles = css`
         }
     }
 
-    .switch__decoration {
+    .switchdecoration {
         top: 50%;
         transform: translate(0%, -50%);
         animation: cloud 8s linear infinite;

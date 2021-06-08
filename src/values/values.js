@@ -59,16 +59,16 @@ export const adjustColors = [
 ]
 
 export const my13Rms = [
-  { name: 'Products of your Interest', count: 0, divider: true, classNames: '' },
-  { name: 'Business of your Interest', count: 0, divider: true, classNames: '' },
-  { name: 'My Groups', count: 5, divider: true, classNames: '' },
-  { name: 'Purchase history', count: 0, divider: true, classNames: '' },
-  { name: 'Recent activity', count: 0, divider: true, classNames: '' },
-  { name: 'Buy again', count: 0, divider: true, classNames: '' },
-  { name: 'Selling', count: 0, divider: true, classNames: '' },
-  { name: 'Saved searches', count: 10, divider: true, classNames: '' },
-  { name: 'Saved sellers', count: 30, divider: true, classNames: '' },
-  { name: 'Inbox', count: 1, divider: false, classNames: '' },
+  { name: 'Products of your Interest', count: 0, divider: true, classNames: '', img:'icon-layout-grid'},
+  { name: 'Business of your Interest', count: 0, divider: true, classNames: '', img: 'icon-slideshow' },
+  { name: 'My Groups', count: 0, divider: true, classNames: '', img:'icon-people'},
+  { name: 'Purchase history', count: 0, divider: true, classNames: '', img:'icon-receipt' },
+  { name: 'Recent activity', count: 0, divider: true, classNames: '', img:'icon-setting-gear-a'},
+  { name: 'Buy again', count: 0, divider: true, classNames: '', img:'icon-ecommerce-shopcart' },
+  { name: 'Selling', count: 0, divider: true, classNames: '', img:'icon-checked-circle' },
+  { name: 'Saved searches', count: 0, divider: true, classNames: '', img:'icon-interface-search-plus' },
+  { name: 'Saved sellers', count: 0, divider: true, classNames: '', img:'icon-user-alt'},
+  { name: 'Inbox', count: 0, divider: false, classNames: '', img:'icon-com-email2' },
 ]
 
 export const productsArray = [

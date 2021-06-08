@@ -1,15 +1,17 @@
 import React, { Fragment } from 'react'
+import useDarkMode from 'use-dark-mode'
 // import ReactCountryFlag from 'react-country-flag'
 
 import { countries } from '../values/values'
 
 import LocationStyles from './styles/LocationStyles'
 
-const WorldwideLocations = ({ closeWorldWideLocationPopover, changeCountry }) => {
+const WorldwideLocations = ({ closeWorldWideLocationPopover, changeCountry, theme }) => {
+  const darkMode = useDarkMode(false)
   return (
     <Fragment>
-      <div {...{ className: LocationStyles }}>
-        <ul {...{ className: 'country-listing' }}>
+      <div {...{ className: LocationStyles }} {...{ id: theme }}>
+        <ul {...{ className: 'country-listing' }} >
           {countries.map((country, key) => {
             return (
               <li {...{ key, onClick: closeWorldWideLocationPopover, style: {} }}>
