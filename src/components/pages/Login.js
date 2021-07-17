@@ -1,24 +1,20 @@
 import React, { useState } from 'react'
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
+
 import CssBaseline from '@material-ui/core/CssBaseline'
-import TextField from '@material-ui/core/TextField'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
-import Link from '@material-ui/core/Link'
-import Grid from '@material-ui/core/Grid'
+
 import Box from '@material-ui/core/Box'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import Typography from '@material-ui/core/Typography'
+
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
+
 import { useHistory } from 'react-router'
 import Loading from '../Loading'
 import { Copyright } from '@material-ui/icons'
-
+import LoginStyles from '../styles/LoginStyles'
+import { Row, Col, FormInput, Button } from 'shards-react'
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        // marginTop: theme.spacing(8),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -48,32 +44,45 @@ async function loginUser(credentials) {
 
 export default function Login({ setToken }) {
     const classes = useStyles()
-    const [isLoaded, setIsLoaded] = useState(false)
+    const [isLoaded, setIsLoaded] = useState(true)
     const history = useHistory()
 
     //capture inputs
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
+    const [fields, setFields] = useState({
+        email: '',
+        password: '',
+    })
+
+    const onChange = (e) => {
+        setFormError(null)
+        const { name, value } = e.target
+        setFields({ ...fields, [name]: value })
+    }
 
     const [formError, setFormError] = useState(null)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const token = await loginUser({
-            email,
-            password,
-        })
-        console.log('Token: ', token)
-        if (token.token && token.name) {
-            setToken(token)
-            history.push('/')
-        } else {
-            if (token.error) {
-                // handle invalid notification
-                setFormError(token.error)
+        try {
+            const { email, password } = fields
+            const token = await loginUser({
+                email,
+                password,
+            })
+            console.log('Token: ', token)
+            if (token.token && token.name) {
+                setToken(token)
+                history.push('/')
             } else {
-                // all other errors
+                if (token.error) {
+                    // handle invalid notification
+                    setFormError(token.error)
+                } else {
+                    // all other errors
+                }
             }
+        } catch (error) {
+            console.error(error)
         }
     }
 
@@ -81,88 +90,90 @@ export default function Login({ setToken }) {
         setIsLoaded(true)
     }, 1000)
 
-    const loaderStyle = {
-        display: 'grid',
-        width: '100vw',
-        height: '100vh',
-        alignContent: 'center',
-        justifyContent: 'center',
-    }
+    const { email, password } = fields
 
     return !isLoaded ? (
         <Loading />
     ) : (
-        <Container component="main" maxWidth="xs">
+        <Container
+            {...{ className: LoginStyles }}
+            style={{ maxWidth: 560 }}
+            component="main"
+        >
             <CssBaseline />
             <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign in
-                </Typography>
+                <img
+                    style={{ height: '8rem' }}
+                    className={'logo'}
+                    src={'/logo.png'}
+                    alt="13RMS"
+                />
                 <form onSubmit={handleSubmit} className={classes.form}>
-                    <Box
-                        textAlign="center"
-                        color="red"
-                        style={{ textTransform: 'capitalize' }}
-                    >
-                        {formError ? formError : null}
-                    </Box>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Sign In
-                    </Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
+                    <div className="card_layout">
+                        <h3>Sign In</h3>
+                        <p>Stay updated on your professional world</p>
+                        <Row form>
+                            {/* Email */}
+                            <Col
+                                style={{ marginTop: 40 }}
+                                className="form-group"
+                            >
+                                <FormInput
+                                    type="email"
+                                    id="feEmail"
+                                    name="email"
+                                    placeholder="Email"
+                                    value={email}
+                                    onChange={onChange}
+                                    autoComplete="email"
+                                />
+                            </Col>
+                            {/* Password */}
+                            <div style={{ marginTop: 20 }}></div>
+                            <Col className="form-group">
+                                <FormInput
+                                    type="password"
+                                    id="fePassword"
+                                    name="password"
+                                    placeholder="Password"
+                                    onChange={onChange}
+                                    autoComplete="current-password"
+                                    value={password}
+                                    style={{ marginBottom: 10 }}
+                                />
+                            </Col>
+
+                            <a href="#" className="link-hover forgot-password">
                                 Forgot password?
-                            </Link>
-                        </Grid>
-                        <Grid item>
-                            <Link href="/sign-up" variant="body2">
-                                {'Dont have an account? Sign Up'}
-                            </Link>
-                        </Grid>
-                    </Grid>
+                            </a>
+                            <Box
+                                textAlign="center"
+                                color="red"
+                                fontWeight="400"
+                                marginTop="0.5rem"
+                                marginBottom="0.5rem"
+                                style={{ textTransform: 'capitalize' }}
+                            >
+                                {formError ? formError : null}
+                            </Box>
+                            <Col className="form-group row footer">
+                                <button
+                                    type="submit"
+                                    onClick={handleSubmit}
+                                    className="save-button btn btn-primary btn"
+                                >
+                                    Sign In
+                                </button>
+                            </Col>
+                        </Row>
+                    </div>
                 </form>
+                <Box textAlign="center" className="join-now mt-2">
+                    Not yet on 13RMS?
+                    <a className="link-hover log-in-span"> Join now</a>
+                </Box>
             </div>
-            <Box mt={8}>
-                <Copyright />
-            </Box>
+            <Box mt={8}>{/* <Copyright /> */}</Box>
         </Container>
     )
 }
