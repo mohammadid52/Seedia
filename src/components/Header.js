@@ -8,8 +8,6 @@ import moon from './../public/assets/moon.png'
 import { withStyles, makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 
-
-
 import Toggle from './Toggle'
 
 import { RiShoppingCart2Line } from 'react-icons/ri'
@@ -18,7 +16,6 @@ import { FaRegBell } from 'react-icons/fa'
 import { AiOutlineHome } from 'react-icons/ai'
 import { BsPeople } from 'react-icons/bs'
 import { CgWorkAlt } from 'react-icons/cg'
-
 
 import { adjustColors, my13Rms } from '../values/values'
 
@@ -35,152 +32,382 @@ import Brightness2Icon from '@material-ui/icons/Brightness2'
 
 // Gets the username from the token
 const getUserName = () => {
-  const tokenString = localStorage.getItem('token')
-  if(tokenString) {
-    const token = JSON.parse(tokenString)
-    if(token.name) return token.name
-    else return null
-  } else {
-    return null
-  }
+    const tokenString = localStorage.getItem('token')
+    if (tokenString) {
+        const token = JSON.parse(tokenString)
+        if (token.name) return token.name
+        else return null
+    } else {
+        return null
+    }
 }
 
 const Header = ({ themeToggler, theme }) => {
-  const userName = getUserName()
+    const userName = getUserName()
 
-  const handleSignOutClick = () => {
-    localStorage.removeItem('token')
-  }
+    const handleSignOutClick = () => {
+        localStorage.removeItem('token')
+    }
 
-  const darkMode = useDarkMode(false)
-  const hamburg = theme === 'light' ? menuWhite : menu
-  var colors,borderColors
-  if(theme=='dark'){
-    colors = '#ffff'
-    borderColors = '#ffff'
-  }else{
-    colors='#6c757dc4'
-    borderColors = '#6c757dc4'
-   
-  }
-  const CustomButton = withStyles((theme) => ({
-    root: {
-      
-      color: colors,
-      borderColor: borderColors
-      
-    },
-  }))(Button)
-  return (
-    <Fragment>
-      <div {...{ className: HeaderStyles + ' header-top' }}>
-        <header {...{ className: 'header-container ' + theme }}>
-          <nav {...{ className: 'navbar navbar-expand-lg navbar-light' }}>
-            <div {...{ className: 'container-fluid' }}>
-              <a {...{ className: 'navbar-brand', href: '/#' }}>{}</a>
-              <button
-                {...{
-                  className: 'navbar-toggler',
-                  type: 'button',
-                }}
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <span {...{ className: '' }}>
-                  <img {...{ alt: '', src: hamburg, style: { height: '2rem' } }} />
-                </span>
-              </button>
-              <div {...{ className: 'collapse navbar-collapse', id: 'navbarSupportedContent' }}>
-                {
-                  // ------------------------------------
-                }
-                <Col {...{ md: { size: 6 }, sm: { size: 6 }, className: 'header-column left-header-column' }}>
-                  <ul {...{ className: 'navbar-nav me-auto mb-2 mb-lg-0' }}>
-                    <li {...{ className: 'nav-item underline' }}>
-                      <a {...{ className: 'nav-link active', href: '/#' }} aria-current="page">
-                        Help & Contact
-                      </a>
-                    </li>
+    const darkMode = useDarkMode(false)
+    const hamburg = theme === 'light' ? menuWhite : menu
+    var colors, borderColors
+    if (theme == 'dark') {
+        colors = '#ffff'
+        borderColors = '#ffff'
+    } else {
+        colors = '#6c757dc4'
+        borderColors = '#6c757dc4'
+    }
+    const CustomButton = withStyles((theme) => ({
+        root: {
+            color: colors,
+            borderColor: borderColors,
+        },
+    }))(Button)
+    // header-column right-header-column col
+    return (
+        <Fragment>
+            <div {...{ className: HeaderStyles + ' header-top' }}>
+                <header {...{ className: 'header-container ' + theme }}>
+                    <nav
+                        {...{
+                            className: 'navbar navbar-expand-lg navbar-light',
+                        }}
+                    >
+                        <div {...{ className: 'container-fluid' }}>
+                            <a {...{ className: 'navbar-brand', href: '/#' }}>
+                                {}
+                            </a>
+                            <button
+                                {...{
+                                    className: 'navbar-toggler',
+                                    type: 'button',
+                                }}
+                                data-bs-toggle="collapse"
+                                data-bs-target="#navbarSupportedContent"
+                                aria-controls="navbarSupportedContent"
+                                aria-expanded="false"
+                                aria-label="Toggle navigation"
+                            >
+                                <span {...{ className: '' }}>
+                                    <img
+                                        {...{
+                                            alt: '',
+                                            src: hamburg,
+                                            style: { height: '2rem' },
+                                        }}
+                                    />
+                                </span>
+                            </button>
+                            <div
+                                {...{
+                                    className: 'collapse navbar-collapse',
+                                    id: 'navbarSupportedContent',
+                                }}
+                            >
+                                {
+                                    // ------------------------------------
+                                }
+                                <Col
+                                    {...{
+                                        md: { size: 6 },
+                                        sm: { size: 6 },
+                                        className:
+                                            'header-column left-header-column',
+                                    }}
+                                >
+                                    <ul
+                                        {...{
+                                            className:
+                                                'navbar-nav me-auto mb-2 mb-lg-0 mt-3',
+                                        }}
+                                    >
+                                        <li
+                                            {...{
+                                                className: 'nav-item underline',
+                                            }}
+                                        >
+                                            <a
+                                                {...{
+                                                    className:
+                                                        'nav-link active',
+                                                    href: '/#',
+                                                }}
+                                                aria-current="page"
+                                            >
+                                                Help & Contact
+                                            </a>
+                                        </li>
 
-                    <li {...{ className: 'nav-item dropdown underline' }}>
-                      <a {...{ className: 'nav-link dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
-                        Adjust Colors
-                      </a>
-                      <ul {...{ className:  'dropdown-menu darkto' }} {...{ id: theme }} aria-labelledby="navbarDropdown">
-                        <div className="dark-mode-toggle">
-                          
-                         
-                          <Toggle {...{ checked: darkMode.value, onChange: darkMode.toggle, themeToggler }} />
-                          <span {...{  style: { width: '100%' } }}>
-                          <div className='flex'>
-                          
-                          <CustomButton {...{  style: { width: '100px' } }} onClick={darkMode.disable} className={'daymode'} startIcon={<Brightness5Icon />} variant="outlined">Day</CustomButton>
-                          
-                          </div>
-                          <div className='flex'>
-                          
-                          <CustomButton onClick={darkMode.disable} className={'daymode'} onClick={darkMode.enable} startIcon={<Brightness2Icon />} variant="outlined">Night</CustomButton>
-                          
-                          </div>
-                          </span>
-                        </div>
-                        <li>
-                          <hr {...{ className: 'dropdown-divider' }} />
-                        </li>
-                        <li>
-                          <span>
-                          Are you color blind ?
-                            <br />
-                            Then choose the following options
-                          </span>
-                          
-                         <div className="flex">
-                           <div>
-                          <div>
+                                        <li
+                                            {...{
+                                                className:
+                                                    'nav-item dropdown underline',
+                                            }}
+                                        >
+                                            <a
+                                                {...{
+                                                    className:
+                                                        'nav-link dropdown-toggle',
+                                                    href: '/#',
+                                                    id: 'navbarDropdown',
+                                                    role: 'button',
+                                                }}
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                            >
+                                                Adjust Colors
+                                            </a>
+                                            <ul
+                                                {...{
+                                                    className:
+                                                        'dropdown-menu darkto',
+                                                }}
+                                                {...{ id: theme }}
+                                                aria-labelledby="navbarDropdown"
+                                            >
+                                                <div className="dark-mode-toggle">
+                                                    <Toggle
+                                                        {...{
+                                                            checked:
+                                                                darkMode.value,
+                                                            onChange:
+                                                                darkMode.toggle,
+                                                            themeToggler,
+                                                        }}
+                                                    />
+                                                    <span
+                                                        {...{
+                                                            style: {
+                                                                width: '100%',
+                                                            },
+                                                        }}
+                                                    >
+                                                        <div className="flex">
+                                                            <CustomButton
+                                                                {...{
+                                                                    style: {
+                                                                        width: '100px',
+                                                                    },
+                                                                }}
+                                                                onClick={
+                                                                    darkMode.disable
+                                                                }
+                                                                className={
+                                                                    'daymode'
+                                                                }
+                                                                startIcon={
+                                                                    <Brightness5Icon />
+                                                                }
+                                                                variant="outlined"
+                                                            >
+                                                                Day
+                                                            </CustomButton>
+                                                        </div>
+                                                        <div className="flex">
+                                                            <CustomButton
+                                                                onClick={
+                                                                    darkMode.disable
+                                                                }
+                                                                className={
+                                                                    'daymode'
+                                                                }
+                                                                onClick={
+                                                                    darkMode.enable
+                                                                }
+                                                                startIcon={
+                                                                    <Brightness2Icon />
+                                                                }
+                                                                variant="outlined"
+                                                            >
+                                                                Night
+                                                            </CustomButton>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                                <li>
+                                                    <hr
+                                                        {...{
+                                                            className:
+                                                                'dropdown-divider',
+                                                        }}
+                                                    />
+                                                </li>
+                                                <li>
+                                                    <span>
+                                                        Are you color blind ?
+                                                        <br />
+                                                        Then choose the
+                                                        following options
+                                                    </span>
 
-                          <CustomButton {...{style:{width:'100px'}}}onClick={darkMode.disable} className={'daymode'} onClick={darkMode.enable}  variant="outlined">On</CustomButton>
-                          </div>
+                                                    <div className="flex">
+                                                        <div>
+                                                            <div>
+                                                                <CustomButton
+                                                                    {...{
+                                                                        style: {
+                                                                            width: '100px',
+                                                                        },
+                                                                    }}
+                                                                    onClick={
+                                                                        darkMode.disable
+                                                                    }
+                                                                    className={
+                                                                        'daymode'
+                                                                    }
+                                                                    onClick={
+                                                                        darkMode.enable
+                                                                    }
+                                                                    variant="outlined"
+                                                                >
+                                                                    On
+                                                                </CustomButton>
+                                                            </div>
 
-                          <div {...{style:{paddingTop:'10px', paddingBottom:'10px'}}}>
-                          <Button {...{style:{width:'100px'}}}color='secondary' onClick={darkMode.disable} className={'daymode'} onClick={darkMode.enable} variant="contained">Off</Button>
-                          </div>
-                          </div>
-                          </div> 
-
-                        </li>
-                        <li>
-                          <hr {...{ className: 'dropdown-divider' }} />
-                        </li>
-                        {adjustColors.map((item, key) => {
-                          return (
-                            <li {...{ key }}>
-                              <a {...{ className: 'dropdown-item', href: '/#', key: item.value }}>
-                                <p {...{ className: 'float-start item-list' }}> {item.name} </p>
-                                <input
-                                  {...{
-                                    type: 'radio',
-                                    value: item.value,
-                                    name:'select'
-                                  }}
-                                />
-                              </a>
-                            </li>
-                          )
-                        })}
-                      </ul>
-                    </li>
-                    <li {...{ className: 'nav-item' }}>
-                      <a {...{ className: 'nav-link join-community underline', href: '/#' }}>Join our community</a>
-                    </li>
-                  </ul>
-                </Col>
-                {
-                  // ------------------------------------
-                }
-                <Col {...{ className: 'header-column right-header-column' }}>
+                                                            <div
+                                                                {...{
+                                                                    style: {
+                                                                        paddingTop:
+                                                                            '10px',
+                                                                        paddingBottom:
+                                                                            '10px',
+                                                                    },
+                                                                }}
+                                                            >
+                                                                <Button
+                                                                    {...{
+                                                                        style: {
+                                                                            width: '100px',
+                                                                        },
+                                                                    }}
+                                                                    color="secondary"
+                                                                    onClick={
+                                                                        darkMode.disable
+                                                                    }
+                                                                    className={
+                                                                        'daymode'
+                                                                    }
+                                                                    onClick={
+                                                                        darkMode.enable
+                                                                    }
+                                                                    variant="contained"
+                                                                >
+                                                                    Off
+                                                                </Button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <hr
+                                                        {...{
+                                                            className:
+                                                                'dropdown-divider',
+                                                        }}
+                                                    />
+                                                </li>
+                                                {adjustColors.map(
+                                                    (item, key) => {
+                                                        return (
+                                                            <li {...{ key }}>
+                                                                <a
+                                                                    {...{
+                                                                        className:
+                                                                            'dropdown-item',
+                                                                        href: '/#',
+                                                                        key: item.value,
+                                                                    }}
+                                                                >
+                                                                    <p
+                                                                        {...{
+                                                                            className:
+                                                                                'float-start item-list',
+                                                                        }}
+                                                                    >
+                                                                        {' '}
+                                                                        {
+                                                                            item.name
+                                                                        }{' '}
+                                                                    </p>
+                                                                    <input
+                                                                        {...{
+                                                                            type: 'radio',
+                                                                            value: item.value,
+                                                                            name: 'select',
+                                                                        }}
+                                                                    />
+                                                                </a>
+                                                            </li>
+                                                        )
+                                                    }
+                                                )}
+                                            </ul>
+                                        </li>
+                                        <li {...{ className: 'nav-item' }}>
+                                            <a
+                                                {...{
+                                                    className:
+                                                        'nav-link join-community underline',
+                                                    href: '/#',
+                                                }}
+                                            >
+                                                Join our forum
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </Col>
+                                <Col
+                                    {...{
+                                        className:
+                                            'header-column right-header-column col',
+                                    }}
+                                >
+                                    <ul
+                                        {...{
+                                            className:
+                                                'navbar-nav ms-auto mb-2 mb-lg-0 float-right',
+                                        }}
+                                    >
+                                        <li
+                                            {...{
+                                                className: 'nav-item underline',
+                                            }}
+                                        >
+                                            <a
+                                                {...{
+                                                    className:
+                                                        'nav-link active',
+                                                    href: '/signup',
+                                                }}
+                                                aria-current="page"
+                                            >
+                                                Join Now
+                                            </a>
+                                        </li>
+                                        <li
+                                            {...{
+                                                className: 'nav-item underline',
+                                            }}
+                                        >
+                                            <a
+                                                {...{
+                                                    className:
+                                                        'nav-link active',
+                                                    href: '/login',
+                                                }}
+                                                aria-current="page"
+                                            >
+                                                Sign Up
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </Col>
+                                {
+                                    // ------------------------------------
+                                }
+                                {/* <Col {...{ className: 'header-column right-header-column' }}>
                   <ul {...{ className: 'navbar-nav ms-auto mb-2 mb-lg-0 float-right' }}>
                     <li {...{ className: 'nav-item with-label' }}>
                       <a {...{ className: 'nav-link active', href: '/#' }} aria-current="page">
@@ -289,17 +516,17 @@ const Header = ({ themeToggler, theme }) => {
                     </li>
                        }
                   </ul>
-                </Col>
-                {
-                  // ------------------------------------
-                }
-              </div>
+                </Col> */}
+                                {
+                                    // ------------------------------------
+                                }
+                            </div>
+                        </div>
+                    </nav>
+                </header>
             </div>
-          </nav>
-        </header>
-      </div>
-    </Fragment>
-  )
+        </Fragment>
+    )
 }
 
 export default Header
