@@ -28,7 +28,8 @@ body {
     padding-left: calc(var(--bs-gutter-x) / 2);
     margin-top: var(--bs-gutter-y);
 }
-img {
+img,
+svg {
     display: inline-block;
 }
 

@@ -35,7 +35,6 @@ export default function Signup() {
     const classes = useStyles()
     const [isLoaded, setIsLoaded] = useState(true)
     const [formError, setFormError] = useState(null)
-    const history = useHistory()
 
     //capture inputs
     const [fields, setFields] = useState({
