@@ -9,9 +9,9 @@ import Container from '@material-ui/core/Container'
 
 import { useHistory } from 'react-router'
 import Loading from '../Loading'
-import { Copyright } from '@material-ui/icons'
-import LoginStyles from '../styles/LoginStyles'
+import AuthStyles from '../styles/AuthStyles'
 import { Row, Col, FormInput, Button } from 'shards-react'
+import Copyright from '../Copyright'
 const useStyles = makeStyles((theme) => ({
     paper: {
         // marginTop: theme.spacing(8),
@@ -72,7 +72,7 @@ export default function Login({ setToken }) {
             console.log('Token: ', token)
             if (token.token && token.name) {
                 setToken(token)
-                history.push('/')
+                history.push('/dashboard')
             } else {
                 if (token.error) {
                     // handle invalid notification
@@ -95,11 +95,7 @@ export default function Login({ setToken }) {
     return !isLoaded ? (
         <Loading />
     ) : (
-        <Container
-            {...{ className: LoginStyles }}
-            style={{ maxWidth: 560 }}
-            component="main"
-        >
+        <main {...{ className: AuthStyles }} component="main">
             <CssBaseline />
             <div className={classes.paper}>
                 <img
@@ -170,10 +166,13 @@ export default function Login({ setToken }) {
                 </form>
                 <Box textAlign="center" className="join-now mt-2">
                     Not yet on 13RMS?
-                    <a className="link-hover log-in-span"> Join now</a>
+                    <a href="/signup" className="link-hover log-in-span">
+                        {' '}
+                        Join now
+                    </a>
                 </Box>
             </div>
-            <Box mt={8}>{/* <Copyright /> */}</Box>
-        </Container>
+            <Copyright />
+        </main>
     )
 }

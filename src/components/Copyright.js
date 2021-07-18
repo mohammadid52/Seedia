@@ -1,16 +1,29 @@
-import Link from '@material-ui/core/Link'
-import Typography from '@material-ui/core/Typography'
+import CopyrightStyles from './styles/CopyrightStyles'
 
 const Copyright = () => {
     return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="#">
-                13RMS
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
+        <div {...{ className: `${CopyrightStyles} row` }}>
+            <hr />
+            <div className="light row">
+                <div className="text-center col-sm-6 col-md-12">
+                    <p className="copy-right">
+                        © 2021 All rights reserved.{' '}
+                        <a href="/#" className="link link-hover">
+                            Accessibility{' '}
+                        </a>
+                        <a href="/#" className="link link-hover">
+                            User agreement{' '}
+                        </a>{' '}
+                        <a href="/#" className="link link-hover">
+                            Privacy &amp; Policy{' '}
+                        </a>
+                        <a href="/#" className="link link-hover">
+                            Cookies{' '}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
     )
 }
 

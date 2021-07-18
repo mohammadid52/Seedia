@@ -1,17 +1,36 @@
 import { css } from 'emotion'
 
-const LoginStyles = css`
-{
+const AuthStyles = css`
+
+.container {
+    display: grid;
+    float: left;
     max-width: 560px;
+    height: 100%;
+    position: absolute;
+    width: 100% !important;
 }
+
 .logo {
     text-align: center;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
 }
 .bodylogin{
     display:flex
 }
+
+.create-account {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 18px;
+}
+
+.agreement {
+    margin-top: 1rem;
+    font-size: 13px;
+}
+
 .card_layout {
     box-shadow: rgb(0 0 0 / 15%) 0px 4px 12px;
     padding: 24px 32px 32px;
@@ -20,13 +39,31 @@ const LoginStyles = css`
     background: rgb(255, 255, 255);
     width:460px;
 }
+
+.box-area {
+    width: 528px;
+    box-shadow: rgb(0 0 0 / 15%) 0px 4px 12px;
+    padding: 10px 32px 5px;
+    border-radius: 8px;
+    margin: 0px auto;
+    background: rgb(255, 255, 255);
+}
+.business-account,
+.student-account {
+    display: block;
+    margin: auto;
+    width: 300px;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border-color: black;
+}
+
 p {
     margin-bottom:1rem;
 }
 .forgot-password {
     position: relative;
     margin-top: 8px;
-    color: rgb(0, 96, 151);
     background-color: rgba(0, 0, 0, 0);
     border: 0px;
     text-align: center;
@@ -34,9 +71,10 @@ p {
     transition-duration: 167ms;
     transition-property: background-color, box-shadow, color, -webkit-box-shadow;
     transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    color: rgb(0, 96, 151);
     font-weight:600;
     font-size:1rem;
-    transitial: all 150ms ease-in-out;
+    transition: all 150ms ease-in-out;
 }
 
 .footer {
@@ -88,4 +126,4 @@ p {
 }
 `
 
-export default LoginStyles
+export default AuthStyles

@@ -125,7 +125,7 @@ const Header = ({ themeToggler, theme }) => {
                                     >
                                         <li
                                             {...{
-                                                className: 'nav-item underline',
+                                                className: 'nav-item ',
                                             }}
                                         >
                                             <a
@@ -142,8 +142,7 @@ const Header = ({ themeToggler, theme }) => {
 
                                         <li
                                             {...{
-                                                className:
-                                                    'nav-item dropdown underline',
+                                                className: 'nav-item dropdown ',
                                             }}
                                         >
                                             <a
@@ -349,7 +348,7 @@ const Header = ({ themeToggler, theme }) => {
                                             <a
                                                 {...{
                                                     className:
-                                                        'nav-link join-community underline',
+                                                        'nav-link join-community ',
                                                     href: '/#',
                                                 }}
                                             >
@@ -372,7 +371,7 @@ const Header = ({ themeToggler, theme }) => {
                                     >
                                         <li
                                             {...{
-                                                className: 'nav-item underline',
+                                                className: 'nav-item ',
                                             }}
                                         >
                                             <a
@@ -388,7 +387,7 @@ const Header = ({ themeToggler, theme }) => {
                                         </li>
                                         <li
                                             {...{
-                                                className: 'nav-item underline',
+                                                className: 'nav-item ',
                                             }}
                                         >
                                             <a
@@ -399,7 +398,7 @@ const Header = ({ themeToggler, theme }) => {
                                                 }}
                                                 aria-current="page"
                                             >
-                                                Sign Up
+                                                Login
                                             </a>
                                         </li>
                                     </ul>
@@ -446,7 +445,7 @@ const Header = ({ themeToggler, theme }) => {
                       </a>
                     </li>
 
-                    <li {...{ className: 'nav-item dropdown underline' }}>
+                    <li {...{ className: 'nav-item dropdown ' }}>
                       <a {...{ className: 'nav-link dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
                         Sell
                       </a>
@@ -457,7 +456,7 @@ const Header = ({ themeToggler, theme }) => {
                       </ul>
                     </li>
 
-                    <li {...{ className: 'nav-item dropdown underline' }}>
+                    <li {...{ className: 'nav-item dropdown ' }}>
                       <a {...{ className: 'nav-link dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
                         {'My 13RMS'}
                       </a>
@@ -484,7 +483,7 @@ const Header = ({ themeToggler, theme }) => {
                     </li>
 
                        {userName ? 
-                       <li {...{ className: 'nav-item dropdown underline' }}>
+                       <li {...{ className: 'nav-item dropdown ' }}>
                          <a {...{ className: 'nav-link dropdown-toggle', href: '#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">Hello {userName}</a>
                          <ul {...{ className: 'dropdown-menu end-0 sign-in' }} {...{ id: theme }}aria-labelledby="navbarDropdown">
                          <li>
@@ -493,7 +492,7 @@ const Header = ({ themeToggler, theme }) => {
                          </ul>
                        </li>
                        :
-                    <li {...{ className: 'nav-item dropdown underline' }}>
+                    <li {...{ className: 'nav-item dropdown ' }}>
                       <a {...{ className: 'nav-link dropdown-toggle', href: '/sign-in', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
                         Sign In
                       </a>

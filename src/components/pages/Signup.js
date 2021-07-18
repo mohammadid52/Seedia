@@ -1,164 +1,223 @@
-import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import React, { useState } from 'react'
+
 import CssBaseline from '@material-ui/core/CssBaseline'
-import Paper from '@material-ui/core/Paper'
-import Stepper from '@material-ui/core/Stepper'
-import Step from '@material-ui/core/Step'
-import StepLabel from '@material-ui/core/StepLabel'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import Buisness from './Buisness'
-import Test from './Test'
-import Buiscc from './Buiscc'
-import Phone from './Phonetest'
-import Legal from './Legal'
-import Last from './Last'
+
+import Box from '@material-ui/core/Box'
+
+import { makeStyles } from '@material-ui/core/styles'
+import { useHistory } from 'react-router'
+import Loading from '../Loading'
+import AuthStyles from '../styles/AuthStyles'
+import { Row, Col, FormInput } from 'shards-react'
 import Copyright from '../Copyright'
 
 const useStyles = makeStyles((theme) => ({
-    appBar: {
-        position: 'relative',
-    },
-    layout: {
-        width: 'auto',
-        marginLeft: theme.spacing(2),
-        marginRight: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-            width: 600,
-            marginLeft: 'auto',
-            marginRight: 'auto',
-        },
+    paper: {
+        // marginTop: theme.spacing(8),
         display: 'flex',
-        flexFlow: 'column',
-        justifyContent: 'center',
+        flexDirection: 'column',
         alignItems: 'center',
     },
-    paper: {
-        marginTop: theme.spacing(3),
-        marginBottom: theme.spacing(3),
-        padding: theme.spacing(2),
-        [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-            marginTop: theme.spacing(6),
-            marginBottom: theme.spacing(6),
-            padding: theme.spacing(3),
-        },
-        width: '850px',
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
     },
-    stepper: {
-        padding: theme.spacing(3, 0, 5),
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
     },
-    buttons: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-    },
-    button: {
-        marginTop: theme.spacing(3),
-        marginLeft: theme.spacing(1),
+    submit: {
+        margin: theme.spacing(3, 0, 2),
     },
 }))
 
-const steps = ['Step', 'Test', 'Slogan 2', 'Test', 'Slogan 3', 'Slogan 3']
-
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return <Buisness />
-        case 1:
-            return <Test />
-        case 2:
-            return <Buiscc />
-        case 3:
-            return <Phone />
-        case 4:
-            return <Legal />
-        case 5:
-            return <Last />
-
-        default:
-            throw new Error('Unknown step')
-    }
-}
-
 export default function Signup() {
     const classes = useStyles()
-    const [activeStep, setActiveStep] = React.useState(0)
+    const [isLoaded, setIsLoaded] = useState(true)
+    const [formError, setFormError] = useState(null)
+    const history = useHistory()
 
-    const handleNext = () => {
-        setActiveStep(activeStep + 1)
+    //capture inputs
+    const [fields, setFields] = useState({
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+    })
+
+    const onChange = (e) => {
+        setFormError(null)
+        const { name, value } = e.target
+        setFields({ ...fields, [name]: value })
     }
 
-    const handleBack = () => {
-        setActiveStep(activeStep - 1)
-    }
+    setTimeout(() => {
+        setIsLoaded(true)
+    }, 1000)
 
-    return (
-        <React.Fragment>
+    const { email, password, firstName, lastName } = fields
+
+    return !isLoaded ? (
+        <Loading />
+    ) : (
+        <main {...{ className: AuthStyles }} component="main">
             <CssBaseline />
+            <div className={classes.paper}>
+                <img
+                    style={{ height: '8rem' }}
+                    className={'logo'}
+                    src={'/logo.png'}
+                    alt="13RMS"
+                />
+                <form onSubmit={() => {}} className={classes.form}>
+                    <div className="card_layout">
+                        <h6 className="create-account">
+                            Discover the benefits of selling and networking with
+                            your profile
+                        </h6>
+                        <div className="mb-2">
+                            <button
+                                type="button"
+                                className="business-account btn btn-primary btn-md"
+                            >
+                                Create a business account
+                            </button>
+                        </div>
+                        <div className="mb-2">
+                            <button
+                                type="button"
+                                className="student-account btn btn-primary btn-md"
+                            >
+                                Create a student account
+                            </button>
+                        </div>
 
-            <main className={classes.layout}>
-                <Paper className={classes.paper}>
-                    <Typography component="h1" variant="h4" align="center">
-                        Register
-                    </Typography>
-                    <Stepper
-                        activeStep={activeStep}
-                        className={classes.stepper}
-                    >
-                        {steps.map((label) => (
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
-                    <React.Fragment>
-                        {activeStep === steps.length ? (
-                            <React.Fragment>
-                                <Typography variant="h5" gutterBottom>
-                                    Thank you for registering.
-                                </Typography>
-                                <Typography variant="subtitle1">
-                                    Chcek your email you will recieve an
-                                    verification email soon
-                                </Typography>
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    href="/profile"
-                                >
-                                    next
-                                </Button>
-                            </React.Fragment>
-                        ) : (
-                            <React.Fragment>
-                                {getStepContent(activeStep)}
-                                <div className={classes.buttons}>
-                                    {activeStep !== 0 && (
-                                        <Button
-                                            onClick={handleBack}
-                                            className={classes.button}
-                                        >
-                                            Back
-                                        </Button>
-                                    )}
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={handleNext}
-                                        className={classes.button}
+                        <Row form>
+                            {/* Name */}
+                            <Col
+                                style={{ marginTop: 40 }}
+                                className="form-group"
+                            >
+                                <div style={{ display: 'flex' }}>
+                                    <Col
+                                        style={{
+                                            paddingLeft: 0,
+                                            paddingRight: '0.5rem',
+                                        }}
                                     >
-                                        {activeStep === steps.length - 1
-                                            ? 'Submit'
-                                            : 'Next'}
-                                    </Button>
+                                        <FormInput
+                                            type="name"
+                                            id="fname"
+                                            name="firstName"
+                                            placeholder="First Name"
+                                            value={firstName}
+                                            onChange={onChange}
+                                            autoComplete="name"
+                                        />
+                                    </Col>
+                                    <Col
+                                        style={{
+                                            paddingRight: 0,
+                                            paddingLeft: '0.5rem',
+                                        }}
+                                    >
+                                        <FormInput
+                                            type="name"
+                                            id="lname"
+                                            name="lastName"
+                                            placeholder="Last Name"
+                                            value={lastName}
+                                            onChange={onChange}
+                                            autoComplete="name"
+                                        />
+                                    </Col>
                                 </div>
-                            </React.Fragment>
-                        )}
-                    </React.Fragment>
-                </Paper>
-                <Copyright />
-            </main>
-        </React.Fragment>
+                            </Col>
+                            {/* Email */}
+                            <Col
+                                style={{ marginTop: 20 }}
+                                className="form-group"
+                            >
+                                <FormInput
+                                    type="email"
+                                    id="feEmail"
+                                    name="email"
+                                    placeholder="Email"
+                                    value={email}
+                                    onChange={onChange}
+                                    autoComplete="email"
+                                />
+                            </Col>
+
+                            {/* Password */}
+
+                            <Col
+                                style={{ marginTop: 20, marginBottom: 10 }}
+                                className="form-group"
+                            >
+                                <FormInput
+                                    type="password"
+                                    id="fePassword"
+                                    name="password"
+                                    placeholder="Password"
+                                    onChange={onChange}
+                                    autoComplete="current-password"
+                                    value={password}
+                                />
+                            </Col>
+
+                            <p className="agreement">
+                                <span>
+                                    By clicking Agree and Join, you agree to
+                                    13RMS{' '}
+                                </span>
+                                <a className="link-hover" href="#">
+                                    User Agreement
+                                </a>
+                                <span>, </span>
+                                <a className="link-hover" href="#">
+                                    Privacy Policy
+                                </a>{' '}
+                                <span>and </span>{' '}
+                                <a className="link-hover" href="#">
+                                    Cookie Policy
+                                </a>{' '}
+                                <span>.</span>
+                            </p>
+                            <Box
+                                textAlign="center"
+                                color="red"
+                                fontWeight="400"
+                                marginTop="0.5rem"
+                                marginBottom="0.5rem"
+                                style={{ textTransform: 'capitalize' }}
+                            >
+                                {formError ? formError : null}
+                            </Box>
+                            <Col className="form-group row footer">
+                                <button
+                                    type="submit"
+                                    // onClick={handleSubmit}
+                                    className="save-button btn btn-primary btn"
+                                >
+                                    Agree and become a member
+                                </button>
+                            </Col>
+                            <Box textAlign="center" className="mb-3 mt-2">
+                                Already on 13RMS?
+                                <a
+                                    href="/login"
+                                    className="link-hover log-in-span"
+                                >
+                                    {' '}
+                                    Log in here
+                                </a>
+                            </Box>
+                        </Row>
+                    </div>
+                </form>
+            </div>
+            <Copyright />
+        </main>
     )
 }
