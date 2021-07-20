@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react'
 import './styles/HeaderStyles.js'
-import logo from './../public/assets/13RMS.png'
 
 const HomeContent = ({ theme }) => {
     return (
@@ -16,7 +15,7 @@ const HomeContent = ({ theme }) => {
                         <img
                             {...{
                                 alt: '',
-                                src: logo,
+                                src: 'http://tradingpost13rms.com/logo.png',
                                 style: { margin: '0', height: '11rem' },
                             }}
                         />
