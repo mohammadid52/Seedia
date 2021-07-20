@@ -11,7 +11,7 @@ import Footer from './Footer'
 const Home = ({ themeToggler, theme }) => {
     return (
         <div {...{ className: 'w-full' }}>
-            <div className="navbar h-16 border-1 border-gray-300 py-0">
+            <div className="navbar border-1 border-gray-300 py-0">
                 <DarkModeToggle {...{ themeToggler, theme }} />
             </div>
             <HomeContent {...{ theme }} />
