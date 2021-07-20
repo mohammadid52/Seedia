@@ -548,8 +548,7 @@
 // )(Search)
 
 import React, { Fragment } from 'react'
-import { Row, Col, Container } from 'reactstrap'
-import useDarkMode from 'use-dark-mode'
+import { Col } from 'reactstrap'
 import Select from 'react-select'
 import SpeechRecognition from 'react-speech-recognition'
 import { compose, pure, lifecycle, withHandlers, withState } from 'recompose'

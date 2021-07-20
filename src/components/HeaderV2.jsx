@@ -44,7 +44,7 @@ const Header = ({ themeToggler, theme }) => {
                 {!dropdown ? (
                     <a
                         {...{
-                            className: 'nav-link active  flex-col',
+                            className: 'nav-link active  flex-col items-center',
                             href: '#/',
                         }}
                         style={{
@@ -205,7 +205,7 @@ const Header = ({ themeToggler, theme }) => {
                                                 id="light"
                                                 aria-labelledby="navbarDropdown"
                                             >
-                                                <div className="flex items-center justify-around">
+                                                <div className="flex items-center justify-around mb-2">
                                                     <button
                                                         type="button"
                                                         className="inline-flex  items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded  hover:bg-pink-200 hover:text-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
@@ -404,7 +404,7 @@ const Header = ({ themeToggler, theme }) => {
                                                         <p>Web Developer</p>
                                                     </div>
                                                 </div>
-                                                <div className="flex items-center justify-around">
+                                                <div className="flex items-center justify-around mb-2">
                                                     <button
                                                         type="button"
                                                         className="inline-flex  items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded  hover:bg-pink-200 hover:text-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
@@ -513,7 +513,7 @@ const Header = ({ themeToggler, theme }) => {
                                                     style={{
                                                         width: '100%',
                                                     }}
-                                                    className="font-bold tracking-wide"
+                                                    className="font-bold tracking-wide mb-2"
                                                 >
                                                     13RMS Products
                                                 </p>
