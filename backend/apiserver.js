@@ -8,10 +8,7 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
-app.use('/', express.static('public'))
 app.use(express.static(path.join(__dirname, 'build')))
-app.use('/', express.static(path.join(__dirname, 'build', 'static')))
-
 app.use(express.static(path.join(__dirname, 'build', 'static')))
 
 app.use('/login', loginRouter)
