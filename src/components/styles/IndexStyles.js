@@ -622,10 +622,7 @@ export default css`
         position: absolute;
         width: 160px;
     }
-    .dropdown-item:hover {
-        background-color: #fff !important;
-        font-weight: bold;
-    }
+
     .flex {
         padding: 5px;
     }

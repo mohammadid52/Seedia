@@ -8,6 +8,7 @@ const Copyright = () => {
                 position: 'absolute',
                 bottom: '0px',
                 fontSize: '16px !important',
+                width: '100%',
             }}
         >
             <hr />

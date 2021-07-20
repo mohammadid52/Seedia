@@ -151,6 +151,7 @@ export default css`
     .dropdown-menu {
         border: 1px solid gray !important;
     }
+
     .darkto {
         width: 207px;
     }
@@ -330,10 +331,7 @@ export default css`
         position: absolute;
         width: 160px;
     }
-    .dropdown-item:hover {
-        background-color: #fff !important;
-        font-weight: bold;
-    }
+
     hr {
         margin: 0rem 0 !important;
     }

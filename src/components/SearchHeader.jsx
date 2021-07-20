@@ -601,7 +601,7 @@ const Search = ({
         <Fragment>
             <div
                 {...{ className: SearchHeaderStyles }}
-                style={{ width: '50rem' }}
+                style={{ width: '46rem' }}
             >
                 <div {...{ className: theme }}>
                     <nav
@@ -749,8 +749,8 @@ const Search = ({
                                                     height: '100%',
                                                     padding: '5px',
                                                     cursor: 'pointer',
-                                                    top: '-10px',
-                                                    position: 'relative',
+                                                    // top: '-10px',
+                                                    // position: 'relative',
                                                 },
                                             }}
                                         >
@@ -768,11 +768,11 @@ const Search = ({
 
                                         <input
                                             type="text"
-                                            className="text-base input-search"
-                                            style={{
-                                                position: 'relative',
-                                                top: '-8px',
-                                            }}
+                                            className="text-base input-search bg-transparent"
+                                            // style={{
+                                            //     position: 'relative',
+                                            //     top: '-8px',
+                                            // }}
                                             placeholder={
                                                 searchPlaceHolder +
                                                 ' ' +
@@ -836,19 +836,17 @@ const Search = ({
                                         <li
                                             {...{
                                                 className:
-                                                    'nav-item dropdown  w-100',
+                                                    'nav-item customDropdown  w-100',
                                             }}
                                         >
-                                            <a
+                                            <div
                                                 {...{
                                                     className:
                                                         'nav-link dropdown-toggle',
-                                                    href: '/#',
+
                                                     id: 'navbarDropdown',
                                                     role: 'button',
                                                 }}
-                                                data-bs-toggle="dropdown"
-                                                aria-expanded="false"
                                             >
                                                 <img
                                                     {...{
@@ -860,11 +858,11 @@ const Search = ({
                                                         },
                                                     }}
                                                 />
-                                            </a>
+                                            </div>
                                             <ul
                                                 {...{
                                                     className:
-                                                        'dropdown-menu w-80 end-0 left-auto',
+                                                        'dropdown-content w-80 end-0 left-auto',
                                                 }}
                                                 {...{ id: theme }}
                                                 aria-labelledby="navbarDropdown"
@@ -872,10 +870,10 @@ const Search = ({
                                                 <li
                                                     {...{
                                                         className:
-                                                            'nav-item mb-2',
+                                                            'flex items-center justify-between mb-2',
                                                     }}
                                                 >
-                                                    <span
+                                                    <div
                                                         {...{
                                                             style: {
                                                                 marginRight:
@@ -886,7 +884,7 @@ const Search = ({
                                                         }}
                                                     >
                                                         Change language{' '}
-                                                    </span>
+                                                    </div>
                                                     <span
                                                         {...{
                                                             style: {
@@ -902,7 +900,7 @@ const Search = ({
                                                 <li
                                                     {...{
                                                         className:
-                                                            'nav-item mb-2',
+                                                            'flex items-center justify-between mb-2',
                                                         style: {
                                                             marginTop: '0.5rem',
                                                         },
@@ -941,10 +939,11 @@ const Search = ({
 
                                                 <li
                                                     {...{
-                                                        className: 'nav-item',
+                                                        className:
+                                                            'flex items-center justify-between mb-2',
                                                     }}
                                                 >
-                                                    <span
+                                                    <div
                                                         className="mt-2"
                                                         {...{
                                                             style: {
@@ -956,7 +955,7 @@ const Search = ({
                                                         }}
                                                     >
                                                         Change currency{' '}
-                                                    </span>
+                                                    </div>
                                                     <span
                                                         {...{
                                                             style: {
@@ -971,7 +970,8 @@ const Search = ({
                                                 </li>
                                                 <li
                                                     {...{
-                                                        className: 'nav-item',
+                                                        className:
+                                                            'flex items-center justify-between',
                                                         style: {
                                                             marginTop: '0.5rem',
                                                         },
@@ -1001,16 +1001,10 @@ const Search = ({
                                                 </li>
                                                 <li
                                                     {...{
-                                                        className: 'nav-item',
+                                                        className:
+                                                            'flex items-center justify-between ',
                                                     }}
-                                                >
-                                                    <hr
-                                                        {...{
-                                                            className:
-                                                                'dropdown-divider',
-                                                        }}
-                                                    />
-                                                </li>
+                                                ></li>
                                                 <hr />
                                                 <li
                                                     {...{

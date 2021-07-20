@@ -124,7 +124,8 @@ const Header = ({ themeToggler, theme }) => {
 
                                         <li
                                             {...{
-                                                className: 'nav-item dropdown ',
+                                                className:
+                                                    'nav-item customDropdown ',
                                             }}
                                         >
                                             <a
@@ -135,15 +136,16 @@ const Header = ({ themeToggler, theme }) => {
                                                     id: 'navbarDropdown',
                                                     role: 'button',
                                                 }}
-                                                data-bs-toggle="dropdown"
-                                                aria-expanded="false"
+                                                style={{
+                                                    color: 'rgba(0,0,0,0.9)',
+                                                }}
                                             >
                                                 Adjust Colors
                                             </a>
                                             <ul
                                                 {...{
                                                     className:
-                                                        'dropdown-menu darkto',
+                                                        'dropdown-content darkto',
                                                 }}
                                                 {...{ id: theme }}
                                                 aria-labelledby="navbarDropdown"
@@ -165,7 +167,7 @@ const Header = ({ themeToggler, theme }) => {
                                                             },
                                                         }}
                                                     >
-                                                        <div className="flex">
+                                                        <div className="flex items-center justify-center my-1">
                                                             <CustomButton
                                                                 {...{
                                                                     style: {
@@ -186,7 +188,7 @@ const Header = ({ themeToggler, theme }) => {
                                                                 Day
                                                             </CustomButton>
                                                         </div>
-                                                        <div className="flex">
+                                                        <div className="flex items-center justify-center my-1">
                                                             <CustomButton
                                                                 onClick={
                                                                     darkMode.disable
@@ -220,7 +222,7 @@ const Header = ({ themeToggler, theme }) => {
                                                         following options
                                                     </span>
 
-                                                    <div className="flex">
+                                                    <div className="flex items-center justify-center my-1">
                                                         <div>
                                                             <div>
                                                                 <CustomButton
@@ -295,7 +297,7 @@ const Header = ({ themeToggler, theme }) => {
                                                                     <p
                                                                         {...{
                                                                             className:
-                                                                                'float-start item-list',
+                                                                                'float-start mr-3 item-list',
                                                                         }}
                                                                     >
                                                                         {' '}
@@ -323,6 +325,9 @@ const Header = ({ themeToggler, theme }) => {
                                                     className:
                                                         'nav-link join-community ',
                                                     href: '/#',
+                                                }}
+                                                style={{
+                                                    color: 'rgba(0,0,0,0.9)',
                                                 }}
                                             >
                                                 Join our forum

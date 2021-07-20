@@ -4,9 +4,16 @@ import { BiMessageDetail } from 'react-icons/bi'
 
 import { IoMdNotificationsOutline } from 'react-icons/io'
 
-import { AiOutlineHome } from 'react-icons/ai'
-import { BsPeople } from 'react-icons/bs'
+import {
+    AiOutlineHome,
+    AiOutlineSearch,
+    AiOutlineUsergroupDelete,
+} from 'react-icons/ai'
+import { BsFilePost, BsPeople } from 'react-icons/bs'
 import { CgWorkAlt } from 'react-icons/cg'
+import { FaAdversal, FaMoneyBillAlt, FaConnectdevelop } from 'react-icons/fa'
+import { MdFindReplace, MdAttachMoney } from 'react-icons/md'
+import { SiGoogleanalytics } from 'react-icons/si'
 
 import './styles/HeaderV2Styles.js'
 
@@ -64,6 +71,19 @@ const Header = ({ themeToggler, theme }) => {
         )
     }
 
+    const BusinessAppsContent = ({ text, icon }) => {
+        return (
+            <div className="iconmenu cursor-pointer loop-div">
+                <li className="text-center">
+                    <div className="p-2 hover:bg-gray-200 flex items-center rounded-md transition-all duration-200 m-1 rms-item">
+                        <span className="text-base mr-1">{icon}</span>
+                        <span className="block">{text} </span>
+                    </div>
+                </li>
+            </div>
+        )
+    }
+
     return (
         <Fragment>
             <div {...{ className: ' header-top' }}>
@@ -76,7 +96,7 @@ const Header = ({ themeToggler, theme }) => {
                 >
                     <Col
                         {...{
-                            className: 'header-column left-header-column',
+                            className: 'header-column left-header-column ml-24',
                         }}
                     >
                         <ul className="flex flex-row navbar-nav me-auto mb-2 mb-lg-0 head-logo light profile-page">
@@ -149,10 +169,13 @@ const Header = ({ themeToggler, theme }) => {
                                                 />
                                             }
                                         />
-                                        <li className="nav-item dropdown  with-label">
+                                        <li className="nav-item customDropdown  with-label">
                                             <a
                                                 className="nav-link flex flex-col my-account"
                                                 href="/#"
+                                                style={{
+                                                    color: 'rgba(0,0,0,0.9)',
+                                                }}
                                                 id="navbarDropdown"
                                                 role="button"
                                                 data-bs-toggle="dropdown"
@@ -178,37 +201,29 @@ const Header = ({ themeToggler, theme }) => {
                                                 </p>
                                             </a>
                                             <ul
-                                                className="dropdown-menu sell light"
+                                                className="dropdown-content sell light"
                                                 id="light"
                                                 aria-labelledby="navbarDropdown"
                                             >
-                                                <li className="button-list">
+                                                <div className="flex items-center justify-around">
                                                     <button
-                                                        className="MuiButtonBase-root MuiButton-root MuiButton-text dropdown-item sell-button"
-                                                        tabIndex="0"
                                                         type="button"
+                                                        className="inline-flex  items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded  hover:bg-pink-200 hover:text-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                                                     >
-                                                        <span className="MuiButton-label">
-                                                            Sell
-                                                        </span>
-                                                        <span className="MuiTouchRipple-root"></span>
+                                                        Open store
                                                     </button>
                                                     <button
-                                                        className="MuiButtonBase-root MuiButton-root MuiButton-text dropdown-item sell-button"
-                                                        tabIndex="0"
                                                         type="button"
+                                                        className="inline-flex  items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded  hover:bg-pink-200 hover:text-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                                                     >
-                                                        <span className="MuiButton-label">
-                                                            Open Store
-                                                        </span>
-                                                        <span className="MuiTouchRipple-root"></span>
+                                                        Sell
                                                     </button>
-                                                </li>
+                                                </div>
                                                 <hr />
                                                 <div className="iconmenu">
-                                                    <li>
+                                                    <li className="my-2">
                                                         <a
-                                                            className="dropdown-item rms-item"
+                                                            className="customDropdownItem  rms-item"
                                                             href="/#"
                                                         >
                                                             Products of your
@@ -221,9 +236,9 @@ const Header = ({ themeToggler, theme }) => {
                                                     ></span>
                                                 </div>
                                                 <div className="iconmenu">
-                                                    <li>
+                                                    <li className="my-2">
                                                         <a
-                                                            className="dropdown-item rms-item"
+                                                            className="customDropdownItem rms-item"
                                                             href="/#"
                                                         >
                                                             Business of your
@@ -236,9 +251,9 @@ const Header = ({ themeToggler, theme }) => {
                                                     ></span>
                                                 </div>
                                                 <div className="iconmenu">
-                                                    <li>
+                                                    <li className="my-2">
                                                         <a
-                                                            className="dropdown-item rms-item"
+                                                            className="customDropdownItem rms-item"
                                                             href="/#"
                                                         >
                                                             Purchase history{' '}
@@ -250,9 +265,9 @@ const Header = ({ themeToggler, theme }) => {
                                                     ></span>
                                                 </div>
                                                 <div className="iconmenu">
-                                                    <li>
+                                                    <li className="my-2">
                                                         <a
-                                                            className="dropdown-item rms-item"
+                                                            className="customDropdownItem rms-item"
                                                             href="/#"
                                                         >
                                                             Recent activity{' '}
@@ -264,9 +279,9 @@ const Header = ({ themeToggler, theme }) => {
                                                     ></span>
                                                 </div>
                                                 <div className="iconmenu">
-                                                    <li>
+                                                    <li className="my-2">
                                                         <a
-                                                            className="dropdown-item rms-item"
+                                                            className="customDropdownItem rms-item"
                                                             href="/#"
                                                         >
                                                             Buy again{' '}
@@ -278,9 +293,9 @@ const Header = ({ themeToggler, theme }) => {
                                                     ></span>
                                                 </div>
                                                 <div className="iconmenu">
-                                                    <li>
+                                                    <li className="my-2">
                                                         <a
-                                                            className="dropdown-item rms-item"
+                                                            className="customDropdownItem rms-item"
                                                             href="/#"
                                                         >
                                                             Saved searches{' '}
@@ -292,9 +307,9 @@ const Header = ({ themeToggler, theme }) => {
                                                     ></span>
                                                 </div>
                                                 <div className="iconmenu">
-                                                    <li>
+                                                    <li className="my-2">
                                                         <a
-                                                            className="dropdown-item rms-item"
+                                                            className="customDropdownItem rms-item"
                                                             href="/#"
                                                         >
                                                             Saved sellers{' '}
@@ -306,9 +321,9 @@ const Header = ({ themeToggler, theme }) => {
                                                     ></span>
                                                 </div>
                                                 <div className="iconmenu">
-                                                    <li>
+                                                    <li className="my-2">
                                                         <a
-                                                            className="dropdown-item rms-item"
+                                                            className="customDropdownItem rms-item"
                                                             href="/#"
                                                         >
                                                             Inbox{' '}
@@ -322,11 +337,13 @@ const Header = ({ themeToggler, theme }) => {
                                             </ul>
                                         </li>
 
-                                        <li className="nav-item dropdown  with-label">
+                                        <li className="nav-item customDropdown  with-label">
                                             <a
                                                 className="nav-link my-account flex-col"
                                                 style={{
                                                     display: 'flex !important',
+
+                                                    color: 'rgba(0,0,0,0.9)',
                                                 }}
                                                 href="/#"
                                                 id="navbarDropdown"
@@ -360,7 +377,7 @@ const Header = ({ themeToggler, theme }) => {
                                                 </p>
                                             </a>
                                             <ul
-                                                className="dropdown-menu end-0 my-rms"
+                                                className="dropdown-content right-20 my-rms"
                                                 id="light"
                                                 aria-labelledby="navbarDropdown"
                                             >
@@ -387,73 +404,67 @@ const Header = ({ themeToggler, theme }) => {
                                                         <p>Web Developer</p>
                                                     </div>
                                                 </div>
-                                                <li className="button-list">
+                                                <div className="flex items-center justify-around">
                                                     <button
-                                                        className="MuiButtonBase-root MuiButton-root MuiButton-text dropdown-item sell-button"
-                                                        tabIndex="0"
                                                         type="button"
+                                                        className="inline-flex  items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded  hover:bg-pink-200 hover:text-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                                                     >
-                                                        <span className="MuiButton-label">
-                                                            View Profile
-                                                        </span>
-                                                        <span className="MuiTouchRipple-root"></span>
+                                                        View profile
                                                     </button>
                                                     <button
-                                                        className="MuiButtonBase-root MuiButton-root MuiButton-text dropdown-item sell-button"
-                                                        tabIndex="0"
                                                         type="button"
+                                                        className="inline-flex  items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded  hover:bg-pink-200 hover:text-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                                                     >
-                                                        <span className="MuiButton-label">
-                                                            View Store
-                                                        </span>
-                                                        <span className="MuiTouchRipple-root"></span>
+                                                        View store
                                                     </button>
-                                                </li>
+                                                </div>
                                                 <hr />
                                                 <li
                                                     style={{
                                                         marginTop: 15,
                                                     }}
+                                                    className="flex items-center flex-col justify-center"
                                                 >
-                                                    <h6 className="title">
+                                                    <h5 className="font-bold text-base">
                                                         Account
-                                                    </h6>
+                                                    </h5>
                                                     <a
-                                                        className="dropdown-item account-item"
+                                                        className="customDropdownItem account-item"
                                                         href="/#"
                                                     >
                                                         Settings &amp; Privacy
                                                     </a>
                                                     <a
-                                                        className="dropdown-item account-item"
+                                                        className="customDropdownItem account-item"
                                                         href="/#"
                                                     >
                                                         Help
                                                     </a>
                                                     <a
-                                                        className="dropdown-item account-item"
+                                                        className="customDropdownItem account-item"
                                                         href="/#"
                                                     >
                                                         Language
                                                     </a>
                                                 </li>
+                                                <hr />
                                                 <li
-                                                    className="manage-list light"
+                                                    className="flex items-center flex-col justify-center manage-list light"
                                                     style={{
                                                         marginTop: 15,
                                                     }}
                                                 >
-                                                    <h6 className="title">
+                                                    <h5 className="font-bold text-base">
                                                         Manage
-                                                    </h6>
+                                                    </h5>
                                                     <a
-                                                        className="dropdown-item account-item"
+                                                        className="customDropdownItem account-item"
                                                         href="/#"
                                                     >
                                                         Activity
                                                     </a>
                                                     <a
-                                                        className="dropdown-item account-item"
+                                                        className="customDropdownItem account-item"
                                                         href="/#"
                                                     >
                                                         Sign out
@@ -462,11 +473,14 @@ const Header = ({ themeToggler, theme }) => {
                                             </ul>
                                         </li>
 
-                                        <li className="nav-item dropdown  with-label">
+                                        <li className="nav-item customDropdown  with-label">
                                             <a
                                                 className="nav-link active flex flex-col"
                                                 href="/#"
                                                 id="navbarDropdown"
+                                                style={{
+                                                    color: 'rgba(0,0,0,0.9)',
+                                                }}
                                                 role="button"
                                                 data-bs-toggle="dropdown"
                                                 aria-expanded="false"
@@ -491,166 +505,75 @@ const Header = ({ themeToggler, theme }) => {
                                                 </p>
                                             </a>
                                             <ul
-                                                className="dropdown-menu end-0 business-app"
+                                                className="dropdown-content end-0 business-app"
                                                 id="light"
                                                 aria-labelledby="navbarDropdown"
-                                                style={{
-                                                    right: 0,
-                                                    left: 'auto',
-                                                }}
                                             >
                                                 <p
                                                     style={{
                                                         width: '100%',
                                                     }}
+                                                    className="font-bold tracking-wide"
                                                 >
                                                     13RMS Products
                                                 </p>
                                                 <hr />
-                                                <div className="iconmenu  loop-div">
-                                                    <li className="text-center">
-                                                        <a
-                                                            className="dropdown-item rms-item"
-                                                            href="/#"
-                                                        >
-                                                            <span className="_3pPMXKR9nKlHlqzIzqq3FD OXLcLYYySVQqTEUKkCgBF text-base"></span>
-                                                            <span className="block">
-                                                                Search for leads{' '}
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </div>
-                                                <div className="iconmenu  loop-div">
-                                                    <li className="text-center">
-                                                        <a
-                                                            className="dropdown-item rms-item"
-                                                            href="/#"
-                                                        >
-                                                            <span className="_3pPMXKR9nKlHlqzIzqq3FD zeujwmCY64KWP3UWuCeKB text-base"></span>
-                                                            <span className="block">
-                                                                Post a job{' '}
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </div>
-                                                <div className="iconmenu  loop-div">
-                                                    <li className="text-center">
-                                                        <a
-                                                            className="dropdown-item rms-item"
-                                                            href="/#"
-                                                        >
-                                                            <span className="_3pPMXKR9nKlHlqzIzqq3FD MNqXhlqWlynwtcKAT0n3j text-base"></span>
-                                                            <span className="block">
-                                                                Advertise{' '}
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </div>
-                                                <div className="iconmenu  loop-div">
-                                                    <li className="text-center">
-                                                        <a
-                                                            className="dropdown-item rms-item"
-                                                            href="/#"
-                                                        >
-                                                            <span className="_3pPMXKR9nKlHlqzIzqq3FD _1uXwwgDjALWFGP4WiEM12o text-base"></span>
-                                                            <span className="block">
-                                                                Open store{' '}
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </div>
-                                                <div className="iconmenu  loop-div">
-                                                    <li className="text-center">
-                                                        <a
-                                                            className="dropdown-item rms-item"
-                                                            href="/#"
-                                                        >
-                                                            <span className="_3pPMXKR9nKlHlqzIzqq3FD lTsZewyvLLhSo1XLEehMh text-base"></span>
-                                                            <span className="block">
-                                                                Sell products{' '}
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </div>
-                                                <div className="iconmenu  loop-div">
-                                                    <li className="text-center">
-                                                        <a
-                                                            className="dropdown-item rms-item"
-                                                            href="/#"
-                                                        >
-                                                            <span className="_3pPMXKR9nKlHlqzIzqq3FD _1Q2xNTphum3cqVCyHiXN5n text-base"></span>
-                                                            <span className="block">
-                                                                Groups{' '}
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </div>
-                                                <div className="iconmenu  loop-div">
-                                                    <li className="text-center">
-                                                        <a
-                                                            className="dropdown-item rms-item"
-                                                            href="/#"
-                                                        >
-                                                            <span className="_3pPMXKR9nKlHlqzIzqq3FD _2n9HssAV11NDptA8_8DdT text-base"></span>
-                                                            <span className="block">
-                                                                Pro finder{' '}
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </div>
-                                                <div className="iconmenu  loop-div">
-                                                    <li className="text-center">
-                                                        <a
-                                                            className="dropdown-item rms-item"
-                                                            href="/#"
-                                                        >
-                                                            <span className="_3pPMXKR9nKlHlqzIzqq3FD _1IbZPsp_gOwPZ-hShLA25n text-base"></span>
-                                                            <span className="block">
-                                                                Salary{' '}
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </div>
-                                                <div className="iconmenu  loop-div">
-                                                    <li className="text-center">
-                                                        <a
-                                                            className="dropdown-item rms-item"
-                                                            href="/#"
-                                                        >
-                                                            <span className="_3pPMXKR9nKlHlqzIzqq3FD _1IbZPsp_gOwPZ-hShLA25n text-base"></span>
-                                                            <span className="block">
-                                                                New product{' '}
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </div>
-                                                <div className="iconmenu  loop-div">
-                                                    <li className="text-center">
-                                                        <a
-                                                            className="dropdown-item rms-item"
-                                                            href="/#"
-                                                        >
-                                                            <span className="_3pPMXKR9nKlHlqzIzqq3FD _1IbZPsp_gOwPZ-hShLA25n text-base"></span>
-                                                            <span className="block">
-                                                                New product
-                                                                developed{' '}
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </div>
-                                                <div className="iconmenu  loop-div">
-                                                    <li className="text-center">
-                                                        <a
-                                                            className="dropdown-item rms-item"
-                                                            href="/#"
-                                                        >
-                                                            <span className="_3pPMXKR9nKlHlqzIzqq3FD _1IbZPsp_gOwPZ-hShLA25n text-base"></span>
-                                                            <span className="block">
-                                                                Profile
-                                                                statistics{' '}
-                                                            </span>
-                                                        </a>
-                                                    </li>
+                                                <div
+                                                    className="flex flex-wrap"
+                                                    style={{
+                                                        maxWidth: '25rem',
+                                                    }}
+                                                >
+                                                    <BusinessAppsContent
+                                                        icon={
+                                                            <AiOutlineSearch />
+                                                        }
+                                                        text="Search for leads"
+                                                    />
+                                                    <BusinessAppsContent
+                                                        icon={<BsFilePost />}
+                                                        text="Post a job"
+                                                    />
+                                                    <BusinessAppsContent
+                                                        icon={<FaAdversal />}
+                                                        text="Advertise"
+                                                    />
+                                                    <BusinessAppsContent
+                                                        icon={
+                                                            <FaMoneyBillAlt />
+                                                        }
+                                                        text="Sell products"
+                                                    />
+                                                    <BusinessAppsContent
+                                                        icon={
+                                                            <AiOutlineUsergroupDelete />
+                                                        }
+                                                        text="Groups"
+                                                    />
+                                                    <BusinessAppsContent
+                                                        icon={<MdFindReplace />}
+                                                        text="Pro finder"
+                                                    />
+                                                    <BusinessAppsContent
+                                                        icon={<MdAttachMoney />}
+                                                        text="Salary"
+                                                    />
+                                                    <BusinessAppsContent
+                                                        icon={<BsFilePost />}
+                                                        text="New product"
+                                                    />
+                                                    <BusinessAppsContent
+                                                        icon={
+                                                            <FaConnectdevelop />
+                                                        }
+                                                        text="New product developed"
+                                                    />
+                                                    <BusinessAppsContent
+                                                        icon={
+                                                            <SiGoogleanalytics />
+                                                        }
+                                                        text="Profile statistics"
+                                                    />
                                                 </div>
                                             </ul>
                                         </li>
