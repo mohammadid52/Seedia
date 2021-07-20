@@ -31,15 +31,16 @@ const Header = ({ themeToggler, theme }) => {
         return (
             <li
                 {...{
-                    className: 'nav-item with-label link-hover',
+                    className: 'nav-item with-label link-hover ',
                 }}
             >
                 {!dropdown ? (
                     <a
                         {...{
-                            className: 'nav-link active',
+                            className: 'nav-link active  flex-col',
                             href: '#/',
                         }}
+                        style={{ display: 'flex !important' }}
                         aria-current="page"
                     >
                         {icon}
@@ -65,7 +66,9 @@ const Header = ({ themeToggler, theme }) => {
             <div {...{ className: ' header-top' }}>
                 <header
                     {...{
-                        className: 'header-container flex items-center' + theme,
+                        className:
+                            'header-container border-1 border-gray-300 flex items-center' +
+                            theme,
                     }}
                 >
                     <Col
@@ -88,7 +91,8 @@ const Header = ({ themeToggler, theme }) => {
 
                     <nav
                         {...{
-                            className: 'navbar navbar-expand-lg navbar-light',
+                            className:
+                                'navbar navbar-expand-lg navbar-light p-0',
                         }}
                     >
                         <div {...{ className: 'container-fluid' }}>
@@ -154,7 +158,7 @@ const Header = ({ themeToggler, theme }) => {
                                                 <svg
                                                     stroke="currentColor"
                                                     fill="currentColor"
-                                                    stroke-width="0"
+                                                    strokeWidth="0"
                                                     viewBox="0 0 512 512"
                                                     height="1em"
                                                     width="1em"
@@ -327,7 +331,7 @@ const Header = ({ themeToggler, theme }) => {
                                                 <svg
                                                     stroke="currentColor"
                                                     fill="currentColor"
-                                                    stroke-width="0"
+                                                    strokeWidth="0"
                                                     viewBox="0 0 24 24"
                                                     height="1em"
                                                     width="1em"
@@ -380,7 +384,7 @@ const Header = ({ themeToggler, theme }) => {
                                                 <li className="button-list">
                                                     <button
                                                         className="MuiButtonBase-root MuiButton-root MuiButton-text dropdown-item sell-button"
-                                                        tabindex="0"
+                                                        tabIndex="0"
                                                         type="button"
                                                     >
                                                         <span className="MuiButton-label">
@@ -390,7 +394,7 @@ const Header = ({ themeToggler, theme }) => {
                                                     </button>
                                                     <button
                                                         className="MuiButtonBase-root MuiButton-root MuiButton-text dropdown-item sell-button"
-                                                        tabindex="0"
+                                                        tabIndex="0"
                                                         type="button"
                                                     >
                                                         <span className="MuiButton-label">
@@ -464,7 +468,7 @@ const Header = ({ themeToggler, theme }) => {
                                                 <svg
                                                     stroke="currentColor"
                                                     fill="currentColor"
-                                                    stroke-width="0"
+                                                    strokeWidth="0"
                                                     viewBox="0 0 24 24"
                                                     height="1em"
                                                     width="1em"

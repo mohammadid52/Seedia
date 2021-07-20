@@ -68,8 +68,8 @@ const Search = ({
                                 <HtmlTooltip
                                     title={
                                         <React.Fragment>
-                                            <p class="p1">
-                                                <span class="s1">
+                                            <p className="p1">
+                                                <span className="s1">
                                                     <strong>
                                                         Bulk items
                                                         <br />{' '}
@@ -78,8 +78,8 @@ const Search = ({
                                                 Bulk items are items that are
                                                 offered in large numbers.
                                             </p>
-                                            <p class="p1">
-                                                <span class="s1">
+                                            <p className="p1">
+                                                <span className="s1">
                                                     <strong>
                                                         Commercial agent
                                                         <br />{' '}
@@ -87,7 +87,7 @@ const Search = ({
                                                 </span>
                                                 A commercial agent acts on your
                                                 company's behalf.
-                                                <span class="s1">
+                                                <span className="s1">
                                                     <strong>
                                                         <br />{' '}
                                                     </strong>
@@ -95,8 +95,8 @@ const Search = ({
                                                 Find a commercial agent abroad
                                                 to sell your products abroad.
                                             </p>
-                                            <p class="p1">
-                                                <span class="s1">
+                                            <p className="p1">
+                                                <span className="s1">
                                                     <strong>
                                                         Distributor
                                                         <br />{' '}
@@ -104,7 +104,7 @@ const Search = ({
                                                 </span>
                                                 A distributor acts for its own
                                                 account and risk.
-                                                <span class="s1">
+                                                <span className="s1">
                                                     <strong>
                                                         <br />{' '}
                                                     </strong>
@@ -112,8 +112,8 @@ const Search = ({
                                                 Find a distributor who wants to
                                                 buy your products.
                                             </p>
-                                            <p class="p1">
-                                                <span class="s1">
+                                            <p className="p1">
+                                                <span className="s1">
                                                     <strong>
                                                         Manufacturer
                                                         <br />{' '}
@@ -121,7 +121,7 @@ const Search = ({
                                                 </span>
                                                 A manufacturer is a company that
                                                 produces goods.
-                                                <span class="s1">
+                                                <span className="s1">
                                                     <strong>
                                                         <br />{' '}
                                                     </strong>
@@ -129,8 +129,8 @@ const Search = ({
                                                 Find a manufacturer who wants to
                                                 produce your product.
                                             </p>
-                                            <p class="p1">
-                                                <span class="s1">
+                                            <p className="p1">
+                                                <span className="s1">
                                                     <strong>
                                                         Supplier
                                                         <br />{' '}
@@ -138,7 +138,7 @@ const Search = ({
                                                 </span>
                                                 A supplier provides goods or
                                                 services in exchange for money.
-                                                <span class="s1">
+                                                <span className="s1">
                                                     <strong>
                                                         <br />{' '}
                                                     </strong>

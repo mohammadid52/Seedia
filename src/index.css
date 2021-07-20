@@ -47,6 +47,28 @@ a {
     text-decoration: none;
 }
 
+a {
+    font-weight: 400;
+    transition: all 150ms ease-in-out;
+    background-color: rgba(0, 0, 0, 0);
+    border: 0px;
+    text-align: center;
+    text-decoration: none;
+}
+a:hover {
+    color: #ea1b83 !important;
+    background-image: linear-gradient(
+        to right,
+        rgb(178, 188, 75),
+        rgb(254, 198, 78),
+        rgb(226, 17, 142),
+        rgb(86, 75, 143)
+    );
+
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+}
 .link-hover:hover {
     color: #ea1b83 !important;
     background-image: linear-gradient(

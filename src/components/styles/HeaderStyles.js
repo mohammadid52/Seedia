@@ -194,6 +194,9 @@ export default css`
         background-color: white !important;
         cursor: alias !important;
     }
+    .nav-link {
+        color: rgba(0, 0, 0, 0.9) !important;
+    }
     .dark .nav-link {
         color: #fff !important;
     }
@@ -342,9 +345,7 @@ export default css`
     .description {
         padding-top: 1.5rem;
     }
-    .item-label {
-        display: block;
-    }
+
     .with-label {
         text-align: center;
     }

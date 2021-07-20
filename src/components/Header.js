@@ -102,7 +102,7 @@ const Header = ({ themeToggler, theme }) => {
                                     <ul
                                         {...{
                                             className:
-                                                'navbar-nav me-auto mb-2 mb-lg-0 mt-3',
+                                                'navbar-nav me-auto mb-2 mb-lg-0',
                                         }}
                                     >
                                         <li

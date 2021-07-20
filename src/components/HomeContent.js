@@ -6,7 +6,6 @@ const HomeContent = ({ theme }) => {
     return (
         <Fragment>
             <div {...{ className: ' home-content' }}>
-                <hr />
                 <div
                     {...{
                         className: 'text-center ' + theme,

@@ -5,14 +5,14 @@ const SideCard = () => {
     return (
         <Card className="news-panel-start light p-4">
             <div className="mb-8">
-                <div class="visitors pb-4">
-                    <div class="flex justify-between mb-4 items-center visitor-head">
+                <div className="visitors pb-4">
+                    <div className="flex justify-between mb-4 items-center visitor-head">
                         13RMS News
                         <div>
                             <svg
                                 stroke="currentColor"
                                 fill="currentColor"
-                                stroke-width="0"
+                                strokeWidth="0"
                                 viewBox="0 0 24 24"
                                 height="1em"
                                 width="1em"
@@ -25,9 +25,9 @@ const SideCard = () => {
                             </svg>
                         </div>
                     </div>
-                    <div class="col-md-12 text-left view-all cursor-pointer col-sm-6 float-right">
+                    <div className="col-md-12 text-left view-all cursor-pointer col-sm-6 float-right">
                         <ul style={{ padding: 0 }}>
-                            <li>
+                            <li className="mb-2">
                                 <h6
                                     style={{
                                         textAlign: 'left',
@@ -37,7 +37,7 @@ const SideCard = () => {
                                 </h6>
                                 <p>Top news • 54,460 readers</p>
                             </li>
-                            <li>
+                            <li className="mb-2">
                                 <h6
                                     style={{
                                         textAlign: 'left',
@@ -47,7 +47,7 @@ const SideCard = () => {
                                 </h6>
                                 <p>Top news • 54,460 readers</p>
                             </li>
-                            <li>
+                            <li className="mb-2">
                                 <h6
                                     style={{
                                         textAlign: 'left',

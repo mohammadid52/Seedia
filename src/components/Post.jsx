@@ -16,17 +16,17 @@ const Post = ({ post }) => {
     return (
         <Card className="profile-feed light mb-8 p-3">
             <div className="css-16j7msu light">
-                <div class="flex items-center mb-8 justify-around">
-                    <div class="left-col-panel col-lg-1 col-sm-12 col-md-6 col">
+                <div className="flex items-center mb-8 justify-around">
+                    <div className="left-col-panel col-lg-1 col-sm-12 col-md-6 col">
                         <div>
                             <img
                                 src="/logo.png"
                                 alt=""
-                                class="profile-img-medium"
+                                className="profile-img-medium"
                             />
                         </div>
                     </div>
-                    <div class="pl-4 left-col-panel col-lg-11 col-sm-12 col-md-6 col">
+                    <div className="pl-4 left-col-panel col-lg-11 col-sm-12 col-md-6 col">
                         <h6 style={{ textAlign: 'left' }}>
                             {user.firstName} {user.lastName}
                         </h6>
@@ -40,7 +40,7 @@ const Post = ({ post }) => {
                                     <svg
                                         stroke="currentColor"
                                         fill="currentColor"
-                                        stroke-width="0"
+                                        strokeWidth="0"
                                         viewBox="0 0 24 24"
                                         height="1em"
                                         width="1em"
@@ -76,7 +76,7 @@ const Post = ({ post }) => {
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
-                                    stroke-width="0"
+                                    strokeWidth="0"
                                     viewBox="0 0 24 24"
                                     height="1em"
                                     width="1em"
@@ -93,7 +93,7 @@ const Post = ({ post }) => {
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
-                                    stroke-width="0"
+                                    strokeWidth="0"
                                     t="1569682881658"
                                     viewBox="0 0 1024 1024"
                                     version="1.1"
@@ -115,7 +115,7 @@ const Post = ({ post }) => {
                                 <svg
                                     stroke="currentColor"
                                     fill="currentColor"
-                                    stroke-width="0"
+                                    strokeWidth="0"
                                     viewBox="0 0 24 24"
                                     height="1em"
                                     width="1em"
@@ -138,10 +138,10 @@ const Post = ({ post }) => {
                                 <svg
                                     stroke="currentColor"
                                     fill="none"
-                                    stroke-width="2"
+                                    strokeWidth="2"
                                     viewBox="0 0 24 24"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
                                     height="1em"
                                     width="1em"
                                     xmlns="http://www.w3.org/2000/svg"

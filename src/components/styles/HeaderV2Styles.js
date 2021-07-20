@@ -363,7 +363,6 @@ export default css`
         padding-top: 1.5rem;
     }
     .item-label {
-        display: block;
         color: #000000e6;
         font-size: 14px !important;
         font-weight: 400;

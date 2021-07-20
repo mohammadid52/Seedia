@@ -297,9 +297,7 @@ export default css`
         top: 0;
         width: 100%;
         display: flex;
-        /*background-color: #131921;*/
         padding: 0px !important;
-        /*color: #fff !importan;*/
     }
     .neon-red {
         --neon: #ff5161;
@@ -776,9 +774,7 @@ export default css`
     button {
         font-size: 14px;
     }
-    .item-label {
-        display: block;
-    }
+
     .with-label {
         text-align: center;
     }
