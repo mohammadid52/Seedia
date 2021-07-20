@@ -5,7 +5,6 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Loading from './components/Loading'
-import NotFound from './components/pages/NotFound'
 import Dashboard from './components/pages/Dashboard'
 
 const Welcome = lazy(() => import('./Welcome'))
@@ -83,7 +82,6 @@ class App extends Component {
                         path="/profile"
                         component={ProfileWithLoader}
                     />
-                    <Route component={NotFound} />
                 </Switch>
             </Router>
         )
