@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react'
 import { Row, Col, Button } from 'reactstrap'
-import useDarkMode from 'use-dark-mode'
 
 import paySafe from './../public/assets/features/pay-safe.png'
 import globe from './../public/assets/features/globe.png'
@@ -29,7 +28,7 @@ const Features = ({ theme }) => {
     } else {
         color = false
     }
-    console.log(color)
+
     return (
         <Fragment>
             <div

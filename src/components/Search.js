@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { Row, Col, Container } from 'reactstrap'
-import useDarkMode from 'use-dark-mode'
+
 import Select from 'react-select'
 import SpeechRecognition from 'react-speech-recognition'
 import { compose, pure, lifecycle, withHandlers, withState } from 'recompose'
@@ -28,9 +28,9 @@ const Search = ({
 }) => {
     const searchPlaceHolder =
         ['products', 'bulk'].indexOf(product.value) !== -1 ? 'Search' : 'Find a'
-    const darkMode = useDarkMode(false)
+
     var color, textColor
-    if (theme == 'dark') {
+    if (theme === 'dark') {
         color = '#262d31'
         textColor = '#fff'
     } else {

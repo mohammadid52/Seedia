@@ -1,10 +1,17 @@
-import CopyrightStyles from './styles/CopyrightStyles'
+import './styles/CopyrightStyles.css'
 
 const Copyright = () => {
     return (
-        <div {...{ className: `${CopyrightStyles} row` }}>
+        <div
+            {...{ className: 'row' }}
+            style={{
+                position: 'absolute',
+                bottom: '0px',
+                fontSize: '16px !important',
+            }}
+        >
             <hr />
-            <div className="light row">
+            <div className="light row pt-3">
                 <div className="text-center col-sm-6 col-md-12">
                     <p className="copy-right">
                         © 2021 All rights reserved.{' '}

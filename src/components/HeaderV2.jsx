@@ -8,7 +8,7 @@ import { AiOutlineHome } from 'react-icons/ai'
 import { BsPeople } from 'react-icons/bs'
 import { CgWorkAlt } from 'react-icons/cg'
 
-import HeaderV2Styles from './styles/HeaderV2Styles'
+import './styles/HeaderV2Styles.js'
 
 import { Col } from 'reactstrap'
 
@@ -38,7 +38,7 @@ const Header = ({ themeToggler, theme }) => {
                     <a
                         {...{
                             className: 'nav-link active',
-                            href: '/#',
+                            href: '#/',
                         }}
                         aria-current="page"
                     >
@@ -62,8 +62,12 @@ const Header = ({ themeToggler, theme }) => {
 
     return (
         <Fragment>
-            <div {...{ className: HeaderV2Styles + ' header-top' }}>
-                <header {...{ className: 'header-container ' + theme }}>
+            <div {...{ className: ' header-top' }}>
+                <header
+                    {...{
+                        className: 'header-container flex items-center' + theme,
+                    }}
+                >
                     <Col
                         {...{
                             className: 'header-column left-header-column',

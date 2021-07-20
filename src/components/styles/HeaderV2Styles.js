@@ -1,6 +1,6 @@
 import { css } from 'emotion'
 
-const HeaderV2Styles = css`
+export default css`
     .rms-item {
         padding: 0px !important;
     }
@@ -8,10 +8,10 @@ const HeaderV2Styles = css`
         border-radius: 38px !important;
         width: 75px !important;
         height: 75px !important;
-        user-select:none;
+        user-select: none;
         float: left !important;
     }
-    }
+
     .flex {
         display: flex;
         justify-content: space-evenly;
@@ -31,9 +31,7 @@ const HeaderV2Styles = css`
     .iconmenu:hover span {
         color: #dc3545;
     }
-    .right-header-column,
-    .left-header-column {
-    }
+
     .my-rms > li > a:hover {
         border-left: 4px solid #d63384;
         padding-left: 8px;
@@ -140,13 +138,13 @@ const HeaderV2Styles = css`
         min-block-size: 100%;
         min-inline-size: 100%;
         margin: 0;
-        padding: 5vmin;
-        box-sizing: border-box;
-        display: flex;
-        gap: 5vmin;
-        flex-wrap: wrap;
-        place-content: center;
-        font-family: system-ui;
+        /* padding: 5vmin; */
+        /* box-sizing: border-box; */
+        /* display: flex; */
+        /* gap: 5vmin; */
+        /* flex-wrap: wrap; */
+        /* place-content: center; */
+        /* font-family: system-ui; */
     }
     #dark {
         background: #262d31 !important;
@@ -171,13 +169,12 @@ const HeaderV2Styles = css`
         justify-content: center;
     }
     .header-container {
-        // background-color: #fff;
         min-height: 60px !important;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
         font-size: calc(10px + 2vmin);
-        // color: white;
+
         display: flex !important;
         border-bottom: 1px solid #ddd;
     }
@@ -199,9 +196,7 @@ const HeaderV2Styles = css`
         margin-top: 15px;
         margin-left: 4rem;
     }
-    // .dropdown:hover > .dropdown-menu {
-    //   display: block;
-    // }
+
     .new-to-rms:hover {
         background-color: white !important;
         cursor: alias !important;
@@ -245,7 +240,6 @@ const HeaderV2Styles = css`
         display: none;
     }
     .header-container .underline:hover {
-        // text-decoration: underline;
         border-radius: 4px;
     }
     .header-container .dropdown-menu li:hover {
@@ -266,12 +260,12 @@ const HeaderV2Styles = css`
             rgb(226, 17, 142),
             rgb(86, 75, 143)
         );
-    
+
         -webkit-text-fill-color: transparent;
         background-clip: text;
         -webkit-background-clip: text;
     }
-    }
+
     .header-container li {
         font-size: 16px !important;
     }
@@ -285,9 +279,7 @@ const HeaderV2Styles = css`
         margin-left: 8px;
         margin-top: 5px;
     }
-    .header-container .navbar-light .navbar-nav .nav-link {
-        // color: #fff !important;
-    }
+
     .light .dropdown-toggle {
         color: rgba(0, 0, 0, 0.9) !important;
     }
@@ -333,9 +325,9 @@ const HeaderV2Styles = css`
             padding-top: 0px;
         }
     }
-    .light .image-url {
-        background-image: url(../../public/assets/logo.jpg);
-    }
+    /* .light .image-url {
+    background-image: url(../../public/assets/logo.jpg);
+} */
     .description {
         font-family: 'Times New Roman', Times, serif;
     }
@@ -372,9 +364,9 @@ const HeaderV2Styles = css`
     }
     .item-label {
         display: block;
-        color:#000000E6 ;
-        font-size:14px !important;
-        font-weight:400;
+        color: #000000e6;
+        font-size: 14px !important;
+        font-weight: 400;
     }
     .with-label {
         text-align: center;
@@ -382,9 +374,9 @@ const HeaderV2Styles = css`
 
     .nav-item {
         margin-bottom: 0.5rem;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .pointer-span:hover {
@@ -396,7 +388,7 @@ const HeaderV2Styles = css`
             rgb(226, 17, 142),
             rgb(86, 75, 143)
         );
-    
+
         -webkit-text-fill-color: transparent;
         background-clip: text;
         -webkit-background-clip: text;
@@ -406,7 +398,7 @@ const HeaderV2Styles = css`
         margin-left: 7rem;
         padding-top: 5px !important;
     }
-    
+
     .pointer-span {
         color: rgb(17, 85, 204);
     }
@@ -424,7 +416,6 @@ const HeaderV2Styles = css`
         position: absolute;
         width: 255px !important;
         padding: 14px !important;
-        
     }
 
     .dropdown-menu {
@@ -442,11 +433,11 @@ const HeaderV2Styles = css`
     .dropdown-menu[data-bs-popper] {
         top: 100%;
         left: 0;
-        margin-top: .125rem;
+        margin-top: 0.125rem;
     }
 
     .end-0 {
-        right: 0!important;
+        right: 0 !important;
     }
 
     .dropdown-menu {
@@ -454,7 +445,7 @@ const HeaderV2Styles = css`
         z-index: 1000;
         display: none;
         min-width: 10rem;
-        padding: .5rem 0;
+        padding: 0.5rem 0;
         margin: 0;
         font-size: 1rem;
         color: #212529;
@@ -462,23 +453,25 @@ const HeaderV2Styles = css`
         list-style: none;
         background-color: #fff;
         background-clip: padding-box;
-        border: 1px solid rgba(0,0,0,.15);
-        border-radius: .25rem;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius: 0.25rem;
     }
-    .dropdown, .dropend, .dropstart, .dropup {
+    .dropdown,
+    .dropend,
+    .dropstart,
+    .dropup {
         position: relative;
     }
     .header-container .dropdown-menu {
         padding: 14px;
     }
 
-     .button-list {
+    .button-list {
         text-align: center;
         display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .header-container .dropdown-item {
@@ -499,8 +492,10 @@ const HeaderV2Styles = css`
         font-size: 0.875rem;
         min-width: 64px;
         box-sizing: border-box;
-        transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+            box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+            border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
         font-weight: 500;
         line-height: 1.75;
         border-radius: 4px;
@@ -510,7 +505,7 @@ const HeaderV2Styles = css`
     .dropdown-item {
         display: block;
         width: 100%;
-        padding: .25rem 1rem;
+        padding: 0.25rem 1rem;
         clear: both;
         font-weight: 400;
         color: #212529;
@@ -535,7 +530,7 @@ const HeaderV2Styles = css`
         width: 270px;
     }
 
-     .business-app {
+    .business-app {
         margin-left: auto;
         position: absolute;
         width: 540px;
@@ -562,5 +557,3 @@ const HeaderV2Styles = css`
         margin-top: 10px;
     }
 `
-
-export default HeaderV2Styles

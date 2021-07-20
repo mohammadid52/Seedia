@@ -1,9 +1,5 @@
 import { css } from 'emotion'
-
-const IndexStyles = css`
-     {
-        width: 100%;
-    }
+export default css`
     .rms-item {
         padding: 0px !important;
     }
@@ -32,9 +28,7 @@ const IndexStyles = css`
     .iconmenu:hover span {
         color: #dc3545;
     }
-    .right-header-column,
-    .left-header-column {
-    }
+
     .my-rms > li > a:hover {
         border-left: 4px solid #d63384;
         padding-left: 8px;
@@ -150,33 +144,32 @@ const IndexStyles = css`
         background-color: #7b7b7b;
         border-radius: 9999px;
         box-shadow: 10px 0px 0 0 rgba(#000000, 0.2) inset;
+    }
+    .switchindicator::before,
+    .switchindicator::after {
+        position: absolute;
+        content: '';
+        display: block;
+        background-color: #ffffff;
+        border-radius: 9999px;
+    }
 
-        &::before,
-        &::after {
-            position: absolute;
-            content: '';
-            display: block;
-            background-color: #ffffff;
-            border-radius: 9999px;
-        }
+    .switchindicator::before {
+        top: 7px;
+        left: 7px;
+        width: 9px;
+        height: 9px;
+        background-color: #ffffff;
+        opacity: 0.6;
+    }
 
-        &::before {
-            top: 7px;
-            left: 7px;
-            width: 9px;
-            height: 9px;
-            background-color: #ffffff;
-            opacity: 0.6;
-        }
-
-        &::after {
-            bottom: 8px;
-            right: 6px;
-            width: 6px;
-            height: 6px;
-            background-color: #ffffff;
-            opacity: 0.8;
-        }
+    .switchindicator::after {
+        bottom: 8px;
+        right: 6px;
+        width: 6px;
+        height: 6px;
+        background-color: #ffffff;
+        opacity: 0.8;
     }
 
     .switchdecoration {
@@ -189,30 +182,29 @@ const IndexStyles = css`
         background-color: #ffffff;
         border-radius: 9999px;
         animation: twinkle 0.8s infinite -0.6s;
+    }
 
-        &::before,
-        &::after {
-            position: absolute;
-            display: block;
-            content: '';
-            width: 5px;
-            height: 5px;
-            background-color: #ffffff;
-            border-radius: 9999px;
-        }
+    .switchdecoration::after,
+    .switchdecoration::before {
+        position: absolute;
+        display: block;
+        content: '';
+        width: 5px;
+        height: 5px;
+        background-color: #ffffff;
+        border-radius: 9999px;
+    }
+    .switchdecoration::before {
+        top: -20px;
+        left: 10px;
+        opacity: 1;
+        animation: twinkle 0.6s infinite;
+    }
 
-        &::before {
-            top: -20px;
-            left: 10px;
-            opacity: 1;
-            animation: twinkle 0.6s infinite;
-        }
-
-        &::after {
-            top: -7px;
-            left: 30px;
-            animation: twinkle 0.6s infinite -0.2s;
-        }
+    .switchdecoration::after {
+        top: -7px;
+        left: 30px;
+        animation: twinkle 0.6s infinite -0.2s;
     }
 
     @keyframes twinkle {
@@ -221,12 +213,10 @@ const IndexStyles = css`
         }
     }
 
-    .switchindicator {
-        &,
-        &::before,
-        &::after {
-            transition: all 0.4s cubic-bezier(0.46, 0.03, 0.52, 0.96);
-        }
+    .switchindicator,
+    .switchindicator::after,
+    .switchindicator::before {
+        transition: all 0.4s cubic-bezier(0.46, 0.03, 0.52, 0.96);
     }
 
     .switchinput:checked + .switchlabel {
@@ -303,7 +293,7 @@ const IndexStyles = css`
         }
     }
     .navbar {
-        // position: fixed;
+        position: fixed;
         top: 0;
         width: 100%;
         display: flex;
@@ -451,19 +441,15 @@ const IndexStyles = css`
         color: #ee09;
     }
 
-    //----------------------headerstyles
-
     .header-top {
         width: 100% !important;
     }
     .description {
         padding-top: 1.5rem;
     }
-    .right-header-column,
-    .left-header-column {
-    }
+
     .header-container {
-        // background-color: #fff;
+        background-color: #fff;
         min-height: 60px !important;
         flex-direction: column;
         align-items: center;
@@ -472,7 +458,7 @@ const IndexStyles = css`
         color: white;
         margin-top: -13px;
         height: 60px !important;
-        // display: -webkit-box !important;
+        display: -webkit-box !important;
     }
 
     .header-column {
@@ -492,9 +478,9 @@ const IndexStyles = css`
         margin-top: 15px;
         margin-left: 4rem;
     }
-    // .dropdown:hover > .dropdown-menu {
-    //   display: block;
-    // }
+    .dropdown:hover > .dropdown-menu {
+        display: block;
+    }
     .new-to-rms:hover {
         background-color: white !important;
         cursor: alias !important;
@@ -537,7 +523,6 @@ const IndexStyles = css`
         display: none;
     }
     .header-container .underline:hover {
-        // text-decoration: underline;
         border-radius: 4px;
     }
     .header-container .dropdown-menu li:hover {
@@ -566,9 +551,7 @@ const IndexStyles = css`
         margin-left: 8px;
         margin-top: 5px;
     }
-    .header-container .navbar-light .navbar-nav .nav-link {
-        // color: #fff !important;
-    }
+
     .light .dropdown-toggle {
         color: rgba(0, 0, 0, 0.9) !important;
     }
@@ -620,9 +603,9 @@ const IndexStyles = css`
             text-align: inherit !important;
         }
     }
-    .light .image-url {
-        background-image: url(../../public/assets/logo.jpg);
-    }
+    /* .light .image-url {
+    background-image: url(../../public/assets/logo.jpg);
+} */
     .description {
         font-family: 'Times New Roman', Times, serif;
     }
@@ -713,16 +696,12 @@ const IndexStyles = css`
         }
     }
 
-    //--------toggle button
-
     .dark-mode-toggle > button {
         color: #999;
         &:last-child {
             color: lightblue;
         }
     }
-
-    //---------------toggleStyles
 
     .switch {
         position: relative;
@@ -878,5 +857,3 @@ const IndexStyles = css`
         font-weight: normal !important;
     }
 `
-
-export default IndexStyles

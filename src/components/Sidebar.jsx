@@ -29,7 +29,10 @@ const Sidebar = ({ setCollapsed, collapsed }) => {
                                         <path d="M32 96v64h448V96H32zm0 128v64h448v-64H32zm0 128v64h448v-64H32z"></path>
                                     </svg>
                                 </div>
-                                <div hidden={collapsed} class="company-logo">
+                                <div
+                                    hidden={collapsed}
+                                    className="company-logo"
+                                >
                                     <img src="/logo.png" alt="13RMS" />
                                 </div>
                             </div>

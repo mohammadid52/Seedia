@@ -1,58 +1,39 @@
+import './styles/HeaderStyles.js'
 import React, { Fragment } from 'react'
 import { Col } from 'reactstrap'
 import useDarkMode from 'use-dark-mode'
-import Icon from '@oticon/react-icons'
-import sun from './../public/assets/sun.png'
-import night from './../public/assets/night.png'
-import moon from './../public/assets/moon.png'
-import { withStyles, makeStyles } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
+
+import { withStyles } from '@material-ui/core/styles'
 
 import Toggle from './Toggle'
 
-import { RiShoppingCart2Line } from 'react-icons/ri'
-import { BiMessageDetail } from 'react-icons/bi'
-import { FaRegBell } from 'react-icons/fa'
-import { AiOutlineHome } from 'react-icons/ai'
-import { BsPeople } from 'react-icons/bs'
-import { CgWorkAlt } from 'react-icons/cg'
-
-import { adjustColors, my13Rms } from '../values/values'
+import { adjustColors } from '../values/values'
 
 import menu from './../public/assets/menu.png'
-import red from './../public/assets/red.png'
-import green from './../public/assets/green.png'
+
 import menuWhite from './../public/assets/list.png'
-import on from './../public/assets/on.png'
-import off from './../public/assets/off.png'
-import HeaderStyles from './styles/HeaderStyles'
+
 import Button from '@material-ui/core/Button'
 import Brightness5Icon from '@material-ui/icons/Brightness5'
 import Brightness2Icon from '@material-ui/icons/Brightness2'
 
-// Gets the username from the token
-const getUserName = () => {
-    const tokenString = localStorage.getItem('token')
-    if (tokenString) {
-        const token = JSON.parse(tokenString)
-        if (token.name) return token.name
-        else return null
-    } else {
-        return null
-    }
-}
+// // Gets the username from the token
+// const getUserName = () => {
+//     const tokenString = localStorage.getItem('token')
+//     if (tokenString) {
+//         const token = JSON.parse(tokenString)
+//         if (token.name) return token.name
+//         else return null
+//     } else {
+//         return null
+//     }
+// }
 
 const Header = ({ themeToggler, theme }) => {
-    const userName = getUserName()
-
-    const handleSignOutClick = () => {
-        localStorage.removeItem('token')
-    }
-
     const darkMode = useDarkMode(false)
     const hamburg = theme === 'light' ? menuWhite : menu
     var colors, borderColors
-    if (theme == 'dark') {
+    if (theme === 'dark') {
         colors = '#ffff'
         borderColors = '#ffff'
     } else {
@@ -69,7 +50,7 @@ const Header = ({ themeToggler, theme }) => {
     // header-column right-header-column col
     return (
         <Fragment>
-            <div {...{ className: HeaderStyles + ' header-top' }}>
+            <div style={{ width: '100%' }} {...{ className: ' header-top' }}>
                 <header {...{ className: 'header-container ' + theme }}>
                     <nav
                         {...{
@@ -213,9 +194,6 @@ const Header = ({ themeToggler, theme }) => {
                                                                 className={
                                                                     'daymode'
                                                                 }
-                                                                onClick={
-                                                                    darkMode.enable
-                                                                }
                                                                 startIcon={
                                                                     <Brightness2Icon />
                                                                 }
@@ -251,9 +229,6 @@ const Header = ({ themeToggler, theme }) => {
                                                                             width: '100px',
                                                                         },
                                                                     }}
-                                                                    onClick={
-                                                                        darkMode.disable
-                                                                    }
                                                                     className={
                                                                         'daymode'
                                                                     }
@@ -288,9 +263,6 @@ const Header = ({ themeToggler, theme }) => {
                                                                     }
                                                                     className={
                                                                         'daymode'
-                                                                    }
-                                                                    onClick={
-                                                                        darkMode.enable
                                                                     }
                                                                     variant="contained"
                                                                 >

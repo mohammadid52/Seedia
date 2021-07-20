@@ -49,13 +49,17 @@ class App extends Component {
     }
 
     componentDidMount() {
-        const themeData = JSON.parse(localStorage.getItem('theme'))
-        if (themeData) {
-            this.setState({
-                ...this.state,
-                theme: themeData.theme,
-            })
-        }
+        try {
+            const themeData = JSON.parse(
+                localStorage.getItem('theme') || { theme: 'light' }
+            )
+            if (themeData) {
+                this.setState({
+                    ...this.state,
+                    theme: themeData.theme,
+                })
+            }
+        } catch (err) {}
     }
 
     componentWillUpdate(nextProps, nextState) {

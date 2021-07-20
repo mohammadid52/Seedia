@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Box from '@material-ui/core/Box'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { useHistory } from 'react-router'
+
 import Loading from '../Loading'
 import AuthStyles from '../styles/AuthStyles'
 import { Row, Col, FormInput } from 'shards-react'
@@ -170,15 +170,15 @@ export default function Signup() {
                                     By clicking Agree and Join, you agree to
                                     13RMS{' '}
                                 </span>
-                                <a className="link-hover" href="#">
+                                <a className="link-hover" href="/#">
                                     User Agreement
                                 </a>
                                 <span>, </span>
-                                <a className="link-hover" href="#">
+                                <a className="link-hover" href="/#">
                                     Privacy Policy
                                 </a>{' '}
                                 <span>and </span>{' '}
-                                <a className="link-hover" href="#">
+                                <a className="link-hover" href="/#">
                                     Cookie Policy
                                 </a>{' '}
                                 <span>.</span>

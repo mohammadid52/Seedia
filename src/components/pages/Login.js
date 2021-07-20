@@ -5,12 +5,11 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Box from '@material-ui/core/Box'
 
 import { makeStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
 
 import { useHistory } from 'react-router'
 import Loading from '../Loading'
 import AuthStyles from '../styles/AuthStyles'
-import { Row, Col, FormInput, Button } from 'shards-react'
+import { Row, Col, FormInput } from 'shards-react'
 import Copyright from '../Copyright'
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -139,7 +138,7 @@ export default function Login({ setToken }) {
                                 />
                             </Col>
 
-                            <a href="#" className="link-hover forgot-password">
+                            <a href="/#" className="link-hover forgot-password">
                                 Forgot password?
                             </a>
                             <Box
