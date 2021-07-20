@@ -171,7 +171,7 @@ const Header = ({ themeToggler, theme }) => {
                                         />
                                         <li className="nav-item customDropdown  with-label">
                                             <a
-                                                className="nav-link flex flex-col my-account"
+                                                className="nav-link flex flex-col items-center my-account"
                                                 href="/#"
                                                 style={{
                                                     color: 'rgba(0,0,0,0.9)',
@@ -475,7 +475,7 @@ const Header = ({ themeToggler, theme }) => {
 
                                         <li className="nav-item customDropdown  with-label">
                                             <a
-                                                className="nav-link active flex flex-col"
+                                                className="nav-link active flex flex-col items-center"
                                                 href="/#"
                                                 id="navbarDropdown"
                                                 style={{
