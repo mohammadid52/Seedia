@@ -9,6 +9,11 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+app.use('/', express.static(path.join(__dirname, 'build')))
+app.use('*', express.static(path.join(__dirname, 'build', 'static')))
+app.use('/', express.static(path.join(__dirname, 'build/static')))
+app.use('/static', express.static(__dirname + 'build/static'))
+
 app.use('/login', loginRouter)
 
 const getTokenFrom = (request) => {
@@ -32,18 +37,13 @@ app.post('/test', (req, res) => {
     res.send({ 'Token verified': body })
 })
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'))
-})
-
-app.use(express.static(path.join(__dirname, 'build')))
-app.use(express.static(path.join(__dirname, 'build', 'static')))
-
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/build/index.html'))
 })
 
-app.use('/', express.static(path.join(__dirname, 'build/static')))
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'))
+})
 
 console.log(path.join(__dirname, 'build', 'static'))
 
