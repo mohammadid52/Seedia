@@ -40,9 +40,8 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 
-app.use('/', express.static(path.join(__dirname, 'build')))
-app.use('*', express.static(path.join(__dirname, 'build/static')))
-app.use('/static', express.static(__dirname + '/build/static'))
+app.use('/', express.static(path.join(__dirname + 'build')))
+app.use('*', express.static(path.join(__dirname + 'build/static')))
 
 app.listen(3005, () => {
     console.log('API Server running on 3005')
