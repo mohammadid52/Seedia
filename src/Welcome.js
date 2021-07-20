@@ -17,16 +17,16 @@ export default class Welcome extends Component {
         this.setState({ theme: value })
     }
 
-    componentDidMount() {
-        const themeData = JSON.parse(localStorage.getItem('theme')) || {
-            theme: 'light',
-        }
-        if (themeData) {
-            this.setState({
-                theme: themeData.theme,
-            })
-        }
-    }
+    // componentDidMount() {
+    //     const themeData = JSON.parse(localStorage.getItem('theme')) || {
+    //         theme: 'light',
+    //     }
+    //     if (themeData) {
+    //         this.setState({
+    //             theme: themeData.theme,
+    //         })
+    //     }
+    // }
 
     componentWillUpdate(nextProps, nextState) {
         localStorage.setItem('theme', JSON.stringify(nextState || 'light'))
