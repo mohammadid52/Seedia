@@ -389,7 +389,7 @@ const Header = ({ themeToggler, theme }) => {
                                                 >
                                                     <div>
                                                         <img
-                                                            src="/static/media/13RMS.45341eaf.png"
+                                                            src="/logo.png"
                                                             alt=""
                                                             className="profile-img-medium"
                                                         />

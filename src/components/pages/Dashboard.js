@@ -320,7 +320,7 @@ const Dashboard = () => {
                                                 <div className="feed-identity"></div>
                                                 <div>
                                                     <img
-                                                        src="/static/media/13RMS.45341eaf.png"
+                                                        src="/logo.png"
                                                         alt=""
                                                         className="profile-img-large"
                                                     />
