@@ -11,6 +11,8 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, 'build')))
 app.use(express.static(path.join(__dirname, 'build/static')))
 
+app.use(express.static(path.join(__dirname, 'public')))
+
 app.use('/login', loginRouter)
 
 const getTokenFrom = (request) => {
