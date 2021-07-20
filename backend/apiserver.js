@@ -9,8 +9,6 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.use(express.static(path.join(__dirname, 'build')))
-
 app.use('/login', loginRouter)
 
 const getTokenFrom = (request) => {
@@ -41,6 +39,8 @@ app.get('/', (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
+
+app.use(express.static(path.join(__dirname, 'build')))
 
 app.listen(3005, () => {
     console.log('API Server running on 3005')
