@@ -38,11 +38,9 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
-
-app.use('static', express.static(path.join(__dirname, 'public')))
 
 app.listen(3005, () => {
     console.log('API Server running on 3005')
