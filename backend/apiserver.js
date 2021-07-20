@@ -33,12 +33,13 @@ app.post('/test', (req, res) => {
 })
 
 app.use(express.static(path.join(__dirname, 'build')))
+app.use(express.static(path.join(__dirname, 'build', 'static')))
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 
-app.use('/static', express.static(path.join(__dirname, 'build/static')))
+app.use('/', express.static(path.join(__dirname, 'build', 'static')))
 
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
