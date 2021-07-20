@@ -8,6 +8,11 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use('/', express.static('public'))
+app.use(express.static(path.join(__dirname, 'build')))
+app.use('/', express.static(path.join(__dirname, 'build', 'static')))
+
+app.use(express.static(path.join(__dirname, 'build', 'static')))
 
 app.use('/login', loginRouter)
 
@@ -32,14 +37,9 @@ app.post('/test', (req, res) => {
     res.send({ 'Token verified': body })
 })
 
-app.use(express.static(path.join(__dirname, 'build')))
-app.use(express.static(path.join(__dirname, 'build', 'static')))
-
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
-
-app.use('/', express.static(path.join(__dirname, 'build', 'static')))
 
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
