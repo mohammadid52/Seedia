@@ -42,7 +42,6 @@ app.get('*', (req, res) => {
 
 app.use(express.static(path.join(__dirname, 'build')))
 app.use(express.static(path.join(__dirname, 'build', 'static')))
-app.use('/static', express.static(path.resolve(__dirname, 'build/static')))
 
 app.listen(3005, () => {
     console.log('API Server running on 3005')
