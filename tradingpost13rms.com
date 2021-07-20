@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name: tradingpost13rms.com;
+    server_name tradingpost13rms.com;
 
     location / {
         root /home/ubuntu/13RMS_NEW/backend/build/static;
