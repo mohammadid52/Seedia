@@ -842,7 +842,7 @@ const Search = ({
                                             <div
                                                 {...{
                                                     className:
-                                                        'nav-link dropdown-toggle',
+                                                        'nav-link pt-1 pl-1',
 
                                                     id: 'navbarDropdown',
                                                     role: 'button',

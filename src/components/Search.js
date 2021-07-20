@@ -278,13 +278,12 @@ const Search = ({
                                         <li
                                             {...{
                                                 className:
-                                                    'nav-item dropdown  w-100',
+                                                    'nav-item customDropdown  w-100',
                                             }}
                                         >
                                             <a
                                                 {...{
-                                                    className:
-                                                        'nav-link dropdown-toggle',
+                                                    className: 'nav-link  pt-1',
                                                     href: '/#',
                                                     id: 'navbarDropdown',
                                                     role: 'button',
@@ -306,10 +305,9 @@ const Search = ({
                                             <ul
                                                 {...{
                                                     className:
-                                                        'dropdown-menu end-0 left-auto',
+                                                        'dropdown-content end-0 left-auto',
                                                 }}
                                                 {...{ id: theme }}
-                                                aria-labelledby="navbarDropdown"
                                             >
                                                 <li
                                                     {...{
