@@ -61,7 +61,7 @@ const Search = ({
                             className: 'navbar navbar-expand-lg navbar-light',
                         }}
                     >
-                        <div {...{ className: 'container-fluid' }}>
+                        <div {...{ className: 'container-fluid px-0' }}>
                             <div
                                 {...{
                                     className:
