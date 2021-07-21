@@ -54,7 +54,8 @@ const Header = ({ themeToggler, theme }) => {
                 <header {...{ className: 'header-container ' + theme }}>
                     <nav
                         {...{
-                            className: 'navbar navbar-expand-lg navbar-light',
+                            className:
+                                'navbar navbar-expand-lg navbar-light py-1',
                         }}
                     >
                         <div {...{ className: 'container-fluid' }}>
@@ -113,7 +114,7 @@ const Header = ({ themeToggler, theme }) => {
                                             <a
                                                 {...{
                                                     className:
-                                                        'nav-link active',
+                                                        ' active customNavLink ',
                                                     href: '/#',
                                                 }}
                                                 aria-current="page"
@@ -131,14 +132,12 @@ const Header = ({ themeToggler, theme }) => {
                                             <a
                                                 {...{
                                                     className:
-                                                        'nav-link dropdown-toggle',
+                                                        ' dropdown-toggle customNavLink ',
                                                     href: '/#',
                                                     id: 'navbarDropdown',
                                                     role: 'button',
                                                 }}
-                                                style={{
-                                                    color: 'rgba(0,0,0,0.9)',
-                                                }}
+                                                
                                             >
                                                 Adjust Colors
                                             </a>
@@ -323,12 +322,10 @@ const Header = ({ themeToggler, theme }) => {
                                             <a
                                                 {...{
                                                     className:
-                                                        'nav-link join-community ',
+                                                        ' join-community customNavLink ',
                                                     href: '/#',
                                                 }}
-                                                style={{
-                                                    color: 'rgba(0,0,0,0.9)',
-                                                }}
+                                                
                                             >
                                                 Join our forum
                                             </a>
@@ -349,13 +346,13 @@ const Header = ({ themeToggler, theme }) => {
                                     >
                                         <li
                                             {...{
-                                                className: 'nav-item ',
+                                                className: 'nav-item  ',
                                             }}
                                         >
                                             <a
                                                 {...{
                                                     className:
-                                                        'nav-link active',
+                                                        'customNavLink active',
                                                     href: '/signup',
                                                 }}
                                                 aria-current="page"
@@ -365,13 +362,13 @@ const Header = ({ themeToggler, theme }) => {
                                         </li>
                                         <li
                                             {...{
-                                                className: 'nav-item ',
+                                                className: 'nav-item  ',
                                             }}
                                         >
                                             <a
                                                 {...{
                                                     className:
-                                                        'nav-link active',
+                                                        'customNavLink active',
                                                     href: '/login',
                                                 }}
                                                 aria-current="page"
@@ -387,44 +384,44 @@ const Header = ({ themeToggler, theme }) => {
                                 {/* <Col {...{ className: 'header-column right-header-column' }}>
                   <ul {...{ className: 'navbar-nav ms-auto mb-2 mb-lg-0 float-right' }}>
                     <li {...{ className: 'nav-item with-label' }}>
-                      <a {...{ className: 'nav-link active', href: '/#' }} aria-current="page">
+                      <a {...{ className: ' active', href: '/#' }} aria-current="page">
                         <AiOutlineHome {...{ style: { width: '21px', height: '21px' } }} />
                         <span {...{ className: 'item-label' }}>Home</span>
                       </a>
                     </li>
 
                     <li {...{ className: 'nav-item with-label' }}>
-                      <a {...{ className: 'nav-link active', href: '/#' }} aria-current="page">
+                      <a {...{ className: ' active', href: '/#' }} aria-current="page">
                         <BsPeople {...{ style: { width: '21px', height: '21px' } }} />
                         <span {...{ className: 'item-label' }}>My Network</span>
                       </a>
                     </li>
                     <li {...{ className: 'nav-item with-label' }}>
-                      <a {...{ className: 'nav-link active', href: '/#' }} aria-current="page">
+                      <a {...{ className: ' active', href: '/#' }} aria-current="page">
                         <CgWorkAlt {...{ style: { width: '21px', height: '21px' } }} />
                         <span {...{ className: 'item-label' }}>Jobs</span>
                       </a>
                     </li>
 
                     <li {...{ className: 'nav-item' }}>
-                      <a {...{ className: 'nav-link active', href: '/#' }} aria-current="page">
+                      <a {...{ className: ' active', href: '/#' }} aria-current="page">
                         <BiMessageDetail {...{ style: { width: '21px', height: '21px' } }} />
                       </a>
                     </li>
 
                     <li {...{ className: 'nav-item' }}>
-                      <a {...{ className: 'nav-link active', href: '/#' }} aria-current="page">
+                      <a {...{ className: ' active', href: '/#' }} aria-current="page">
                         <FaRegBell {...{ style: { width: '21px', height: '21px' } }} />
                       </a>
                     </li>
                     <li {...{ className: 'nav-item' }}>
-                      <a {...{ className: 'nav-link active', href: '/#' }} aria-current="page">
+                      <a {...{ className: ' active', href: '/#' }} aria-current="page">
                         <RiShoppingCart2Line {...{ style: { width: '21px', height: '21px' } }} />
                       </a>
                     </li>
 
                     <li {...{ className: 'nav-item dropdown ' }}>
-                      <a {...{ className: 'nav-link dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
+                      <a {...{ className: ' dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
                         Sell
                       </a>
                       <ul {...{ className: 'dropdown-menu sell' }} {...{ id: theme }} aria-labelledby="navbarDropdown">
@@ -435,7 +432,7 @@ const Header = ({ themeToggler, theme }) => {
                     </li>
 
                     <li {...{ className: 'nav-item dropdown ' }}>
-                      <a {...{ className: 'nav-link dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
+                      <a {...{ className: ' dropdown-toggle', href: '/#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
                         {'My 13RMS'}
                       </a>
                       <ul {...{ className: 'dropdown-menu end-0 my-rms' }} {...{ id: theme }} aria-labelledby="navbarDropdown">
@@ -462,7 +459,7 @@ const Header = ({ themeToggler, theme }) => {
 
                        {userName ? 
                        <li {...{ className: 'nav-item dropdown ' }}>
-                         <a {...{ className: 'nav-link dropdown-toggle', href: '#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">Hello {userName}</a>
+                         <a {...{ className: ' dropdown-toggle', href: '#', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">Hello {userName}</a>
                          <ul {...{ className: 'dropdown-menu end-0 sign-in' }} {...{ id: theme }}aria-labelledby="navbarDropdown">
                          <li>
                           <a {...{ className: 'dropdown-item', href: '#' }} onClick={handleSignOutClick}>Sign Out</a>
@@ -471,7 +468,7 @@ const Header = ({ themeToggler, theme }) => {
                        </li>
                        :
                     <li {...{ className: 'nav-item dropdown ' }}>
-                      <a {...{ className: 'nav-link dropdown-toggle', href: '/sign-in', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
+                      <a {...{ className: ' dropdown-toggle', href: '/sign-in', id: 'navbarDropdown', role: 'button' }} data-bs-toggle="dropdown" aria-expanded="false">
                         Sign In
                       </a>
                       <ul {...{ className: 'dropdown-menu end-0 sign-in' }} {...{ id: theme }}aria-labelledby="navbarDropdown">

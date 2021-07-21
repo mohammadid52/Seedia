@@ -2,6 +2,16 @@ import { css } from 'emotion'
 
 const AuthStyles = css`
 
+.loginContainer.light {
+    background-color: #fff !important;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+.loginContainer {
+    background-color: #262d31 !important;
+    color: #fff;
+}
+
 .container {
     display: grid;
     float: left;

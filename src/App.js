@@ -72,7 +72,7 @@ class App extends Component {
                     <Route exact path="/" component={WelcomeWithLoader} />
                     <Route exact path="/login">
                         <Suspense fallback={<Loading />}>
-                            <Login setToken={this.updateToken} />
+                            <Login theme={this.state.theme} setToken={this.updateToken} />
                         </Suspense>
                     </Route>
                     <Route exact path="/signup" component={SignupWithLoader} />

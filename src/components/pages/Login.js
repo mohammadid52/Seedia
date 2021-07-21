@@ -3,9 +3,7 @@ import React, { useState } from 'react'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
 import Box from '@material-ui/core/Box'
-
 import { makeStyles } from '@material-ui/core/styles'
-
 import { useHistory } from 'react-router'
 import Loading from '../Loading'
 import AuthStyles from '../styles/AuthStyles'
@@ -32,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 async function loginUser(credentials) {
-    return fetch('http://localhost:3005/login', {
+    return fetch('/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -41,7 +39,7 @@ async function loginUser(credentials) {
     }).then((data) => data.json())
 }
 
-export default function Login({ setToken }) {
+export default function Login({ setToken, theme='light' }) {
     const classes = useStyles()
     const [isLoaded, setIsLoaded] = useState(true)
     const history = useHistory()
@@ -94,7 +92,7 @@ export default function Login({ setToken }) {
     return !isLoaded ? (
         <Loading />
     ) : (
-        <main {...{ className: AuthStyles }} component="main">
+        <main {...{ className: AuthStyles + ' h-screen loginContainer ' + theme }} component="main">
             <CssBaseline />
             <div className={classes.paper}>
                 <img
@@ -105,8 +103,8 @@ export default function Login({ setToken }) {
                 />
                 <form onSubmit={handleSubmit} className={classes.form}>
                     <div className="card_layout">
-                        <h3>Sign In</h3>
-                        <p>Stay updated on your professional world</p>
+                        <h3 className="text-4xl font-semibold">Sign In</h3>
+                        <p className="text-base">Stay updated on your professional world</p>
                         <Row form>
                             {/* Email */}
                             <Col

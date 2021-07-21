@@ -70,7 +70,7 @@ export default function Signup() {
                 />
                 <form onSubmit={() => {}} className={classes.form}>
                     <div className="card_layout">
-                        <h6 className="create-account">
+                        <h6 className="create-account text-2xl font-semibold">
                             Discover the benefits of selling and networking with
                             your profile
                         </h6>
