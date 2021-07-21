@@ -42,9 +42,7 @@ const SearchStyles = css`
   .dropdown-menu a {
     padding-left: 0 !important;
   }
-  .light .navbar {
-    background: #fff !important;
-  }
+  
   .dark .navbar {
     background-color: #313231 !important;
   }
