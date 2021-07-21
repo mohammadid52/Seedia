@@ -53,6 +53,10 @@ const Search = ({
             <Container {...{ className: SearchStyles }}>
                 <Row {...{ className: theme }}>
                     <nav
+                        style={{
+                            background: 'transparent',
+                            paddingBottom: 3
+                    }}
                         {...{
                             className: 'navbar navbar-expand-lg navbar-light',
                         }}

@@ -190,7 +190,7 @@ const Header = ({ themeToggler, theme }) => {
                                                         <div className="flex items-center justify-center my-1">
                                                             <CustomButton
                                                                 onClick={
-                                                                    darkMode.disable
+                                                                    darkMode.enable
                                                                 }
                                                                 className={
                                                                     'daymode'
