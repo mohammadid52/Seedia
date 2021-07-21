@@ -54,7 +54,7 @@ const Search = ({
                 <Row {...{ className: theme }}>
                     <nav
                         style={{
-                            background: 'transparent',
+                            background: 'transparent !important',
                             paddingBottom: 3
                     }}
                         {...{
