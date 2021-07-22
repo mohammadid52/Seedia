@@ -57,7 +57,6 @@ body {
 
 .header-container .customDropdownItem {
     color: #fff !important;
-
 }
 .header-container.light .dropdown-item {
     color: #262d31 !important;
@@ -67,7 +66,8 @@ body {
     color: #fff !important;
 }
 
-.dropdown-item:hover, .dropdown-item:focus {
+.dropdown-item:hover,
+.dropdown-item:focus {
     background-color: transparent !important;
 }
 
@@ -206,4 +206,15 @@ body.dark-mode {
 :-moz-placeholder {
     /* Firefox 4 - 18 */
     font-style: italic;
+}
+
+@media only screen and (max-width: 1600px) {
+    .first-col {
+        display: none;
+    }
+}
+@media only screen and (min-width: 1600px) {
+    .third-col-2 {
+        display: none;
+    }
 }

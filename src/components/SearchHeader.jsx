@@ -599,7 +599,7 @@ const Search = ({
     return (
         <Fragment>
             <div
-                {...{ className: SearchHeaderStyles }}
+                {...{ className: SearchHeaderStyles + 'search-container' }}
                 style={{ width: '46rem' }}
             >
                 <div {...{ className: theme }}>
