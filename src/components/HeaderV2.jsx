@@ -91,7 +91,7 @@ const Header = ({ themeToggler, theme }) => {
                     {...{
                         className:
                             'header-container border-1 border-gray-300 flex items-center ' +
-                            theme,
+                                theme || 'light',
                     }}
                 >
                     <Col
