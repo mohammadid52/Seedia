@@ -86,7 +86,7 @@ const Search = ({
     <Fragment>
       <Container className="search-container">
         <Row className={theme}>
-          <nav className="pb-1 bg-transparent navbar navbar-expand-lg navbar-light">
+          <nav className="pb-1 bg-transparent navbar navbar-expand-lg hidden navbar-light">
             <div className="container-fluid px-0">
               <div
                 className="collapse navbar-collapse search-panel"

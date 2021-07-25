@@ -10,7 +10,6 @@ import {
 } from 'recompose'
 import WorldwideLocations from 'components/WorldwideLocations'
 import usa from 'assets/images/countries/usa.png'
-import FooterStyles from 'styles/FooterStyles'
 
 const Footer = ({
   theme,

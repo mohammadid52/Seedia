@@ -6,7 +6,7 @@ const SideCard = () => {
     <Card className="news-panel-start light p-4">
       <div className="mb-8">
         <div className="visitors pb-4">
-          <div className="flex justify-between mb-4 items-center visitor-head">
+          <div className="flex justify-between mb-2 items-center font-semibold text-xs italic tracking-wide">
             13RMS News
             <div>
               <svg
@@ -26,36 +26,30 @@ const SideCard = () => {
             </div>
           </div>
           <div className="col-md-12 text-left view-all cursor-pointer col-sm-6 float-right">
-            <ul style={{ padding: 0 }}>
-              <li className="mb-2">
-                <h6
-                  style={{
-                    textAlign: 'left',
-                  }}
-                >
+            <ul className="p-0">
+              <li className="mb-2 pl-2">
+                <h6 className="italic text-xs font-semibold mb-1 uppercase normal-hover">
                   WHO sets global vaccination goals
                 </h6>
-                <p>Top news • 54,460 readers</p>
+                <p className="text-gray-500 uppercase text-xs italic">
+                  Top news • 54,460 readers
+                </p>
               </li>
-              <li className="mb-2">
-                <h6
-                  style={{
-                    textAlign: 'left',
-                  }}
-                >
+              <li className="mb-2 pl-2 ">
+                <h6 className="italic text-xs font-semibold mb-1 uppercase normal-hover">
                   WHO sets global vaccination goals
                 </h6>
-                <p>Top news • 54,460 readers</p>
+                <p className="text-gray-500 uppercase text-xs italic">
+                  Top news • 54,460 readers
+                </p>
               </li>
-              <li className="mb-2">
-                <h6
-                  style={{
-                    textAlign: 'left',
-                  }}
-                >
+              <li className="mb-2 pl-2">
+                <h6 className="italic text-xs font-semibold mb-1 uppercase normal-hover">
                   WHO sets global vaccination goals
                 </h6>
-                <p>Top news • 54,460 readers</p>
+                <p className="text-gray-500 uppercase text-xs italic">
+                  Top news • 54,460 readers
+                </p>
               </li>
             </ul>
           </div>
