@@ -4,9 +4,6 @@
     "semi": ["error", "never"],
     "array-callback-return": ["off"],
     "no-tabs": "error",
-    // "indent": ["warning", 2, {
-    //   "ignoredNodes": ["TemplateLiteral"]
-    // }],
     "quotes": [
       "error",
       "single",

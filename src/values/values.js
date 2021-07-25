@@ -1,52 +1,52 @@
-import brazil from './../public/assets/countries/brazil.png'
-import argentina from './../public/assets/countries/argentina.png'
-import australia from './../public/assets/countries/australia.png'
-import austria from './../public/assets/countries/austria.png'
-import belarus from './../public/assets/countries/belarus.png'
-import belgium from './../public/assets/countries/belgium.png'
-import bolivia from './../public/assets/countries/bolivia.png'
-import canada from './../public/assets/countries/canada.png'
-import chile from './../public/assets/countries/chile.png'
-import china from './../public/assets/countries/china.png'
-import colombia from './../public/assets/countries/colombia.png'
-import costa from './../public/assets/countries/costa.png'
-import dom from './../public/assets/countries/dom.png'
-import ecuador from './../public/assets/countries/ecuador.png'
-import el from './../public/assets/countries/el.png'
-import france from './../public/assets/countries/france.png'
-import germany from './../public/assets/countries/germany.png'
-import guatemala from './../public/assets/countries/guatemala.png'
-import honduras from './../public/assets/countries/honduras.png'
-import hong from './../public/assets/countries/hong.png'
-import india from './../public/assets/countries/india.png'
-import ireland from './../public/assets/countries/ireland.png'
-import israel from './../public/assets/countries/israel.png'
-import italy from './../public/assets/countries/italy.png'
-import japan from './../public/assets/countries/japan.png'
-import kaz from './../public/assets/countries/kaz.png'
-import korea from './../public/assets/countries/korea.png'
-import malaysia from './../public/assets/countries/malaysia.png'
-import mexico from './../public/assets/countries/mexico.png'
-import netherlands from './../public/assets/countries/netherlands.png'
-import nicaragua from './../public/assets/countries/nicaragua.png'
-import panama from './../public/assets/countries/panama.png'
-import paraguay from './../public/assets/countries/paraguay.png'
-import peru from './../public/assets/countries/peru.png'
-import philippines from './../public/assets/countries/philippines.png'
-import poland from './../public/assets/countries/poland.png'
-import portugal from './../public/assets/countries/portugal.png'
-import rico from './../public/assets/countries/rico.png'
-import russia from './../public/assets/countries/russia.png'
-import singapore from './../public/assets/countries/singapore.png'
-import spain from './../public/assets/countries/spain.png'
-import switzerland from './../public/assets/countries/switzerland.png'
-import taiwan from './../public/assets/countries/taiwan.png'
-import turkey from './../public/assets/countries/turkey.png'
-import uk from './../public/assets/countries/uk.png'
-import uruguay from './../public/assets/countries/uruguay.png'
-import venezuela from './../public/assets/countries/venezuela.png'
-import usa from './../public/assets/countries/usa.png'
-import ww from './../public/assets/countries/ww.png'
+import brazil from 'assets/images/countries/brazil.png'
+import argentina from 'assets/images/countries/argentina.png'
+import australia from 'assets/images/countries/australia.png'
+import austria from 'assets/images/countries/austria.png'
+import belarus from 'assets/images/countries/belarus.png'
+import belgium from 'assets/images/countries/belgium.png'
+import bolivia from 'assets/images/countries/bolivia.png'
+import canada from 'assets/images/countries/canada.png'
+import chile from 'assets/images/countries/chile.png'
+import china from 'assets/images/countries/china.png'
+import colombia from 'assets/images/countries/colombia.png'
+import costa from 'assets/images/countries/costa.png'
+import dom from 'assets/images/countries/dom.png'
+import ecuador from 'assets/images/countries/ecuador.png'
+import el from 'assets/images/countries/el.png'
+import france from 'assets/images/countries/france.png'
+import germany from 'assets/images/countries/germany.png'
+import guatemala from 'assets/images/countries/guatemala.png'
+import honduras from 'assets/images/countries/honduras.png'
+import hong from 'assets/images/countries/hong.png'
+import india from 'assets/images/countries/india.png'
+import ireland from 'assets/images/countries/ireland.png'
+import israel from 'assets/images/countries/israel.png'
+import italy from 'assets/images/countries/italy.png'
+import japan from 'assets/images/countries/japan.png'
+import kaz from 'assets/images/countries/kaz.png'
+import korea from 'assets/images/countries/korea.png'
+import malaysia from 'assets/images/countries/malaysia.png'
+import mexico from 'assets/images/countries/mexico.png'
+import netherlands from 'assets/images/countries/netherlands.png'
+import nicaragua from 'assets/images/countries/nicaragua.png'
+import panama from 'assets/images/countries/panama.png'
+import paraguay from 'assets/images/countries/paraguay.png'
+import peru from 'assets/images/countries/peru.png'
+import philippines from 'assets/images/countries/philippines.png'
+import poland from 'assets/images/countries/poland.png'
+import portugal from 'assets/images/countries/portugal.png'
+import rico from 'assets/images/countries/rico.png'
+import russia from 'assets/images/countries/russia.png'
+import singapore from 'assets/images/countries/singapore.png'
+import spain from 'assets/images/countries/spain.png'
+import switzerland from 'assets/images/countries/switzerland.png'
+import taiwan from 'assets/images/countries/taiwan.png'
+import turkey from 'assets/images/countries/turkey.png'
+import uk from 'assets/images/countries/uk.png'
+import uruguay from 'assets/images/countries/uruguay.png'
+import venezuela from 'assets/images/countries/venezuela.png'
+import usa from 'assets/images/countries/usa.png'
+import ww from 'assets/images/countries/ww.png'
 
 export const adjustColors = [
   { name: 'Deuteranomaly', value: 1 },
@@ -59,16 +59,76 @@ export const adjustColors = [
 ]
 
 export const my13Rms = [
-  { name: 'Products of your Interest', count: 0, divider: true, classNames: '', img:'icon-layout-grid'},
-  { name: 'Business of your Interest', count: 0, divider: true, classNames: '', img: 'icon-slideshow' },
-  { name: 'My Groups', count: 0, divider: true, classNames: '', img:'icon-people'},
-  { name: 'Purchase history', count: 0, divider: true, classNames: '', img:'icon-receipt' },
-  { name: 'Recent activity', count: 0, divider: true, classNames: '', img:'icon-setting-gear-a'},
-  { name: 'Buy again', count: 0, divider: true, classNames: '', img:'icon-ecommerce-shopcart' },
-  { name: 'Selling', count: 0, divider: true, classNames: '', img:'icon-checked-circle' },
-  { name: 'Saved searches', count: 0, divider: true, classNames: '', img:'icon-interface-search-plus' },
-  { name: 'Saved sellers', count: 0, divider: true, classNames: '', img:'icon-user-alt'},
-  { name: 'Inbox', count: 0, divider: false, classNames: '', img:'icon-com-email2' },
+  {
+    name: 'Products of your Interest',
+    count: 0,
+    divider: true,
+    classNames: '',
+    img: 'icon-layout-grid',
+  },
+  {
+    name: 'Business of your Interest',
+    count: 0,
+    divider: true,
+    classNames: '',
+    img: 'icon-slideshow',
+  },
+  {
+    name: 'My Groups',
+    count: 0,
+    divider: true,
+    classNames: '',
+    img: 'icon-people',
+  },
+  {
+    name: 'Purchase history',
+    count: 0,
+    divider: true,
+    classNames: '',
+    img: 'icon-receipt',
+  },
+  {
+    name: 'Recent activity',
+    count: 0,
+    divider: true,
+    classNames: '',
+    img: 'icon-setting-gear-a',
+  },
+  {
+    name: 'Buy again',
+    count: 0,
+    divider: true,
+    classNames: '',
+    img: 'icon-ecommerce-shopcart',
+  },
+  {
+    name: 'Selling',
+    count: 0,
+    divider: true,
+    classNames: '',
+    img: 'icon-checked-circle',
+  },
+  {
+    name: 'Saved searches',
+    count: 0,
+    divider: true,
+    classNames: '',
+    img: 'icon-interface-search-plus',
+  },
+  {
+    name: 'Saved sellers',
+    count: 0,
+    divider: true,
+    classNames: '',
+    img: 'icon-user-alt',
+  },
+  {
+    name: 'Inbox',
+    count: 0,
+    divider: false,
+    classNames: '',
+    img: 'icon-com-email2',
+  },
 ]
 
 export const productsArray = [
