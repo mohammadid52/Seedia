@@ -1,5 +1,4 @@
 import React, { Component, lazy, Suspense } from 'react'
-import { hot } from 'react-hot-loader'
 import 'bootstrap/dist/css/bootstrap.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -84,4 +83,4 @@ class App extends Component {
   }
 }
 
-export default hot(module)(App)
+export default App

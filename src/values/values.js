@@ -133,6 +133,7 @@ export const my13Rms = [
 
 export const productsArray = [
   // { label: 'All', value: 'all' },
+  { label: 'All', value: 'all' },
   { label: 'Products', value: 'products' },
   { value: 'bulk', label: 'Bulk Items' },
   { value: 'commercial', label: 'Commercial Agent' },

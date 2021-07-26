@@ -41,7 +41,7 @@ const Button = ({
     }  focus:outline-none focus:ring-2 focus:ring-offset-2 `
     switch (true) {
       case gradient:
-        return `text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-${gradientColor.x}-500 to-${gradientColor.y}-500`
+        return `text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-${gradientColor.x}-500 to-${gradientColor.y}-500`
       case primary:
         return primaryClass
       case secondary:

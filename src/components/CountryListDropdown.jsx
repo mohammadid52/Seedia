@@ -26,7 +26,7 @@ const CountryListDropdown = ({ theme }) => {
             <RiArrowDropDownFill className="w-8 h-8" />
           </a>
           <ul
-            className="dropdown-content hidden absolute right-0 top-10 bg-white py-4 px-4 origin-top-right mt-2  rounded-md shadow-lg  ring-1 ring-black ring-opacity-5 focus:outline-none"
+            className="dropdown-content hidden absolute right-0 top-14 bg-white py-4 px-4 origin-top-right mt-2  rounded-md shadow-lg  ring-1 ring-black ring-opacity-5 focus:outline-none"
             id={theme}
           >
             <li className="nav-item">

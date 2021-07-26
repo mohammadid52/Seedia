@@ -23,7 +23,9 @@ const Search = ({
   voiceActivated,
 }) => {
   const searchPlaceHolder =
-    ['products', 'bulk'].indexOf(product.value) !== -1 ? 'Search' : 'Find a'
+    ['products', 'bulk', 'all'].indexOf(product.value) !== -1
+      ? 'Search'
+      : 'Find a'
 
   var color, textColor
   if (theme === 'dark') {
@@ -86,7 +88,7 @@ const Search = ({
     <Fragment>
       <Container className="search-container">
         <Row className={theme}>
-          <nav className="pb-1 bg-transparent navbar navbar-expand-lg hidden navbar-light">
+          <nav className="pb-1 px-0 bg-transparent navbar-expand-lg ">
             <div className="container-fluid px-0">
               <div
                 className="collapse navbar-collapse search-panel"
