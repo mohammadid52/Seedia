@@ -11,6 +11,7 @@ interface IButton {
     y: string
   }
   primary: boolean
+  fullWidth: boolean
   invert: boolean
   secondary: boolean
   size: 'sm' | 'md' | 'lg' | 'xl'
@@ -25,6 +26,7 @@ const Button = ({
   gradient = false,
   gradientColor = { x: 'pink', y: 'yellow' },
   primary = false,
+  fullWidth = false,
   secondary = false,
   size,
   invert = false,
@@ -70,7 +72,9 @@ const Button = ({
       type="button"
       aria-hidden="true"
       onClick={onClick}
-      className={`${generateClass()} ${generatePadding()} ${rounded} font-${weight} ${className}`}
+      className={`${generateClass()} ${generatePadding()} ${rounded} font-${weight} ${className} ${
+        fullWidth ? 'w-full' : ''
+      }`}
     >
       {label}
       {Icon && <Icon className="ml-3 -mr-1 h-5 w-5" />}

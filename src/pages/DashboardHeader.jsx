@@ -57,7 +57,7 @@ const settings = [
     name: 'Sign Out',
     description:
       'Get a better understanding of where your traffic is coming from.',
-    href: '#/',
+    href: '/',
     icon: AiOutlineLogout,
   },
 ]

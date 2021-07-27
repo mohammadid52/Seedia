@@ -13,19 +13,9 @@ const HomeContent = ({ theme }) => {
           }}
         >
           <img alt="13RMS" src={logo} className="m-0 h-48" />
-          <p
-            {...{
-              className: 'description',
-              style: {
-                textAlign: 'center',
-                display: 'grid',
-                fontWeight: '600',
-                fontSize: '15px',
-              },
-            }}
-          >
-            <span>The place to sell your products, services</span>
-            <span>and build business relationships</span>
+          <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
+            The place to sell your products, services and build business
+            relationships
           </p>
         </div>
       </div>

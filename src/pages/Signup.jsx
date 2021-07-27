@@ -1,209 +1,183 @@
 import React, { useState } from 'react'
-
-import CssBaseline from '@material-ui/core/CssBaseline'
-
-import Box from '@material-ui/core/Box'
-
-import { makeStyles } from '@material-ui/core/styles'
-
 import Loading from 'components/Loading'
-
-import { Row, Col, FormInput } from 'shards-react'
 import Copyright from 'components/Copyright'
+import Button from 'components/atoms/Button'
+import { useHistory } from 'react-router-dom'
+import useForm from 'hooks/useForm'
+import FormInput from 'components/atoms/FormInput'
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    // marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}))
-
-export default function Signup() {
-  const classes = useStyles()
+const Signup = () => {
+  const history = useHistory()
   const [isLoaded, setIsLoaded] = useState(true)
-  const [formError, setFormError] = useState(null)
 
   //capture inputs
-  const [fields, setFields] = useState({
+  const INITIAL_FIELDS = {
     email: '',
     password: '',
     firstName: '',
     lastName: '',
-  })
+  }
 
-  const onChange = (e) => {
-    setFormError(null)
-    const { name, value } = e.target
-    setFields({ ...fields, [name]: value })
+  const ERROR_INITIAL_FIELDS = {
+    email: '',
+    password: '',
+  }
+
+  const { fields, onChange, errors, setErrors } = useForm(
+    INITIAL_FIELDS,
+    ERROR_INITIAL_FIELDS
+  )
+
+  const validateForm = () => {
+    let isValid = true
+
+    const trimmedLen = (field) => fields[field].trim().length
+
+    if (trimmedLen('email') <= 0) {
+      isValid = false
+      errors.email = 'Please add email field'
+    } else {
+      isValid = true
+      errors.email = ''
+    }
+
+    if (
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+        fields.email
+      )
+    ) {
+      isValid = true
+      errors.email = ''
+    } else {
+      isValid = false
+      errors.email = 'Please enter a valid email address'
+    }
+
+    if (trimmedLen('password') < 6) {
+      isValid = false
+      errors.password = 'Password must be atleast six characters long'
+    } else {
+      isValid = true
+      errors.password = ''
+    }
+
+    setErrors({ ...errors })
+
+    return isValid
   }
 
   setTimeout(() => {
     setIsLoaded(true)
   }, 1000)
 
-  const { email, password, firstName, lastName } = fields
-
+  const handleSubmit = () => {
+    const isValid = true
+    if (isValid) {
+      history.push('/account/personal/edit-profile/company')
+    } else {
+    }
+  }
   return !isLoaded ? (
     <Loading />
   ) : (
-    <main className="" component="main">
-      <CssBaseline />
-      <div className={classes.paper}>
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md flex items-center flex-col ">
         <img
-          style={{ height: '8rem' }}
-          className={'logo'}
-          src={'/logo.png'}
-          alt="13RMS"
+          className="mx-auto h-32 w-auto"
+          src={process.env.PUBLIC_URL + '/logo.png'}
+          alt="Workflow"
         />
-        <form onSubmit={() => {}} className={classes.form}>
-          <div className="card_layout">
-            <h6 className="create-account text-2xl font-semibold">
-              Discover the benefits of selling and networking with your profile
-            </h6>
-            <div className="mb-2">
-              <button
-                type="button"
-                className="business-account btn btn-primary btn-md"
-              >
-                Create a business account
-              </button>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Create new account
+        </h2>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Discover the benefits of selling and <br />
+          networking with your profile
+        </p>
+      </div>
+
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+              <FormInput
+                gridClass="sm:col-span-3"
+                label="First name"
+                id="firstName"
+                name="firstName"
+                onChange={onChange}
+                value={fields.firstName}
+              />
+
+              <FormInput
+                gridClass="sm:col-span-3"
+                label="Last name"
+                id="lastName"
+                name="lastName"
+                onChange={onChange}
+                value={fields.lastName}
+              />
             </div>
-            <div className="mb-2">
-              <button
-                type="button"
-                className="student-account btn btn-primary btn-md"
+
+            <FormInput
+              label="Email"
+              id="email"
+              name="email"
+              onChange={onChange}
+              required
+              type="email"
+              error={errors.email}
+              value={fields.email}
+            />
+            <FormInput
+              label="Password"
+              id="password"
+              name="password"
+              onChange={onChange}
+              type="password"
+              error={errors.password}
+              required
+              value={fields.password}
+            />
+
+            <p className="my-4 text-left text-xs text-gray-600">
+              By clicking Agree and Join, you agree to 13RMS{' '}
+              <a
+                href="#/"
+                className="font-medium text-xs text-blue-600 hover:text-blue-500"
               >
-                Create a student account
-              </button>
+                User Agreement, Privacy Policy
+              </a>{' '}
+              and{' '}
+              <a
+                href="#/"
+                className="font-medium text-xs text-blue-600 hover:text-blue-500"
+              >
+                Cookie Policy
+              </a>
+            </p>
+
+            <div>
+              <Button
+                onClick={handleSubmit}
+                fullWidth
+                rounded="rounded-lg"
+                gradient
+                label="Agree and become a member"
+              />
             </div>
-
-            <Row form>
-              {/* Name */}
-              <Col style={{ marginTop: 40 }} className="form-group">
-                <div style={{ display: 'flex' }}>
-                  <Col
-                    style={{
-                      paddingLeft: 0,
-                      paddingRight: '0.5rem',
-                    }}
-                  >
-                    <FormInput
-                      type="name"
-                      id="fname"
-                      name="firstName"
-                      placeholder="First Name"
-                      value={firstName}
-                      onChange={onChange}
-                      autoComplete="name"
-                    />
-                  </Col>
-                  <Col
-                    style={{
-                      paddingRight: 0,
-                      paddingLeft: '0.5rem',
-                    }}
-                  >
-                    <FormInput
-                      type="name"
-                      id="lname"
-                      name="lastName"
-                      placeholder="Last Name"
-                      value={lastName}
-                      onChange={onChange}
-                      autoComplete="name"
-                    />
-                  </Col>
-                </div>
-              </Col>
-              {/* Email */}
-              <Col style={{ marginTop: 20 }} className="form-group">
-                <FormInput
-                  type="email"
-                  id="feEmail"
-                  name="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={onChange}
-                  autoComplete="email"
-                />
-              </Col>
-
-              {/* Password */}
-
-              <Col
-                style={{ marginTop: 20, marginBottom: 10 }}
-                className="form-group"
-              >
-                <FormInput
-                  type="password"
-                  id="fePassword"
-                  name="password"
-                  placeholder="Password"
-                  onChange={onChange}
-                  autoComplete="current-password"
-                  value={password}
-                />
-              </Col>
-
-              <p className="agreement">
-                <span>By clicking Agree and Join, you agree to 13RMS </span>
-                <a className="link-hover" href="/#">
-                  User Agreement
-                </a>
-                <span>, </span>
-                <a className="link-hover" href="/#">
-                  Privacy Policy
-                </a>{' '}
-                <span>and </span>{' '}
-                <a className="link-hover" href="/#">
-                  Cookie Policy
-                </a>{' '}
-                <span>.</span>
-              </p>
-              <Box
-                textAlign="center"
-                color="red"
-                fontWeight="400"
-                marginTop="0.5rem"
-                marginBottom="0.5rem"
-                style={{ textTransform: 'capitalize' }}
-              >
-                {formError ? formError : null}
-              </Box>
-              <Col className="form-group row footer">
-                <button
-                  type="submit"
-                  // onClick={handleSubmit}
-                  className="save-button btn btn-primary btn"
-                >
-                  Agree and become a member
-                </button>
-              </Col>
-              <Box textAlign="center" className="mb-3 mt-2">
-                Already on 13RMS?
-                <a href="/login" className="link-hover log-in-span">
-                  {' '}
-                  Log in here
-                </a>
-              </Box>
-            </Row>
-          </div>
-        </form>
+          </form>
+        </div>
+        <div className="mt-4 text-center">
+          Already on 13RMS?
+          <a href="/login" className="link-hover">
+            {' '}
+            Login now
+          </a>
+        </div>
       </div>
       <Copyright />
-    </main>
+    </div>
   )
 }
+export default Signup

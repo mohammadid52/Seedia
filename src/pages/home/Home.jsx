@@ -13,7 +13,6 @@ const Home = ({ themeToggler, theme }) => {
       <HomeContent theme={theme} />
       <div className="flex flex-col">
         <Search theme={theme} />
-
         <Features theme={theme} />
       </div>
       {/* <Footer theme={theme} /> */}
