@@ -8,7 +8,7 @@ const Copyright = () => {
   const year = new Date().getFullYear()
   return (
     <footer className="">
-      <div className="max-w-7xl mx-auto pt-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto pt-16 px-4 overflow-hidden sm:px-6 lg:px-8">
         <nav
           className="-mx-5 lg:flex md:flex sm:grid sm:place-content-center sm:grid-cols-1 flex-wrap justify-center"
           aria-label="Footer"
