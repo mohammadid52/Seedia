@@ -6,6 +6,7 @@ import Loading from 'components/Loading'
 import useForm from 'hooks/useForm'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { wait } from 'utils/wait'
 
 const LastStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -31,11 +32,16 @@ const LastStep = () => {
     INITIAL_FIELDS,
     ERROR_INITIAL_FIELDS
   )
+  const [saving, setSaving] = useState(false)
 
   const nextStep = () => {
     const isValid = validateForm()
     if (isValid) {
-      history.push('/dashboard')
+      setSaving(true)
+      wait(3000).then(() => {
+        setSaving(false)
+        return history.push('/dashboard')
+      })
     } else {
     }
   }
@@ -76,6 +82,10 @@ const LastStep = () => {
   setTimeout(() => {
     setIsLoaded(true)
   }, 1000)
+
+  const goBack = () => {
+    history.push('/account/personal/edit-profile/company')
+  }
 
   return !isLoaded ? (
     <Loading />
@@ -143,10 +153,20 @@ const LastStep = () => {
                 fullWidth
                 rounded="rounded-lg"
                 gradient
-                label="Next Step"
+                loading={saving}
+                label="Finish Submit"
               />
             </div>
           </div>
+        </div>
+        <div className="my-4">
+          <Button
+            onClick={goBack}
+            rounded="rounded-lg"
+            gradient
+            size="sm"
+            label="Go back"
+          />
         </div>
       </div>
       <Copyright />

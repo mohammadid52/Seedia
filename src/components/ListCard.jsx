@@ -1,9 +1,6 @@
 import { useState } from 'react'
+import { wait } from 'utils/wait'
 import Button from './atoms/Button'
-
-const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout))
-}
 
 const ListCard = ({ imgUrl }) => {
   const [status, setStatus] = useState('no_connection')

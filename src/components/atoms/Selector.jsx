@@ -37,7 +37,7 @@ const Selector = ({ list, label, selectedItem, onSelect }) => {
             >
               <Listbox.Options
                 static
-                className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                className="pl-0 absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
               >
                 {list.map((item) => (
                   <Listbox.Option
@@ -62,14 +62,13 @@ const Selector = ({ list, label, selectedItem, onSelect }) => {
                         </span>
 
                         {selected ? (
-                          <span
+                          <CheckIcon
                             className={classNames(
                               active ? 'text-white' : 'text-indigo-600',
-                              'absolute inset-y-0 right-0 flex items-center pr-4'
+                              'absolute inset-y-0 right-0 flex items-center pr-4 h-5 w-5'
                             )}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
+                            aria-hidden="true"
+                          />
                         ) : null}
                       </>
                     )}
