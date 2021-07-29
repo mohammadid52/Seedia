@@ -23,48 +23,10 @@ const Signup = () => {
     password: '',
   }
 
-  const { fields, onChange, errors, setErrors } = useForm(
+  const { fields, onChange, errors } = useForm(
     INITIAL_FIELDS,
     ERROR_INITIAL_FIELDS
   )
-
-  const validateForm = () => {
-    let isValid = true
-
-    const trimmedLen = (field) => fields[field].trim().length
-
-    if (trimmedLen('email') <= 0) {
-      isValid = false
-      errors.email = 'Please add email field'
-    } else {
-      isValid = true
-      errors.email = ''
-    }
-
-    if (
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-        fields.email
-      )
-    ) {
-      isValid = true
-      errors.email = ''
-    } else {
-      isValid = false
-      errors.email = 'Please enter a valid email address'
-    }
-
-    if (trimmedLen('password') < 6) {
-      isValid = false
-      errors.password = 'Password must be atleast six characters long'
-    } else {
-      isValid = true
-      errors.password = ''
-    }
-
-    setErrors({ ...errors })
-
-    return isValid
-  }
 
   setTimeout(() => {
     setIsLoaded(true)

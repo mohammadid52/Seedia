@@ -25,7 +25,7 @@ const BusinessStepOne = () => {
     password: '',
   }
 
-  const { fields, onChange, errors, setErrors } = useForm(
+  const { fields, onChange, errors } = useForm(
     INITIAL_FIELDS,
     ERROR_INITIAL_FIELDS
   )
