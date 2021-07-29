@@ -6,16 +6,19 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Loading from 'components/Loading'
 import Dashboard from 'pages/Dashboard'
 import NotFound from 'pages/NotFound'
+import BusinessStepOne from 'pages/account/business/StepOne'
+import BusinessStepTwo from 'pages/account/business/StepTwo'
+// import BusinessStepTwo from 'pages/account/business/StepTwo'
 
 const Welcome = lazy(() => import('pages/Welcome'))
 const Profile = lazy(() => import('pages/profile/Profile'))
 const Signup = lazy(() => import('pages/Signup'))
 const Login = lazy(() => import('pages/Login'))
 const PersonalSecondStep = lazy(() =>
-  import('pages/account/personal/PersonalSecondStep')
+  import('pages/account/personal/CompanyStep')
 )
 const PersonalLastStep = lazy(() =>
-  import('pages/account/personal/LastPersonalStep')
+  import('pages/account/personal/LocationStep')
 )
 const EducationStep = lazy(() => import('pages/account/student/EducationStep'))
 const LocationStep = lazy(() => import('pages/account/student/LocationStep'))
@@ -87,6 +90,14 @@ class App extends Component {
             <Route
               path="/account/student/edit-profile/location"
               component={LocationStep}
+            />
+            <Route
+              path="/account/business/edit-profile/stepOne"
+              component={BusinessStepOne}
+            />
+            <Route
+              path="/account/business/edit-profile/stepTwo"
+              component={BusinessStepTwo}
             />
             <Route exact path="/profile" component={Profile} />
           </Loader>

@@ -71,9 +71,9 @@ const Signup = () => {
   }, 1000)
 
   const handleSubmit = () => {
-    const isValid = validateForm()
+    const isValid = true
     if (isValid) {
-      history.push('/account/personal/edit-profile/company')
+      history.push('/account/business/edit-profile/stepOne')
     } else {
     }
   }

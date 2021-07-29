@@ -9,7 +9,7 @@ import useForm from 'hooks/useForm'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { wait } from 'utils/wait'
-import { yearList } from 'values/values'
+import { yearList, yearListWithFuture } from 'values/values'
 console.log('🚀 ~ file: EducationStep.jsx ~ line 13 ~ yearList', yearList)
 
 const EducationStep = () => {
@@ -154,7 +154,7 @@ const EducationStep = () => {
               <div className="mt-6">
                 <Selector
                   label={'End year (or expected)'}
-                  list={yearList}
+                  list={yearListWithFuture}
                   selectedItem={
                     fields.end_year.name
                       ? fields.end_year
