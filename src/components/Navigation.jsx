@@ -1,53 +1,13 @@
 /* eslint-disable quotes */
 /* This example requires Tailwind CSS v2.0+ */
 import React, { Fragment, useState } from 'react'
-import { Popover, Transition, Switch } from '@headlessui/react'
+import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { adjustColors } from 'values/values'
 import Button from './atoms/Button'
 import { useHistory } from 'react-router-dom'
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
-const Toggle = ({ enabled, setEnabled }) => {
-  return (
-    <Switch.Group as="div" className="flex items-center justify-between">
-      <span className="flex-grow flex flex-col items-start">
-        <Switch.Label
-          as="span"
-          className="text-sm font-medium text-gray-900"
-          passive
-        >
-          Select Mode
-        </Switch.Label>
-        <Switch.Description as="span" className="text-sm text-gray-500">
-          Choose theme preferance
-        </Switch.Description>
-      </span>
-      <Switch
-        checked={enabled}
-        onChange={setEnabled}
-        className={classNames(
-          enabled
-            ? 'bg-gradient-to-r from-pink-500 to-yellow-500'
-            : 'bg-gray-200',
-          'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-        )}
-      >
-        <span
-          aria-hidden="true"
-          className={classNames(
-            enabled ? 'translate-x-5' : 'translate-x-0',
-            'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200'
-          )}
-        />
-      </Switch>
-    </Switch.Group>
-  )
-}
+import Toggle, { classNames } from './atoms/Toggle'
 
 export default function Navigation() {
   const [darkMode, setDarkMode] = useState(false)
@@ -63,7 +23,7 @@ export default function Navigation() {
             <div className="flex justify-between items-center border-b-2 border-gray-100 py-3 md:justify-start md:space-x-10">
               <div className="flex justify-start lg:w-0 lg:flex-1">
                 <a href="/#">
-                  <span className="sr-only">Workflow</span>
+                  <span className="sr-only">13RMS</span>
                   <img
                     className="h-12 w-auto sm:h-12"
                     src={process.env.PUBLIC_URL + '/logo.png'}
@@ -123,6 +83,8 @@ export default function Navigation() {
                                 <div>
                                   <Toggle
                                     enabled={darkMode}
+                                    text="Select mode"
+                                    subText="Choose theme preferance"
                                     setEnabled={setDarkMode}
                                   />
                                 </div>

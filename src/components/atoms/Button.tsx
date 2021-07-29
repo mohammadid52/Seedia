@@ -6,6 +6,7 @@ interface IButton {
   rounded?: string
   className?: string
   gradient: boolean
+  onlyText?: boolean
   gradientColor?: {
     x: string
     y: string
@@ -30,6 +31,7 @@ const Button = ({
   primary = false,
   fullWidth = false,
   secondary = false,
+  onlyText = false,
   size,
   invert = false,
   rounded = 'rounded',
@@ -39,8 +41,12 @@ const Button = ({
   loadingText = 'Processing',
 }: IButton) => {
   const generateClass = () => {
-    const primaryClass = `text-white inline-flex items-center border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-${bgColor}-600 hover:bg-${bgColor}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${bgColor}-500`
-    const secondaryClass = `inline-flex items-center border border-transparent text-xs font-medium rounded text-${bgColor}-700 ${
+    const primaryClass = `${
+      onlyText
+        ? `text-${bgColor}-600 hover:text-${bgColor}-700 `
+        : `text-white bg-${bgColor}-600 hover:bg-${bgColor}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${bgColor}-500`
+    }  flex items-center border border-transparent shadow-sm text-base font-medium rounded-md `
+    const secondaryClass = `flex items-center border border-transparent text-xs font-medium rounded text-${bgColor}-700 ${
       invert
         ? `hover:bg-${bgColor}-100 focus:ring-${bgColor}-500`
         : `bg-${bgColor}-100 hover:bg-${bgColor}-200 focus:ring-${bgColor}-500`

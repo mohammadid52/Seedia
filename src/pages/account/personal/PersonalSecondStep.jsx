@@ -1,8 +1,8 @@
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
 import Selector from 'components/atoms/Selector'
-import Copyright from 'components/Copyright'
 import Loading from 'components/Loading'
+import Layout from 'containers/Layout'
 import useForm from 'hooks/useForm'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
@@ -85,22 +85,14 @@ const StudentSecondStep = () => {
   return !isLoaded ? (
     <Loading />
   ) : (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md flex items-center flex-col ">
-        <img
-          className="mx-auto h-32 w-auto"
-          src={process.env.PUBLIC_URL + '/logo.png'}
-          alt="Workflow"
-        />
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Step Two
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Your profile helps you find new people and <br />
-          oppurtunites
+    <Layout
+      title="Company Information"
+      subtitle={
+        <p>
+          Your profile helps you find new people and <br /> oppurtunites
         </p>
-      </div>
-
+      }
+    >
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
           <div className="space-y-6">
@@ -163,8 +155,7 @@ const StudentSecondStep = () => {
           />
         </div>
       </div>
-      <Copyright />
-    </div>
+    </Layout>
   )
 }
 

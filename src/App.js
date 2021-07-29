@@ -17,34 +17,14 @@ const PersonalSecondStep = lazy(() =>
 const PersonalLastStep = lazy(() =>
   import('pages/account/personal/LastPersonalStep')
 )
+const EducationStep = lazy(() => import('pages/account/student/EducationStep'))
+const LocationStep = lazy(() => import('pages/account/student/LocationStep'))
 
 library.add(fas)
 
-const WelcomeWithLoader = () => (
-  <Suspense fallback={<Loading />}>
-    <Welcome />
-  </Suspense>
-)
-const ProfileWithLoader = () => (
-  <Suspense fallback={<Loading />}>
-    <Profile />
-  </Suspense>
-)
-const SignupWithLoader = () => (
-  <Suspense fallback={<Loading />}>
-    <Signup />
-  </Suspense>
-)
-const PersonalSecondStepWithLoader = () => (
-  <Suspense fallback={<Loading />}>
-    <PersonalSecondStep />
-  </Suspense>
-)
-const PersonalLastStepWithLoader = () => (
-  <Suspense fallback={<Loading />}>
-    <PersonalLastStep />
-  </Suspense>
-)
+const Loader = ({ children }) => {
+  return <Suspense fallback={<Loading />}>{children}</Suspense>
+}
 
 class App extends Component {
   constructor(props) {
@@ -85,23 +65,31 @@ class App extends Component {
     return (
       <Router>
         <Switch>
-          <Route exact path="/" component={WelcomeWithLoader} />
-          <Route exact path="/login">
-            <Suspense fallback={<Loading />}>
+          <Loader>
+            <Route exact path="/" component={Welcome} />
+            <Route exact path="/login">
               <Login theme={this.state.theme} setToken={this.updateToken} />
-            </Suspense>
-          </Route>
-          <Route exact path="/signup" component={SignupWithLoader} />
-          <Route exact path="/dashboard" component={Dashboard} />
-          <Route
-            path="/account/personal/edit-profile/company"
-            component={PersonalSecondStepWithLoader}
-          />
-          <Route
-            path="/account/personal/edit-profile/location"
-            component={PersonalLastStepWithLoader}
-          />
-          <Route exact path="/profile" component={ProfileWithLoader} />
+            </Route>
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/dashboard" component={Dashboard} />
+            <Route
+              path="/account/personal/edit-profile/company"
+              component={PersonalSecondStep}
+            />
+            <Route
+              path="/account/personal/edit-profile/location"
+              component={PersonalLastStep}
+            />
+            <Route
+              path="/account/student/edit-profile/education"
+              component={EducationStep}
+            />
+            <Route
+              path="/account/student/edit-profile/location"
+              component={LocationStep}
+            />
+            <Route exact path="/profile" component={Profile} />
+          </Loader>
           <Route path="*" component={NotFound} />
         </Switch>
       </Router>

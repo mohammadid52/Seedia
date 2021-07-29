@@ -131,6 +131,19 @@ export const my13Rms = [
   },
 ]
 
+export const year = new Date().getFullYear()
+const startDate = 1950
+
+const getYearList = () => {
+  let years = []
+
+  for (let i = Number(year); i >= startDate; i--) {
+    years.push({ id: String(i), name: String(i) })
+  }
+  return years
+}
+export const yearList = getYearList()
+
 export const productsArray = [
   // { label: 'All', value: 'all' },
   { label: 'All', value: 'all' },
