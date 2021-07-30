@@ -10,6 +10,9 @@ import InputWithDropdown from 'components/atoms/InputWithDropdown'
 import { countryCodeList } from 'values/values'
 import Selector from 'components/atoms/Selector'
 import Divider from 'components/atoms/Divider'
+import TextButton from 'components/atoms/TextButton'
+import { links } from 'constants/Links'
+import { wait } from 'utils/wait'
 
 const BusinessStepTwo = () => {
   const history = useHistory()
@@ -45,11 +48,16 @@ const BusinessStepTwo = () => {
   setTimeout(() => {
     setIsLoaded(true)
   }, 1000)
+  const [saving, setSaving] = useState(false)
 
   const handleSubmit = () => {
     const isValid = true
     if (isValid) {
-      history.push('/account/business/edit-profile/stepTwo')
+      setSaving(true)
+      wait(3000).then(() => {
+        setSaving(false)
+        history.push(links.DASHBAORD)
+      })
     } else {
     }
   }
@@ -228,6 +236,7 @@ const BusinessStepTwo = () => {
               <Button
                 onClick={handleSubmit}
                 fullWidth
+                loading={saving}
                 rounded="rounded-lg"
                 gradient
                 label="Get on"
@@ -235,6 +244,11 @@ const BusinessStepTwo = () => {
             </div>
           </form>
         </div>
+        <TextButton
+          onClick={history.goBack}
+          text="Go back"
+          className="inline-block mt-4"
+        />
       </div>
       <Copyright />
     </div>

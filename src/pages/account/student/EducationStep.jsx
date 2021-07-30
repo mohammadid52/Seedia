@@ -2,15 +2,16 @@
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
 import Selector from 'components/atoms/Selector'
+import TextButton from 'components/atoms/TextButton'
 import Toggle from 'components/atoms/Toggle'
 import Loading from 'components/Loading'
+import { links } from 'constants/Links'
 import Layout from 'containers/Layout'
 import useForm from 'hooks/useForm'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { wait } from 'utils/wait'
 import { yearList, yearListWithFuture } from 'values/values'
-console.log('🚀 ~ file: EducationStep.jsx ~ line 13 ~ yearList', yearList)
 
 const EducationStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -36,36 +37,10 @@ const EducationStep = () => {
     above_sixteen: '',
   }
 
-  const { fields, onChange, errors, setFields, setErrors } = useForm(
+  const { fields, onChange, errors, setFields } = useForm(
     INITIAL_FIELDS,
     ERROR_INITIAL_FIELDS
   )
-
-  const validateForm = () => {
-    let isValid = true
-
-    const trimmedLen = (field) => fields[field].trim().length
-
-    if (trimmedLen('jobTitle') <= 0) {
-      isValid = false
-      errors.jobTitle = 'Job title could not be empty.'
-    } else {
-      isValid = true
-      errors.jobTitle = ''
-    }
-
-    if (trimmedLen('latestCompany') <= 0) {
-      isValid = false
-      errors.latestCompany = 'This field is important.'
-    } else {
-      isValid = true
-      errors.latestCompany = ''
-    }
-
-    setErrors({ ...errors })
-
-    return isValid
-  }
 
   setTimeout(() => {
     setIsLoaded(true)
@@ -74,19 +49,15 @@ const EducationStep = () => {
   const [saving, setSaving] = useState(false)
 
   const nextStep = () => {
-    const isValid = validateForm()
+    const isValid = true
     if (isValid) {
       setSaving(true)
       wait(3000).then(() => {
         setSaving(false)
-        return history.push('/account/personal/edit-profile/location')
+        return history.push(links.STUDENT_STEP_2)
       })
     } else {
     }
-  }
-
-  const goBack = () => {
-    history.push('/signup')
   }
 
   return !isLoaded ? (
@@ -132,8 +103,8 @@ const EducationStep = () => {
               required
               value={fields.grade_subject}
             />
-            <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-              <div className="mt-6">
+            <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+              <div className="">
                 <Selector
                   label={'Start year'}
                   list={yearList}
@@ -151,7 +122,7 @@ const EducationStep = () => {
                 />
               </div>
 
-              <div className="mt-6">
+              <div className="">
                 <Selector
                   label={'End year (or expected)'}
                   list={yearListWithFuture}
@@ -171,6 +142,7 @@ const EducationStep = () => {
             </div>
             <div>
               <Toggle
+                className="mt-2"
                 enabled={fields.above_sixteen}
                 text={"I'm over 16 years old"}
                 setEnabled={() =>
@@ -179,14 +151,11 @@ const EducationStep = () => {
               />
             </div>
             <div>
-              <Button
-                onClick={nextStep}
-                onlyText
-                rounded="rounded-lg"
-                primary
-                fullWidth
-                loading={saving}
-                label="I'm not a student"
+              <TextButton
+                color="gray"
+                onClick={() => history.push(links.CHOOSE_ACCOUNT)}
+                text={"I'm not a student"}
+                className="text-center py-2"
               />
             </div>
 
@@ -202,15 +171,11 @@ const EducationStep = () => {
             </div>
           </div>
         </div>
-        <div className="my-4">
-          <Button
-            onClick={goBack}
-            rounded="rounded-lg"
-            gradient
-            size="sm"
-            label="Go back"
-          />
-        </div>
+        <TextButton
+          onClick={history.goBack}
+          text="Go back"
+          className="inline-block mt-4"
+        />
       </div>
     </Layout>
   )

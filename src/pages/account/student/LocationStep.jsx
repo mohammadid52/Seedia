@@ -1,6 +1,7 @@
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
 import Selector from 'components/atoms/Selector'
+import TextButton from 'components/atoms/TextButton'
 import Copyright from 'components/Copyright'
 import Loading from 'components/Loading'
 import useForm from 'hooks/useForm'
@@ -83,10 +84,6 @@ const LocationStep = () => {
     setIsLoaded(true)
   }, 1000)
 
-  const goBack = () => {
-    history.push('/account/personal/edit-profile/company')
-  }
-
   return !isLoaded ? (
     <Loading />
   ) : (
@@ -159,15 +156,11 @@ const LocationStep = () => {
             </div>
           </div>
         </div>
-        <div className="my-4">
-          <Button
-            onClick={goBack}
-            rounded="rounded-lg"
-            gradient
-            size="sm"
-            label="Go back"
-          />
-        </div>
+        <TextButton
+          onClick={history.goBack}
+          text="Go back"
+          className="inline-block mt-4"
+        />
       </div>
       <Copyright />
     </div>

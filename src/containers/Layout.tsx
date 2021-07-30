@@ -6,8 +6,8 @@ const Layout = ({
   subtitle,
   children,
 }: {
-  title: string
-  subtitle: React.ReactNode
+  title?: string
+  subtitle?: React.ReactNode
   children: React.ReactNode
 }) => {
   return (
@@ -18,10 +18,14 @@ const Layout = ({
           src={process.env.PUBLIC_URL + '/logo.png'}
           alt="13RMS"
         />
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          {title}
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">{subtitle}</p>
+        {title && (
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            {title}
+          </h2>
+        )}
+        {subtitle && (
+          <p className="mt-2 text-center text-sm text-gray-600">{subtitle}</p>
+        )}
       </div>
 
       {children}

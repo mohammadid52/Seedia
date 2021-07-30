@@ -7,10 +7,14 @@ import useForm from 'hooks/useForm'
 import FormInput from 'components/atoms/FormInput'
 import Info from 'components/alerts/Info'
 import TextButton from 'components/atoms/TextButton'
+import { links } from 'constants/Links'
+import { wait } from 'utils/wait'
 
 const BusinessStepOne = () => {
   const history = useHistory()
   const [isLoaded, setIsLoaded] = useState(true)
+
+  const [saving, setSaving] = useState(false)
 
   //capture inputs
   const INITIAL_FIELDS = {
@@ -36,8 +40,13 @@ const BusinessStepOne = () => {
 
   const handleSubmit = () => {
     const isValid = true
+
     if (isValid) {
-      history.push('/account/business/edit-profile/stepTwo')
+      setSaving(true)
+      wait(3000).then(() => {
+        setSaving(false)
+        return history.push(links.BUSINESS_STEP_2)
+      })
     } else {
     }
   }
@@ -140,12 +149,18 @@ const BusinessStepOne = () => {
                 onClick={handleSubmit}
                 fullWidth
                 rounded="rounded-lg"
+                loading={saving}
                 gradient
                 label="Register"
               />
             </div>
           </form>
         </div>
+        <TextButton
+          onClick={history.goBack}
+          text="Go back"
+          className="inline-block mt-4"
+        />
       </div>
       <Copyright />
     </div>

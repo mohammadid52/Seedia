@@ -16,6 +16,9 @@ interface IButton {
   invert: boolean
   secondary: boolean
   loading: boolean
+  customClass?: boolean
+  shadow?: boolean
+
   loadingText?: string
   size: 'sm' | 'md' | 'lg' | 'xl'
   weight: 'light' | 'medium' | 'semibold' | 'bold'
@@ -37,8 +40,10 @@ const Button = ({
   rounded = 'rounded',
   weight = 'medium',
   className = '',
+  shadow = false,
   loading = false,
   loadingText = 'Processing',
+  customClass = false,
 }: IButton) => {
   const generateClass = () => {
     const primaryClass = `${
@@ -82,8 +87,13 @@ const Button = ({
       type="button"
       aria-hidden="true"
       onClick={onClick}
-      className={`${generateClass()} ${generatePadding()} ${rounded} font-${weight} ${className} ${
-        fullWidth ? 'w-full' : ''
+      style={{ filter: shadow ? 'drop-shadow(2px 4px 6px pink)' : undefined }}
+      className={`${
+        customClass
+          ? className
+          : `${generateClass()} ${generatePadding()} ${rounded} font-${weight} ${className} ${
+              fullWidth ? 'w-full' : ''
+            }`
       }`}
     >
       {loading && (

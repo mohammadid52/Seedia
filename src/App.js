@@ -1,13 +1,14 @@
-import React, { Component, lazy, Suspense } from 'react'
+import React, { lazy } from 'react'
 import 'bootstrap/dist/css/bootstrap.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import Loading from 'components/Loading'
+// import Loading from 'components/Loading'
 import Dashboard from 'pages/Dashboard'
 import NotFound from 'pages/NotFound'
 import BusinessStepOne from 'pages/account/business/StepOne'
 import BusinessStepTwo from 'pages/account/business/StepTwo'
+import ChooseAccount from 'pages/account/other/ChooseAccount'
 // import BusinessStepTwo from 'pages/account/business/StepTwo'
 
 const Welcome = lazy(() => import('pages/Welcome'))
@@ -25,87 +26,60 @@ const LocationStep = lazy(() => import('pages/account/student/LocationStep'))
 
 library.add(fas)
 
-const Loader = ({ children }) => {
-  return <Suspense fallback={<Loading />}>{children}</Suspense>
-}
+// const Loader = ({ children }) => {
+//   return <Suspense fallback={<Loading />}>{children}</Suspense>
+// }
 
-class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { theme: 'light', token: null } // Init token to hold user data
-    this.themeToggler = this.themeToggler.bind(this)
-    this.updateToken = this.updateToken.bind(this)
-  }
+const App = () => {
+  return (
+    <Router>
+      <Switch>
+        {/* This is common page */}
+        <Route exact path="/" component={Welcome} />
+        <Route exact path="/login">
+          <Login theme={'light'} setToken={() => {}} />
+        </Route>
 
-  themeToggler = (value) => {
-    this.setState({ ...this.state, theme: value })
-  }
+        <Route exact path="/signup" component={Signup} />
+        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/choose-account" component={ChooseAccount} />
 
-  updateToken = (newToken) => {
-    localStorage.setItem('token', JSON.stringify(newToken))
-    this.setState({ ...this.state, token: newToken })
-  }
+        {/* Personal Account routes */}
+        <Route
+          path="/account/personal/edit-profile/company"
+          component={PersonalSecondStep}
+        />
+        <Route
+          path="/account/personal/edit-profile/location"
+          component={PersonalLastStep}
+        />
 
-  componentDidMount() {
-    try {
-      const themeData = JSON.parse(
-        localStorage.getItem('theme') || { theme: 'light' }
-      )
-      if (themeData) {
-        this.setState({
-          ...this.state,
-          theme: themeData.theme,
-        })
-      }
-    } catch (err) {}
-  }
+        {/* Student Account routes */}
+        <Route
+          path="/account/student/edit-profile/education"
+          component={EducationStep}
+        />
+        <Route
+          path="/account/student/edit-profile/location"
+          component={LocationStep}
+        />
 
-  componentWillUpdate(nextProps, nextState) {
-    localStorage.setItem('theme', JSON.stringify(nextState.theme))
-  }
+        {/* Business Account routes */}
+        <Route
+          path="/account/business/edit-profile/stepOne"
+          component={BusinessStepOne}
+        />
+        <Route
+          path="/account/business/edit-profile/stepTwo"
+          component={BusinessStepTwo}
+        />
 
-  render() {
-    return (
-      <Router>
-        <Switch>
-          <Loader>
-            <Route exact path="/" component={Welcome} />
-            <Route exact path="/login">
-              <Login theme={this.state.theme} setToken={this.updateToken} />
-            </Route>
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/dashboard" component={Dashboard} />
-            <Route
-              path="/account/personal/edit-profile/company"
-              component={PersonalSecondStep}
-            />
-            <Route
-              path="/account/personal/edit-profile/location"
-              component={PersonalLastStep}
-            />
-            <Route
-              path="/account/student/edit-profile/education"
-              component={EducationStep}
-            />
-            <Route
-              path="/account/student/edit-profile/location"
-              component={LocationStep}
-            />
-            <Route
-              path="/account/business/edit-profile/stepOne"
-              component={BusinessStepOne}
-            />
-            <Route
-              path="/account/business/edit-profile/stepTwo"
-              component={BusinessStepTwo}
-            />
-            <Route exact path="/profile" component={Profile} />
-          </Loader>
-          <Route path="*" component={NotFound} />
-        </Switch>
-      </Router>
-    )
-  }
+        {/* Error Page */}
+        <Route component={NotFound} />
+      </Switch>
+    </Router>
+  )
 }
 
 export default App

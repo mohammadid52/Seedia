@@ -153,20 +153,7 @@ a {
 //   background-clip: text;
 //   -webkit-background-clip: text;
 // }
-.link-hover:hover {
-  color: #ea1b83 !important;
-  background-image: linear-gradient(
-    to right,
-    rgb(178, 188, 75),
-    rgb(254, 198, 78),
-    rgb(226, 17, 142),
-    rgb(86, 75, 143)
-  );
 
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-}
 body.light-mode {
   background-color: #fff;
   color: #333;
@@ -1143,7 +1130,7 @@ a:hover {
   display: inline-block;
   font-size: 1rem;
   font-weight: 600;
-  font-family: inherit;
+
   height: 40px;
   line-height: 40px;
   overflow: hidden;
@@ -3587,4 +3574,33 @@ input:checked + .slider:before {
     rgb(226, 17, 142),
     rgb(86, 75, 143)
   );
+}
+
+@mixin gradient {
+  --tw-gradient-from: #ec4899;
+  --tw-gradient-stops: var(--tw-gradient-from),
+    var(--tw-gradient-to, rgba(236, 72, 153, 0));
+  --tw-gradient-to: #f59e0b;
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.gradient-text {
+  @include gradient();
+}
+.link-hover:hover {
+  @include gradient();
+}
+
+.gradient-bg-light {
+  --tw-gradient-from: #ec4899;
+  --tw-gradient-stops: var(--tw-gradient-from),
+    var(--tw-gradient-to, rgba(236, 72, 153, 0));
+  --tw-gradient-to: #f59e0b;
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
 }

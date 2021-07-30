@@ -1,22 +1,24 @@
 import { Switch } from '@headlessui/react'
-
-export const classNames = (...classes: string[]) => {
-  return classes.filter(Boolean).join(' ')
-}
+import { classNames } from 'utils/classNames'
 
 const Toggle = ({
   enabled,
   setEnabled,
   text,
   subText,
+  className,
 }: {
   enabled: boolean
   setEnabled: React.Dispatch<React.SetStateAction<boolean>>
   text: string
   subText?: string
+  className?: string
 }) => {
   return (
-    <Switch.Group as="div" className="flex items-center justify-between">
+    <Switch.Group
+      as="div"
+      className={`flex items-center justify-between ${className}`}
+    >
       <span className="flex-grow flex flex-col items-start">
         <Switch.Label
           as="span"

@@ -1,6 +1,7 @@
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
 import Selector from 'components/atoms/Selector'
+import TextButton from 'components/atoms/TextButton'
 import Copyright from 'components/Copyright'
 import Loading from 'components/Loading'
 import useForm from 'hooks/useForm'
@@ -28,14 +29,14 @@ const LastStep = () => {
     location_within_area: '',
   }
 
-  const { fields, onChange, errors, setFields, setErrors } = useForm(
+  const { fields, onChange, errors, setFields } = useForm(
     INITIAL_FIELDS,
     ERROR_INITIAL_FIELDS
   )
   const [saving, setSaving] = useState(false)
 
   const nextStep = () => {
-    const isValid = validateForm()
+    const isValid = true
     if (isValid) {
       setSaving(true)
       wait(3000).then(() => {
@@ -44,39 +45,6 @@ const LastStep = () => {
       })
     } else {
     }
-  }
-
-  const validateForm = () => {
-    let isValid = true
-
-    const trimmedLen = (field) => fields[field].trim().length
-
-    if (trimmedLen('country') <= 0) {
-      isValid = false
-      errors.country = 'Please add country.'
-    } else {
-      isValid = true
-      errors.country = ''
-    }
-
-    if (trimmedLen('pincode') < 6) {
-      isValid = false
-      errors.pincode = 'Invalid pincode.'
-    } else {
-      isValid = true
-      errors.pincode = ''
-    }
-    // if (trimmedLen('location_within_area') <= 0) {
-    //   isValid = false
-    //   errors.location_within_area = ''
-    // } else {
-    //   isValid = true
-    //   errors.location_within_area = 'This field is important.'
-    // }
-
-    setErrors({ ...errors })
-
-    return isValid
   }
 
   setTimeout(() => {
@@ -159,15 +127,11 @@ const LastStep = () => {
             </div>
           </div>
         </div>
-        <div className="my-4">
-          <Button
-            onClick={goBack}
-            rounded="rounded-lg"
-            gradient
-            size="sm"
-            label="Go back"
-          />
-        </div>
+        <TextButton
+          text="Go back"
+          onClick={goBack}
+          className="inline-block mt-4"
+        />
       </div>
       <Copyright />
     </div>

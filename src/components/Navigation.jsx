@@ -7,7 +7,8 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 import { adjustColors } from 'values/values'
 import Button from './atoms/Button'
 import { useHistory } from 'react-router-dom'
-import Toggle, { classNames } from './atoms/Toggle'
+import Toggle from './atoms/Toggle'
+import { classNames } from 'utils/classNames'
 
 export default function Navigation() {
   const [darkMode, setDarkMode] = useState(false)

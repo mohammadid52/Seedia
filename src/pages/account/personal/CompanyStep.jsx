@@ -1,7 +1,9 @@
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
 import Selector from 'components/atoms/Selector'
+import TextButton from 'components/atoms/TextButton'
 import Loading from 'components/Loading'
+import { links } from 'constants/Links'
 import Layout from 'containers/Layout'
 import useForm from 'hooks/useForm'
 import React, { useState } from 'react'
@@ -29,36 +31,10 @@ const StudentSecondStep = () => {
     latestCompany: '',
   }
 
-  const { fields, onChange, errors, setFields, setErrors } = useForm(
+  const { fields, onChange, errors, setFields } = useForm(
     INITIAL_FIELDS,
     ERROR_INITIAL_FIELDS
   )
-
-  const validateForm = () => {
-    let isValid = true
-
-    const trimmedLen = (field) => fields[field].trim().length
-
-    if (trimmedLen('jobTitle') <= 0) {
-      isValid = false
-      errors.jobTitle = 'Job title could not be empty.'
-    } else {
-      isValid = true
-      errors.jobTitle = ''
-    }
-
-    if (trimmedLen('latestCompany') <= 0) {
-      isValid = false
-      errors.latestCompany = 'This field is important.'
-    } else {
-      isValid = true
-      errors.latestCompany = ''
-    }
-
-    setErrors({ ...errors })
-
-    return isValid
-  }
 
   setTimeout(() => {
     setIsLoaded(true)
@@ -67,19 +43,19 @@ const StudentSecondStep = () => {
   const [saving, setSaving] = useState(false)
 
   const nextStep = () => {
-    const isValid = validateForm()
+    const isValid = true
     if (isValid) {
       setSaving(true)
       wait(3000).then(() => {
         setSaving(false)
-        return history.push('/account/personal/edit-profile/location')
+        return history.push(links.PERSONAL_STEP_2)
       })
     } else {
     }
   }
 
   const goBack = () => {
-    history.push('/signup')
+    history.goBack()
   }
 
   return !isLoaded ? (
@@ -145,15 +121,11 @@ const StudentSecondStep = () => {
             </div>
           </div>
         </div>
-        <div className="my-4">
-          <Button
-            onClick={goBack}
-            rounded="rounded-lg"
-            gradient
-            size="sm"
-            label="Go back"
-          />
-        </div>
+        <TextButton
+          text="Go back"
+          onClick={goBack}
+          className="inline-block mt-4"
+        />
       </div>
     </Layout>
   )

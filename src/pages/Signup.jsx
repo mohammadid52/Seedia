@@ -35,7 +35,7 @@ const Signup = () => {
   const handleSubmit = () => {
     const isValid = true
     if (isValid) {
-      history.push('/account/business/edit-profile/stepOne')
+      history.push('/choose-account')
     } else {
     }
   }

@@ -1,8 +1,16 @@
 import { InformationCircleIcon } from '@heroicons/react/solid'
 
-const Info = ({ text, color = 'blue' }: { text: string; color?: string }) => {
+const Info = ({
+  text,
+  color = 'blue',
+  className = '',
+}: {
+  className: string
+  text: string
+  color?: string
+}) => {
   return (
-    <div className={`rounded-md bg-${color}-50 p-4`}>
+    <div className={`rounded-md bg-${color}-50 p-4 ${className}`}>
       <div className="flex">
         <div className="flex-shrink-0">
           <InformationCircleIcon
