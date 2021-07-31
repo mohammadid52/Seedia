@@ -1176,20 +1176,7 @@ a:hover {
 .mr3 {
   margin-right: 3rem;
 }
-@media only screen and (min-width: 768px) and (max-width: 1024px) {
-  button {
-    padding: 7px;
-  }
-  .justify-content {
-    justify-content: space-around !important;
-  }
-  .mr3 {
-    margin-right: 2rem;
-  }
-  p {
-    min-height: 92px !important;
-  }
-}
+
 .dark .feature-button:not(:hover) {
   border-color: #fff;
   color: #fff;

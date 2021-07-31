@@ -3,42 +3,49 @@ import Loading from 'components/Loading'
 import Copyright from 'components/Copyright'
 import Button from 'components/atoms/Button'
 import { useHistory } from 'react-router-dom'
-import useForm from 'hooks/useForm'
+
 import FormInput from 'components/atoms/FormInput'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
+import { wait } from 'utils/wait'
+import { links } from 'constants/Links'
+import { isEmpty } from 'lodash'
 
 const Signup = () => {
   const history = useHistory()
   const [isLoaded, setIsLoaded] = useState(true)
-
-  //capture inputs
-  const INITIAL_FIELDS = {
+  const initialValues = {
     email: '',
     password: '',
+    confirmPassword: '',
     firstName: '',
     lastName: '',
   }
 
-  const ERROR_INITIAL_FIELDS = {
-    email: '',
-    password: '',
-  }
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email('Invalid email address')
+      .required('Please add email address'),
+    password: Yup.string().required('Please add password'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Password must match')
+      .required('Please add confirm password'),
+  })
 
-  const { fields, onChange, errors } = useForm(
-    INITIAL_FIELDS,
-    ERROR_INITIAL_FIELDS
-  )
+  const [saving, setSaving] = useState(false)
+
+  const onSubmit = (values) => {
+    setSaving(true)
+    wait(3000).then(() => {
+      setSaving(false)
+      history.push(links.CHOOSE_ACCOUNT)
+    })
+  }
 
   setTimeout(() => {
     setIsLoaded(true)
   }, 1000)
 
-  const handleSubmit = () => {
-    const isValid = true
-    if (isValid) {
-      history.push('/choose-account')
-    } else {
-    }
-  }
   return !isLoaded ? (
     <Loading />
   ) : (
@@ -60,75 +67,81 @@ const Signup = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-              <FormInput
-                gridClass="sm:col-span-3"
-                label="First name"
-                id="firstName"
-                name="firstName"
-                onChange={onChange}
-                value={fields.firstName}
-              />
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            <Form className="space-y-6">
+              <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <FormInput
+                  gridClass="sm:col-span-3"
+                  label="First name"
+                  id="firstName"
+                  name="firstName"
+                />
+
+                <FormInput
+                  gridClass="sm:col-span-3"
+                  label="Last name"
+                  id="lastName"
+                  name="lastName"
+                />
+              </div>
 
               <FormInput
-                gridClass="sm:col-span-3"
-                label="Last name"
-                id="lastName"
-                name="lastName"
-                onChange={onChange}
-                value={fields.lastName}
+                label="Email"
+                id="email"
+                name="email"
+                required
+                type="email"
               />
-            </div>
-
-            <FormInput
-              label="Email"
-              id="email"
-              name="email"
-              onChange={onChange}
-              required
-              type="email"
-              error={errors.email}
-              value={fields.email}
-            />
-            <FormInput
-              label="Password"
-              id="password"
-              name="password"
-              onChange={onChange}
-              type="password"
-              error={errors.password}
-              required
-              value={fields.password}
-            />
-
-            <p className="my-4 text-left text-xs text-gray-600">
-              By clicking Agree and Join, you agree to 13RMS{' '}
-              <a
-                href="#/"
-                className="font-medium text-xs text-blue-600 hover:text-blue-500"
-              >
-                User Agreement, Privacy Policy
-              </a>{' '}
-              and{' '}
-              <a
-                href="#/"
-                className="font-medium text-xs text-blue-600 hover:text-blue-500"
-              >
-                Cookie Policy
-              </a>
-            </p>
-
-            <div>
-              <Button
-                onClick={handleSubmit}
-                fullWidth
-                rounded="rounded-lg"
-                gradient
-                label="Agree and become a member"
+              <FormInput
+                label="Password"
+                id="password"
+                name="password"
+                showPasswordButton
+                type="password"
+                required
               />
-            </div>
-          </form>
+              <FormInput
+                label="Confirm password"
+                name="confirmPassword"
+                id="confirmPassword"
+                showPasswordButton
+                type="password"
+                required
+              />
+
+              <p className="my-4 text-left text-xs text-gray-600">
+                By clicking Agree and Join, you agree to 13RMS{' '}
+                <a
+                  href="#/"
+                  className="font-medium text-xs text-blue-600 hover:text-blue-500"
+                >
+                  User Agreement, Privacy Policy
+                </a>{' '}
+                and{' '}
+                <a
+                  href="#/"
+                  className="font-medium text-xs text-blue-600 hover:text-blue-500"
+                >
+                  Cookie Policy
+                </a>
+              </p>
+
+              <div>
+                <Button
+                  type="submit"
+                  fullWidth
+                  rounded="rounded-lg"
+                  loading={saving}
+                  gradient
+                  label="Agree and become a member"
+                />
+              </div>
+            </Form>
+          </Formik>
         </div>
         <div className="mt-4 text-center">
           Already on 13RMS?

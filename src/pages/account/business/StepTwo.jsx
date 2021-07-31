@@ -3,7 +3,6 @@ import Loading from 'components/Loading'
 import Copyright from 'components/Copyright'
 import Button from 'components/atoms/Button'
 import { useHistory } from 'react-router-dom'
-import useForm from 'hooks/useForm'
 import FormInput from 'components/atoms/FormInput'
 import Info from 'components/alerts/Info'
 import InputWithDropdown from 'components/atoms/InputWithDropdown'
@@ -13,54 +12,52 @@ import Divider from 'components/atoms/Divider'
 import TextButton from 'components/atoms/TextButton'
 import { links } from 'constants/Links'
 import { wait } from 'utils/wait'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
 
 const BusinessStepTwo = () => {
   const history = useHistory()
   const [isLoaded, setIsLoaded] = useState(true)
 
   //capture inputs
-  const INITIAL_FIELDS = {
+  const initialValues = {
     company_country: '',
     business_address: '',
     additional_info: '',
     postal_code: '',
     place: '',
     legal_number: '',
-    type_of_company: { id: '', name: '' },
-    business_entity_type: { id: '', name: '' },
     company_reg_number: '',
     firstName: '',
     lastName: '',
-    relationship_to_company: { id: '', name: '' },
     personal_mobile: '',
+    type_of_company: { id: '', name: '' },
+    business_entity_type: { id: '', name: '' },
+    relationship_to_company: { id: '', name: '' },
+    mobile_number: '',
   }
 
-  const ERROR_INITIAL_FIELDS = {
-    email: '',
-    password: '',
-  }
+  const [saving, setSaving] = useState(false)
 
-  const { fields, onChange, errors } = useForm(
-    INITIAL_FIELDS,
-    ERROR_INITIAL_FIELDS
-  )
+  const validationSchema = Yup.object({
+    company_country: Yup.string().required('Please add company country'),
+    business_address: Yup.string().required('Please add business address'),
+    postal_code: Yup.string().required('Please add postal code'),
+    place: Yup.string().required('Please add place'),
+  })
 
   setTimeout(() => {
     setIsLoaded(true)
   }, 1000)
-  const [saving, setSaving] = useState(false)
 
-  const handleSubmit = () => {
-    const isValid = true
-    if (isValid) {
-      setSaving(true)
-      wait(3000).then(() => {
-        setSaving(false)
-        history.push(links.DASHBAORD)
-      })
-    } else {
-    }
+  const onSubmit = () => {
+    setSaving(true)
+    wait(3000).then(() => {
+      setSaving(false)
+      history.push(links.DASHBAORD)
+    })
   }
+
   return !isLoaded ? (
     <Loading />
   ) : (
@@ -81,168 +78,153 @@ const BusinessStepTwo = () => {
           <Info text="Please provide your legally registered business address and telephone number" />
         </div>
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <FormInput
-              label="Legal company country"
-              id="company_country"
-              name="company_country"
-              onChange={onChange}
-              required
-              error={errors.company_country}
-              value={fields.company_country}
-            />
-            <FormInput
-              label="Legal business address"
-              id="business_address"
-              name="business_address"
-              onChange={onChange}
-              error={errors.business_address}
-              required
-              value={fields.business_address}
-            />
-            <FormInput
-              label="Additional information (optional)"
-              id="additional_info"
-              name="additional_info"
-              onChange={onChange}
-              value={fields.additional_info}
-            />
-            <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            <Form className="space-y-6">
               <FormInput
-                gridClass="sm:col-span-3"
-                label="Postal Code"
-                id="postal_code"
-                name="postal_code"
+                label="Legal company country"
+                id="company_country"
+                name="company_country"
                 required
-                onChange={onChange}
-                value={fields.postal_code}
-                error={errors.postal_code}
               />
-
               <FormInput
-                gridClass="sm:col-span-3"
-                label="Place"
-                id="place"
+                label="Legal business address"
+                id="business_address"
+                name="business_address"
                 required
-                name="place"
-                onChange={onChange}
-                value={fields.place}
-                error={errors.place}
               />
-            </div>
-
-            <div>
-              <InputWithDropdown
-                label="Legal phone number"
-                list={countryCodeList}
-                placeholder="+91 (123) 456-7890"
-                required
-                id="legal_number"
-                name="legal_number"
-              />
-            </div>
-
-            <Divider />
-
-            <div>
-              <Selector
-                selectedItem={fields.type_of_company}
-                list={[
-                  { id: '0', name: 'Test business 1' },
-                  { id: '1', name: 'Test business 2' },
-                ]}
-                placeholder="Select type of company"
-                label="Type of company"
-                required
-                onSelect={(item) => {}}
-              />
-            </div>
-            <div>
-              <Selector
-                selectedItem={fields.business_entity_type}
-                list={[
-                  { id: '0', name: 'Test business entity 1' },
-                  { id: '1', name: 'Test business entity 2' },
-                ]}
-                placeholder="Select business entity"
-                required
-                label="Business entity type"
-                onSelect={(item) => {}}
-              />
-            </div>
-
-            <div>
               <FormInput
-                label="Company registration number (optional)"
-                id="company_reg_number"
-                name="company_reg_number"
-                onChange={onChange}
-                value={fields.company_reg_number}
+                label="Additional information (optional)"
+                id="additional_info"
+                name="additional_info"
               />
-            </div>
-            <Divider />
-            <h5>Your contact details</h5>
-            <p>
-              We use this information to message you about account activity or
-              other matters that require your attention.
-            </p>
+              <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <FormInput
+                  gridClass="sm:col-span-3"
+                  label="Postal Code"
+                  id="postal_code"
+                  name="postal_code"
+                  required
+                />
 
-            <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-              <FormInput
-                gridClass="sm:col-span-3"
-                label="First Name"
-                id="firstName"
-                name="firstName"
-                onChange={onChange}
-                required
-                value={fields.firstName}
-                error={errors.firstName}
-              />
+                <FormInput
+                  gridClass="sm:col-span-3"
+                  label="Place"
+                  id="place"
+                  required
+                  name="place"
+                />
+              </div>
 
-              <FormInput
-                gridClass="sm:col-span-3"
-                required
-                label="Last Name"
-                id="lastName"
-                name="lastName"
-                onChange={onChange}
-                value={fields.lastName}
-                error={errors.lastName}
-              />
-            </div>
-            <div>
-              <Selector
-                selectedItem={fields.relationship_to_company}
-                list={[
-                  { id: '0', name: 'Test relationship 1' },
-                  { id: '1', name: 'Test relationship 2' },
-                ]}
-                required
-                label="Relationship to company"
-                placeholder="Select relationship"
-                onSelect={(item) => {}}
-              />
-            </div>
-            <div>
-              <InputWithDropdown
-                required
-                label="Mobile phone"
-                list={countryCodeList}
-                placeholder="+91 (123) 456-7890"
-              />
-            </div>
+              <div>
+                <InputWithDropdown
+                  label="Legal phone number"
+                  list={countryCodeList}
+                  placeholder="+91 (123) 456-7890"
+                  required
+                  id="legal_number"
+                  name="legal_number"
+                />
+              </div>
 
-            <div>
-              <Button
-                onClick={handleSubmit}
-                fullWidth
-                loading={saving}
-                rounded="rounded-lg"
-                gradient
-                label="Get on"
-              />
-            </div>
-          </form>
+              <Divider />
+
+              <div>
+                {/* <Selector
+                  selectedItem={fields.type_of_company}
+                  list={[
+                    { id: '0', name: 'Test business 1' },
+                    { id: '1', name: 'Test business 2' },
+                  ]}
+                  placeholder="Select type of company"
+                  label="Type of company"
+                  required
+                  onSelect={(item) => {}}
+                /> */}
+              </div>
+              <div>
+                {/* <Selector
+                  selectedItem={fields.business_entity_type}
+                  list={[
+                    { id: '0', name: 'Test business entity 1' },
+                    { id: '1', name: 'Test business entity 2' },
+                  ]}
+                  placeholder="Select business entity"
+                  required
+                  label="Business entity type"
+                  onSelect={(item) => {}}
+                /> */}
+              </div>
+
+              <div>
+                <FormInput
+                  label="Company registration number (optional)"
+                  id="company_reg_number"
+                  name="company_reg_number"
+                />
+              </div>
+              <Divider />
+              <h5>Your contact details</h5>
+              <p>
+                We use this information to message you about account activity or
+                other matters that require your attention.
+              </p>
+
+              <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <FormInput
+                  gridClass="sm:col-span-3"
+                  label="First Name"
+                  id="firstName"
+                  name="firstName"
+                  required
+                />
+
+                <FormInput
+                  gridClass="sm:col-span-3"
+                  required
+                  label="Last Name"
+                  id="lastName"
+                  name="lastName"
+                />
+              </div>
+              <div>
+                {/* <Selector
+                  selectedItem={fields.relationship_to_company}
+                  list={[
+                    { id: '0', name: 'Test relationship 1' },
+                    { id: '1', name: 'Test relationship 2' },
+                  ]}
+                  required
+                  label="Relationship to company"
+                  placeholder="Select relationship"
+                  onSelect={(item) => {}}
+                /> */}
+              </div>
+              <div>
+                <InputWithDropdown
+                  required
+                  name="mobile_number"
+                  label="Mobile phone"
+                  list={countryCodeList}
+                  placeholder="+91 (123) 456-7890"
+                />
+              </div>
+
+              <div>
+                <Button
+                  fullWidth
+                  type="submit"
+                  loading={saving}
+                  rounded="rounded-lg"
+                  gradient
+                  label="Get on"
+                />
+              </div>
+            </Form>
+          </Formik>
         </div>
         <TextButton
           onClick={history.goBack}

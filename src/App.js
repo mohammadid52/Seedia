@@ -23,6 +23,9 @@ const PersonalLastStep = lazy(() =>
 )
 const EducationStep = lazy(() => import('pages/account/student/EducationStep'))
 const LocationStep = lazy(() => import('pages/account/student/LocationStep'))
+const EmailVerification = lazy(() =>
+  import('pages/account/other/EmailVerification')
+)
 
 library.add(fas)
 
@@ -44,6 +47,7 @@ const App = () => {
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/profile" component={Profile} />
         <Route exact path="/choose-account" component={ChooseAccount} />
+        <Route exact path="/email-verification" component={EmailVerification} />
 
         {/* Personal Account routes */}
         <Route

@@ -4,10 +4,12 @@ import Selector from 'components/atoms/Selector'
 import TextButton from 'components/atoms/TextButton'
 import Copyright from 'components/Copyright'
 import Loading from 'components/Loading'
-import useForm from 'hooks/useForm'
+
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { wait } from 'utils/wait'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
 
 const LastStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -17,35 +19,7 @@ const LastStep = () => {
 
   const locationList = [{ id: 1, name: 'India' }]
 
-  const INITIAL_FIELDS = {
-    country: '',
-    pincode: '',
-    location_within_area: { id: '', name: '' },
-  }
-
-  const ERROR_INITIAL_FIELDS = {
-    country: '',
-    pincode: '',
-    location_within_area: '',
-  }
-
-  const { fields, onChange, errors, setFields } = useForm(
-    INITIAL_FIELDS,
-    ERROR_INITIAL_FIELDS
-  )
   const [saving, setSaving] = useState(false)
-
-  const nextStep = () => {
-    const isValid = true
-    if (isValid) {
-      setSaving(true)
-      wait(3000).then(() => {
-        setSaving(false)
-        return history.push('/dashboard')
-      })
-    } else {
-    }
-  }
 
   setTimeout(() => {
     setIsLoaded(true)
@@ -54,6 +28,26 @@ const LastStep = () => {
   const goBack = () => {
     history.push('/account/personal/edit-profile/company')
   }
+
+  const initialValues = {
+    country: '',
+    pincode: '',
+  }
+
+  const onSubmit = (values) => {
+    setSaving(true)
+    wait(3000).then(() => {
+      setSaving(false)
+      history.push('/dashboard')
+    })
+  }
+
+  const validationSchema = Yup.object({
+    country: Yup.string().required('Please add this field'),
+    pincode: Yup.string().required('Please add this field'),
+  })
+
+  const [selectedLocation, setSelectedLocation] = useState('')
 
   return !isLoaded ? (
     <Loading />
@@ -76,56 +70,47 @@ const LastStep = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
-          <div className="space-y-6">
-            <FormInput
-              label="Country / region"
-              id="country"
-              name="country"
-              onChange={onChange}
-              required
-              type="text"
-              error={errors.country}
-              value={fields.country}
-            />
-
-            <FormInput
-              label="Postal Code"
-              id="pincode"
-              name="pincode"
-              onChange={onChange}
-              error={errors.pincode}
-              required
-              value={fields.pincode}
-            />
-            <div className="mt-6">
-              <Selector
-                label={'Location within this area'}
-                list={locationList}
-                selectedItem={
-                  fields.location_within_area.id
-                    ? fields.location_within_area
-                    : { id: 0, name: 'Select area' }
-                }
-                onSelect={(item) =>
-                  setFields({
-                    ...fields,
-                    location_within_area: { id: item.id, name: item.name },
-                  })
-                }
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            <Form className="space-y-6">
+              <FormInput
+                label="Country / region"
+                id="country"
+                name="country"
+                required
               />
-            </div>
 
-            <div>
-              <Button
-                onClick={nextStep}
-                fullWidth
-                rounded="rounded-lg"
-                gradient
-                loading={saving}
-                label="Finish Submit"
+              <FormInput
+                label="Postal Code"
+                id="pincode"
+                name="pincode"
+                required
               />
-            </div>
-          </div>
+              <div className="mt-6">
+                <Selector
+                  label={'Location within this area'}
+                  list={locationList}
+                  selectedItem={selectedLocation}
+                  placeholder={'Select location'}
+                  onSelect={(item) => setSelectedLocation(item.name)}
+                />
+              </div>
+
+              <div>
+                <Button
+                  fullWidth
+                  rounded="rounded-lg"
+                  type="submit"
+                  gradient
+                  loading={saving}
+                  label="Finish Submit"
+                />
+              </div>
+            </Form>
+          </Formik>
         </div>
         <TextButton
           text="Go back"

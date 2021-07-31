@@ -3,12 +3,14 @@ import Loading from 'components/Loading'
 import Copyright from 'components/Copyright'
 import Button from 'components/atoms/Button'
 import { useHistory } from 'react-router-dom'
-import useForm from 'hooks/useForm'
+
 import FormInput from 'components/atoms/FormInput'
 import Info from 'components/alerts/Info'
 import TextButton from 'components/atoms/TextButton'
 import { links } from 'constants/Links'
 import { wait } from 'utils/wait'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
 
 const BusinessStepOne = () => {
   const history = useHistory()
@@ -16,39 +18,38 @@ const BusinessStepOne = () => {
 
   const [saving, setSaving] = useState(false)
 
-  //capture inputs
-  const INITIAL_FIELDS = {
-    email: '',
+  const initialValues = {
+    company_name: '',
+    company_email: '',
+    re_company_email: '',
     password: '',
-    firstName: '',
-    lastName: '',
+    company_number: '',
   }
 
-  const ERROR_INITIAL_FIELDS = {
-    email: '',
-    password: '',
-  }
-
-  const { fields, onChange, errors } = useForm(
-    INITIAL_FIELDS,
-    ERROR_INITIAL_FIELDS
-  )
+  const validationSchema = Yup.object({
+    company_name: Yup.string()
+      .email('Please enter valid email address')
+      .required('Please add legal company name'),
+    company_email: Yup.string()
+      .email('Please enter valid email address')
+      .required('Please add legal company email address'),
+    re_company_email: Yup.string()
+      .oneOf([Yup.ref('company_email'), null], 'Email address must match')
+      .required('Please re-enter legal company email address'),
+    password: Yup.string().required('Please enter password'),
+    company_number: Yup.string().required('Please enter password'),
+  })
 
   setTimeout(() => {
     setIsLoaded(true)
   }, 1000)
 
-  const handleSubmit = () => {
-    const isValid = true
-
-    if (isValid) {
-      setSaving(true)
-      wait(3000).then(() => {
-        setSaving(false)
-        return history.push(links.BUSINESS_STEP_2)
-      })
-    } else {
-    }
+  const onSubmit = () => {
+    setSaving(true)
+    wait(3000).then(() => {
+      setSaving(false)
+      history.push(links.BUSINESS_STEP_2)
+    })
   }
   return !isLoaded ? (
     <Loading />
@@ -72,89 +73,78 @@ const BusinessStepOne = () => {
           <Info text="Qualify for business seller limits, promotions and professional tools to expand your business" />
         </div>
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <FormInput
-              label="Legal company name"
-              id="email"
-              name="email"
-              onChange={onChange}
-              required
-              type="email"
-              error={errors.email}
-              value={fields.email}
-            />
-            <FormInput
-              label="Legal company email address"
-              id="password"
-              name="password"
-              onChange={onChange}
-              type="password"
-              error={errors.password}
-              required
-              value={fields.password}
-            />
-            <FormInput
-              label="Re-enter email address"
-              id="email"
-              name="email"
-              onChange={onChange}
-              required
-              type="email"
-              error={errors.email}
-              value={fields.email}
-            />
-            <FormInput
-              label="password"
-              id="password"
-              name="password"
-              onChange={onChange}
-              type="password"
-              error={errors.password}
-              required
-              value={fields.password}
-            />
-            <FormInput
-              label="Legal phone number of company"
-              id="password"
-              name="password"
-              onChange={onChange}
-              type="password"
-              error={errors.password}
-              required
-              value={fields.password}
-            />
-
-            <div className="space-y-2 my-4">
-              <p className="text-left text-xs text-gray-600">
-                We regularly send you e-mails with special offers on 13RMS. You
-                can unsubsribe from these marketing messages at any time free of
-                charge throw 13RMS or the links in the email.
-              </p>
-              <p className="text-left text-xs text-gray-600">
-                By selecting <strong>Register</strong>, you confirm that you
-                have read and agreed to our{' '}
-                <a className="text-xs" href="#/">
-                  User Agreement.
-                </a>
-                . For more information about the processing of your data, please
-                see out{' '}
-                <a className="text-xs" href="#/">
-                  Privacy Statement.
-                </a>
-              </p>
-            </div>
-
-            <div>
-              <Button
-                onClick={handleSubmit}
-                fullWidth
-                rounded="rounded-lg"
-                loading={saving}
-                gradient
-                label="Register"
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            <Form className="space-y-6">
+              <FormInput
+                label="Legal company name"
+                id="company_name"
+                name="company_name"
+                required
               />
-            </div>
-          </form>
+              <FormInput
+                label="Legal company email address"
+                id="company_email"
+                name="company_email"
+                type="email"
+                required
+              />
+              <FormInput
+                label="Re-enter email address"
+                id="re_company_email"
+                name="re_company_email"
+                required
+                type="email"
+              />
+              <FormInput
+                label="password"
+                id="password"
+                name="password"
+                type="password"
+                required
+              />
+              <FormInput
+                label="Legal phone number of company"
+                id="company_number"
+                name="company_number"
+                required
+              />
+
+              <div className="space-y-2 my-4">
+                <p className="text-left text-xs text-gray-600">
+                  We regularly send you e-mails with special offers on 13RMS.
+                  You can unsubsribe from these marketing messages at any time
+                  free of charge throw 13RMS or the links in the email.
+                </p>
+                <p className="text-left text-xs text-gray-600">
+                  By selecting <strong>Register</strong>, you confirm that you
+                  have read and agreed to our{' '}
+                  <a className="text-xs" href="#/">
+                    User Agreement.
+                  </a>
+                  . For more information about the processing of your data,
+                  please see out{' '}
+                  <a className="text-xs" href="#/">
+                    Privacy Statement.
+                  </a>
+                </p>
+              </div>
+
+              <div>
+                <Button
+                  fullWidth
+                  rounded="rounded-lg"
+                  type="submit"
+                  gradient
+                  loading={saving}
+                  label="Finish Submit"
+                />
+              </div>
+            </Form>
+          </Formik>
         </div>
         <TextButton
           onClick={history.goBack}

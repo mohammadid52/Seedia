@@ -15,12 +15,12 @@ const Copyright = () => {
         >
           {navigation.map((item) => (
             <div key={item.name} className="text-center px-5 py-2">
-              <a
+              <li
                 href={item.href}
-                className="text-base text-gray-500 hover:text-gray-900"
+                className="list-none link-hover text-base text-gray-500 cursor-pointer"
               >
                 {item.name}
-              </a>
+              </li>
             </div>
           ))}
         </nav>

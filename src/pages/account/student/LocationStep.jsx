@@ -4,10 +4,12 @@ import Selector from 'components/atoms/Selector'
 import TextButton from 'components/atoms/TextButton'
 import Copyright from 'components/Copyright'
 import Loading from 'components/Loading'
-import useForm from 'hooks/useForm'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { wait } from 'utils/wait'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
+import { links } from 'constants/Links'
 
 const LocationStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -17,72 +19,30 @@ const LocationStep = () => {
 
   const locationList = [{ id: 1, name: 'India' }]
 
-  const INITIAL_FIELDS = {
-    country: '',
-    pincode: '',
-    location_within_area: { id: '', name: '' },
-  }
-
-  const ERROR_INITIAL_FIELDS = {
-    country: '',
-    pincode: '',
-    location_within_area: '',
-  }
-
-  const { fields, onChange, errors, setFields, setErrors } = useForm(
-    INITIAL_FIELDS,
-    ERROR_INITIAL_FIELDS
-  )
   const [saving, setSaving] = useState(false)
 
-  const nextStep = () => {
-    const isValid = validateForm()
-    if (isValid) {
-      setSaving(true)
-      wait(3000).then(() => {
-        setSaving(false)
-        return history.push('/dashboard')
-      })
-    } else {
-    }
+  const initialValues = {
+    country: '',
+    pincode: '',
   }
 
-  const validateForm = () => {
-    let isValid = true
+  const validationSchema = Yup.object({
+    country: Yup.string().required('Please add country'),
+    pincode: Yup.string().required('Please add pincode'),
+  })
 
-    const trimmedLen = (field) => fields[field].trim().length
-
-    if (trimmedLen('country') <= 0) {
-      isValid = false
-      errors.country = 'Please add country.'
-    } else {
-      isValid = true
-      errors.country = ''
-    }
-
-    if (trimmedLen('pincode') < 6) {
-      isValid = false
-      errors.pincode = 'Invalid pincode.'
-    } else {
-      isValid = true
-      errors.pincode = ''
-    }
-    // if (trimmedLen('location_within_area') <= 0) {
-    //   isValid = false
-    //   errors.location_within_area = ''
-    // } else {
-    //   isValid = true
-    //   errors.location_within_area = 'This field is important.'
-    // }
-
-    setErrors({ ...errors })
-
-    return isValid
+  const onSubmit = () => {
+    setSaving(true)
+    wait(3000).then(() => {
+      setSaving(false)
+      return history.push(links.DASHBAORD)
+    })
   }
 
   setTimeout(() => {
     setIsLoaded(true)
   }, 1000)
+  const [fields, setFields] = useState({ location_within_area: '' })
 
   return !isLoaded ? (
     <Loading />
@@ -105,56 +65,52 @@ const LocationStep = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
-          <div className="space-y-6">
-            <FormInput
-              label="Country / region"
-              id="country"
-              name="country"
-              onChange={onChange}
-              required
-              type="text"
-              error={errors.country}
-              value={fields.country}
-            />
-
-            <FormInput
-              label="Postal Code"
-              id="pincode"
-              name="pincode"
-              onChange={onChange}
-              error={errors.pincode}
-              required
-              value={fields.pincode}
-            />
-            <div className="mt-6">
-              <Selector
-                label={'Location within this area'}
-                list={locationList}
-                selectedItem={
-                  fields.location_within_area.id
-                    ? fields.location_within_area
-                    : { id: 0, name: 'Select area' }
-                }
-                onSelect={(item) =>
-                  setFields({
-                    ...fields,
-                    location_within_area: { id: item.id, name: item.name },
-                  })
-                }
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            <Form className="space-y-6">
+              <FormInput
+                label="Country / region"
+                id="country"
+                name="country"
+                required
               />
-            </div>
 
-            <div>
-              <Button
-                onClick={nextStep}
-                fullWidth
-                rounded="rounded-lg"
-                gradient
-                loading={saving}
-                label="Finish Submit"
+              <FormInput
+                label="Postal Code"
+                id="pincode"
+                name="pincode"
+                required
               />
-            </div>
-          </div>
+              <div className="mt-6">
+                <Selector
+                  label={'Location within this area'}
+                  list={locationList}
+                  placeholder={'Select location'}
+                  selectedItem={fields.location_within_area}
+                  onSelect={(item) =>
+                    setFields({
+                      ...fields,
+                      location_within_area: item.name,
+                    })
+                  }
+                />
+              </div>
+
+              <div>
+                <Button
+                  fullWidth
+                  rounded="rounded-lg"
+                  type="submit"
+                  gradient
+                  loading={saving}
+                  label="Finish Submit"
+                />
+              </div>
+            </Form>
+          </Formik>
         </div>
         <TextButton
           onClick={history.goBack}

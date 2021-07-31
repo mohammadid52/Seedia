@@ -2,7 +2,7 @@ import React from 'react'
 
 const Sidebar = ({ setCollapsed, collapsed }) => {
   return (
-    <div className="light">
+    <div className="light hidden">
       <div id="header" className="light">
         <div
           className={`pro-sidebar transition-all duration-500 ${

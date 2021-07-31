@@ -30,7 +30,7 @@ const Post = ({ post }) => {
         <div className="flex items-start mb-3 justify-start">
           <div className="">
             <div>
-              <span class="sr-only">
+              <span className="sr-only">
                 {user.firstName} {user.lastName}
               </span>
               <span className="inline-block relative">
@@ -65,7 +65,7 @@ const Post = ({ post }) => {
         </div>
 
         <div className="">
-          <div className="justify-start space-x-12  col border-t border-gray-200 w-full flex items-center pt-2">
+          <div className="justify-start   col border-t border-gray-200 w-full flex items-center pt-2">
             <button
               onClick={() => setLiked(!liked)}
               className="inline-flex px-4 py-2 hover:bg-gray-200 rounded-lg text-lg"

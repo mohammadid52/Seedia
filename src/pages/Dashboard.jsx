@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Post from 'components/Post'
 import Sidebar from 'components/Sidebar'
 
@@ -7,6 +7,7 @@ import ListCard from 'components/ListCard'
 import Card from 'components/Card'
 import Button from 'components/atoms/Button'
 import DashboardHeader from './DashboardHeader'
+import DashboardLayout from './DashboardLayout'
 
 const PostInput = ({ setPosts, posts }) => {
   const [postText, setPostText] = useState('')
@@ -235,9 +236,9 @@ const PostInput = ({ setPosts, posts }) => {
 
 const Divider = () => <hr style={{ margin: 'revert' }} />
 
-const PersonalCard = () => {
+const PersonalCard = ({ className }) => {
   return (
-    <div className="first-col hidden lg:block md:block px-2">
+    <div className={`px-2 ${className}`}>
       <Card>
         <div className="light">
           <div className="p-4 overflow-hidden">
@@ -382,6 +383,21 @@ const Dashboard = () => {
     },
   }
 
+  const [users, setUsers] = useState([])
+
+  const fetchUsers = () => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then((response) => response.json())
+      .then((json) => setUsers(json))
+  }
+
+  useEffect(() => {
+    fetchUsers()
+    return () => {
+      fetchUsers()
+    }
+  }, [])
+
   const [posts, setPosts] = useState([INITIAL_POST])
 
   const [collapsed, setCollapsed] = useState(true)
@@ -397,47 +413,31 @@ const Dashboard = () => {
           }`}
         >
           <DashboardHeader />
-          <div
-            className="mt-8 content-wrapper grid grid-cols-5  md:grid-cols-3 lg:grid-cols-5 gap-x-4 mx-auto"
-            style={{ maxWidth: '90rem' }}
-          >
-            {/* 1st col */}
-            <PersonalCard />
-
-            {/* 2nd col to 4th col */}
-            <div className="second-col col-span-3">
-              <PostInput posts={posts} setPosts={setPosts} />
-              <Card className="relative">
-                <div className="py-8 px-4 flex-wrap flex justify-center light space-x-2">
-                  <ListCard
-                    imgUrl={
-                      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    }
-                  />
-                  <ListCard
-                    imgUrl={
-                      'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    }
-                  />
-                  <ListCard
-                    imgUrl={
-                      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80'
-                    }
-                  />
-                </div>
-              </Card>
-              {posts.map((post) => (
-                <Post post={post} />
-              ))}
-            </div>
-
-            {/* 5th col */}
-
-            <div className="third-col hidden lg:block  h-auto">
-              <SideCard />
-              <SideCard />
-            </div>
-          </div>
+          <DashboardLayout
+            firstColClass="md:hidden lg:block sm:hidden xl:block"
+            firstCol={<PersonalCard />}
+            secondCol={
+              <div className="">
+                <PostInput posts={posts} setPosts={setPosts} />
+                <Card className="relative">
+                  <div className="py-8 px-4 grid grid-cols-2 gap-4 sm:grid-cols-2 ">
+                    {users.slice(0, 4).map((user) => {
+                      return <ListCard key={user.id} user={user} />
+                    })}
+                  </div>
+                </Card>
+                {posts.map((post, idx) => (
+                  <Post key={idx} post={post} />
+                ))}
+              </div>
+            }
+            thirdCol={
+              <div className="">
+                <SideCard />
+                <SideCard />
+              </div>
+            }
+          />
         </div>
       </div>
     </div>
@@ -445,3 +445,45 @@ const Dashboard = () => {
 }
 
 export default Dashboard
+
+// <div
+//           className="mt-8 content-wrapper grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-x-4 mx-auto"
+//           style={{ maxWidth: '90rem' }}
+//         >
+//           {/* 1st col */}
+//           <PersonalCard />
+
+//           {/* 2nd col to 4th col */}
+// <div className="second-col col-span-1">
+//   <PostInput posts={posts} setPosts={setPosts} />
+//   <Card className="relative">
+//     <div className="py-8 px-4 flex-wrap flex justify-center light space-x-2">
+//       <ListCard
+//         imgUrl={
+//           'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+//         }
+//       />
+//       <ListCard
+//         imgUrl={
+//           'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+//         }
+//       />
+//       <ListCard
+//         imgUrl={
+//           'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80'
+//         }
+//       />
+//     </div>
+//   </Card>
+//   {posts.map((post) => (
+//     <Post post={post} />
+//   ))}
+// </div>
+
+//           {/* 5th col */}
+
+// <div className=" hidden lg:block  h-auto">
+//   <SideCard />
+//   <SideCard />
+// </div>
+//         </div>

@@ -20,6 +20,7 @@ interface IButton {
   shadow?: boolean
 
   loadingText?: string
+  type?: 'button' | 'submit' | 'reset'
   size: 'sm' | 'md' | 'lg' | 'xl'
   weight: 'light' | 'medium' | 'semibold' | 'bold'
 }
@@ -28,6 +29,7 @@ const Button = ({
   label,
   onClick,
   Icon,
+  type = 'button',
   bgColor = 'indigo',
   gradient = false,
   gradientColor = { x: 'pink', y: 'yellow' },
@@ -84,9 +86,9 @@ const Button = ({
 
   return (
     <button
-      type="button"
       aria-hidden="true"
       onClick={onClick}
+      type={type}
       style={{ filter: shadow ? 'drop-shadow(2px 4px 6px pink)' : undefined }}
       className={`${
         customClass
@@ -109,7 +111,7 @@ const Button = ({
             cy="12"
             r="10"
             stroke="currentColor"
-            stroke-width="4"
+            strokeWidth="4"
           ></circle>
           <path
             className="opacity-75"
