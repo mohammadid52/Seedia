@@ -57,6 +57,11 @@ const BusinessStepTwo = () => {
       history.push(links.DASHBAORD)
     })
   }
+  const [fields, setFields] = useState({
+    type_of_company: '',
+    business_entity_type: '',
+    relationship_to_company: '',
+  })
 
   return !isLoaded ? (
     <Loading />
@@ -133,7 +138,7 @@ const BusinessStepTwo = () => {
               <Divider />
 
               <div>
-                {/* <Selector
+                <Selector
                   selectedItem={fields.type_of_company}
                   list={[
                     { id: '0', name: 'Test business 1' },
@@ -142,11 +147,13 @@ const BusinessStepTwo = () => {
                   placeholder="Select type of company"
                   label="Type of company"
                   required
-                  onSelect={(item) => {}}
-                /> */}
+                  onSelect={(item) =>
+                    setFields({ ...fields, type_of_company: item.name })
+                  }
+                />
               </div>
               <div>
-                {/* <Selector
+                <Selector
                   selectedItem={fields.business_entity_type}
                   list={[
                     { id: '0', name: 'Test business entity 1' },
@@ -155,8 +162,10 @@ const BusinessStepTwo = () => {
                   placeholder="Select business entity"
                   required
                   label="Business entity type"
-                  onSelect={(item) => {}}
-                /> */}
+                  onSelect={(item) =>
+                    setFields({ ...fields, business_entity_type: item.name })
+                  }
+                />
               </div>
 
               <div>
@@ -191,7 +200,7 @@ const BusinessStepTwo = () => {
                 />
               </div>
               <div>
-                {/* <Selector
+                <Selector
                   selectedItem={fields.relationship_to_company}
                   list={[
                     { id: '0', name: 'Test relationship 1' },
@@ -200,8 +209,10 @@ const BusinessStepTwo = () => {
                   required
                   label="Relationship to company"
                   placeholder="Select relationship"
-                  onSelect={(item) => {}}
-                /> */}
+                  onSelect={(item) =>
+                    setFields({ ...fields, relationship_to_company: item.name })
+                  }
+                />
               </div>
               <div>
                 <InputWithDropdown

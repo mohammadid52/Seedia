@@ -9,7 +9,6 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { wait } from 'utils/wait'
 import { links } from 'constants/Links'
-import { isEmpty } from 'lodash'
 
 const Signup = () => {
   const history = useHistory()

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Post from 'components/Post'
-import Sidebar from 'containers/Sidebar'
 
 import SideCard from 'components/SideCard'
-import ListCard from 'components/ListCard'
+
 import Card from 'components/Card'
 import Button from 'components/atoms/Button'
 import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
+import ListCard from 'components/ListCard'
 
 const PostInput = ({ setPosts, posts }) => {
   const [postText, setPostText] = useState('')
@@ -365,44 +365,39 @@ const PersonalCard = ({ className }) => {
 }
 
 const Dashboard = () => {
-  // const themeToggler = (val) => setTheme(val)
-  // const [theme, setTheme] = useState('light')
-
-  const INITIAL_POST = {
-    user: {
-      firstName: 'Mohammad',
-      lastName: 'Dehgamwala',
-      achievement: 'Founder and CEO of XYZ',
-    },
-
-    post: {
-      type: 'text',
-      content:
-        'Software development is the process of conceiving, specifying, designing, programming, documenting, testing, and bug fixing involved in creating and maintaining applications, frameworks, or other software components',
-      postedAt: new Date(),
-      likeCount: 4,
-      commentCount: 3,
-    },
-  }
-
   const [users, setUsers] = useState([])
+  const BASE_URL = 'https://dummyapi.io/data/api/'
+  const APP_ID = '61059484a441674e99287b7f'
 
   const fetchUsers = () => {
     fetch('https://jsonplaceholder.typicode.com/users')
       .then((response) => response.json())
       .then((json) => setUsers(json))
   }
+  const fetchPosts = () => {
+    setPostLoading(true)
+    fetch(`${BASE_URL}post`, { headers: { 'app-id': APP_ID } })
+      .then((response) => response.json())
+      .then((json) => setPosts(json.data))
+      .finally(() => {
+        setPostLoading(false)
+      })
+    // .finally(() => setPostLoading(false))
+  }
 
   useEffect(() => {
     fetchUsers()
+    fetchPosts()
     return () => {
       fetchUsers()
+      fetchPosts()
     }
   }, [])
 
-  const [posts, setPosts] = useState([INITIAL_POST])
+  const [posts, setPosts] = useState([])
+  const [postLoading, setPostLoading] = useState(false)
 
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed] = useState(true)
 
   return (
     // <Sidebar>
@@ -422,14 +417,16 @@ const Dashboard = () => {
                 <PostInput posts={posts} setPosts={setPosts} />
                 <Card className="relative">
                   <div className="py-8 px-4 grid grid-cols-2 gap-4 sm:grid-cols-2 ">
-                    {users.slice(0, 4).map((user) => {
+                    {users.slice(0, 2).map((user) => {
                       return <ListCard key={user.id} user={user} />
                     })}
                   </div>
                 </Card>
-                {posts.map((post, idx) => (
-                  <Post key={idx} post={post} />
-                ))}
+                {postLoading ? (
+                  <Card className="p-4 text-center">loading</Card>
+                ) : (
+                  posts.map((post, idx) => <Post key={idx} post={post} />)
+                )}
               </div>
             }
             thirdCol={

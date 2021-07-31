@@ -1,11 +1,7 @@
 import React, { useState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/solid'
 import { Field } from 'formik'
-import {
-  AiFillEyeInvisible,
-  AiOutlineEye,
-  AiOutlineEyeInvisible,
-} from 'react-icons/ai'
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 
 const FormInput = ({
   label,

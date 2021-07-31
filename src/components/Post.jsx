@@ -19,8 +19,9 @@ const Card = ({ children, className }) => {
   )
 }
 const Post = ({ post }) => {
-  const { user, post: _post } = post
-
+  const { owner, publishDate, text } = post
+  const { firstName, lastName, picture } = owner
+  //
   // fake states
   const [liked, setLiked] = useState(false)
 
@@ -31,36 +32,35 @@ const Post = ({ post }) => {
           <div className="">
             <div>
               <span className="sr-only">
-                {user.firstName} {user.lastName}
+                {firstName} {lastName}
               </span>
               <span className="inline-block relative">
                 <img
-                  className="h-10 w-10 rounded-full"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  className="h-10 w-10 rounded-full shadow"
+                  src={picture}
                   alt=""
                 />
                 <span className="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400" />
               </span>
             </div>
           </div>
-          <div className="ml-3">
+          <div className="ml-4">
             <h6 className="text-left mb-1 font-semibold tracking-wide">
-              {user.firstName} {user.lastName}{' '}
-              <span className="italic text-gray-400 text-xs">
-                • {moment(_post.postedAt).fromNow()}
+              {firstName} {lastName}
+              <span className="absolute right-8 text-gray-400 text-xs">
+                {moment(publishDate).fromNow()}
               </span>
             </h6>
+            <p className="text-gray-600 text-xs tracking-wide">
+              {'Web developer'}
+            </p>
 
-            <span className="text-gray-400">{user.achievement}</span>
+            {/* <span className="text-gray-400">{user.achievement}</span> */}
           </div>
         </div>
         <div className="">
           <div className="left-col-panel col-lg-10 col-sm-12 col-md-6 col px-1">
-            {_post.type === 'text' ? (
-              <p className="text-gray-700">{_post.content}</p>
-            ) : (
-              <div>Coming soon</div>
-            )}
+            <p>{text}</p>
           </div>
         </div>
 
