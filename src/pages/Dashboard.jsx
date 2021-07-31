@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Post from 'components/Post'
-import Sidebar from 'components/Sidebar'
+import Sidebar from 'containers/Sidebar'
 
 import SideCard from 'components/SideCard'
 import ListCard from 'components/ListCard'
 import Card from 'components/Card'
 import Button from 'components/atoms/Button'
-import DashboardHeader from './DashboardHeader'
-import DashboardLayout from './DashboardLayout'
+import DashboardHeader from 'pages/DashboardHeader'
+import DashboardLayout from 'pages/DashboardLayout'
 
 const PostInput = ({ setPosts, posts }) => {
   const [postText, setPostText] = useState('')
@@ -241,26 +241,28 @@ const PersonalCard = ({ className }) => {
     <div className={`px-2 ${className}`}>
       <Card>
         <div className="light">
-          <div className="p-4 overflow-hidden">
+          <div className="p-4 overflow-hidden relative">
             <div className="float-left text-center pl-0 pr-0 col-sm-12 col-lg-12">
               <div className="col- profile-image">
                 <div className="feed-identity"></div>
-                <span className="inline-block relative">
+                <span className="inline-block ">
                   <img
-                    className="h-44 w-44 rounded-full"
+                    className="h-16 w-16 rounded-full z-20"
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     alt=""
                   />
-                  {/* <span className="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400" /> */}
                 </span>
               </div>
             </div>
             <div className="float-right profile-description pr-0 mb-0  col-sm-12 col-lg-12">
-              <div className="float-left pr-0 mb-10 col-md-12">
-                <div className="mt-4 mb-2 text-xl font-extrabold text-center">
-                  Welcome, Mohammad
+              <div className="float-left pr-0  col-md-12">
+                <div className="mt-4 mb-1 text-base hover:underline  font-extrabold text-center">
+                  Mohammad Dehgamwala
                 </div>
-                <p className="link-hover cursor-pointer text-center add-photo light">
+
+                <p className="pb-0 text-sm text-center">Web developer</p>
+
+                <p className="link-hover pb-0 mb-0 tracking-wide cursor-pointer text-center add-photo light">
                   Change photo
                 </p>
               </div>
@@ -319,10 +321,10 @@ const PersonalCard = ({ className }) => {
         <div>
           <div className="p-4 overflow-hidden mb-8">
             <div className="float-left  pl-0 pr-0 col-sm-12 col-lg-12">
-              <div className="col mb-2">
+              <div className="col mb-2 ml-0">
                 <a href="/">Groups</a>
               </div>
-              <div className="col mb-2 d-flex justify-content-between">
+              <div className="col mb-2 d-flex justify-content-between ml-0">
                 <a href="/">Events</a>
                 <svg
                   stroke="currentColor"
@@ -403,10 +405,9 @@ const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(true)
 
   return (
+    // <Sidebar>
     <div className="relative">
-      <div>
-        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
-
+      <div className="">
         <div
           className={`h-auto flow-root transition-all duration-500 sidebar-${
             collapsed ? 'collapsed' : 'toggled'
@@ -441,6 +442,7 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
+    // </Sidebar>
   )
 }
 
