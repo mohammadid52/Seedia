@@ -27,6 +27,7 @@
     "connected-react-router": "^6.6.1",
     "emotion": "^10.0.27",
     "emotion-theming": "^10.0.27",
+    "formik": "^2.2.9",
     "history": "^4.7.2",
     "jquery": "^3.6.0",
     "jsonwebtoken": "^8.5.1",
