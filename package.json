@@ -55,7 +55,8 @@
     "styled-components": "^5.2.1",
     "typescript": "^4.3.5",
     "use-dark-mode": "latest",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "yup": "^0.32.9"
   },
   "scripts": {
     "start": "PORT=3005 HOST=13rms.localhost craco start",
