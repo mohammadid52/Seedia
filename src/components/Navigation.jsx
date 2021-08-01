@@ -20,17 +20,9 @@ export default function Navigation() {
     <Popover className="relative bg-white">
       {({ open }) => (
         <>
-          <div className=" px-4 sm:px-6">
-            <div className="flex justify-between items-center border-b-2 border-gray-100 py-3 md:justify-start md:space-x-10">
+          <div className="">
+            <div className="flex justify-between items-center border-b-2 border-gray-100 py-3 md:justify-start md:space-x-10 px-2">
               <div className="flex justify-start lg:w-0 lg:flex-1">
-                <a href="/#">
-                  <span className="sr-only">13RMS</span>
-                  <img
-                    className="h-12 w-auto sm:h-12"
-                    src={process.env.PUBLIC_URL + '/logo.png'}
-                    alt=""
-                  />
-                </a>
                 <Popover.Group
                   as="nav"
                   className="hidden ml-6 md:flex space-x-10"

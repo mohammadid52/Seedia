@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 import React, { Fragment } from 'react'
-import { Row, Col, Container } from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 import Select from 'react-select'
 import SpeechRecognition from 'react-speech-recognition'
 import { compose, pure, lifecycle, withHandlers, withState } from 'recompose'
@@ -94,7 +94,7 @@ const Search = ({
           <nav className="pb-1 px-0 bg-transparent navbar-expand-lg ">
             <div className="container-fluid px-0">
               <div
-                className="collapse navbar-collapse search-panel"
+                className="navbar-collapse search-panel"
                 id="navbarSupportedContent"
               >
                 <HtmlTooltip

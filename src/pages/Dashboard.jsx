@@ -372,20 +372,20 @@ const Dashboard = () => {
   const [user, setUser] = useState({})
   const [accountInfo, setAccountInfo] = useState({})
 
-  const fetchUserInfo = () => {
-    const json = window.localStorage.getItem('user')
-    return JSON.parse(json) || {}
-  }
-
-  const fetchAccountType = () =>
-    window.localStorage.getItem('accountType') || 'Personal'
-
-  const fetchAccountInfo = () => {
-    const accountType = fetchAccountType().toLocaleLowerCase()
-    return JSON.parse(window.localStorage.getItem(accountType)) || {}
-  }
-
   useEffect(() => {
+    const fetchAccountType = () =>
+      window.localStorage.getItem('accountType') || 'Personal'
+
+    const fetchUserInfo = () => {
+      const json = window.localStorage.getItem('user')
+      return JSON.parse(json) || {}
+    }
+
+    const fetchAccountInfo = () => {
+      const accountType = fetchAccountType().toLocaleLowerCase()
+      return JSON.parse(window.localStorage.getItem(accountType)) || {}
+    }
+
     const user = fetchUserInfo()
     const accountInfo = fetchAccountInfo()
     setUser({ ...user })

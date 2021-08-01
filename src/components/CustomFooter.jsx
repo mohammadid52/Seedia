@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import {
   compose,
   pure,
@@ -7,9 +7,113 @@ import {
   withHandlers,
   withState,
 } from 'recompose'
-// import WorldwideLocations from './WorldwideLocations'
-// import usa from 'assets/images/countries/usa.png'
+
+import usa from 'assets/images/countries/usa.png'
+
+import { Popover, Transition } from '@headlessui/react'
+import { ChevronDownIcon, MenuIcon } from '@heroicons/react/outline'
+import { classNames } from 'utils/classNames'
+import { countries } from 'values/values'
 // import { Col } from 'reactstrap'
+
+const WorldListPopover = ({ changeCountry }) => {
+  return (
+    <Popover className="relative bg-white">
+      {({ open }) => (
+        <>
+          <div className="max-w-7xl">
+            <div className="flex justify-between items-center  py-6 md:justify-start md:space-x-10">
+              <div className="-mr-2 -my-2 md:hidden">
+                <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                  <span className="sr-only">Open menu</span>
+                  <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                </Popover.Button>
+              </div>
+
+              <Popover.Group
+                as="nav"
+                className="hidden mx-0 md:flex space-x-10"
+              >
+                <Popover className="relative">
+                  {({ open }) => (
+                    <>
+                      <p className="mb-3  text-sm font-medium text-gray-400">
+                        13RMS Trading post worldwide
+                      </p>
+                      <Popover.Button
+                        className={classNames(
+                          open ? 'text-gray-900' : 'text-gray-500',
+                          'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 border p-2 border-gray-400 focus:ring-indigo-500'
+                        )}
+                      >
+                        <img alt="usa" className={'h-4 mr-1 w-4 '} src={usa} />
+                        <span>United States</span>
+                        <ChevronDownIcon
+                          className={classNames(
+                            open ? 'text-gray-600' : 'text-gray-400',
+                            'ml-2 h-5 w-5 group-hover:text-gray-500'
+                          )}
+                          aria-hidden="true"
+                        />
+                      </Popover.Button>
+                      <Transition
+                        show={open}
+                        as={Fragment}
+                        enter="transition ease-out duration-200"
+                        enterFrom="opacity-0 translate-y-1"
+                        enterTo="opacity-100 translate-y-0"
+                        leave="transition ease-in duration-150"
+                        leaveFrom="opacity-100 translate-y-0"
+                        leaveTo="opacity-0 translate-y-1"
+                      >
+                        <Popover.Panel
+                          static
+                          style={{ maxWidth: '90rem' }}
+                          className="absolute bottom-10 z-10 -ml-4 mt-3 transform px-2 w-screen sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+                        >
+                          <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                            <div className="relative grid bg-white px-5 py-6 sm:gap-8 sm:p-8 grid-cols-6">
+                              {countries.map((country, key) => {
+                                return (
+                                  <div
+                                    className="cursor-pointer hover:bg-gray-100 p-2 px-3 truncate rounded-md flex items-center justify-start"
+                                    {...{
+                                      key,
+                                      onClick: () => {},
+                                      style: {},
+                                    }}
+                                  >
+                                    <img
+                                      {...{
+                                        alt: '',
+                                        src: country.flag,
+                                        style: {
+                                          width: '1.5rem',
+                                          height: '1.5rem',
+                                          marginRight: '6px',
+                                        },
+                                      }}
+                                      className="mr-4"
+                                    />
+                                    <p className="mb-0">{country.label}</p>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        </Popover.Panel>
+                      </Transition>
+                    </>
+                  )}
+                </Popover>
+              </Popover.Group>
+            </div>
+          </div>
+        </>
+      )}
+    </Popover>
+  )
+}
 
 const navigation = {
   first: [
@@ -122,6 +226,32 @@ const Footer = ({
                       </a>
                     </li>
                   ))}
+                  <li>
+                    <WorldListPopover changeCountry={changeCountry} />
+                  </li>
+                  {/* <li>
+                    <div className="rounded-md p-2" ref={locationRef}>
+                      <button
+                        type="button"
+                        onClick={openWorldWideLocationPopover}
+                        className={
+                          'flex border border-gray-500 text-gray-500 text-xs'
+                        }
+                      >
+                        <img className="w-6 h-6 mr-2" src={usa} alt="usa" />{' '}
+                        United States
+                        <RiArrowDropDownFill className="w-6 h-6" />
+                      </button>
+                      {worldwideLocationPopoverIsOpen ? (
+                        <WorldwideLocations
+                          {...{
+                            closeWorldWideLocationPopover,
+                            changeCountry,
+                          }}
+                        />
+                      ) : null}
+                    </div>
+                  </li> */}
                 </ul>
               </div>
               <div className="mt-12 md:mt-0">
@@ -178,39 +308,6 @@ const Footer = ({
                 </ul>
               </div>
             </div>
-            {/* <Col md={9} sm={12}>
-              <p>13RMS Trading post worldwide</p>
-              <div className="" ref={locationRef}>
-                <button
-                  {...{
-                    type: 'button',
-                    className: 'button worldwide dropdown-toggle',
-                    onClick: openWorldWideLocationPopover,
-                  }}
-                >
-                  <img
-                    {...{
-                      alt: '',
-                      src: usa,
-                      style: {
-                        width: '2rem',
-                        height: '2rem',
-                        marginRight: '8px',
-                      },
-                    }}
-                  />{' '}
-                  United States
-                </button>
-                {worldwideLocationPopoverIsOpen ? (
-                  <WorldwideLocations
-                    {...{
-                      closeWorldWideLocationPopover,
-                      changeCountry,
-                    }}
-                  />
-                ) : null}
-              </div>
-            </Col> */}
           </div>
         </div>
         <div className="mt-12 border-t border-gray-200 pt-8">
