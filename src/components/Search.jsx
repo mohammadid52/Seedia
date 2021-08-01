@@ -86,8 +86,11 @@ const Search = ({
 
   return (
     <Fragment>
-      <Container className="search-container">
-        <Row className={theme}>
+      <div className="search-container">
+        <div
+          className={'h-10  border-gray-200 flex flex-wrap row p-0 border-2'}
+          style={{ borderBottom: 0 }}
+        >
           <nav className="pb-1 px-0 bg-transparent navbar-expand-lg ">
             <div className="container-fluid px-0">
               <div
@@ -113,12 +116,7 @@ const Search = ({
                   placement="left"
                   disableTouchListener
                 >
-                  <Col
-                    md={{ size: 6 }}
-                    lg={{ size: 2 }}
-                    sm={{ size: 3 }}
-                    className="column mb-md-3 mb-lg-0 product"
-                  >
+                  <div className="relative h-10 flex-1">
                     <Select
                       className="highlite-area search-area products"
                       value={product}
@@ -126,7 +124,7 @@ const Search = ({
                       options={productsArray}
                       onChange={changeProduct}
                     />
-                  </Col>
+                  </div>
                 </HtmlTooltip>
                 <Col
                   md={{ size: 6 }}
@@ -177,8 +175,8 @@ const Search = ({
               </div>
             </div>
           </nav>
-        </Row>
-        <Row className={`search-quote quote-links mx-0 items-center ${theme}`}>
+        </div>
+        <Row className={`h-10 border-2 border-gray-200 flex flex-wrap`}>
           {bottomRow.map((item, idx) => (
             <Col className="text-center">
               <a className={`search-link link-tag mt-0`} href={item.href}>
@@ -187,7 +185,7 @@ const Search = ({
             </Col>
           ))}
         </Row>
-      </Container>
+      </div>
     </Fragment>
   )
 }
