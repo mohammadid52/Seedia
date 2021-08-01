@@ -43,7 +43,7 @@ const ChooseAccount = () => {
     setLoading(true)
     setValues({
       ...values,
-      account_type: selected.name,
+      accountType: selected.name,
     })
     wait(1000).then(() => {
       setLoading(false)

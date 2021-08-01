@@ -9,7 +9,7 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { wait } from 'utils/wait'
 import { links } from 'constants/Links'
-import { SIGNUP } from 'initials'
+
 import { useUserContext } from 'context/UserContext'
 
 const Signup = () => {
@@ -29,17 +29,24 @@ const Signup = () => {
 
   const [saving, setSaving] = useState(false)
 
+  const addUserToLS = () => {
+    window.localStorage.setItem('user', JSON.stringify(values.user))
+    console.log('Successfully added user to local storage')
+  }
+
   const onSubmit = (_values) => {
     setSaving(true)
     wait(3000).then(() => {
       setValues({
         ...values,
         user: {
+          ...values.user,
           firstName: _values.firstName,
           lastName: _values.lastName,
           email: _values.email,
         },
       })
+      addUserToLS()
       setSaving(false)
       history.push(links.CHOOSE_ACCOUNT)
     })
@@ -71,7 +78,7 @@ const Signup = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
           <Formik
-            initialValues={SIGNUP}
+            initialValues={values.user}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >

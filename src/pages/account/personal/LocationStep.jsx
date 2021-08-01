@@ -11,11 +11,17 @@ import { wait } from 'utils/wait'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { PersonalStepTwo } from 'initials'
+import { useUserContext } from 'context/UserContext'
+import { links } from 'constants/Links'
 
 const LastStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const history = useHistory()
-
+  const { values, setValues } = useUserContext()
+  console.log(
+    '🚀 ~ file: CompanyStep.jsx ~ line 20 ~ StudentSecondStep ~ values',
+    values
+  )
   //capture inputs
 
   const locationList = [{ id: 1, name: 'India' }]
@@ -30,11 +36,32 @@ const LastStep = () => {
     history.push('/account/personal/edit-profile/company')
   }
 
-  const onSubmit = (values) => {
+  // for test purpose
+
+  const addDataToLS = () => {
+    window.localStorage.setItem('personal', JSON.stringify(values.personal))
+    window.localStorage.setItem('accountType', values.accountType)
+    console.log('Successfully added personal account to local storage')
+  }
+
+  const onSubmit = (_values) => {
     setSaving(true)
     wait(3000).then(() => {
       setSaving(false)
-      history.push('/dashboard')
+      setValues({
+        ...values,
+        personal: {
+          ...values.personal,
+          location: {
+            ...values.location,
+            country: _values.country,
+            pincode: _values.pincode,
+            location: selectedLocation,
+          },
+        },
+      })
+      addDataToLS()
+      history.push(links.DASHBAORD)
     })
   }
 

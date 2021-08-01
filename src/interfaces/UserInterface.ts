@@ -1,6 +1,6 @@
 export interface IUser {
   user: User
-  account_type: string
+  accountType: string
   personal: PersonalAccount | null
   student: StudentAccount | null
   business: BusinessAccount | null
@@ -53,7 +53,6 @@ export interface BusinessAccount {
   companyRegNumber: string
   firstName: string
   lastName: string
-  personalMobile: string
   mobileNumber: string
   typeOfCompany: string
   bussinessEntityType: string

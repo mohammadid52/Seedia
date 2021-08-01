@@ -11,7 +11,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       coverPicture: '',
       email: '',
     },
-    account_type: '',
+    accountType: '',
     personal: {
       company: {
         jobTitle: '',
@@ -51,7 +51,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       companyRegNumber: '',
       firstName: '',
       lastName: '',
-      personalMobile: '',
+
       mobileNumber: '',
       typeOfCompany: '',
       bussinessEntityType: '',

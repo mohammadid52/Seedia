@@ -195,35 +195,37 @@ export default function DashboardHeader() {
                 className="text-base flex flex-col items-center font-medium text-gray-500 hover:text-gray-900"
               >
                 <AiOutlineHome />
-                Home
+                <span className="hidden lg:block">Home</span>
               </a>
               <a
                 href="/#"
                 className="text-base font-medium text-gray-500 hover:text-gray-900  flex flex-col items-center"
               >
                 <BsPeople />
-                My Network
+
+                <span className="hidden lg:block">My Network</span>
               </a>
               <a
                 href="/#"
                 className="text-base font-medium text-gray-500 hover:text-gray-900  flex flex-col items-center"
               >
                 <CgWorkAlt />
-                Jobs
+                <span className="hidden lg:block">Jobs</span>
               </a>
               <a
                 href="/#"
                 className="text-base font-medium text-gray-500 hover:text-gray-900  flex flex-col items-center"
               >
                 <BiMessageDetail />
-                Messaging
+                <span className="hidden lg:block">Messaging</span>
               </a>
               <a
                 href="/#"
                 className="text-base font-medium text-gray-500 hover:text-gray-900  flex flex-col items-center"
               >
                 <IoMdNotificationsOutline />
-                Notifications
+
+                <span className="hidden lg:block">Notifications</span>
               </a>
               <Popover className="relative">
                 {({ open }) => (
@@ -236,7 +238,7 @@ export default function DashboardHeader() {
                     >
                       <span className="text-base font-medium normal-hover text-gray-500 hover:text-gray-900  flex flex-col items-center">
                         <GiReceiveMoney className="" />
-                        <span>
+                        <span className="hidden lg:block">
                           Sell{' '}
                           <ChevronDownIcon
                             className={classNames(
@@ -317,7 +319,7 @@ export default function DashboardHeader() {
                     >
                       <span className="text-base font-medium normal-hover text-gray-500 hover:text-gray-900  flex flex-col items-center">
                         <BiUserCircle className="" />
-                        <span>
+                        <span className="hidden lg:block">
                           My 13RMS{' '}
                           <ChevronDownIcon
                             className={classNames(
@@ -402,7 +404,7 @@ export default function DashboardHeader() {
                     >
                       <span className="text-base font-medium normal-hover text-gray-500 hover:text-gray-900  flex flex-col items-center">
                         <BiUserCircle className="" />
-                        <span>
+                        <span className="hidden lg:block">
                           Business Apps{' '}
                           <ChevronDownIcon
                             className={classNames(

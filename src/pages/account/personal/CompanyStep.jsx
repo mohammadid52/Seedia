@@ -17,6 +17,10 @@ const StudentSecondStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const history = useHistory()
   const { values, setValues } = useUserContext()
+  console.log(
+    '🚀 ~ file: CompanyStep.jsx ~ line 20 ~ StudentSecondStep ~ values',
+    values
+  )
 
   //capture inputs
 
@@ -29,7 +33,18 @@ const StudentSecondStep = () => {
     setSaving(true)
     wait(3000).then(() => {
       setSaving(false)
-      setValues({ ...values, ..._values })
+      setValues({
+        ...values,
+        personal: {
+          ...values.personal,
+          company: {
+            ...values.company,
+            jobType: selectedJobType,
+            jobTitle: _values.jobTitle,
+            latestCompany: _values.latestCompany,
+          },
+        },
+      })
       history.push(links.PERSONAL_STEP_2)
     })
   }

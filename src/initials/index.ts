@@ -1,22 +1,4 @@
-interface ISignup {
-  email: string
-  password: string
-  confirmPassword: string
-  firstName: string
-  lastName: string
-}
-
-interface IPersonalStepOne {
-  jobTitle: string
-  latestCompany: string
-}
-
-interface IPersonalStepTwo {
-  country: string
-  pincode: string
-}
-
-export const SIGNUP: ISignup = {
+export const SIGNUP = {
   email: '',
   password: '',
   confirmPassword: '',
@@ -24,11 +6,11 @@ export const SIGNUP: ISignup = {
   lastName: '',
 }
 
-export const PersonalStepOne: IPersonalStepOne = {
+export const PersonalStepOne = {
   jobTitle: '',
   latestCompany: '',
 }
-export const PersonalStepTwo: IPersonalStepTwo = {
+export const PersonalStepTwo = {
   country: '',
   pincode: '',
 }
@@ -61,6 +43,5 @@ export const BusinessStepTwoFields = {
   company_reg_number: '',
   firstName: '',
   lastName: '',
-  personal_mobile: '',
   mobile_number: '',
 }

@@ -8,7 +8,6 @@ import Button from 'components/atoms/Button'
 import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
 import ListCard from 'components/ListCard'
-import { useUserContext } from 'context/UserContext'
 
 const PostInput = ({ setPosts, posts }) => {
   const [postText, setPostText] = useState('')
@@ -237,7 +236,7 @@ const PostInput = ({ setPosts, posts }) => {
 
 const Divider = () => <hr style={{ margin: 'revert' }} />
 
-const PersonalCard = ({ className, user }) => {
+const PersonalCard = ({ className, user, accountInfo }) => {
   return (
     <div className={`px-2 ${className}`}>
       <Card>
@@ -261,7 +260,9 @@ const PersonalCard = ({ className, user }) => {
                   {user.firstName} {user.lastName}
                 </div>
 
-                <p className="pb-0 text-sm text-center">{user.jobTitle}</p>
+                <p className="pb-0 text-sm text-center">
+                  {accountInfo?.company?.jobTitle}
+                </p>
 
                 <p className="link-hover pb-0 mb-0 tracking-wide cursor-pointer text-center add-photo light">
                   Change photo
@@ -368,11 +369,33 @@ const PersonalCard = ({ className, user }) => {
 const Dashboard = () => {
   const [users, setUsers] = useState([])
 
-  const { values } = useUserContext()
-  console.log(
-    '🚀 ~ file: Dashboard.jsx ~ line 372 ~ Dashboard ~ values',
-    values
-  )
+  const [user, setUser] = useState({})
+  const [accountInfo, setAccountInfo] = useState({})
+
+  const fetchUserInfo = () => {
+    const json = window.localStorage.getItem('user')
+    return JSON.parse(json) || {}
+  }
+
+  const fetchAccountType = () =>
+    window.localStorage.getItem('accountType') || 'Personal'
+
+  const fetchAccountInfo = () => {
+    const accountType = fetchAccountType().toLocaleLowerCase()
+    return JSON.parse(window.localStorage.getItem(accountType)) || {}
+  }
+
+  useEffect(() => {
+    const user = fetchUserInfo()
+    const accountInfo = fetchAccountInfo()
+    setUser({ ...user })
+    setAccountInfo({ ...accountInfo })
+
+    return () => {
+      fetchUserInfo()
+      fetchAccountInfo()
+    }
+  }, [])
 
   const BASE_URL = 'https://dummyapi.io/data/api/'
   const APP_ID = '61059484a441674e99287b7f'
@@ -419,15 +442,7 @@ const Dashboard = () => {
           <DashboardHeader />
           <DashboardLayout
             firstColClass="md:hidden lg:block sm:hidden xl:block"
-            firstCol={
-              <PersonalCard
-                user={{
-                  firstName: values.firstName,
-                  lastName: values.lastName,
-                  jobTitle: values.jobTitle,
-                }}
-              />
-            }
+            firstCol={<PersonalCard user={user} accountInfo={accountInfo} />}
             secondCol={
               <div className="">
                 <PostInput posts={posts} setPosts={setPosts} />

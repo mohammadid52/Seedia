@@ -12,10 +12,12 @@ import { wait } from 'utils/wait'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { BusinessStepOneFields } from '../../../initials'
+import { useUserContext } from 'context/UserContext'
 
 const BusinessStepOne = () => {
   const history = useHistory()
   const [isLoaded, setIsLoaded] = useState(true)
+  const { values, setValues } = useUserContext()
 
   const [saving, setSaving] = useState(false)
 
@@ -37,10 +39,19 @@ const BusinessStepOne = () => {
     setIsLoaded(true)
   }, 1000)
 
-  const onSubmit = () => {
+  const onSubmit = (_values) => {
     setSaving(true)
     wait(3000).then(() => {
       setSaving(false)
+      setValues({
+        ...values,
+        business: {
+          ...values.business,
+          name: _values.company_name,
+          email: _values.company_email,
+          number: _values.company_number,
+        },
+      })
       history.push(links.BUSINESS_STEP_2)
     })
   }

@@ -80,7 +80,7 @@ const Footer = ({
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm text-gray-500 hover:text-gray-900"
+                        className="text-sm font-medium text-gray-400 link-hover"
                       >
                         {item.name}
                       </a>
@@ -97,7 +97,7 @@ const Footer = ({
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm text-gray-500 hover:text-gray-900"
+                        className="text-sm font-medium text-gray-400 link-hover"
                       >
                         {item.name}
                       </a>
@@ -116,7 +116,7 @@ const Footer = ({
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm text-gray-500 hover:text-gray-900"
+                        className="text-sm font-medium text-gray-400 link-hover"
                       >
                         {item.name}
                       </a>
@@ -133,7 +133,7 @@ const Footer = ({
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm text-gray-500 hover:text-gray-900"
+                        className="text-sm font-medium text-gray-400 link-hover"
                       >
                         {item.name}
                       </a>
@@ -152,7 +152,7 @@ const Footer = ({
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm text-gray-500 hover:text-gray-900"
+                        className="text-sm font-medium text-gray-400 link-hover"
                       >
                         {item.name}
                       </a>
@@ -169,7 +169,7 @@ const Footer = ({
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="text-sm text-gray-500 hover:text-gray-900"
+                        className="text-sm font-medium text-gray-400 link-hover"
                       >
                         {item.name}
                       </a>

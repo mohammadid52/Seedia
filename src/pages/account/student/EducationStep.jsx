@@ -14,11 +14,12 @@ import { yearList, yearListWithFuture } from 'values/values'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { StudentStepOne } from 'initials'
+import { useUserContext } from 'context/UserContext'
 
 const EducationStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const history = useHistory()
-
+  const { values, setValues } = useUserContext()
   //capture inputs
 
   setTimeout(() => {
@@ -27,10 +28,24 @@ const EducationStep = () => {
 
   const [saving, setSaving] = useState(false)
 
-  const onSubmit = (values) => {
+  const onSubmit = (_values) => {
     setSaving(true)
     wait(3000).then(() => {
       setSaving(false)
+      setValues({
+        ...values,
+        student: {
+          ...values.student,
+          education: {
+            ...values.education,
+            education: _values.education,
+            grade: _values.grade,
+            grade_subject: _values.grade_subject,
+            start_year: fields.start_year,
+            end_year: fields.end_year,
+          },
+        },
+      })
       history.push(links.STUDENT_STEP_2)
     })
   }

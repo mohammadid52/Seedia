@@ -11,10 +11,12 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { links } from 'constants/Links'
 import { StudentStepTwo } from 'initials'
+import { useUserContext } from 'context/UserContext'
 
 const LocationStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const history = useHistory()
+  const { values, setValues } = useUserContext()
 
   //capture inputs
 
@@ -27,10 +29,31 @@ const LocationStep = () => {
     pincode: Yup.string().required('Please add pincode'),
   })
 
-  const onSubmit = () => {
+  // for test purpose
+
+  const addDataToLS = () => {
+    window.localStorage.setItem('student', JSON.stringify(values.student))
+    window.localStorage.setItem('accountType', values.accountType)
+    console.log('Successfully added student account to local storage')
+  }
+
+  const onSubmit = (_values) => {
     setSaving(true)
     wait(3000).then(() => {
       setSaving(false)
+      setValues({
+        ...values,
+        student: {
+          ...values.student,
+          location: {
+            ...values.location,
+            country: _values.country,
+            pincode: _values.pincode,
+            location: fields.location_within_area,
+          },
+        },
+      })
+      addDataToLS()
       return history.push(links.DASHBAORD)
     })
   }

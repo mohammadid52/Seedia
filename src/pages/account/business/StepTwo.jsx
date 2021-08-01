@@ -15,10 +15,12 @@ import { wait } from 'utils/wait'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { BusinessStepTwoFields } from 'initials'
+import { useUserContext } from 'context/UserContext'
 
 const BusinessStepTwo = () => {
   const history = useHistory()
   const [isLoaded, setIsLoaded] = useState(true)
+  const { values, setValues } = useUserContext()
 
   const [saving, setSaving] = useState(false)
 
@@ -33,10 +35,38 @@ const BusinessStepTwo = () => {
     setIsLoaded(true)
   }, 1000)
 
-  const onSubmit = () => {
+  // for test purpose
+
+  const addDataToLS = () => {
+    window.localStorage.setItem('business', JSON.stringify(values.business))
+    window.localStorage.setItem('accountType', values.accountType)
+    console.log('Successfully added business account to local storage')
+  }
+
+  const onSubmit = (_values) => {
     setSaving(true)
     wait(3000).then(() => {
       setSaving(false)
+      setValues({
+        ...values,
+        business: {
+          ...values.business,
+          country: _values.company_country,
+          address: _values.business_address,
+          additionalInfo: _values.additional_info,
+          postalCode: _values.postal_code,
+          place: _values.place,
+          legalNumber: _values.legal_number,
+          companyRegNumber: _values.company_reg_number,
+          firstName: _values.firstName,
+          lastName: _values.lastName,
+          mobileNumber: _values.mobile_number,
+          typeOfCompany: _values.type_of_company,
+          bussinessEntityType: _values.business_entity_type,
+          relationshipToCompany: _values.relationship_to_company,
+        },
+      })
+      addDataToLS()
       history.push(links.DASHBAORD)
     })
   }
