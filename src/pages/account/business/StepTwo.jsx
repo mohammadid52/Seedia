@@ -14,28 +14,11 @@ import { links } from 'constants/Links'
 import { wait } from 'utils/wait'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { BusinessStepTwoFields } from 'initials'
 
 const BusinessStepTwo = () => {
   const history = useHistory()
   const [isLoaded, setIsLoaded] = useState(true)
-
-  //capture inputs
-  const initialValues = {
-    company_country: '',
-    business_address: '',
-    additional_info: '',
-    postal_code: '',
-    place: '',
-    legal_number: '',
-    company_reg_number: '',
-    firstName: '',
-    lastName: '',
-    personal_mobile: '',
-    type_of_company: { id: '', name: '' },
-    business_entity_type: { id: '', name: '' },
-    relationship_to_company: { id: '', name: '' },
-    mobile_number: '',
-  }
 
   const [saving, setSaving] = useState(false)
 
@@ -84,7 +67,7 @@ const BusinessStepTwo = () => {
         </div>
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
           <Formik
-            initialValues={initialValues}
+            initialValues={BusinessStepTwoFields}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >

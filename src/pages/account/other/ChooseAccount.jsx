@@ -8,6 +8,7 @@ import { wait } from 'utils/wait'
 import { useHistory } from 'react-router-dom'
 import { links } from 'constants/Links'
 import TextButton from 'components/atoms/TextButton'
+import { useUserContext } from 'context/UserContext'
 
 const settings = [
   {
@@ -27,6 +28,7 @@ const settings = [
 const ChooseAccount = () => {
   const [selected, setSelected] = useState(settings[0])
   const history = useHistory()
+  const { setValues, values } = useUserContext()
 
   const [loading, setLoading] = useState(false)
   const onNext = () => {
@@ -39,6 +41,10 @@ const ChooseAccount = () => {
       path = links.BUSINESS_STEP_1
     }
     setLoading(true)
+    setValues({
+      ...values,
+      account_type: selected.name,
+    })
     wait(1000).then(() => {
       setLoading(false)
       history.push(path || links.PERSONAL_STEP_1)

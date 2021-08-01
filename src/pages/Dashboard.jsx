@@ -8,6 +8,7 @@ import Button from 'components/atoms/Button'
 import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
 import ListCard from 'components/ListCard'
+import { useUserContext } from 'context/UserContext'
 
 const PostInput = ({ setPosts, posts }) => {
   const [postText, setPostText] = useState('')
@@ -236,7 +237,7 @@ const PostInput = ({ setPosts, posts }) => {
 
 const Divider = () => <hr style={{ margin: 'revert' }} />
 
-const PersonalCard = ({ className }) => {
+const PersonalCard = ({ className, user }) => {
   return (
     <div className={`px-2 ${className}`}>
       <Card>
@@ -257,10 +258,10 @@ const PersonalCard = ({ className }) => {
             <div className="float-right profile-description pr-0 mb-0  col-sm-12 col-lg-12">
               <div className="float-left pr-0  col-md-12">
                 <div className="mt-4 mb-1 text-base hover:underline  font-extrabold text-center">
-                  Mohammad Dehgamwala
+                  {user.firstName} {user.lastName}
                 </div>
 
-                <p className="pb-0 text-sm text-center">Web developer</p>
+                <p className="pb-0 text-sm text-center">{user.jobTitle}</p>
 
                 <p className="link-hover pb-0 mb-0 tracking-wide cursor-pointer text-center add-photo light">
                   Change photo
@@ -366,6 +367,13 @@ const PersonalCard = ({ className }) => {
 
 const Dashboard = () => {
   const [users, setUsers] = useState([])
+
+  const { values } = useUserContext()
+  console.log(
+    '🚀 ~ file: Dashboard.jsx ~ line 372 ~ Dashboard ~ values',
+    values
+  )
+
   const BASE_URL = 'https://dummyapi.io/data/api/'
   const APP_ID = '61059484a441674e99287b7f'
 
@@ -411,7 +419,15 @@ const Dashboard = () => {
           <DashboardHeader />
           <DashboardLayout
             firstColClass="md:hidden lg:block sm:hidden xl:block"
-            firstCol={<PersonalCard />}
+            firstCol={
+              <PersonalCard
+                user={{
+                  firstName: values.firstName,
+                  lastName: values.lastName,
+                  jobTitle: values.jobTitle,
+                }}
+              />
+            }
             secondCol={
               <div className="">
                 <PostInput posts={posts} setPosts={setPosts} />

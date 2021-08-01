@@ -10,6 +10,7 @@ import { wait } from 'utils/wait'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { links } from 'constants/Links'
+import { StudentStepTwo } from 'initials'
 
 const LocationStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -20,11 +21,6 @@ const LocationStep = () => {
   const locationList = [{ id: 1, name: 'India' }]
 
   const [saving, setSaving] = useState(false)
-
-  const initialValues = {
-    country: '',
-    pincode: '',
-  }
 
   const validationSchema = Yup.object({
     country: Yup.string().required('Please add country'),
@@ -66,7 +62,7 @@ const LocationStep = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
           <Formik
-            initialValues={initialValues}
+            initialValues={StudentStepTwo}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >

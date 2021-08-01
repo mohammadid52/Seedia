@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom'
 import { wait } from 'utils/wait'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { PersonalStepTwo } from 'initials'
 
 const LastStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -27,11 +28,6 @@ const LastStep = () => {
 
   const goBack = () => {
     history.push('/account/personal/edit-profile/company')
-  }
-
-  const initialValues = {
-    country: '',
-    pincode: '',
   }
 
   const onSubmit = (values) => {
@@ -71,7 +67,7 @@ const LastStep = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
           <Formik
-            initialValues={initialValues}
+            initialValues={PersonalStepTwo}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >

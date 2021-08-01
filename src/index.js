@@ -4,7 +4,7 @@ import 'styles/index.scss'
 import 'styles/index.css'
 import App from 'App'
 import Loading from 'components/Loading'
-import UserContextProvider from 'context/UserContextContext'
+import UserContextProvider from 'context/UserContext'
 
 const MainLoader = () => (
   <Suspense fallback={<Loading />}>

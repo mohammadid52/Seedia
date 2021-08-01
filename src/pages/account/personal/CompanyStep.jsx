@@ -10,10 +10,13 @@ import { useHistory } from 'react-router-dom'
 import { wait } from 'utils/wait'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { PersonalStepOne } from 'initials'
+import { useUserContext } from 'context/UserContext'
 
 const StudentSecondStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const history = useHistory()
+  const { values, setValues } = useUserContext()
 
   //capture inputs
 
@@ -22,15 +25,11 @@ const StudentSecondStep = () => {
     { id: '2', name: 'Web Designer' },
   ]
 
-  const initialValues = {
-    jobTitle: '',
-    latestCompany: '',
-  }
-
-  const onSubmit = (values) => {
+  const onSubmit = (_values) => {
     setSaving(true)
     wait(3000).then(() => {
       setSaving(false)
+      setValues({ ...values, ..._values })
       history.push(links.PERSONAL_STEP_2)
     })
   }
@@ -66,7 +65,7 @@ const StudentSecondStep = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
           <Formik
-            initialValues={initialValues}
+            initialValues={PersonalStepOne}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >

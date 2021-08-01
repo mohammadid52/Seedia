@@ -11,20 +11,13 @@ import { links } from 'constants/Links'
 import { wait } from 'utils/wait'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { BusinessStepOneFields } from '../../../initials'
 
 const BusinessStepOne = () => {
   const history = useHistory()
   const [isLoaded, setIsLoaded] = useState(true)
 
   const [saving, setSaving] = useState(false)
-
-  const initialValues = {
-    company_name: '',
-    company_email: '',
-    re_company_email: '',
-    password: '',
-    company_number: '',
-  }
 
   const validationSchema = Yup.object({
     company_name: Yup.string()
@@ -74,7 +67,7 @@ const BusinessStepOne = () => {
         </div>
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
           <Formik
-            initialValues={initialValues}
+            initialValues={BusinessStepOneFields}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >

@@ -13,6 +13,7 @@ import { wait } from 'utils/wait'
 import { yearList, yearListWithFuture } from 'values/values'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { StudentStepOne } from 'initials'
 
 const EducationStep = () => {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -32,12 +33,6 @@ const EducationStep = () => {
       setSaving(false)
       history.push(links.STUDENT_STEP_2)
     })
-  }
-
-  const initialValues = {
-    education: '',
-    grade: '',
-    grade_subject: '',
   }
 
   const validationSchema = Yup.object({
@@ -66,7 +61,7 @@ const EducationStep = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
           <Formik
-            initialValues={initialValues}
+            initialValues={StudentStepOne}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >
