@@ -29,7 +29,8 @@ const Features = () => {
     },
     {
       name: 'Network',
-      description: 'Worldwide selling & Networking',
+      description:
+        'Connect with people and professional organizations in your industry',
       icon: HiOutlineGlobe,
     },
     {

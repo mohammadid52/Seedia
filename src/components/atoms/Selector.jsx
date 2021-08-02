@@ -15,6 +15,7 @@ const Selector = ({
   selectedItem,
   onSelect,
 }) => {
+  console.log('🚀 ~ file: Selector.jsx ~ line 18 ~ list', list)
   return (
     <Listbox value={selectedItem} onChange={onSelect}>
       {({ open }) => (
@@ -28,9 +29,9 @@ const Selector = ({
             </Listbox.Label>
           )}
           <div className="mt-1 relative">
-            <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <Listbox.Button className="bg-white dark:bg-gray-800 relative w-full border dark:border-gray-700 border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <span
-                className={`block truncate ${
+                className={`block truncate dark:text-white ${
                   !selectedItem ? 'text-gray-500' : ''
                 }`}
               >
@@ -53,7 +54,7 @@ const Selector = ({
             >
               <Listbox.Options
                 static
-                className="pl-0 absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                className="pl-0 absolute z-10 mt-1 w-full bg-white dark:bg-gray-700 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
               >
                 {list.map((item) => (
                   <Listbox.Option
@@ -71,7 +72,7 @@ const Selector = ({
                         <span
                           className={classNames(
                             selected ? 'font-semibold' : 'font-normal',
-                            'block truncate'
+                            'block truncate text-left'
                           )}
                         >
                           {item.name}
