@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 /* This example requires Tailwind CSS v2.0+ */
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -14,14 +14,34 @@ export default function Navigation() {
   const [darkMode, setDarkMode] = useState(false)
   const [selected, setSelected] = useState(adjustColors[0])
 
+  useEffect(() => {
+    loadTheme()
+    return () => loadTheme()
+  }, [])
+
+  const loadTheme = () => {
+    const theme = localStorage.getItem('theme')
+
+    const html = document.querySelector('html')
+
+    if (theme) {
+      if (theme === 'dark') {
+        setDarkMode(true)
+        html?.classList.add('dark')
+      } else {
+        setDarkMode(false)
+        html?.classList.remove('dark')
+      }
+    }
+  }
   const history = useHistory()
 
   return (
-    <Popover className="relative bg-white">
+    <Popover className="relative dark:bg-gray-800  bg-white">
       {({ open }) => (
         <>
           <div className="">
-            <div className="flex justify-between items-center border-b-2 border-gray-100 py-3 md:justify-start md:space-x-10 px-2">
+            <div className="flex justify-between  items-center border-b-2 dark:border-gray-700 border-gray-100 py-3 md:justify-start md:space-x-10 px-2">
               <div className="flex justify-start lg:w-0 lg:flex-1">
                 <Popover.Group
                   as="nav"
@@ -29,7 +49,7 @@ export default function Navigation() {
                 >
                   <a
                     href="/#"
-                    className="text-base font-medium text-gray-500 link-hover"
+                    className="text-base font-medium dark:text-gray-400 text-gray-500 link-hover"
                   >
                     Help & Contact
                   </a>
@@ -39,18 +59,18 @@ export default function Navigation() {
                         <Popover.Button
                           className={classNames(
                             open ? 'text-gray-900' : 'text-gray-500',
-                            'group bg-white rounded-md inline-flex items-center text-base font-medium link-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                            'group bg-white dark:bg-gray-800 rounded-md inline-flex items-center text-base font-medium link-hover focus:outline-none '
                           )}
                         >
                           <a
                             href="/#"
-                            className="text-base font-medium text-gray-500 link-hover"
+                            className="text-base font-medium dark:text-gray-400 text-gray-500 link-hover"
                           >
                             Adjust Colors
                           </a>
                           <ChevronDownIcon
                             className={classNames(
-                              open ? 'text-gray-600' : 'text-gray-400',
+                              open ? 'text-gray-600' : ' text-gray-400',
                               'ml-2 h-5 w-5 group-hover:text-gray-500'
                             )}
                             aria-hidden="true"
@@ -72,7 +92,7 @@ export default function Navigation() {
                             className="absolute z-10 -ml-4 mt-3 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                           >
                             <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                              <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                              <div className="relative grid gap-6 bg-white dark:bg-gray-800 px-5 py-6 sm:gap-8 sm:p-8">
                                 <div>
                                   <Toggle
                                     enabled={darkMode}
@@ -94,9 +114,7 @@ export default function Navigation() {
                                         selected.name === item.name
                                           ? 'bg-indigo-600 border-transparent'
                                           : 'bg-white border-gray-300',
-                                        selected.name === item.name
-                                          ? 'ring-2 ring-offset-2 ring-indigo-500'
-                                          : '',
+                                        selected.name === item.name ? '' : '',
                                         'h-4 w-4 mt-0.5 cursor-pointer rounded-full border flex items-center justify-center'
                                       )}
                                       aria-hidden="true"
@@ -104,7 +122,7 @@ export default function Navigation() {
                                       <span className="rounded-full bg-white w-1.5 h-1.5" />
                                     </span>
                                     <div className="ml-4">
-                                      <p className="text-base text-left font-medium text-gray-900 mb-0">
+                                      <p className="text-base text-left font-medium dark:text-white text-gray-900 mb-0">
                                         {item.name}
                                       </p>
                                       {/* <p className="mt-1 text-left text-sm text-gray-500">
@@ -122,14 +140,14 @@ export default function Navigation() {
                   </Popover>
                   <a
                     href="/#"
-                    className="text-base text-gray-500  font-medium link-hover"
+                    className="text-base text-gray-500  dark:text-gray-400 font-medium link-hover"
                   >
                     Join our forum
                   </a>
                 </Popover.Group>
               </div>
               <div className="-mr-2 -my-2 md:hidden">
-                <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none ">
                   <span className="sr-only">Open menu</span>
                   <MenuIcon className="h-6 w-6" aria-hidden="true" />
                 </Popover.Button>
@@ -138,14 +156,14 @@ export default function Navigation() {
               <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                 <a
                   href="/signup"
-                  className="whitespace-nowrap text-gray-500  text-base font-medium  link-hover"
+                  className="whitespace-nowrap dark:text-gray-400 text-gray-500  text-base font-medium  link-hover"
                 >
                   Join Now
                 </a>
 
                 <Button
                   onClick={() => history.push('/login')}
-                  className="ml-4"
+                  className="mx-4 "
                   label="Login"
                   gradient
                 />

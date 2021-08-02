@@ -88,10 +88,10 @@ const Search = ({
     <Fragment>
       <div className="search-container">
         <div
-          className={'h-10  border-gray-200  p-0 -'}
+          className={'h-10 dark:border-gray-700  border-gray-200  p-0 '}
           style={{ borderBottom: 0 }}
         >
-          <nav className="pb-1 px-0 bg-transparent ">
+          <nav className="pb-1 px-0 bg-transparent dark:bg-gray-700 ">
             <div className=" px-0">
               <div
                 className="search-panel flex w-full items-center justify-start"
@@ -116,9 +116,9 @@ const Search = ({
                   placement="left"
                   disableTouchListener
                 >
-                  <div className="relative h-10 flex-1">
+                  <div className="relative  h-10 flex-1">
                     <Select
-                      className="highlite-area search-area products"
+                      className=""
                       value={product}
                       placeholder="Products"
                       options={productsArray}
@@ -127,7 +127,7 @@ const Search = ({
                   </div>
                 </HtmlTooltip>
                 <div className="flex-1">
-                  <div className="highlite-area search-area item search-place-holder">
+                  <div className="">
                     <div
                       onClick={voiceSearch}
                       className="float-left h-full p-1 cursor-pointer"

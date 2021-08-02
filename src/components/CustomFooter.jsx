@@ -18,36 +18,35 @@ import { countries } from 'values/values'
 
 const WorldListPopover = ({ changeCountry }) => {
   return (
-    <Popover className="relative bg-white">
+    <Popover className="relative z-100 dark:bg-gray-800 bg-white">
       {({ open }) => (
         <>
           <div className="max-w-7xl">
             <div className="flex justify-between items-center  py-6 md:justify-start md:space-x-10">
               <div className="-mr-2 -my-2 md:hidden">
-                <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                <Popover.Button className="bg-inherit rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                   <span className="sr-only">Open menu</span>
                   <MenuIcon className="h-6 w-6" aria-hidden="true" />
                 </Popover.Button>
               </div>
 
-              <Popover.Group
-                as="nav"
-                className="hidden mx-0 md:flex space-x-10"
-              >
+              <Popover.Group as="nav" className="" style={{ margin: 0 }}>
                 <Popover className="relative">
                   {({ open }) => (
                     <>
-                      <p className="mb-3  text-sm font-medium text-gray-400">
+                      <p className="mb-3  text-sm font-medium dark:text-gray-400 text-gray-400">
                         13RMS Trading post worldwide
                       </p>
                       <Popover.Button
                         className={classNames(
                           open ? 'text-gray-900' : 'text-gray-500',
-                          'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 border p-2 border-gray-400 focus:ring-indigo-500'
+                          'group bg-inherit rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none dark:border-gray-700 border p-2 border-gray-400 '
                         )}
                       >
                         <img alt="usa" className={'h-4 mr-1 w-4 '} src={usa} />
-                        <span>United States</span>
+                        <span className="dark:text-gray-400">
+                          United States
+                        </span>
                         <ChevronDownIcon
                           className={classNames(
                             open ? 'text-gray-600' : 'text-gray-400',
@@ -72,30 +71,22 @@ const WorldListPopover = ({ changeCountry }) => {
                           className="absolute bottom-10 z-10 -ml-4 mt-3 transform px-2 w-screen sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                         >
                           <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                            <div className="relative grid bg-white px-5 py-6 sm:gap-8 sm:p-8 grid-cols-6">
+                            <div className="relative grid bg-white dark:bg-gray-700 px-5 py-6 sm:gap-8 sm:p-8 grid-cols-6">
                               {countries.map((country, key) => {
                                 return (
                                   <div
-                                    className="cursor-pointer hover:bg-gray-100 p-2 px-3 truncate rounded-md flex items-center justify-start"
-                                    {...{
-                                      key,
-                                      onClick: () => {},
-                                      style: {},
-                                    }}
+                                    className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 p-2 px-3 truncate rounded-md flex items-center justify-start"
+                                    key={key}
+                                    onClick={() => {}}
                                   >
                                     <img
-                                      {...{
-                                        alt: '',
-                                        src: country.flag,
-                                        style: {
-                                          width: '1.5rem',
-                                          height: '1.5rem',
-                                          marginRight: '6px',
-                                        },
-                                      }}
-                                      className="mr-4"
+                                      alt={country.label}
+                                      src={country.flag}
+                                      className="w-6 h-6 mr-3"
                                     />
-                                    <p className="mb-0">{country.label}</p>
+                                    <p className="mb-0 dark:text-white">
+                                      {country.label}
+                                    </p>
                                   </div>
                                 )
                               })}
@@ -154,18 +145,11 @@ const navigation = {
   ],
 }
 
-const Footer = ({
-  theme,
-  worldwideLocationPopoverIsOpen,
-  openWorldWideLocationPopover,
-  locationRef,
-  closeWorldWideLocationPopover,
-  changeCountry,
-}) => {
+const Footer = ({ changeCountry }) => {
   const year = new Date().getFullYear()
   return (
     <footer
-      className="bg-white border-t border-gray-200"
+      className="bg-white dark:bg-gray-800 dark:border-gray-700 border-t border-gray-200"
       aria-labelledby="footer-heading"
     >
       <h2 id="footer-heading" className="sr-only">
@@ -176,18 +160,16 @@ const Footer = ({
           <div className="mt-12 grid grid-cols-3 gap-8 xl:mt-0 xl:col-span-3">
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-sm font-semibold text-gray-600 tracking-wider uppercase">
+                <h3 className="text-sm font-semibold  text-gray-600 tracking-wider uppercase">
                   13RMS Trading post
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.first.map((item) => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-sm font-medium text-gray-400 link-hover"
-                      >
-                        {item.name}
-                      </a>
+                    <li
+                      className="text-sm font-medium text-gray-400 link-hover text-left"
+                      key={item.name}
+                    >
+                      {item.name}
                     </li>
                   ))}
                 </ul>
@@ -198,13 +180,11 @@ const Footer = ({
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.second.map((item) => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-sm font-medium text-gray-400 link-hover"
-                      >
-                        {item.name}
-                      </a>
+                    <li
+                      className="text-sm font-medium text-gray-400 link-hover text-left"
+                      key={item.name}
+                    >
+                      {item.name}
                     </li>
                   ))}
                 </ul>
@@ -217,41 +197,16 @@ const Footer = ({
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.third.map((item) => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-sm font-medium text-gray-400 link-hover"
-                      >
-                        {item.name}
-                      </a>
+                    <li
+                      className="text-sm font-medium text-left text-gray-400 link-hover"
+                      key={item.name}
+                    >
+                      {item.name}
                     </li>
                   ))}
                   <li>
                     <WorldListPopover changeCountry={changeCountry} />
                   </li>
-                  {/* <li>
-                    <div className="rounded-md p-2" ref={locationRef}>
-                      <button
-                        type="button"
-                        onClick={openWorldWideLocationPopover}
-                        className={
-                          'flex border border-gray-500 text-gray-500 text-xs'
-                        }
-                      >
-                        <img className="w-6 h-6 mr-2" src={usa} alt="usa" />{' '}
-                        United States
-                        <RiArrowDropDownFill className="w-6 h-6" />
-                      </button>
-                      {worldwideLocationPopoverIsOpen ? (
-                        <WorldwideLocations
-                          {...{
-                            closeWorldWideLocationPopover,
-                            changeCountry,
-                          }}
-                        />
-                      ) : null}
-                    </div>
-                  </li> */}
                 </ul>
               </div>
               <div className="mt-12 md:mt-0">
@@ -260,13 +215,11 @@ const Footer = ({
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.fourth.map((item) => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-sm font-medium text-gray-400 link-hover"
-                      >
-                        {item.name}
-                      </a>
+                    <li
+                      className="text-sm font-medium text-gray-400 link-hover text-left"
+                      key={item.name}
+                    >
+                      {item.name}
                     </li>
                   ))}
                 </ul>
@@ -279,13 +232,11 @@ const Footer = ({
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.fifth.map((item) => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-sm font-medium text-gray-400 link-hover"
-                      >
-                        {item.name}
-                      </a>
+                    <li
+                      key={item.name}
+                      className="text-sm font-medium text-gray-400 link-hover text-left"
+                    >
+                      {item.name}
                     </li>
                   ))}
                 </ul>
@@ -296,13 +247,11 @@ const Footer = ({
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.sixth.map((item) => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className="text-sm font-medium text-gray-400 link-hover"
-                      >
-                        {item.name}
-                      </a>
+                    <li
+                      className="text-sm font-medium text-gray-400 link-hover text-left"
+                      key={item.name}
+                    >
+                      {item.name}
                     </li>
                   ))}
                 </ul>
@@ -310,7 +259,7 @@ const Footer = ({
             </div>
           </div>
         </div>
-        <div className="mt-12 border-t border-gray-200 pt-8">
+        <div className="mt-12 border-t  dark:border-gray-700 border-gray-200 pt-8">
           <p className="text-sm text-gray-600 xl:text-center">
             &copy; {year} 13RMS, Inc. All rights reserved.
           </p>

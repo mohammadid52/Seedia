@@ -11,8 +11,8 @@ const Home = ({ themeToggler, theme }) => {
     <div {...{ className: 'w-full' }}>
       <Navigation theme={theme} />
       <HomeContent theme={theme} />
-      <div className="flex flex-col">
-        <Search theme={theme} />
+      <div className="flex flex-col dark:bg-gray-800 bg-white">
+        {/* <Search theme={theme} /> */}
         <Features theme={theme} />
       </div>
       {/* <Footer theme={theme} /> */}
