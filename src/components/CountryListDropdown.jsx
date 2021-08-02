@@ -1,17 +1,11 @@
 import React from 'react'
-import { Col } from 'reactstrap'
 
 import { RiArrowDropDownFill } from 'react-icons/ri'
 import usa from 'assets/images/countries/usa.png'
 
 const CountryListDropdown = ({ theme }) => {
   return (
-    <Col
-      md={{ size: 6 }}
-      lg={{ size: 1 }}
-      sm={{ size: 2 }}
-      className="country-list column mb-md-3 mb-lg-0"
-    >
+    <div className="flex-0">
       <ul className="flex items-center customDropdown p-0 m-0">
         <li className="nav-item  mb-0">
           <a
@@ -73,7 +67,7 @@ const CountryListDropdown = ({ theme }) => {
           </ul>
         </li>
       </ul>
-    </Col>
+    </div>
   )
 }
 

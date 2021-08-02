@@ -88,13 +88,13 @@ const Search = ({
     <Fragment>
       <div className="search-container">
         <div
-          className={'h-10  border-gray-200 flex flex-wrap row p-0 border-2'}
+          className={'h-10  border-gray-200  p-0 -'}
           style={{ borderBottom: 0 }}
         >
-          <nav className="pb-1 px-0 bg-transparent navbar-expand-lg ">
-            <div className="container-fluid px-0">
+          <nav className="pb-1 px-0 bg-transparent ">
+            <div className=" px-0">
               <div
-                className="navbar-collapse search-panel"
+                className="search-panel flex w-full items-center justify-start"
                 id="navbarSupportedContent"
               >
                 <HtmlTooltip
@@ -126,12 +126,7 @@ const Search = ({
                     />
                   </div>
                 </HtmlTooltip>
-                <Col
-                  md={{ size: 6 }}
-                  lg={{ size: 6 }}
-                  sm={{ size: 2 }}
-                  className="column mb-md-3 mb-lg-0 input-box"
-                >
+                <div className="flex-1">
                   <div className="highlite-area search-area item search-place-holder">
                     <div
                       onClick={voiceSearch}
@@ -155,13 +150,8 @@ const Search = ({
                       />
                     )}
                   </div>
-                </Col>
-                <Col
-                  md={{ size: 6 }}
-                  lg={{ size: 3 }}
-                  sm={{ size: 3 }}
-                  className="column mb-md-3 mb-lg-0 department-section"
-                >
+                </div>
+                <div className="flex-1">
                   <Select
                     className="mr-2 highlite-area search-area products"
                     value={department}
@@ -169,14 +159,14 @@ const Search = ({
                     options={departmentsArray}
                     onChange={changeDepartment}
                   />
-                </Col>
+                </div>
 
                 <CountryListDropdown theme={theme} />
               </div>
             </div>
           </nav>
         </div>
-        <Row className={`h-10 border-2 border-gray-200 flex flex-wrap`}>
+        <Row className={`h-10 border-2 border-gray-200 flex mt-2 flex-wrap`}>
           {bottomRow.map((item, idx) => (
             <Col className="text-center">
               <a className={`search-link link-tag mt-0`} href={item.href}>
