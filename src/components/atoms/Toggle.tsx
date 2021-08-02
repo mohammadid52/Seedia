@@ -1,5 +1,4 @@
 import { Switch } from '@headlessui/react'
-import { useEffect } from 'react'
 import { classNames } from 'utils/classNames'
 
 const Toggle = ({
