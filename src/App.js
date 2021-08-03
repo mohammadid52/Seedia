@@ -38,25 +38,24 @@ const App = () => {
   const { setDarkMode } = useUserContext()
 
   useEffect(() => {
-    loadTheme()
-    return () => loadTheme()
-  }, [])
+    const loadTheme = () => {
+      const theme = localStorage.getItem('theme')
 
-  const loadTheme = () => {
-    const theme = localStorage.getItem('theme')
+      const html = document.querySelector('html')
 
-    const html = document.querySelector('html')
-
-    if (theme) {
-      if (theme === 'dark') {
-        setDarkMode(true)
-        html?.classList.add('dark')
-      } else {
-        setDarkMode(false)
-        html?.classList.remove('dark')
+      if (theme) {
+        if (theme === 'dark') {
+          setDarkMode(true)
+          html?.classList.add('dark')
+        } else {
+          setDarkMode(false)
+          html?.classList.remove('dark')
+        }
       }
     }
-  }
+    loadTheme()
+    return () => loadTheme()
+  }, [setDarkMode])
 
   return (
     <Router>
