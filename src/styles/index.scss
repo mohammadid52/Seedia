@@ -831,9 +831,6 @@ input:checked + .slider:before {
   width: 50px;
 }
 
-.home-content hr {
-  margin: 0.3rem 0 !important;
-}
 a,
 span,
 button {
@@ -1708,9 +1705,6 @@ ul {
   width: 160px;
 }
 
-hr {
-  margin: 0rem 0 !important;
-}
 a,
 span,
 button {
@@ -3146,5 +3140,16 @@ input:checked + .slider:before {
     .feature-icon {
       transform: translateY(-10px);
     }
+  }
+}
+
+.tooltip-ref {
+  &:hover {
+    & .tooltip-container {
+      display: block;
+    }
+  }
+  & .tooltip-container {
+    display: hidden;
   }
 }

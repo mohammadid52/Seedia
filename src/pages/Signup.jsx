@@ -59,14 +59,14 @@ const Signup = () => {
   return !isLoaded ? (
     <Loading />
   ) : (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-800 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md flex items-center flex-col ">
         <img
           className="mx-auto h-32 w-auto"
           src={process.env.PUBLIC_URL + '/logo.png'}
           alt="Workflow"
         />
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 dark:text-white text-center text-3xl font-extrabold text-gray-900">
           Create new account
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
@@ -76,7 +76,7 @@ const Signup = () => {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
             initialValues={values.user}
             validationSchema={validationSchema}
@@ -123,7 +123,7 @@ const Signup = () => {
                 required
               />
 
-              <p className="my-4 text-left text-xs text-gray-600">
+              <p className="my-4 text-left text-xs dark:text-gray-400 text-gray-600">
                 By clicking Agree and Join, you agree to 13RMS{' '}
                 <a
                   href="#/"
@@ -153,7 +153,7 @@ const Signup = () => {
             </Form>
           </Formik>
         </div>
-        <div className="mt-4 text-center">
+        <div className="mt-4 text-center dark:text-white">
           Already on 13RMS?
           <a href="/login" className="link-hover">
             {' '}

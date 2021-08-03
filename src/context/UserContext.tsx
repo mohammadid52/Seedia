@@ -3,6 +3,8 @@ import { IUser } from '../interfaces/UserInterface'
 const UserContext = createContext(null)
 
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const [darkMode, setDarkMode] = useState(false)
+
   const [values, setValues] = useState<IUser>({
     user: {
       firstName: '',
@@ -61,7 +63,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     // @ts-ignore
-    <UserContext.Provider value={{ values, setValues }}>
+    <UserContext.Provider value={{ values, setValues, darkMode, setDarkMode }}>
       {children}
     </UserContext.Provider>
   )

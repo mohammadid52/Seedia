@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 /* This example requires Tailwind CSS v2.0+ */
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -9,31 +9,13 @@ import Button from './atoms/Button'
 import { useHistory } from 'react-router-dom'
 import Toggle from './atoms/Toggle'
 import { classNames } from 'utils/classNames'
+import { useUserContext } from 'context/UserContext'
 
 export default function Navigation() {
-  const [darkMode, setDarkMode] = useState(false)
+  const { setDarkMode, darkMode } = useUserContext()
+
   const [selected, setSelected] = useState(adjustColors[0])
 
-  useEffect(() => {
-    loadTheme()
-    return () => loadTheme()
-  }, [])
-
-  const loadTheme = () => {
-    const theme = localStorage.getItem('theme')
-
-    const html = document.querySelector('html')
-
-    if (theme) {
-      if (theme === 'dark') {
-        setDarkMode(true)
-        html?.classList.add('dark')
-      } else {
-        setDarkMode(false)
-        html?.classList.remove('dark')
-      }
-    }
-  }
   const history = useHistory()
 
   return (
@@ -92,7 +74,7 @@ export default function Navigation() {
                             className="absolute z-10 -ml-4 mt-3 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                           >
                             <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                              <div className="relative grid gap-6 bg-white dark:bg-gray-800 px-5 py-6 sm:gap-8 sm:p-8">
+                              <div className="relative grid gap-6 bg-white dark:bg-gray-700 px-5 py-6 sm:gap-8 sm:p-8">
                                 <div>
                                   <Toggle
                                     enabled={darkMode}
@@ -107,7 +89,7 @@ export default function Navigation() {
                                     key={item.name}
                                     onClick={() => setSelected(item)}
                                     href={item.href}
-                                    className="-m-3 p-3 mt-1 flex items-center text-left rounded-lg hover:bg-gray-50 justify-start cursor-pointer"
+                                    className="-m-3 p-3 mt-1 flex items-center text-left rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 justify-start cursor-pointer"
                                   >
                                     <span
                                       className={classNames(

@@ -1,4 +1,4 @@
-import React, { lazy } from 'react'
+import React, { lazy, useEffect } from 'react'
 // import 'bootstrap/dist/css/bootstrap.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -9,6 +9,7 @@ import NotFound from 'pages/NotFound'
 import BusinessStepOne from 'pages/account/business/StepOne'
 import BusinessStepTwo from 'pages/account/business/StepTwo'
 import ChooseAccount from 'pages/account/other/ChooseAccount'
+import { useUserContext } from 'context/UserContext'
 // import BusinessStepTwo from 'pages/account/business/StepTwo'
 
 const Welcome = lazy(() => import('pages/Welcome'))
@@ -34,6 +35,29 @@ library.add(fas)
 // }
 
 const App = () => {
+  const { setDarkMode } = useUserContext()
+
+  useEffect(() => {
+    loadTheme()
+    return () => loadTheme()
+  }, [])
+
+  const loadTheme = () => {
+    const theme = localStorage.getItem('theme')
+
+    const html = document.querySelector('html')
+
+    if (theme) {
+      if (theme === 'dark') {
+        setDarkMode(true)
+        html?.classList.add('dark')
+      } else {
+        setDarkMode(false)
+        html?.classList.remove('dark')
+      }
+    }
+  }
+
   return (
     <Router>
       <Switch>

@@ -13,17 +13,19 @@ const InputWithDropdown = ({
     <div>
       <label
         htmlFor="phone-number"
-        className="block text-sm font-medium text-gray-700"
+        className="block text-sm font-medium dark:text-white text-gray-700"
       >
         {label}{' '}
         {required && (
-          <span className="text-red-500 font-medium text-base">*</span>
+          <span className="text-red-500 dark:text-red-400 font-medium text-base">
+            *
+          </span>
         )}
       </label>
 
       <Field name={name}>
         {(props) => {
-          const { field } = props
+          const { field, meta } = props
 
           return (
             <div className="mt-1 relative rounded-md shadow-sm">
@@ -45,8 +47,16 @@ const InputWithDropdown = ({
                 {...field}
                 id={id}
                 placeholder={placeholder}
-                className={`focus:ring-yellow-500 py-2 focus:border-yellow-500 block w-full pl-16 sm:text-sm border border-gray-300 rounded-md ${className}`}
+                className={`focus:ring-yellow-500 dark:text-white dark:bg-gray-800 dark:border-gray-700 py-2 focus:border-yellow-500 block w-full pl-16 sm:text-sm border border-gray-300 rounded-md ${className}`}
               />
+              {meta.touched && meta.error && (
+                <p
+                  className="mt-2 transition-all duration-200 text-sm text-red-600"
+                  id={`${name || id}-error`}
+                >
+                  {meta.error}
+                </p>
+              )}
             </div>
           )
         }}

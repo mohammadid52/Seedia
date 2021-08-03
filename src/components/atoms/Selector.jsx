@@ -14,14 +14,15 @@ const Selector = ({
   required,
   selectedItem,
   onSelect,
+  border = true,
+  error = '',
 }) => {
-  console.log('🚀 ~ file: Selector.jsx ~ line 18 ~ list', list)
   return (
     <Listbox value={selectedItem} onChange={onSelect}>
       {({ open }) => (
         <>
           {label && (
-            <Listbox.Label className="block text-sm font-medium text-gray-700">
+            <Listbox.Label className="block dark:text-white text-sm font-medium text-gray-700">
               {label}{' '}
               {required && (
                 <span className="text-red-500 font-medium text-base">*</span>
@@ -29,10 +30,14 @@ const Selector = ({
             </Listbox.Label>
           )}
           <div className="mt-1 relative">
-            <Listbox.Button className="bg-white dark:bg-gray-800 relative w-full border dark:border-gray-700 border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <Listbox.Button
+              className={`bg-white dark:bg-gray-800 relative w-full ${
+                border ? 'border' : ''
+              } dark:border-gray-700 border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+            >
               <span
-                className={`block truncate dark:text-white ${
-                  !selectedItem ? 'text-gray-500' : ''
+                className={`block truncate  dark:text-white ${
+                  !selectedItem ? 'text-gray-600' : ''
                 }`}
               >
                 {selectedItem || placeholder}
@@ -44,6 +49,11 @@ const Selector = ({
                 />
               </span>
             </Listbox.Button>
+            {error && (
+              <p className="mt-2 transition-all duration-200 text-sm text-red-600">
+                {error}
+              </p>
+            )}
 
             <Transition
               show={open}
@@ -61,7 +71,9 @@ const Selector = ({
                     key={item.id}
                     className={({ active }) =>
                       classNames(
-                        active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                        active
+                          ? 'text-white bg-gradient-to-r from-pink-500 to-yellow-500'
+                          : 'text-gray-900',
                         'cursor-default select-none relative py-2 pl-3 pr-9'
                       )
                     }
@@ -71,8 +83,8 @@ const Selector = ({
                       <>
                         <span
                           className={classNames(
-                            selected ? 'font-semibold' : 'font-normal',
-                            'block truncate text-left'
+                            selected ? 'font-semibold ' : 'font-normal',
+                            'block truncate dark:text-white text-left'
                           )}
                         >
                           {item.name}

@@ -22,17 +22,12 @@ const BusinessStepOne = () => {
   const [saving, setSaving] = useState(false)
 
   const validationSchema = Yup.object({
-    company_name: Yup.string()
-      .email('Please enter valid email address')
-      .required('Please add legal company name'),
+    company_name: Yup.string().required('Please enter legal company name'),
     company_email: Yup.string()
       .email('Please enter valid email address')
       .required('Please add legal company email address'),
-    re_company_email: Yup.string()
-      .oneOf([Yup.ref('company_email'), null], 'Email address must match')
-      .required('Please re-enter legal company email address'),
-    password: Yup.string().required('Please enter password'),
-    company_number: Yup.string().required('Please enter password'),
+
+    company_number: Yup.string().required('Please enter company number'),
   })
 
   setTimeout(() => {
@@ -76,7 +71,7 @@ const BusinessStepOne = () => {
         <div className="mb-4">
           <Info text="Qualify for business seller limits, promotions and professional tools to expand your business" />
         </div>
-        <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
+        <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
             initialValues={BusinessStepOneFields}
             validationSchema={validationSchema}
@@ -96,20 +91,7 @@ const BusinessStepOne = () => {
                 type="email"
                 required
               />
-              <FormInput
-                label="Re-enter email address"
-                id="re_company_email"
-                name="re_company_email"
-                required
-                type="email"
-              />
-              <FormInput
-                label="password"
-                id="password"
-                name="password"
-                type="password"
-                required
-              />
+
               <FormInput
                 label="Legal phone number of company"
                 id="company_number"

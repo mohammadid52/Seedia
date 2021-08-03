@@ -78,7 +78,7 @@ const StudentSecondStep = () => {
       }
     >
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
+        <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
             initialValues={PersonalStepOne}
             validationSchema={validationSchema}

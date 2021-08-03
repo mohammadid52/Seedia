@@ -25,10 +25,10 @@ const BusinessStepTwo = () => {
   const [saving, setSaving] = useState(false)
 
   const validationSchema = Yup.object({
-    company_country: Yup.string().required('Please add company country'),
-    business_address: Yup.string().required('Please add business address'),
-    postal_code: Yup.string().required('Please add postal code'),
-    place: Yup.string().required('Please add place'),
+    company_country: Yup.string().required('Please enter company country'),
+    business_address: Yup.string().required('Please entry business address'),
+    postal_code: Yup.string().required('Please entry postal code'),
+    place: Yup.string().required('Please entry place'),
   })
 
   setTimeout(() => {
@@ -79,14 +79,14 @@ const BusinessStepTwo = () => {
   return !isLoaded ? (
     <Loading />
   ) : (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-800 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md flex items-center flex-col ">
         <img
           className="mx-auto h-32 w-auto"
           src={process.env.PUBLIC_URL + '/logo.png'}
           alt="Workflow"
         />
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 dark:text-white my-4 text-center text-3xl font-extrabold text-gray-900">
           Contact information for your company
         </h2>
       </div>
@@ -95,7 +95,7 @@ const BusinessStepTwo = () => {
         <div className="mb-4">
           <Info text="Please provide your legally registered business address and telephone number" />
         </div>
-        <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
             initialValues={BusinessStepTwoFields}
             validationSchema={validationSchema}
@@ -115,8 +115,9 @@ const BusinessStepTwo = () => {
                 required
               />
               <FormInput
-                label="Additional information (optional)"
+                label="Additional information"
                 id="additional_info"
+                optional
                 name="additional_info"
               />
               <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -183,35 +184,21 @@ const BusinessStepTwo = () => {
 
               <div>
                 <FormInput
-                  label="Company registration number (optional)"
+                  label="Company registration number"
+                  optional
                   id="company_reg_number"
                   name="company_reg_number"
                 />
               </div>
               <Divider />
-              <h5>Your contact details</h5>
-              <p>
+              <h5 className="font-semibold dark:text-white text-lg">
+                Your contact details
+              </h5>
+              <p className="text-base dark:text-gray-400 text-gray-500">
                 We use this information to message you about account activity or
                 other matters that require your attention.
               </p>
 
-              <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                <FormInput
-                  gridClass="sm:col-span-3"
-                  label="First Name"
-                  id="firstName"
-                  name="firstName"
-                  required
-                />
-
-                <FormInput
-                  gridClass="sm:col-span-3"
-                  required
-                  label="Last Name"
-                  id="lastName"
-                  name="lastName"
-                />
-              </div>
               <div>
                 <Selector
                   selectedItem={fields.relationship_to_company}

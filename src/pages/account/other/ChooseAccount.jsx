@@ -55,7 +55,7 @@ const ChooseAccount = () => {
     <div>
       <Layout title="Choose account type" subtitle="">
         <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-10">
+          <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
             <RadioGroup value={selected} onChange={setSelected}>
               <RadioGroup.Label className="sr-only">
                 Privacy setting

@@ -15,12 +15,14 @@ const FormInput = ({
   gridClass,
   required,
   showPasswordButton = false,
+  optional = false,
   ...props
 }: {
   label?: string
   id?: string
   name?: string
   required?: boolean
+  optional?: boolean
   type?: string
   placeholder?: string
   error?: string
@@ -34,12 +36,24 @@ const FormInput = ({
   const [showPass, setShowPass] = useState(false)
   return (
     <div className={gridClass}>
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
-        {label}{' '}
-        {required && (
-          <span className="text-red-500 font-medium text-base">*</span>
+      <div className="flex justify-between">
+        <label
+          htmlFor={name}
+          className="block dark:text-white text-sm font-medium text-gray-700"
+        >
+          {label}{' '}
+          {required && (
+            <span className="text-red-500 dark:text-red-400 font-medium text-base">
+              *
+            </span>
+          )}
+        </label>
+        {optional && (
+          <span className="text-sm text-gray-500" id="email-optional">
+            Optional
+          </span>
         )}
-      </label>
+      </div>
 
       <Field name={name}>
         {(props: any) => {
@@ -57,14 +71,14 @@ const FormInput = ({
                     error
                       ? errorClass
                       : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
-                  } sm:text-sm p-2 rounded-md`}
+                  } sm:text-sm p-2 rounded-md dark:bg-gray-800 dark:border-gray-700 dark:text-white`}
                   {...field}
                 />
-                <div className="flex items-center absolute transition-all duration-200 inset-y-0 right-0 pr-3 flex items-center">
+                <div className="flex items-center absolute transition-all duration-200 inset-y-0 right-0 pr-3 ">
                   {meta.touched && meta.error && (
                     <div className=" pointer-events-none">
                       <ExclamationCircleIcon
-                        className="h-5 w-5 text-red-500"
+                        className="h-5 w-5 text-red-500 dark:text-red-400"
                         aria-hidden="true"
                       />
                     </div>
@@ -91,7 +105,7 @@ const FormInput = ({
               </div>
               {meta.touched && meta.error && (
                 <p
-                  className="mt-2 transition-all duration-200 text-sm text-red-600"
+                  className="mt-2 transition-all duration-200 text-sm text-red-600 dark:text-red-500"
                   id={`${name || id}-error`}
                 >
                   {meta.error}
