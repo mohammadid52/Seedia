@@ -14,64 +14,6 @@ const Toggle = ({
   subText?: string
   className?: string
 }) => {
-  // const getThemeValue = () => {
-  //   const theme = localStorage.getItem('theme') || 'light'
-  //   return theme
-  // }
-  // useEffect(() => {
-  //   const html = document.querySelector('html')
-
-  //   const theme = getThemeValue()
-  //   if (theme === 'dark') {
-  //     html?.classList.remove('dark')
-  //     setEnabled(true)
-  //   } else {
-  //     localStorage.setItem('theme', 'dark')
-  //     setEnabled(false)
-  //   }
-  // }, [])
-
-  // const enableDarkMode = () => {
-  //   const theme = getThemeValue()
-  //   const html = document.querySelector('html')
-  //   if (
-  //     theme === 'dark' ||
-  //     window.matchMedia('(prefers-color-scheme: dark)').matches
-  //   ) {
-  //     localStorage.setItem('theme', 'light')
-  //     setEnabled(true)
-  //     html?.classList.remove('dark')
-  //   } else {
-  //     html?.classList.add('dark')
-  //     localStorage.setItem('theme', 'dark')
-  //     setEnabled(false)
-  //   }
-  // }
-
-  // to set value to local star --- useState
-  // to set value to storage --- localStorage
-
-  // #1 - First load storage value
-  // #2 - if value is 'dark' set value to true and add 'dark' class
-  // #3 - if value is 'light' set value to false and remove 'dark' class
-  // for on change values
-  // #4 - if current value is 'dark' set value to false and remove 'dark' class and change value from localStorage
-  // #4 - if current value is 'light' set value to true and add  'dark' class and change value from localStorage
-
-  const changeTheme = () => {
-    const html = document.querySelector('html')
-
-    if (enabled) {
-      setEnabled(false)
-      html?.classList.remove('dark')
-      localStorage.setItem('theme', 'light')
-    } else {
-      setEnabled(true)
-      html?.classList.add('dark')
-      localStorage.setItem('theme', 'dark')
-    }
-  }
-
   return (
     <Switch.Group
       as="div"
@@ -91,7 +33,7 @@ const Toggle = ({
       </span>
       <Switch
         checked={enabled}
-        onChange={changeTheme}
+        onChange={setEnabled}
         className={classNames(
           enabled
             ? 'bg-gradient-to-r from-pink-500 to-yellow-500'

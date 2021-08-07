@@ -53,14 +53,14 @@ const BusinessStepOne = () => {
   return !isLoaded ? (
     <Loading />
   ) : (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-800 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md flex items-center flex-col ">
         <img
           className="mx-auto h-32 w-auto"
           src={process.env.PUBLIC_URL + '/logo.png'}
           alt="Workflow"
         />
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="dark:text-white mt-6 text-center text-3xl font-extrabold text-gray-900">
           Create business account
         </h2>
 
@@ -71,7 +71,7 @@ const BusinessStepOne = () => {
         <div className="mb-4">
           <Info text="Qualify for business seller limits, promotions and professional tools to expand your business" />
         </div>
-        <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+        <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
             initialValues={BusinessStepOneFields}
             validationSchema={validationSchema}
@@ -99,13 +99,13 @@ const BusinessStepOne = () => {
                 required
               />
 
-              <div className="space-y-2 my-4">
-                <p className="text-left text-xs text-gray-600">
+              <div className="space-y-2 my-4 ">
+                <p className="text-left text-xs dark:text-gray-400 tracking-wide leading-5 text-gray-600">
                   We regularly send you e-mails with special offers on 13RMS.
                   You can unsubsribe from these marketing messages at any time
                   free of charge throw 13RMS or the links in the email.
                 </p>
-                <p className="text-left text-xs text-gray-600">
+                <p className="text-left text-xs dark:text-gray-400 tracking-wide leading-5 text-gray-600">
                   By selecting <strong>Register</strong>, you confirm that you
                   have read and agreed to our{' '}
                   <a className="text-xs" href="#/">

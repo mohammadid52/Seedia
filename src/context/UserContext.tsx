@@ -3,7 +3,7 @@ import { IUser } from '../interfaces/UserInterface'
 const UserContext = createContext(null)
 
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [darkMode, setDarkMode] = useState(false)
+  const [darkMode, setDarkMode] = useState<boolean>(false)
 
   const [values, setValues] = useState<IUser>({
     user: {
@@ -23,7 +23,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       location: {
         country: '',
         pincode: '',
-        location: '',
+        city: '',
+        state: '',
       },
     },
     student: {
@@ -37,7 +38,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       location: {
         country: '',
         pincode: '',
-        location: '',
+        city: '',
+        state: '',
       },
     },
     business: {
@@ -69,6 +71,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export const useUserContext = () => useContext(UserContext)
+export const useUserContext: any = () => useContext(UserContext)
 
 export default UserContextProvider

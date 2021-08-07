@@ -7,7 +7,7 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 import { adjustColors } from 'values/values'
 import Button from './atoms/Button'
 import { useHistory } from 'react-router-dom'
-import Toggle from './atoms/Toggle'
+import Toggle from './ThemeToggle'
 import { classNames } from 'utils/classNames'
 import { useUserContext } from 'context/UserContext'
 

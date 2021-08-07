@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon, MenuIcon } from '@heroicons/react/outline'
 import {
@@ -17,6 +17,8 @@ import {
   AiOutlineSearch,
   AiOutlineUsergroupDelete,
 } from 'react-icons/ai'
+import faker from 'faker'
+import Toggle from 'components/ThemeToggle'
 import { BsFilePost, BsPeople } from 'react-icons/bs'
 import { CgWorkAlt } from 'react-icons/cg'
 import { FaAdversal, FaMoneyBillAlt, FaConnectdevelop } from 'react-icons/fa'
@@ -167,11 +169,14 @@ function classNames(...classes) {
 }
 
 export default function DashboardHeader() {
+  const [darkMode, setDarkMode] = useState(false)
+  const navClass =
+    'flex flex-col items-center font-medium text-base dark:text-gray-400 text-gray-500 link-hover'
   return (
-    <Popover className="relative bg-white">
+    <Popover className="relative dark:bg-gray-800 bg-white">
       {({ open }) => (
         <>
-          <div className="flex justify-between items-center py-3 border-b-2 border-gray-100  sm:px-6 md:justify-start md:space-x-10">
+          <div className="flex justify-between items-center py-3 border-b-2 dark:border-gray-700 border-gray-100  sm:px-6 md:justify-start md:space-x-10">
             <div className="flex justify-start lg:w-0 lg:flex-1">
               <a href="/#">
                 <span className="sr-only">13RMS</span>
@@ -190,39 +195,24 @@ export default function DashboardHeader() {
             </div>
 
             <Popover.Group as="nav" className="hidden md:flex space-x-10">
-              <a
-                href="/#"
-                className="text-base flex flex-col items-center font-medium text-gray-500 hover:text-gray-900"
-              >
+              <a href="/#" className={navClass}>
                 <AiOutlineHome />
                 <span className="hidden lg:block">Home</span>
               </a>
-              <a
-                href="/#"
-                className="text-base font-medium text-gray-500 hover:text-gray-900  flex flex-col items-center"
-              >
+              <a href="/#" className={navClass}>
                 <BsPeople />
 
                 <span className="hidden lg:block">My Network</span>
               </a>
-              <a
-                href="/#"
-                className="text-base font-medium text-gray-500 hover:text-gray-900  flex flex-col items-center"
-              >
+              <a href="/#" className={navClass}>
                 <CgWorkAlt />
                 <span className="hidden lg:block">Jobs</span>
               </a>
-              <a
-                href="/#"
-                className="text-base font-medium text-gray-500 hover:text-gray-900  flex flex-col items-center"
-              >
+              <a href="/#" className={navClass}>
                 <BiMessageDetail />
                 <span className="hidden lg:block">Messaging</span>
               </a>
-              <a
-                href="/#"
-                className="text-base font-medium text-gray-500 hover:text-gray-900  flex flex-col items-center"
-              >
+              <a href="/#" className={navClass}>
                 <IoMdNotificationsOutline />
 
                 <span className="hidden lg:block">Notifications</span>
@@ -233,10 +223,10 @@ export default function DashboardHeader() {
                     <Popover.Button
                       className={classNames(
                         open ? 'text-gray-900' : 'text-gray-500',
-                        'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none'
+                        `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
                       )}
                     >
-                      <span className="text-base font-medium normal-hover text-gray-500 hover:text-gray-900  flex flex-col items-center">
+                      <span className={navClass}>
                         <GiReceiveMoney className="" />
                         <span className="hidden lg:block">
                           Sell{' '}
@@ -263,34 +253,33 @@ export default function DashboardHeader() {
                     >
                       <Popover.Panel
                         static
-                        className="absolute z-10 -ml-4 mt-3 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+                        className="absolute z-10 -ml-4 mt-4 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                       >
                         <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                          <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                          <div className="relative grid gap-6 dark:bg-gray-700 bg-white px-5 py-6 sm:gap-8 sm:p-8">
                             {sellList.map((item) => (
                               <a
                                 key={item.name}
                                 href={item.href}
-                                className="-m-3 p-3 mt-1 flex items-center text-left rounded-lg hover:bg-gray-50 justify-start cursor-pointer"
+                                className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-600 transition-all  rounded-lg hover:bg-gray-50 justify-start cursor-pointer"
                               >
-                                {/* <item.icon
-                                  className="flex-shrink-0 h-6 w-6 text-indigo-600"
-                                  aria-hidden="true"
-                                /> */}
                                 <div className="ml-4">
-                                  <p className="text-base text-left font-medium mb-0 text-gray-900">
+                                  <p className="text-base dark:text-white text-left font-medium mb-0 text-gray-900">
                                     {item.name}
                                   </p>
                                 </div>
                               </a>
                             ))}
                           </div>
-                          <div className="px-5 py-5 bg-gray-50 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
+                          <div className="px-5 border-t border-gray-600 justify-between w-full py-5 bg-gray-50 dark:bg-gray-700 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
                             {callsToAction.map((item) => (
-                              <div key={item.name} className="flow-root">
+                              <div
+                                key={item.name}
+                                className="w-1/2 flex items-center justify-center "
+                              >
                                 <a
                                   href={item.href}
-                                  className="-m-3 p-3 flex items-center rounded-md text-base font-medium text-gray-900 hover:bg-gray-100"
+                                  className="-m-3 p-3 flex items-center rounded-md text-base font-medium dark:text-white text-gray-900 hover:bg-gray-100 transition-all dark:hover:bg-gray-600 w-full justify-center"
                                 >
                                   <item.icon
                                     className="flex-shrink-0 h-6 w-6 text-gray-400"
@@ -314,10 +303,10 @@ export default function DashboardHeader() {
                     <Popover.Button
                       className={classNames(
                         open ? 'text-gray-900' : 'text-gray-500',
-                        'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none'
+                        `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
                       )}
                     >
-                      <span className="text-base font-medium normal-hover text-gray-500 hover:text-gray-900  flex flex-col items-center">
+                      <span className={navClass}>
                         <BiUserCircle className="" />
                         <span className="hidden lg:block">
                           My 13RMS{' '}
@@ -344,46 +333,54 @@ export default function DashboardHeader() {
                     >
                       <Popover.Panel
                         static
-                        className="absolute z-10 -ml-4 mt-3 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+                        className="absolute z-10 -ml-4 mt-4 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                       >
                         <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                          <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                          <div className="relative grid gap-6 bg-white dark:bg-gray-700 px-5 py-6 sm:gap-8 sm:p-8">
                             {settings.map((item) => (
                               <a
                                 key={item.name}
                                 href={item.href}
-                                className="-m-3 gradient-item p-3 mt-1 flex items-center text-left rounded-lg hover:bg-gray-50 justify-start cursor-pointer"
+                                className="-m-3 gradient-item p-3 mt-1 flex items-center text-left rounded-lg dark:hover:bg-gray-600 transition-all hover:bg-gray-50 justify-start cursor-pointer"
                               >
-                                <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md shadow-lg text-white sm:h-12 sm:w-12">
+                                <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md  text-white sm:h-8 sm:w-8">
                                   <item.icon
-                                    className="h-6 w-6"
+                                    className="sm:h-4 sm:w-4 h-8 w-8"
                                     aria-hidden="true"
                                   />
                                 </div>
                                 <div className="ml-4">
-                                  <p className="text-base text-left font-medium mb-0 text-gray-700">
+                                  <p className="text-base text-left font-medium mb-0 dark:text-white text-gray-700">
                                     {item.name}
                                   </p>
                                 </div>
                               </a>
                             ))}
+                            <div>
+                              <Toggle
+                                enabled={darkMode}
+                                text="Select mode"
+                                subText="Choose theme preferance"
+                                setEnabled={setDarkMode}
+                              />
+                            </div>
                           </div>
 
-                          <div className="flex px-5 py-5 bg-gray-50 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
-                            <div className="mr-1 flex-shrink-0">
+                          <div className="flex px-5 py-5 bg-white border-t dark:border-gray-600 border-gray-200 dark:bg-gray-700 space-y-6 sm:flex sm:space-y-0 sm:px-8">
+                            <div className=" flex-shrink-0">
                               <img
-                                className="h-16 rounded-full w-16"
-                                src={
-                                  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                                }
+                                className="h-14 mr-6 rounded-full w-14 drop-shadow-lg"
+                                src={faker.image.avatar()}
                                 alt="user"
                               />
                             </div>
                             <div>
-                              <h4 className="text-lg font-bold">
-                                Mohammad Dehgamwala
+                              <h4 className="text-lg dark:text-white font-bold">
+                                {faker.name.findName()}
                               </h4>
-                              <p className="mt-1">Web developer</p>
+                              <p className="mt-1 text-gray-800 font-medium leading-3 dark:text-gray-400">
+                                {faker.name.jobTitle()}
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -399,10 +396,10 @@ export default function DashboardHeader() {
                     <Popover.Button
                       className={classNames(
                         open ? 'text-gray-900' : 'text-gray-500',
-                        'group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none'
+                        `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
                       )}
                     >
-                      <span className="text-base font-medium normal-hover text-gray-500 hover:text-gray-900  flex flex-col items-center">
+                      <span className={navClass}>
                         <BiUserCircle className="" />
                         <span className="hidden lg:block">
                           Business Apps{' '}
@@ -430,20 +427,20 @@ export default function DashboardHeader() {
                       <Popover.Panel
                         static
                         style={{ left: '-13rem' }}
-                        className="absolute z-10  mt-3 transform w-screen max-w-md lg:max-w-2xl lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+                        className="absolute z-10  mt-4 transform w-screen max-w-md lg:max-w-2xl lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                       >
                         <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                          <div className="relative  bg-white px-5 py-6 sm:gap-8 sm:p-8 ">
-                            <p className="inline-block text-2xl tracking-wide mb-4 border-b-2 border-pink-600 mt-2 font-bold text-gray-900 ">
+                          <div className="relative dark:bg-gray-700 bg-white px-5 py-6 sm:gap-8 sm:p-8 ">
+                            <p className="inline-block text-2xl tracking-wide mb-4 border-b-2 border-pink-600 mt-2 font-bold text-gray-900 dark:text-white">
                               13RMS
                             </p>
 
-                            <div className="grid gap-6 lg:grid-cols-2">
+                            <div className="grid mt-4 gap-8 lg:grid-cols-2">
                               {businessApps.map((item) => (
                                 <a
                                   key={item.name}
                                   href={item.href}
-                                  className="-m-3 p-3 cursor-pointer flex items-start rounded-lg hover:bg-gray-100"
+                                  className="-m-3 p-3 cursor-pointer flex items-start rounded-lg dark:hover:bg-gray-600 hover:bg-gray-100"
                                 >
                                   <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md shadow-lg text-white sm:h-12 sm:w-12">
                                     <item.icon
@@ -452,10 +449,10 @@ export default function DashboardHeader() {
                                     />
                                   </div>
                                   <div className="ml-4">
-                                    <p className="text-base font-medium text-gray-900">
+                                    <p className="text-base font-medium dark:text-white text-gray-900">
                                       {item.name}
                                     </p>
-                                    <p className="mt-1 text-sm text-gray-500">
+                                    <p className="mt-1 text-sm dark:text-gray-400 text-gray-500">
                                       {item.description}
                                     </p>
                                   </div>

@@ -16,6 +16,7 @@ const Selector = ({
   onSelect,
   border = true,
   error = '',
+  keyName = 'name',
 }) => {
   return (
     <Listbox value={selectedItem} onChange={onSelect}>
@@ -33,7 +34,7 @@ const Selector = ({
             <Listbox.Button
               className={`bg-white dark:bg-gray-800 relative w-full ${
                 border ? 'border' : ''
-              } dark:border-gray-700 border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+              } dark:border-gray-700 border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
             >
               <span
                 className={`block truncate  dark:text-white ${
@@ -87,7 +88,7 @@ const Selector = ({
                             'block truncate dark:text-white text-left'
                           )}
                         >
-                          {item.name}
+                          {item[keyName]}
                         </span>
 
                         {selected ? (

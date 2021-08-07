@@ -11,7 +11,7 @@ const Layout = ({
   children: React.ReactNode
 }) => {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen dark:bg-gray-800 bg-gray-50 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md flex items-center flex-col ">
         <img
           className="mx-auto h-32 w-auto"
@@ -19,7 +19,7 @@ const Layout = ({
           alt="13RMS"
         />
         {title && (
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold dark:text-white text-gray-900">
             {title}
           </h2>
         )}

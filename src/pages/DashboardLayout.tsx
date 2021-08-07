@@ -6,10 +6,10 @@ const DashboardLayout = ({
   thirdCol,
   firstColClass,
 }: {
-  firstColClass: string
-  firstCol: React.ReactNode
-  secondCol: React.ReactNode
-  thirdCol: React.ReactNode
+  firstColClass?: string
+  firstCol?: React.ReactNode
+  secondCol?: React.ReactNode
+  thirdCol?: React.ReactNode
 }) => {
   return (
     <div className="flex-grow w-full px-4 md:max-w-6xl lg:max-w-7xl sm:max-w-5xl mx-auto xl:px-8 lg:flex">

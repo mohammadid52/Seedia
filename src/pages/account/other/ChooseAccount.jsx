@@ -55,12 +55,12 @@ const ChooseAccount = () => {
     <div>
       <Layout title="Choose account type" subtitle="">
         <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+          <div className="bg-white dark:border-gray-700 border border-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
             <RadioGroup value={selected} onChange={setSelected}>
               <RadioGroup.Label className="sr-only">
                 Privacy setting
               </RadioGroup.Label>
-              <div className="bg-white rounded-md space-y-4">
+              <div className="bg-white dark:bg-gray-800 rounded-md space-y-4">
                 {settings.map((setting, settingIdx) => (
                   <RadioGroup.Option
                     key={setting.name}
@@ -70,8 +70,8 @@ const ChooseAccount = () => {
                         settingIdx === 0 ? 'rounded-md' : '',
                         settingIdx === settings.length - 1 ? 'rounded-md' : '',
                         checked
-                          ? 'bg-pink-50 border-pink-200 z-10'
-                          : 'border-gray-200',
+                          ? 'bg-pink-50 dark:bg-gray-800 rounded-md dark:border-pink-700 border-pink-200 z-10'
+                          : 'border-gray-200 dark:border-gray-700',
                         'relative border p-4 transition-all duration-200 flex cursor-pointer focus:outline-none'
                       )
                     }
@@ -94,7 +94,9 @@ const ChooseAccount = () => {
                           <RadioGroup.Label
                             as="span"
                             className={classNames(
-                              checked ? 'gradient-text' : 'text-gray-900',
+                              checked
+                                ? 'gradient-text'
+                                : 'dark:text-white text-gray-900',
                               'block text-sm font-medium mb-2'
                             )}
                           >

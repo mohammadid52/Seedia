@@ -23,7 +23,8 @@ export interface PersonalAccount {
   location: {
     country: string
     pincode: string
-    location: string
+    state: string
+    city: string
   }
 }
 export interface StudentAccount {
@@ -37,7 +38,8 @@ export interface StudentAccount {
   location: {
     country: string
     pincode: string
-    location: string
+    state: string
+    city: string
   }
 }
 export interface BusinessAccount {

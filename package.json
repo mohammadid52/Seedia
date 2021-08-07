@@ -26,8 +26,8 @@
     "bootstrap": "^5.0.2",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.6.1",
-    "emotion": "^10.0.27",
-    "emotion-theming": "^10.0.27",
+    "countrycitystatejson": "^20.8.9-a",
+    "faker": "^5.5.3",
     "formik": "^2.2.9",
     "history": "^4.7.2",
     "jquery": "^3.6.0",
@@ -85,6 +85,9 @@
     ]
   },
   "devDependencies": {
+    "@types/faker": "^5.5.7",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-router-dom": "^5.1.8",
     "autoprefixer": "^9.8.6",
     "babel-plugin-module-resolver": "^4.1.0",
     "cors": "^2.8.5",
@@ -94,7 +97,6 @@
     "lodash": "^4.17.21",
     "node-sass": "^4.12.0",
     "postcss": "^7.0.36",
-    "react-hot-loader": "^4.13.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.4"
   }
 }

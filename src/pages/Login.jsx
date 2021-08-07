@@ -16,7 +16,7 @@ async function loginUser(credentials) {
   }).then((data) => data.json())
 }
 
-const Example = ({ setToken }) => {
+const Login = ({ setToken }) => {
   const [isLoaded, setIsLoaded] = useState(true)
   const history = useHistory()
 
@@ -249,4 +249,4 @@ const Example = ({ setToken }) => {
     </div>
   )
 }
-export default Example
+export default Login

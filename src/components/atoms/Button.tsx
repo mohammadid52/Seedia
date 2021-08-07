@@ -1,28 +1,29 @@
 interface IButton {
-  label: string
-  onClick: () => void
-  Icon: any
+  label?: string
+  onClick?: () => void
+  Icon?: any
   bgColor?: string
   rounded?: string
   className?: string
-  gradient: boolean
+  gradient?: boolean
   onlyText?: boolean
   gradientColor?: {
     x: string
     y: string
   }
-  primary: boolean
-  fullWidth: boolean
-  invert: boolean
-  secondary: boolean
-  loading: boolean
+  primary?: boolean
+  fullWidth?: boolean
+  invert?: boolean
+  secondary?: boolean
+  loading?: boolean
   customClass?: boolean
   shadow?: boolean
+  gradientHover?: boolean
 
   loadingText?: string
   type?: 'button' | 'submit' | 'reset'
-  size: 'sm' | 'md' | 'lg' | 'xl'
-  weight: 'light' | 'medium' | 'semibold' | 'bold'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  weight?: 'light' | 'medium' | 'semibold' | 'bold'
 }
 
 const Button = ({
@@ -37,10 +38,11 @@ const Button = ({
   fullWidth = false,
   secondary = false,
   onlyText = false,
-  size,
+  size = 'md',
   invert = false,
   rounded = 'rounded',
   weight = 'medium',
+  gradientHover = true,
   className = '',
   shadow = false,
   loading = false,
@@ -53,14 +55,24 @@ const Button = ({
         ? `text-${bgColor}-600 hover:text-${bgColor}-700 `
         : `text-white bg-${bgColor}-600 hover:bg-${bgColor}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${bgColor}-500`
     }  flex items-center border border-transparent shadow-sm text-base font-medium rounded-md `
-    const secondaryClass = `flex items-center border border-transparent text-xs font-medium rounded text-${bgColor}-700 ${
+    const secondaryClass = `flex items-center border border-transparent font-medium rounded dark:text-${bgColor}-400 dark:border-${bgColor}-400 text-${bgColor}-700 ${
       invert
-        ? `hover:bg-${bgColor}-100 focus:ring-${bgColor}-500`
+        ? `hover:border-${bgColor}-300 dark:border-gray-600 dark:hover:border-gray-500 {bgColor}- border-${bgColor}-200 border focus:ring-${bgColor}-500`
         : `bg-${bgColor}-100 hover:bg-${bgColor}-200 focus:ring-${bgColor}-500`
     }  focus:outline-none focus:ring-2 focus:ring-offset-2 `
     switch (true) {
       case gradient:
-        return `text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-${gradientColor.x}-500 to-${gradientColor.y}-500`
+        return `${
+          invert
+            ? `gradient-text border border-gray-200 dark:border-gray-600 overflow-hidden  ${
+                gradientHover
+                  ? 'hover:gradient-border'
+                  : 'hover:border-gray-300'
+              }  rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${
+                gradientColor.x
+              }-500`
+            : `text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${gradientColor.x}-500 bg-gradient-to-r from-${gradientColor.x}-500 to-${gradientColor.y}-500`
+        } `
       case primary:
         return primaryClass
       case secondary:
@@ -70,17 +82,17 @@ const Button = ({
     }
   }
 
-  const generatePadding = () => {
+  const generatePaddingAndTextSize = () => {
     switch (size) {
       case 'sm':
-        return 'px-3 py-2'
+        return 'px-3 py-2 text-sm'
       case 'md':
       case 'lg':
-        return 'px-4 py-2'
+        return 'px-4 py-2 text-base'
       case 'xl':
-        return 'px-8 py-3'
+        return 'px-8 py-3 text-lg'
       default:
-        return 'px-4 py-2'
+        return 'px-4 py-2 text-xl'
     }
   }
 
@@ -93,9 +105,9 @@ const Button = ({
       className={`${
         customClass
           ? className
-          : `${generateClass()} ${generatePadding()} ${rounded} font-${weight} ${className} ${
+          : `${generateClass()} ${generatePaddingAndTextSize()} ${rounded} font-${weight} ${className} ${
               fullWidth ? 'w-full' : ''
-            }`
+            } transition-all duration-200`
       }`}
     >
       {loading && (
@@ -120,8 +132,10 @@ const Button = ({
           ></path>
         </svg>
       )}
-      {loading ? loadingText : label}
-      {Icon && <Icon className="ml-3 -mr-1 h-5 w-5" />}
+      {Icon && (
+        <Icon className={`${label ? 'mr-2' : ''} dark:text-white h-5 w-5"`} />
+      )}
+      {label && (loading ? loadingText : label)}
     </button>
   )
 }
