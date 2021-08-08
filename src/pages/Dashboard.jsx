@@ -3,7 +3,7 @@ import Post from 'components/Post'
 
 import SideCard from 'components/SideCard'
 
-import Card from 'components/Card'
+import Card from 'components/atoms/Card'
 import Button from 'components/atoms/Button'
 import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
@@ -475,45 +475,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard
-
-// <div
-//           className="mt-8 content-wrapper grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-x-4 mx-auto"
-//           style={{ maxWidth: '90rem' }}
-//         >
-//           {/* 1st col */}
-//           <PersonalCard />
-
-//           {/* 2nd col to 4th col */}
-// <div className="second-col col-span-1">
-//   <PostInput posts={posts} setPosts={setPosts} />
-//   <Card className="relative">
-//     <div className="py-8 px-4 flex-wrap flex justify-center light space-x-2">
-//       <ListCard
-//         imgUrl={
-//           'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-//         }
-//       />
-//       <ListCard
-//         imgUrl={
-//           'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-//         }
-//       />
-//       <ListCard
-//         imgUrl={
-//           'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80'
-//         }
-//       />
-//     </div>
-//   </Card>
-//   {posts.map((post) => (
-//     <Post post={post} />
-//   ))}
-// </div>
-
-//           {/* 5th col */}
-
-// <div className=" hidden lg:block  h-auto">
-//   <SideCard />
-//   <SideCard />
-// </div>
-//         </div>

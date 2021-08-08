@@ -1,7 +1,7 @@
 import React from 'react'
-
-import { RiArrowDropDownFill } from 'react-icons/ri'
 import usa from 'assets/images/countries/usa.png'
+import { classNames } from 'utils/classNames'
+import { ChevronDownIcon } from '@heroicons/react/outline'
 
 const CountryListDropdown = () => {
   return (
@@ -17,27 +17,33 @@ const CountryListDropdown = () => {
             aria-expanded="false"
           >
             <img alt={'USA'} src={usa} className="w-8 h-8" />
-            <RiArrowDropDownFill className="w-8 h-8 dark:text-gray-50" />
+            <ChevronDownIcon
+              className={classNames(
+                ' text-gray-400',
+                'ml-2 h-5 w-5 group-hover:text-gray-500'
+              )}
+              aria-hidden="true"
+            />
           </a>
-          <ul className="dropdown-content hidden absolute right-0 top-8 bg-white dark:bg-gray-700 py-4 px-4 origin-top-right mt-2  rounded-md shadow-lg  ring-1 ring-black ring-opacity-5 focus:outline-none w-72">
+          <ul className="dropdown-content hidden absolute right-0 top-8 bg-white dark:bg-gray-700 py-4 px-4 origin-top-right mt-2  rounded-md shadow-lg  ring-1 ring-black ring-opacity-5 focus:outline-none w-96">
             <li className="nav-item">
               <span className="dark:text-white mr-11 font-semibold">
                 Change language{' '}
               </span>
 
-              <span className="dark:text-blue-500 link-hover cursor-pointer">
+              <span className="dark:text-blue-400 link-hover cursor-pointer">
                 Learn more
               </span>
             </li>
             <li className="nav-item mt-2">
               <span className="dark:text-white mr-14">English-EN</span>
-              <span className="dark:text-blue-500 cursor-pointer link-hover">
+              <span className="dark:text-blue-400 cursor-pointer link-hover">
                 Change
               </span>
             </li>
 
             <div
-              className="dark:bg-gray-900 bg-gray-50  my-4 dark:bg-opacity-100 bg-opacity-30"
+              className="dark:bg-gray-600 bg-gray-200 my-4"
               style={{ height: 1 }}
             />
 
@@ -45,18 +51,18 @@ const CountryListDropdown = () => {
               <span className="dark:text-white mr-12 font-semibold">
                 Change currency
               </span>
-              <span className="dark:text-blue-500 cursor-pointer link-hover">
+              <span className="dark:text-blue-400 cursor-pointer link-hover">
                 Learn more
               </span>
             </li>
             <li className="nav-item mt-2">
-              <span className="dark:text-white mr-14">$- USD- US Dollar</span>
-              <span className="dark:text-blue-500 cursor-pointer link-hover">
+              <span className="dark:text-white mr-14">$ US Dollar</span>
+              <span className="dark:text-blue-400 cursor-pointer link-hover">
                 Change
               </span>
             </li>
             <div
-              className="bg-gray-50 my-4 bg-opacity-30"
+              className="dark:bg-gray-600 bg-gray-200 my-4"
               style={{ height: 1 }}
             />
 
@@ -67,7 +73,7 @@ const CountryListDropdown = () => {
                   You are on Tradingpost13RMS.com
                 </span>
               </span>
-              <span className="dark:text-blue-500 cursor-pointer link-hover">
+              <span className="dark:text-blue-400 cursor-pointer link-hover">
                 Change country/region
               </span>
             </li>
