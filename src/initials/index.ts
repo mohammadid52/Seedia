@@ -6,6 +6,11 @@ export const SIGNUP = {
   lastName: '',
 }
 
+export const LOGIN = {
+  email: '',
+  password: '',
+}
+
 export const PersonalStepOne = {
   jobTitle: '',
   latestCompany: '',

@@ -33,7 +33,7 @@ const Button = ({
   type = 'button',
   bgColor = 'indigo',
   gradient = false,
-  gradientColor = { x: 'pink', y: 'yellow' },
+  gradientColor = { x: 'yellow', y: 'pink' },
   primary = false,
   fullWidth = false,
   secondary = false,
@@ -71,7 +71,7 @@ const Button = ({
               }  rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${
                 gradientColor.x
               }-500`
-            : `text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${gradientColor.x}-500 bg-gradient-to-r from-${gradientColor.x}-500 to-${gradientColor.y}-500`
+            : `text-white via-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${gradientColor.x}-500 bg-gradient-to-br from-${gradientColor.x}-500 to-${gradientColor.y}-500`
         } `
       case primary:
         return primaryClass

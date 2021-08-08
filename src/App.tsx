@@ -1,4 +1,4 @@
-import React, { lazy, useEffect } from 'react'
+import React, { lazy, useEffect, useState } from 'react'
 // import 'bootstrap/dist/css/bootstrap.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -10,6 +10,7 @@ import BusinessStepOne from 'pages/account/business/StepOne'
 import BusinessStepTwo from 'pages/account/business/StepTwo'
 import ChooseAccount from 'pages/account/other/ChooseAccount'
 import { useUserContext } from 'context/UserContext'
+
 // import BusinessStepTwo from 'pages/account/business/StepTwo'
 
 const Welcome = lazy(() => import('pages/Welcome'))
@@ -25,7 +26,11 @@ const EducationStep = lazy(() => import('pages/account/student/EducationStep'))
 library.add(fas)
 
 const App = () => {
-  const { setDarkMode } = useUserContext()
+  const { setDarkMode, setIsLoggedIn } = useUserContext()
+
+  // #1 Fetch values from local storage
+  // #2 If value is not undefined setIsLoggedIn to true;
+  // #3 Otherwise setIsLoggedIn to false
 
   useEffect(() => {
     const loadTheme = () => {
@@ -47,6 +52,41 @@ const App = () => {
     return () => loadTheme()
   }, [setDarkMode])
 
+  const [user, setUser] = useState({})
+  const [accountInfo, setAccountInfo] = useState({})
+
+  useEffect(() => {
+    const fetchAccountType = () =>
+      window.localStorage.getItem('accountType') || 'Personal'
+
+    const fetchUserInfo = () => {
+      const json: any = window.localStorage.getItem('user')
+      return JSON.parse(json) || {}
+    }
+
+    const fetchAccountInfo = () => {
+      const accountType = fetchAccountType().toLocaleLowerCase()
+      const json: any = window.localStorage.getItem(accountType)
+      return JSON.parse(json) || {}
+    }
+
+    const user = fetchUserInfo()
+    const accountInfo = fetchAccountInfo()
+    // if (filter(values(user), (d) => Boolean(d)).length > 0) {
+    setIsLoggedIn(true)
+    // } else {
+    // setIsLoggedIn(false)
+    // }
+
+    setUser({ ...user })
+    setAccountInfo({ ...accountInfo })
+
+    return () => {
+      fetchUserInfo()
+      fetchAccountInfo()
+    }
+  }, [setIsLoggedIn])
+
   return (
     <Router>
       <Switch>
@@ -57,8 +97,10 @@ const App = () => {
         </Route>
 
         <Route exact path="/signup" component={Signup} />
-        <Route exact path="/dashboard" component={Dashboard} />
-        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/dashboard">
+          <Dashboard user={user} accountInfo={accountInfo} />
+        </Route>
+        <Route exact path="/profile/1" component={Profile} />
         <Route exact path="/choose-account" component={ChooseAccount} />
         {/* <Route exact path="/email-verification" component={EmailVerification} /> */}
 

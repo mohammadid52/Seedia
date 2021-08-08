@@ -31,6 +31,7 @@ const ChooseAccount = () => {
   const { setValues, values } = useUserContext()
 
   const [loading, setLoading] = useState(false)
+
   const onNext = () => {
     let path
     if (selected.name === 'Personal') {
@@ -45,6 +46,8 @@ const ChooseAccount = () => {
       ...values,
       accountType: selected.name,
     })
+    window.localStorage.setItem('accountType', selected.name)
+    console.log('Successfully added account type to local storage')
     wait(1000).then(() => {
       setLoading(false)
       history.push(path || links.PERSONAL_STEP_1)

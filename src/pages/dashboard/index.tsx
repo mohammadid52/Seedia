@@ -8,38 +8,8 @@ import PostInput from './PostInput'
 import PersonalCard from './AboutMe'
 import faker from 'faker'
 
-const Dashboard = () => {
+const Dashboard = ({ user, accountInfo }: { user: any; accountInfo: any }) => {
   const [users, setUsers] = useState([])
-
-  const [user, setUser] = useState({})
-  const [accountInfo, setAccountInfo] = useState({})
-
-  useEffect(() => {
-    const fetchAccountType = () =>
-      window.localStorage.getItem('accountType') || 'Personal'
-
-    const fetchUserInfo = () => {
-      const json: any = window.localStorage.getItem('user')
-      return JSON.parse(json) || {}
-    }
-
-    const fetchAccountInfo = () => {
-      const accountType = fetchAccountType().toLocaleLowerCase()
-      const fetchItemsByAccountType: any =
-        window.localStorage.getItem(accountType)
-      return JSON.parse(fetchItemsByAccountType) || {}
-    }
-
-    const user = fetchUserInfo()
-    const accountInfo = fetchAccountInfo()
-    setUser({ ...user })
-    setAccountInfo({ ...accountInfo })
-
-    return () => {
-      fetchUserInfo()
-      fetchAccountInfo()
-    }
-  }, [])
 
   const BASE_URL = 'https://dummyapi.io/data/api/'
   const APP_ID = '61059484a441674e99287b7f'

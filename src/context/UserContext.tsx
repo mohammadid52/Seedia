@@ -4,6 +4,7 @@ const UserContext = createContext(null)
 
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [darkMode, setDarkMode] = useState<boolean>(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const [values, setValues] = useState<IUser>({
     user: {
@@ -64,8 +65,17 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   })
 
   return (
-    // @ts-ignore
-    <UserContext.Provider value={{ values, setValues, darkMode, setDarkMode }}>
+    <UserContext.Provider
+      // @ts-ignore
+      value={{
+        isLoggedIn,
+        setIsLoggedIn,
+        values,
+        setValues,
+        darkMode,
+        setDarkMode,
+      }}
+    >
       {children}
     </UserContext.Provider>
   )

@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 /* This example requires Tailwind CSS v2.0+ */
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -10,9 +10,10 @@ import { useHistory } from 'react-router-dom'
 import Toggle from './ThemeToggle'
 import { classNames } from 'utils/classNames'
 import { useUserContext } from 'context/UserContext'
+import { RiProfileLine } from 'react-icons/ri'
 
 export default function Navigation() {
-  const { setDarkMode, darkMode } = useUserContext()
+  const { setDarkMode, darkMode, isLoggedIn } = useUserContext()
 
   const [selected, setSelected] = useState(adjustColors[0])
 
@@ -135,21 +136,97 @@ export default function Navigation() {
                 </Popover.Button>
               </div>
 
-              <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-                <a
-                  href="/signup"
-                  className="whitespace-nowrap dark:text-gray-400 text-gray-500  text-base font-medium  link-hover"
-                >
-                  Join Now
-                </a>
+              {isLoggedIn ? (
+                <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+                  <Popover.Group
+                    as="nav"
+                    className="hidden ml-6 md:flex space-x-10"
+                  >
+                    <Popover className="relative">
+                      {({ open }) => (
+                        <>
+                          <Popover.Button
+                            className={classNames(
+                              open ? 'text-gray-900' : 'text-gray-500',
+                              'group bg-white dark:bg-gray-800 rounded-md inline-flex items-center text-base font-medium link-hover focus:outline-none '
+                            )}
+                          >
+                            <Button
+                              // onClick={() => history.push('/profile')}
+                              className="mx-4 "
+                              label="Profile"
+                              gradient
+                              invert
+                            />
+                          </Popover.Button>
 
-                <Button
-                  onClick={() => history.push('/login')}
-                  className="mx-4 "
-                  label="Login"
-                  gradient
-                />
-              </div>
+                          <Transition
+                            show={open}
+                            as={Fragment}
+                            enter="transition ease-out duration-200"
+                            enterFrom="opacity-0 translate-y-1"
+                            enterTo="opacity-100 translate-y-0"
+                            leave="transition ease-in duration-150"
+                            leaveFrom="opacity-100 translate-y-0"
+                            leaveTo="opacity-0 translate-y-1"
+                          >
+                            <Popover.Panel
+                              static
+                              className="absolute z-10  mt-4 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+                            >
+                              <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                                <div className="relative grid gap-6 bg-white dark:bg-gray-700 px-5 py-6 sm:gap-8 sm:p-8">
+                                  <div
+                                    onClick={() => history.push('/profile/1')}
+                                    className="p-2 cursor-pointer pl-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600"
+                                  >
+                                    <p className="text-base flex items-center link-hover text-left font-medium dark:text-white text-gray-900 mb-0">
+                                      <RiProfileLine className="mr-2" />
+                                      Profile one
+                                    </p>
+                                  </div>
+                                  <div
+                                    onClick={() => history.push('/profile/2')}
+                                    className="rounded-lg pl-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 p-2"
+                                  >
+                                    <p className="text-base flex items-center text-left link-hover font-medium dark:text-white text-gray-900 mb-0">
+                                      <RiProfileLine className="mr-2" />
+                                      Profile two
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </Popover.Panel>
+                          </Transition>
+                        </>
+                      )}
+                    </Popover>
+                  </Popover.Group>
+
+                  <Button
+                    onClick={() => history.push('/dashboard')}
+                    className="mx-4 "
+                    label="Dashboard"
+                    gradient
+                  />
+                </div>
+              ) : (
+                <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+                  <a
+                    href="/signup"
+                    className="whitespace-nowrap dark:text-gray-400 text-gray-500  text-base font-medium  link-hover"
+                  >
+                    Join Now
+                  </a>
+
+                  <Button
+                    onClick={() => history.push('/login')}
+                    className="mx-4 "
+                    label="Login"
+                    gradient
+                  />
+                </div>
+              )}
             </div>
           </div>
         </>
