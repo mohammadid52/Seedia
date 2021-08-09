@@ -4,17 +4,15 @@ import HomeContent from 'components/HomeContent'
 // import Search from 'components/Search'
 import Features from 'components/Features'
 import Footer from 'components/CustomFooter'
-import Navigation from 'components/Navigation'
 import CustomSearchPanel from 'components/CustomSearch'
 
-const Home = ({ themeToggler, theme }) => {
+const Home = () => {
   return (
     <div {...{ className: 'w-full' }}>
-      <Navigation theme={theme} />
-      <HomeContent theme={theme} />
+      <HomeContent />
       <div className="flex flex-col dark:bg-gray-800 bg-white">
         <CustomSearchPanel />
-        <Features theme={theme} />
+        <Features />
       </div>
 
       <Footer />

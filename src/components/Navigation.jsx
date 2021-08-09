@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 /* This example requires Tailwind CSS v2.0+ */
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -180,7 +180,7 @@ export default function Navigation() {
                                     onClick={() => history.push('/profile/1')}
                                     className="p-2 cursor-pointer pl-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600"
                                   >
-                                    <p className="text-base flex items-center link-hover text-left font-medium dark:text-white text-gray-900 mb-0">
+                                    <p className="text-base flex items-center text-left font-medium dark:text-white text-gray-900 mb-0">
                                       <RiProfileLine className="mr-2" />
                                       Profile one
                                     </p>
@@ -189,7 +189,7 @@ export default function Navigation() {
                                     onClick={() => history.push('/profile/2')}
                                     className="rounded-lg pl-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 p-2"
                                   >
-                                    <p className="text-base flex items-center text-left link-hover font-medium dark:text-white text-gray-900 mb-0">
+                                    <p className="text-base flex items-center text-left  font-medium dark:text-white text-gray-900 mb-0">
                                       <RiProfileLine className="mr-2" />
                                       Profile two
                                     </p>

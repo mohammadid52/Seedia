@@ -10,6 +10,10 @@ import BusinessStepOne from 'pages/account/business/StepOne'
 import BusinessStepTwo from 'pages/account/business/StepTwo'
 import ChooseAccount from 'pages/account/other/ChooseAccount'
 import { useUserContext } from 'context/UserContext'
+import ProfileTwo from 'pages/profile/ProfileTwo'
+import DashboardHeader from 'pages/DashboardHeader'
+import { useRouter } from 'hooks/useRouter'
+import Navigation from 'components/Navigation'
 
 // import BusinessStepTwo from 'pages/account/business/StepTwo'
 
@@ -87,8 +91,18 @@ const App = () => {
     }
   }, [setIsLoggedIn])
 
+  const RenderNav = () => {
+    const router = useRouter()
+    const atHome = router.pathname === '/'
+    const atAuthPages =
+      router.pathname.includes('account') ||
+      router.pathname.includes('edit-profile')
+    return atHome ? <Navigation /> : atAuthPages ? null : <DashboardHeader />
+  }
+
   return (
     <Router>
+      <RenderNav />
       <Switch>
         {/* This is common page */}
         <Route exact path="/" component={Welcome} />
@@ -101,6 +115,7 @@ const App = () => {
           <Dashboard user={user} accountInfo={accountInfo} />
         </Route>
         <Route exact path="/profile/1" component={Profile} />
+        <Route exact path="/profile/2" component={ProfileTwo} />
         <Route exact path="/choose-account" component={ChooseAccount} />
         {/* <Route exact path="/email-verification" component={EmailVerification} /> */}
 

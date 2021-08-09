@@ -1,12 +1,4 @@
 import React, { Fragment } from 'react'
-import {
-  compose,
-  pure,
-  withProps,
-  lifecycle,
-  withHandlers,
-  withState,
-} from 'recompose'
 
 import usa from 'assets/images/countries/usa.png'
 
@@ -16,7 +8,7 @@ import { classNames } from 'utils/classNames'
 import { countries } from 'values/values'
 // import { Col } from 'reactstrap'
 
-const WorldListPopover = ({ changeCountry }) => {
+const WorldListPopover = () => {
   return (
     <Popover className="relative z-100 dark:bg-gray-800 bg-white">
       {({ open }) => (
@@ -145,7 +137,7 @@ const navigation = {
   ],
 }
 
-const Footer = ({ changeCountry }) => {
+const Footer = () => {
   const year = new Date().getFullYear()
   return (
     <footer
@@ -205,7 +197,7 @@ const Footer = ({ changeCountry }) => {
                     </li>
                   ))}
                   <li>
-                    <WorldListPopover changeCountry={changeCountry} />
+                    <WorldListPopover />
                   </li>
                 </ul>
               </div>
@@ -269,55 +261,4 @@ const Footer = ({ changeCountry }) => {
   )
 }
 
-export default compose(
-  withProps(() => ({
-    locationRef: React.createRef(),
-  })),
-  withState('extraRunType', 'setExtraRunType', null),
-  withState(
-    'worldwideLocationPopoverIsOpen',
-    'setWorldwideLocationPopoverStatus',
-    false
-  ),
-
-  withHandlers({
-    openWorldWideLocationPopover:
-      ({ setWorldwideLocationPopoverStatus, worldwideLocationPopoverIsOpen }) =>
-      () => {
-        setWorldwideLocationPopoverStatus(!worldwideLocationPopoverIsOpen)
-      },
-    closeWorldWideLocationPopover:
-      ({ setWorldwideLocationPopoverStatus, worldwideLocationPopoverIsOpen }) =>
-      () => {
-        setWorldwideLocationPopoverStatus(!worldwideLocationPopoverIsOpen)
-      },
-    handleClickOutside:
-      ({
-        locationRef,
-        setWorldwideLocationPopoverStatus,
-        worldwideLocationPopoverIsOpen,
-      }) =>
-      (event) => {
-        if (
-          locationRef.current &&
-          !locationRef.current.contains(event.target)
-        ) {
-          setWorldwideLocationPopoverStatus(false)
-        }
-      },
-    changeCountry: () => (countryCode) => {
-      if (countryCode === 'NL') {
-        window.location.assign('http://tradingpost13rms.nl')
-      }
-    },
-  }),
-  lifecycle({
-    componentDidMount() {
-      document.addEventListener('mousedown', this.props.handleClickOutside)
-    },
-    componentWillUnmount() {
-      document.removeEventListener('mousedown', this.props.handleClickOutside)
-    },
-  }),
-  pure
-)(Footer)
+export default Footer

@@ -1,3 +1,5 @@
+import React from 'react'
+
 const Layout = ({
   firstCol,
   secondCol,
@@ -40,4 +42,4 @@ const Layout = ({
     </div>
   )
 }
-export default Layout
+export default React.memo(Layout)

@@ -1,11 +1,26 @@
 import Card from 'components/atoms/Card'
 import React from 'react'
 import faker from 'faker'
+import Button from 'components/atoms/Button'
+import { AiOutlineEdit } from 'react-icons/ai'
 
 const About = () => {
   return (
     <Card
       cardTitle="About"
+      withCardHeadings={
+        <>
+          <Button
+            secondary
+            className="mr-3"
+            invert
+            bgColor="gray"
+            Icon={AiOutlineEdit}
+            size="sm"
+            label={'Edit'}
+          />
+        </>
+      }
       content={
         <div className="space-y-4">
           <div className="current-company">

@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon, MenuIcon } from '@heroicons/react/outline'
 import {
@@ -25,6 +25,7 @@ import { FaAdversal, FaMoneyBillAlt, FaConnectdevelop } from 'react-icons/fa'
 import { MdFindReplace, MdAttachMoney, MdLanguage } from 'react-icons/md'
 import { SiGoogleanalytics } from 'react-icons/si'
 import { FiActivity } from 'react-icons/fi'
+import { useUserContext } from 'context/UserContext'
 
 const settings = [
   {
@@ -168,8 +169,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function DashboardHeader() {
-  const [darkMode, setDarkMode] = useState(false)
+const DashboardHeader = () => {
+  const { setDarkMode, darkMode } = useUserContext()
+
   const navClass =
     'flex flex-col items-center font-medium text-base dark:text-gray-400 text-gray-500 link-hover'
   return (
@@ -473,3 +475,5 @@ export default function DashboardHeader() {
     </Popover>
   )
 }
+
+export default DashboardHeader

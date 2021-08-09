@@ -9,11 +9,11 @@ function classNames(...classes) {
 
 const Selector = ({
   list,
-  placeholder,
-  label,
-  required,
-  selectedItem,
-  onSelect,
+  placeholder = '',
+  label = '',
+  required = false,
+  selectedItem = '',
+  onSelect = () => {},
   border = true,
   error = '',
   keyName = 'name',

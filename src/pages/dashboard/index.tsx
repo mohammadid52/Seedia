@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Post from 'components/Post'
 import SideCard from 'components/SideCard'
-import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
 import ListCard from 'components/ListCard'
 import PostInput from './PostInput'
@@ -53,7 +52,6 @@ const Dashboard = ({ user, accountInfo }: { user: any; accountInfo: any }) => {
             collapsed ? 'collapsed' : 'toggled'
           }`}
         >
-          <DashboardHeader />
           <DashboardLayout
             firstColClass="md:hidden lg:block sm:hidden xl:block"
             firstCol={<PersonalCard user={user} accountInfo={accountInfo} />}
