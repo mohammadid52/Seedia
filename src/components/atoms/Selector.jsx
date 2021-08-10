@@ -21,7 +21,7 @@ const Selector = ({
   return (
     <Listbox value={selectedItem} onChange={onSelect}>
       {({ open }) => (
-        <>
+        <div>
           {label && (
             <Listbox.Label className="block dark:text-white text-sm font-medium text-gray-700">
               {label}{' '}
@@ -107,7 +107,7 @@ const Selector = ({
               </Listbox.Options>
             </Transition>
           </div>
-        </>
+        </div>
       )}
     </Listbox>
   )

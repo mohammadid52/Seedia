@@ -16,6 +16,10 @@ const NormalFormInput = ({
   showPasswordButton = false,
   optional = false,
   fullWidth = false,
+  textarea = false,
+  className = '',
+  rows = 4,
+  cols = 100,
   ...props
 }: {
   label?: string
@@ -26,12 +30,16 @@ const NormalFormInput = ({
   type?: string
   placeholder?: string
   error?: string
-  value: string
+  className?: string
+  value: string | undefined
   onChange: () => void
   gridClass?: string
   props?: any
   showPasswordButton?: boolean
   fullWidth?: boolean
+  textarea?: boolean
+  rows?: number
+  cols?: number
 }) => {
   const errorClass = `border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500`
   const [showPass, setShowPass] = useState(false)
@@ -58,20 +66,41 @@ const NormalFormInput = ({
 
       <div>
         <div className="mt-1 relative rounded-md shadow-sm">
-          <input
-            {...props}
-            id={id}
-            value={value}
-            name={name}
-            onChange={onChange}
-            placeholder={placeholder}
-            type={showPasswordButton ? (showPass ? 'text' : 'password') : type}
-            className={`block border w-full pr-10 ${
-              error
-                ? errorClass
-                : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
-            } sm:text-sm p-2 rounded-md dark:placeholder-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white`}
-          />
+          {textarea ? (
+            <textarea
+              {...props}
+              id={id}
+              value={value}
+              name={name}
+              onChange={onChange}
+              placeholder={placeholder}
+              rows={rows}
+              cols={cols}
+              className={`block border w-full pr-10 ${
+                error
+                  ? errorClass
+                  : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
+              } sm:text-sm p-2 rounded-md dark:placeholder-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white ${className}`}
+            />
+          ) : (
+            <input
+              {...props}
+              id={id}
+              value={value}
+              name={name}
+              onChange={onChange}
+              placeholder={placeholder}
+              type={
+                showPasswordButton ? (showPass ? 'text' : 'password') : type
+              }
+              className={`block border w-full pr-10 ${
+                error
+                  ? errorClass
+                  : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
+              } sm:text-sm p-2 rounded-md dark:placeholder-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white ${className}`}
+            />
+          )}
+
           <div className="flex items-center absolute transition-all duration-200 inset-y-0 right-0 pr-3 ">
             {error && (
               <div className=" pointer-events-none">

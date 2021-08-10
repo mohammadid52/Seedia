@@ -5,6 +5,7 @@ import moment from 'moment'
 import Button from 'components/atoms/Button'
 import { AiOutlineEdit } from 'react-icons/ai'
 import Modal from 'components/atoms/Modal'
+import NormalFormInput from 'components/atoms/NormalFormInput'
 
 const Experiences = ({ experience }: { experience: any }) => {
   const [showModal, setShowModal] = useState(false)
@@ -79,19 +80,35 @@ const Experiences = ({ experience }: { experience: any }) => {
               Add New Experience:
             </h3>
             <div className="flex border border-gray-200 dark:border-gray-700 p-4 rounded-md items-center flex-col space-y-2">
-              <div className="flex items-center space-x-2">
-                {/* <NormalFormInput
-                  placeholder="Enter new language"
+              <div
+                style={{ maxWidth: '50rem' }}
+                className="grid grid-cols-1 sm:grid-cols-2   gap-3 "
+              >
+                <NormalFormInput
+                  placeholder="Enter job title"
                   value={''}
                   onChange={() => {}}
-                  fullWidth
                 />
-
-                <Selector
-                  list={languageKnownLevel}
-                  placeholder="Select level"
-                  // selectedItem={languageKnownLevel[0].name}
-                /> */}
+                <NormalFormInput
+                  placeholder="Enter company name"
+                  value={''}
+                  onChange={() => {}}
+                />
+                <NormalFormInput
+                  placeholder="Enter company address"
+                  value={''}
+                  onChange={() => {}}
+                />
+                <NormalFormInput
+                  placeholder="Enter joined at date"
+                  value={''}
+                  onChange={() => {}}
+                />
+                <NormalFormInput
+                  placeholder="Enter left at date"
+                  value={''}
+                  onChange={() => {}}
+                />
               </div>
               <Button size="sm" gradient label="Add" fullWidth />
             </div>
