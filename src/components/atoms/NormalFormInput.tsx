@@ -32,7 +32,7 @@ const NormalFormInput = ({
   error?: string
   className?: string
   value: string | undefined
-  onChange: () => void
+  onChange: (e: any) => void
   gridClass?: string
   props?: any
   showPasswordButton?: boolean

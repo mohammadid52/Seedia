@@ -1,21 +1,13 @@
+import { useState } from 'react'
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
 import NormalFormInput from 'components/atoms/NormalFormInput'
 import Selector from 'components/atoms/Selector'
+import { ILanguage } from 'interfaces/UniversalInterface'
 import { map } from 'lodash'
-import React, { useState } from 'react'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { BiTrashAlt } from 'react-icons/bi'
-const languages = [
-  {
-    langName: 'English',
-    langLevel: 'Full Professional Profiency',
-  },
-  { langName: 'French', langLevel: 'Intermediate' },
-  { langName: 'Spanish', langLevel: 'Intermediate' },
-  { langName: 'Polish', langLevel: 'Full Professional Profiency' },
-]
 
 const languageKnownLevel = [
   { name: 'Beginner', id: '1' },
@@ -23,7 +15,7 @@ const languageKnownLevel = [
   { name: 'Fluent', id: '3' },
 ]
 
-const Languages = () => {
+const Languages = ({ languages }: { languages: ILanguage[] }) => {
   const [showModal, setShowModal] = useState(false)
 
   return (

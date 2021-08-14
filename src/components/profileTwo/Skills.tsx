@@ -2,21 +2,13 @@ import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
 import NormalFormInput from 'components/atoms/NormalFormInput'
+import { IProfileTwo } from 'interfaces/UniversalInterface'
 import { map } from 'lodash'
 import { useState } from 'react'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { BiTrashAlt } from 'react-icons/bi'
 
-const Skills = () => {
-  const skills = [
-    'User Interface Design',
-    'Web Design',
-    'Mobile Design',
-    'User Experience Knowledge',
-    'CSS / HTML',
-    'Fast Learning',
-  ]
-
+const Skills = ({ skills }: { skills: IProfileTwo['skills'] }) => {
   const [showModal, setShowModal] = useState(false)
 
   return (
@@ -29,13 +21,13 @@ const Skills = () => {
               className="overflow-y-auto  custom-scroll-mini darker"
             >
               <ol className="space-y-6 list-none py-4 ">
-                {map(skills, (skill) => (
+                {map(skills, (skill, idx: number) => (
                   <>
                     <li
                       className="text-gray-900 on-hover-container p-4  relative dark:text-white flex items-center  cursor-pointer text-left"
-                      key={skill}
+                      key={skill.name + idx}
                     >
-                      {skill}
+                      {skill.name}
                       <span className="absolute on-hover-item pr-4 right-0">
                         <BiTrashAlt className="hover:bg-gray-600 p-2 h-8 w-8  rounded-md text-red-500" />
                       </span>
@@ -86,12 +78,12 @@ const Skills = () => {
             className="overflow-y-auto  custom-scroll-mini"
           >
             <ol className="space-y-6 list-disc px-8 py-4 ">
-              {map(skills, (skill) => (
+              {map(skills, (skill, idx: number) => (
                 <li
                   className="text-gray-900 dark:text-white  cursor-pointer text-left"
-                  key={skill}
+                  key={skill.name + idx}
                 >
-                  {skill}
+                  {skill.name}
                 </li>
               ))}
             </ol>

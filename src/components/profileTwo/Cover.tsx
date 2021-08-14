@@ -1,8 +1,7 @@
 import Card from 'components/atoms/Card'
+import { IAbout } from 'interfaces/UniversalInterface'
 
-import React from 'react'
-
-const Cover = ({ user }: { user: any }) => {
+const Cover = ({ about }: { about: IAbout }) => {
   return (
     <div className="">
       <Card
@@ -12,7 +11,7 @@ const Cover = ({ user }: { user: any }) => {
               <span className="sr-only">13RMS</span>
               <img
                 className="h-56 w-auto sm:h-48 rounded-full shadow-xl"
-                src={user.userImage}
+                src={about.userImage}
                 alt=""
               />
             </div>
@@ -20,9 +19,9 @@ const Cover = ({ user }: { user: any }) => {
               <div className="overflow-hidden">
                 <div className=" px-4 pb-5 sm:px-6">
                   <div className="dark:text-white text-gray-900 text-xl font-medium border-b border-gray-200 dark:border-gray-600 pb-4 ">
-                    {user.jobTitle}{' '}
+                    {about.jobTitle}{' '}
                     <span className="ml-2 dark:text-gray-400 text-gray-500 text-sm">
-                      - {user.companyName}
+                      - {about.companyName}
                     </span>
                   </div>
 
@@ -32,7 +31,7 @@ const Cover = ({ user }: { user: any }) => {
                         Full name
                       </dt>
                       <dd className="mt-1 text-sm text-gray-900 dark:text-white">
-                        {user.fullName}
+                        {about.fullName}
                       </dd>
                     </div>
 
@@ -41,7 +40,7 @@ const Cover = ({ user }: { user: any }) => {
                         Email address
                       </dt>
                       <dd className="mt-1 text-sm text-gray-900 dark:text-white">
-                        {user.email}
+                        {about.email}
                       </dd>
                     </div>
                     <div className="sm:col-span-1">
@@ -49,7 +48,7 @@ const Cover = ({ user }: { user: any }) => {
                         Company
                       </dt>
                       <dd className="mt-1 text-sm text-gray-900 dark:text-white">
-                        {user.companyName}
+                        {about.companyName}
                       </dd>
                     </div>
                     <div className="sm:col-span-1">
@@ -57,7 +56,7 @@ const Cover = ({ user }: { user: any }) => {
                         Company address
                       </dt>
                       <dd className="mt-1 text-sm text-gray-900 dark:text-white">
-                        {user.companyAddress}
+                        {about.companyAddress}
                       </dd>
                     </div>
                   </dl>

@@ -1,23 +1,14 @@
+import { useState } from 'react'
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
 import NormalFormInput from 'components/atoms/NormalFormInput'
+import { IAward } from 'interfaces/UniversalInterface'
 import { map } from 'lodash'
-import React, { useState } from 'react'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { BiTrashAlt } from 'react-icons/bi'
 
-const awards = [
-  {
-    awardName: 'Behance Interaction Featured',
-    awardFor: 'User Interface Design',
-  },
-  { awardName: 'Behance Product Design Featured', awardFor: 'Web Design' },
-  { awardName: 'Site Of The Month by Awwwards', awardFor: 'Web Design' },
-  { awardName: 'CSS Beauty Award', awardFor: 'UI / User Experience Design' },
-]
-
-const Awards = () => {
+const Awards = ({ awards }: { awards: IAward[] }) => {
   const [showModal, setShowModal] = useState(false)
   return (
     <>

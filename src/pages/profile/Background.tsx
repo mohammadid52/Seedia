@@ -1,18 +1,53 @@
 import Card from 'components/atoms/Card'
-import React, { useState } from 'react'
-import faker from 'faker'
+import { useEffect, useState } from 'react'
 import Section from 'components/atoms/Section'
 import { CgDetailsMore } from 'react-icons/cg'
 import { AiOutlineEdit } from 'react-icons/ai'
 import Button from 'components/atoms/Button'
-import { map } from 'lodash'
+import { isEmpty, map } from 'lodash'
 import Modal from 'components/atoms/Modal'
 import { IBackground } from 'interfaces/UniversalInterface'
 import NormalFormInput from 'components/atoms/NormalFormInput'
 import Label from 'components/atoms/Label'
+import Divider from 'components/atoms/Divider'
 
-const Background = ({ data }: { data: IBackground }) => {
+const Background = ({
+  data,
+  setData,
+}: {
+  data: IBackground
+  setData: (data: IBackground) => any
+}) => {
   const [showModal, setShowModal] = useState(false)
+
+  const onChange = (e: any) => {
+    const { value, id } = e.target
+
+    setFields({ ...fields, [id]: value })
+  }
+  const [fields, setFields] = useState<{
+    interest: string
+    summary: string
+    interests: IBackground['interests']
+  }>({
+    interest: '',
+    interests: [],
+    summary: '',
+  })
+
+  useEffect(() => {
+    if (!isEmpty(data)) {
+      setFields({ ...fields, summary: data.summary, interests: data.interests })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
+
+  const onInterestAdd = () => {
+    setFields({
+      ...fields,
+      interests: [...fields.interests, { name: fields.interest }],
+    })
+  }
 
   return (
     <>
@@ -29,28 +64,42 @@ const Background = ({ data }: { data: IBackground }) => {
             <div className="grid gap-6 grid-cols-1">
               <NormalFormInput
                 label="Summary"
-                value={data.summary}
+                value={fields.summary}
+                id={'summary'}
                 textarea
                 gridClass="col-span-2"
-                onChange={() => {}}
+                onChange={onChange}
+                placeholder="Enter interest name"
               />
-              <div className="flex col-span-2 items-center gap-x-4 gap-y-2 flex-wrap justify-start">
+              <Divider />
+
+              <div className="relative flex col-span-2 items-center gap-x-4 gap-y-2 flex-wrap justify-start">
+                <Label text="Skills" className="absolute -top-6" />
                 <div className="gap-x-4 flex items-center">
-                  {map(data.interests, (skill: any) => (
-                    <Button gradient invert bgColor="pink" label={skill.name} />
+                  {map(fields.interests, (interest: any) => (
+                    <Button
+                      gradient
+                      invert
+                      bgColor="pink"
+                      label={interest.name}
+                    />
                   ))}
                 </div>
               </div>
               <div className="flex items-center gap-x-4 ">
                 <NormalFormInput
-                  value={data.summary}
+                  value={fields.interest}
+                  id="interest"
                   gridClass="col-span-2"
-                  onChange={() => {}}
+                  onChange={(e) =>
+                    setFields({ ...fields, interest: e.target.value })
+                  }
                 />
                 <Button
                   gradient
                   size="sm"
                   className=""
+                  onClick={onInterestAdd}
                   bgColor="pink"
                   label={'+ Add New'}
                 />
@@ -125,16 +174,16 @@ const Background = ({ data }: { data: IBackground }) => {
                       }`}
                     >
                       <h4 className="job_title font-medium dark:text-white text-gray-900">
-                        {faker.name.jobTitle()}
+                        {exp.jobTitle}
                       </h4>
                       <h5 className="company_name link-hover block text-left cursor-pointer ">
-                        {faker.company.companyName()}
+                        {exp.companyName}
                       </h5>
                       <span className="job_duration text-gray-300 font-semibold text-sm">
-                        February {faker.date.past().getFullYear()} - Present
+                        February {exp.startedAt} - Present
                       </span>
                       <p className="company_description text-gray-400 mt-3">
-                        {faker.lorem.paragraph(2)}
+                        {exp.description}
                       </p>
                     </div>
                   ))}

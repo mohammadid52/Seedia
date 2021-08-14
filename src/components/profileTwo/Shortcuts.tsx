@@ -1,4 +1,3 @@
-import React from 'react'
 import { map } from 'lodash'
 const shortcuts = ['Experience', 'Skills', 'Awards', 'Education', 'Language']
 

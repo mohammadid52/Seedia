@@ -1,6 +1,6 @@
-import React from 'react'
+import { IAbout } from 'interfaces/UniversalInterface'
 
-const Header = ({ user, headerRef }: { user: any; headerRef: any }) => {
+const Header = ({ about, headerRef }: { about: IAbout; headerRef: any }) => {
   return (
     <div
       ref={headerRef}
@@ -12,10 +12,10 @@ const Header = ({ user, headerRef }: { user: any; headerRef: any }) => {
         </p>
         <div className="mx-6">
           <span className="dark:text-gray-400 text-gray-500 text-base font-medium ">
-            {user.jobTitle}
+            {about.jobTitle}
           </span>
           <p className="dark:text-white text-gray-900   text-3xl font-semibold ">
-            {user.fullName}
+            {about.fullName}
           </p>
         </div>
       </div>

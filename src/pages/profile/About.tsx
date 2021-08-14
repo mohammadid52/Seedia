@@ -30,7 +30,7 @@ const About = ({ data }: { data: IAbout }) => {
               />
               <NormalFormInput
                 label="Previous company name"
-                value={data.previoudCompany}
+                value={data.previousCompany}
                 onChange={() => {}}
               />
               <NormalFormInput
@@ -88,7 +88,7 @@ const About = ({ data }: { data: IAbout }) => {
                 Previous
               </span>
               <span className="data block text-sm  text-gray-900 dark:text-white">
-                {data.previoudCompany}
+                {data.previousCompany}
               </span>
             </div>
 

@@ -6,8 +6,9 @@ import Button from 'components/atoms/Button'
 import { AiOutlineEdit } from 'react-icons/ai'
 import Modal from 'components/atoms/Modal'
 import NormalFormInput from 'components/atoms/NormalFormInput'
+import { IExperience } from 'interfaces/UniversalInterface'
 
-const Experiences = ({ experience }: { experience: any }) => {
+const Experiences = ({ experience }: { experience: IExperience[] }) => {
   const [showModal, setShowModal] = useState(false)
   return (
     <div>
