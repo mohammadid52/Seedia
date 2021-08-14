@@ -10,4 +10,5 @@ export const links = {
   STUDENT_STEP_2: '/account/student/edit-profile/location',
   BUSINESS_STEP_1: '/account/business/edit-profile/stepOne',
   BUSINESS_STEP_2: '/account/business/edit-profile/stepTwo',
+  BASE_API_URL: 'http://localhost:3005',
 }

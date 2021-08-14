@@ -3,14 +3,14 @@ import Loading from 'components/Loading'
 import Copyright from 'components/Copyright'
 import Button from 'components/atoms/Button'
 import { useHistory } from 'react-router-dom'
-
+import axios from 'axios'
 import FormInput from 'components/atoms/FormInput'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { wait } from 'utils/wait'
 import { links } from 'constants/Links'
 
 import { useUserContext } from 'context/UserContext'
+import Error from 'components/alerts/Error'
 
 const Signup = () => {
   const history = useHistory()
@@ -18,25 +18,37 @@ const Signup = () => {
   const { setValues, values } = useUserContext()
 
   const validationSchema = Yup.object({
+    firstName: Yup.string().required('Please enter your first name'),
+    lastName: Yup.string().required('Please enter your last name'),
     email: Yup.string()
       .email('Invalid email address')
       .required('Please add email address'),
-    password: Yup.string().required('Please add password'),
+    password: Yup.string()
+      .min(6, 'Password must be atleast 6 characters long')
+      .required('Please add password'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Password must match')
       .required('Please add confirm password'),
   })
 
   const [saving, setSaving] = useState(false)
+  const [errors, setErrors] = useState([])
 
-  const addUserToLS = () => {
-    window.localStorage.setItem('user', JSON.stringify(values.user))
-    console.log('Successfully added user to local storage')
+  const apiCall = async (values) => {
+    const res = await axios.post(links.BASE_API_URL + '/auth/register', {
+      password: values.password,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+    })
+    if (res.status === 409) {
+      setErrors([...errors, 'User already exists'])
+    }
   }
 
   const onSubmit = (_values) => {
-    setSaving(true)
-    wait(3000).then(() => {
+    try {
+      setSaving(true)
       setValues({
         ...values,
         user: {
@@ -46,10 +58,14 @@ const Signup = () => {
           email: _values.email,
         },
       })
-      addUserToLS()
+
+      apiCall(_values)
+      // history.push(links.CHOOSE_ACCOUNT)
+    } catch (error) {
+      console.error(error)
+    } finally {
       setSaving(false)
-      history.push(links.CHOOSE_ACCOUNT)
-    })
+    }
   }
 
   setTimeout(() => {
@@ -89,6 +105,7 @@ const Signup = () => {
                   label="First name"
                   id="firstName"
                   name="firstName"
+                  required
                 />
 
                 <FormInput
@@ -96,6 +113,7 @@ const Signup = () => {
                   label="Last name"
                   id="lastName"
                   name="lastName"
+                  required
                 />
               </div>
 
@@ -139,6 +157,9 @@ const Signup = () => {
                   Cookie Policy
                 </a>
               </p>
+              <div hidden={errors.length === 0}>
+                <Error errors={errors} />
+              </div>
 
               <div>
                 <Button

@@ -1,7 +1,7 @@
 const path = require('path')
 const express = require('express')
 const cors = require('cors')
-const loginRouter = require('./loginRouter')
+
 const mongodb = require('mongodb')
 const authenticationRouter = require('./apis/authenticate')
 const app = express()

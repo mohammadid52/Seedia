@@ -2,13 +2,14 @@
 const router = require('express').Router()
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+const { responseMsg } = require('../utils')
 require('dotenv').config()
 
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body
     if (!(email && password)) {
-      res.status(400).send('All input is required')
+      res.status(400).json(responseMsg('error', 'All input is required'))
     }
     const usersCollection = res.locals.usersCollection
     const user = await usersCollection.findOne({ email })
@@ -24,12 +25,18 @@ router.post('/login', async (req, res) => {
         )
         user.access_token = token
 
-        return res.status(200).json(user)
+        return res
+          .status(200)
+          .json(responseMsg('success', 'Logged In Successfully', user))
       } else {
-        return res.status(401).send('Invalid password or email')
+        return res
+          .status(401)
+          .json(responseMsg('error', 'Invalid password or email'))
       }
     } else {
-      res.status(401).send("User don't exist. Please register")
+      res
+        .status(401)
+        .json(responseMsg('error', "User don't exist. Please register"))
     }
   } catch (error) {
     console.error(error)
@@ -37,22 +44,24 @@ router.post('/login', async (req, res) => {
 })
 router.post('/register', async (req, res) => {
   try {
-    const { email, password } = req.body
+    const { email, password, firstName, lastName } = req.body
 
-    // if (!(email && password && firstName && lastName)) {
-    //   res.status(400).send('All fields are required')
-    // }
+    if (!(email && password && firstName && lastName)) {
+      res.status(400).json(responseMsg('error', 'Please add all fields'))
+    }
     const usersCollection = res.locals.usersCollection
 
     const alreadyExists = await usersCollection.findOne({ email })
 
     if (alreadyExists) {
-      return res.status(409).send('User Already exits')
+      return res.status(409).json(responseMsg('error', 'User Already Exists'))
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const user = {
+      firstName,
+      lastName,
       email: email.toLowerCase(),
       password: hashedPassword,
     }
@@ -63,9 +72,6 @@ router.post('/register', async (req, res) => {
     })
     user.access_token = token
 
-    const responseMsg = (status = 'none', message = '', data = {}) => {
-      return { status, message, data }
-    }
     delete user.password
 
     return res
