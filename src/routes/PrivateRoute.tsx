@@ -10,22 +10,24 @@ const PrivateRoute = ({
   isPublic = false,
   children,
   isUser,
+  component: Component = null,
   ...rest
 }: {
   isPublic: boolean
   isUser: boolean
   children: any
+  component?: any
 }) => {
   const onPublic = (isuser: boolean) => {
     if (isuser) {
       return <Redirect to="/dashboard" />
     } else {
-      return children
+      return Component ? Component : children
     }
   }
   const onPrivate = (isuser: boolean) => {
     if (isuser) {
-      return children
+      return Component ? Component : children
     } else {
       return <Redirect to="/login" />
     }

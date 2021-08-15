@@ -286,12 +286,20 @@ const App = () => {
           <Switch>
             {/* This is common page */}
             <Route exact path="/" component={Welcome} />
+
             {/* @ts-ignore */}
             <PrivateRoute isPublic isUser={isUser} exact path="/login">
               <Login />
             </PrivateRoute>
 
-            <Route exact path="/signup" component={Signup} />
+            <PrivateRoute
+              isPublic
+              isUser={isUser}
+              // @ts-ignore
+              exact
+              path="/signup"
+              component={Signup}
+            />
             <PrivateRoute
               // @ts-ignore
               exact
@@ -300,41 +308,62 @@ const App = () => {
             >
               <Dashboard user={profileOne} />
             </PrivateRoute>
-            <Route exact path="/profile/1">
+            {/* @ts-ignore */}
+            <PrivateRoute isUser={isUser} exact path="/profile/1">
               <Profile user={profileOne} />
-            </Route>
-            <Route exact path="/profile/2">
+            </PrivateRoute>
+            {/* @ts-ignore */}
+            <PrivateRoute isUser={isUser} exact path="/profile/2">
               <ProfileTwo user={profileTwo} />
-            </Route>
-            <Route exact path="/choose-account" component={ChooseAccount} />
+            </PrivateRoute>
+            <PrivateRoute
+              // @ts-ignore
+              exact
+              isUser={isUser}
+              path="/choose-account"
+              component={ChooseAccount}
+            />
             {/* <Route exact path="/email-verification" component={EmailVerification} /> */}
 
             {/* Personal Account routes */}
-            <Route
+            <PrivateRoute
+              // @ts-ignore
               path="/account/personal/edit-profile/company"
+              isUser={isUser}
               component={PersonalSecondStep}
             />
-            <Route path="/account/personal/edit-profile/location">
+            {/* @ts-ignore */}
+            <PrivateRoute path="/account/personal/edit-profile/location">
               <LocationStep accountType="personal" />
-            </Route>
+            </PrivateRoute>
 
             {/* Student Account routes */}
-            <Route
+            <PrivateRoute
+              // @ts-ignore
               path="/account/student/edit-profile/education"
+              isUser={isUser}
               component={EducationStep}
             />
-            <Route path="/account/student/edit-profile/location">
+            <PrivateRoute
+              // @ts-ignore
+              path="/account/student/edit-profile/location"
+              isUser={isUser}
+            >
               <LocationStep accountType="student" />
-            </Route>
+            </PrivateRoute>
 
             {/* Business Account routes */}
-            <Route
+            <PrivateRoute
+              // @ts-ignore
               path="/account/business/edit-profile/stepOne"
+              isUser={isUser}
               component={BusinessStepOne}
             />
-            <Route
+            <PrivateRoute
+              // @ts-ignore
               path="/account/business/edit-profile/stepTwo"
               component={BusinessStepTwo}
+              isUser={isUser}
             />
 
             {/* Error Page */}
