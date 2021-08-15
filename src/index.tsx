@@ -8,16 +8,16 @@ import UserContextProvider from 'context/UserContext'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Provider } from 'react-redux'
 import { store } from 'state'
-import AuthWrapper from 'containers/AuthWrapper'
+import NotFound from 'pages/NotFound'
 
 // @ts-ignore
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
-    <div role="alert">
-      <p>Something went wrong:</p>
-      <pre>{error.message}</pre>
-      <button onClick={resetErrorBoundary}>Try again</button>
-    </div>
+    <NotFound
+      errorCode={'403'}
+      errorTitle={'Oops! Something went wrong'}
+      errorMessage={error.message}
+    />
   )
 }
 
@@ -27,13 +27,11 @@ function ErrorFallback({ error, resetErrorBoundary }) {
 const MainApp = () => (
   <Suspense fallback={<Loading />}>
     <Provider store={store}>
-      {/* <AuthWrapper> */}
       <UserContextProvider>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <App />
         </ErrorBoundary>
       </UserContextProvider>
-      {/* </AuthWrapper> */}
     </Provider>
   </Suspense>
 )

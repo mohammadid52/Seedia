@@ -15,7 +15,7 @@ const PrivateRoute = ({
 }: {
   isPublic: boolean
   isUser: boolean
-  children: any
+  children?: any
   component?: any
 }) => {
   const onPublic = (isuser: boolean) => {

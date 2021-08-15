@@ -1,5 +1,9 @@
 import * as types from 'state/Redux/constants'
 import jwt_decode from 'jwt-decode'
+import axios from 'axios'
+import { links } from 'constants/Links'
+import { network } from 'helpers'
+import { isEmpty } from 'lodash'
 
 export const logOut = () => async (dispatch) => {
   try {
@@ -30,31 +34,21 @@ export const loader = (val) => (dispatch) => {
   dispatch({ type: types.LOADER, data: val })
 }
 
-const getAccessToken = () => {
-  const token = localStorage.getItem('access_token') || null
-  return token
+const getUser = async () => {
+  const { data } = await network.post('/user')
+  return data
 }
 
-export const loadUser = () => (dispatch) => {
+export const loadUser = () => async (dispatch) => {
   try {
     dispatch({ type: types.LOADER, data: false })
 
-    const access_token = getAccessToken()
-
-    // First check if token is available or not
-    // if it is available then check if that object contains necessary data or not
-    // if it contains then set user to true
-    // else set false
-    if (access_token) {
-      const decoded = jwt_decode(access_token)
-
-      if (decoded) {
-        dispatch({ type: types.IS_LOGGED_IN, data: true })
-      } else {
-        dispatch({ type: types.IS_LOGGED_IN, data: false })
-      }
+    const user = await getUser()
+    console.log('🚀 ~ file: authActions.js ~ line 47 ~ loadUser ~ user', user)
+    if (!isEmpty(user)) {
+      dispatch({ type: types.IS_LOGGED_IN, data: user })
     } else {
-      dispatch({ type: types.IS_LOGGED_IN, data: false })
+      dispatch({ type: types.IS_LOGGED_IN, data: {} })
     }
   } catch (error) {
   } finally {

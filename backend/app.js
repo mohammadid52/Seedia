@@ -6,6 +6,8 @@ const mongodb = require('mongodb')
 const authenticationRouter = require('./apis/authenticate')
 const app = express()
 const bodyParser = require('body-parser')
+const auth = require('./middleware/verifyAuth')
+const { responseMsg } = require('./utils')
 const client = mongodb.MongoClient
 
 const URI = 'mongodb://localhost:27017/'
@@ -30,11 +32,23 @@ client.connect(
       next()
     }
 
-    app.get('/test', async (req, res) => {
-      const users = await usersCollection.find({}).toArray()
-      res.json(users)
-    })
+    app.post('/user', auth, async (req, res) => {
+      const token = req.user
 
+      const user = await usersCollection.findOne({
+        insertedId: token._id,
+        // _id: token._id,
+      })
+
+      if (user) {
+        delete user.password
+        return res
+          .status(202)
+          .json(responseMsg('success', 'Authentication successfully', user))
+      } else {
+        return res.status(403).json(responseMsg('error', 'Invalid user access'))
+      }
+    })
     app.use('/auth', passData, authenticationRouter)
 
     app.get('/', (req, res) => {

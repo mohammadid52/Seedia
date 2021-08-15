@@ -3,7 +3,7 @@ import * as types from 'state/Redux/constants'
 const initialState = {
   loading: false,
   loaded: false,
-  isLoggedIn: false,
+  user: {},
 }
 
 const authReducer = (
@@ -24,7 +24,7 @@ const authReducer = (
     case types.IS_LOGGED_IN:
       return {
         ...state,
-        isLoggedIn: action.data,
+        user: action.data,
       }
 
     case types.START_LOADING:

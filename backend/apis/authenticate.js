@@ -3,7 +3,20 @@ const router = require('express').Router()
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const { responseMsg } = require('../utils')
+
 require('dotenv').config()
+
+const generateToken = (user) => {
+  return jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    },
+    process.env.SECRET_KEY,
+    { expiresIn: '10days' }
+  )
+}
 
 router.post('/login', async (req, res) => {
   try {
@@ -16,13 +29,7 @@ router.post('/login', async (req, res) => {
     if (user) {
       const matched = await bcrypt.compare(password, user.password)
       if (matched) {
-        const token = jwt.sign(
-          { user_id: user._id, email },
-          'tradingpost13rms',
-          {
-            expiresIn: '60days',
-          }
-        )
+        const token = generateToken(matched)
         user.access_token = token
 
         return res
@@ -65,11 +72,10 @@ router.post('/register', async (req, res) => {
       email: email.toLowerCase(),
       password: hashedPassword,
     }
-    await usersCollection.insertOne(user)
+    const _user = await usersCollection.insertOne(user)
 
-    const token = jwt.sign({ user_id: user._id, email }, 'tradingpost13rms', {
-      expiresIn: '60days',
-    })
+    const token = generateToken({ ...user, id: _user.insertedId })
+
     user.access_token = token
 
     delete user.password

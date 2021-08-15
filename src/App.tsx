@@ -14,7 +14,7 @@ import DashboardHeader from 'pages/DashboardHeader'
 import { useRouter } from 'hooks/useRouter'
 import Navigation from 'components/Navigation'
 import faker from 'faker'
-import { map } from 'lodash'
+import { isEmpty, map } from 'lodash'
 import PrivateRoute from 'routes/PrivateRoute'
 import AuthContainer from 'containers/AuthContainer'
 import { getAuth } from 'helpers'
@@ -276,7 +276,7 @@ const App = () => {
 
   const auth = useSelector((state) => getAuth(state))
 
-  const isUser = auth.isLoggedIn
+  const isUser = !isEmpty(auth.user)
 
   return (
     <Router>
@@ -298,8 +298,9 @@ const App = () => {
               // @ts-ignore
               exact
               path="/signup"
-              component={Signup}
-            />
+            >
+              <Signup />
+            </PrivateRoute>
             <PrivateRoute
               // @ts-ignore
               exact

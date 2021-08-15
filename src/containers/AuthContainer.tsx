@@ -10,6 +10,7 @@ const AuthContainer = ({ children }: any) => {
   const auth = useSelector((state) => getAuth(state))
 
   useEffect(() => {
+    // this will load user authorization
     dispatch(loadUser())
   }, [dispatch])
 
