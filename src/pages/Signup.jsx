@@ -11,6 +11,7 @@ import { links } from 'constants/Links'
 
 import { useUserContext } from 'context/UserContext'
 import Error from 'components/alerts/Error'
+import { isEmpty } from 'lodash'
 
 const Signup = () => {
   const history = useHistory()
@@ -35,19 +36,21 @@ const Signup = () => {
   const [errors, setErrors] = useState([])
 
   const apiCall = async (values) => {
-    const { data } = await axios.post(links.BASE_API_URL + '/auth/register', {
-      password: values.password,
-      firstName: values.firstName,
-      lastName: values.lastName,
-      email: values.email,
-    })
+    try {
+      const res = await axios.post(links.BASE_API_URL + '/auth/register', {
+        password: values.password,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+      })
 
-    // if (res.status === 409) {
-    //   setErrors([...errors, 'User already exists'])
-    // }
+      history.push(links.DASHBAORD)
+      localStorage.setItem('access_token', res.data.data.access_token)
+    } catch (error) {
+      setErrors(['User with this email already exists'])
+    }
 
     // set token in localStorage
-    localStorage.setItem('access_token', data.data.access_token)
   }
 
   const onSubmit = (_values) => {
@@ -64,7 +67,6 @@ const Signup = () => {
       })
 
       apiCall(_values)
-      history.push(links.DASHBAORD)
     } catch (error) {
       console.error(error)
     } finally {
