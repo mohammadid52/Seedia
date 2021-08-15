@@ -7,7 +7,7 @@ import PostInput from './PostInput'
 import PersonalCard from './AboutMe'
 import faker from 'faker'
 
-const Dashboard = ({ user, accountInfo }: { user: any; accountInfo: any }) => {
+const Dashboard = ({ user }: { user: any }) => {
   const [users, setUsers] = useState([])
 
   const BASE_URL = 'https://dummyapi.io/data/api/'
@@ -54,7 +54,7 @@ const Dashboard = ({ user, accountInfo }: { user: any; accountInfo: any }) => {
         >
           <DashboardLayout
             firstColClass="md:hidden lg:block sm:hidden xl:block"
-            firstCol={<PersonalCard user={user} accountInfo={accountInfo} />}
+            firstCol={<PersonalCard user={user} />}
             secondCol={
               <div className="">
                 <PostInput posts={posts} setPosts={setPosts} />

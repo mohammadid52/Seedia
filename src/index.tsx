@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
 import ReactDOM from 'react-dom'
 import 'styles/index.scss'
 import 'styles/index.css'
@@ -6,6 +6,10 @@ import App from 'App'
 import Loading from 'components/Loading'
 import UserContextProvider from 'context/UserContext'
 import { ErrorBoundary } from 'react-error-boundary'
+import { Provider } from 'react-redux'
+import { store } from 'state'
+import AuthWrapper from 'containers/AuthWrapper'
+
 // @ts-ignore
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -20,14 +24,18 @@ function ErrorFallback({ error, resetErrorBoundary }) {
 // latest test server
 // https://611807137e05ef00074bcb13--festive-mcclintock-bdc127.netlify.app/
 
-const MainLoader = () => (
+const MainApp = () => (
   <Suspense fallback={<Loading />}>
-    <UserContextProvider>
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <App />
-      </ErrorBoundary>
-    </UserContextProvider>
+    <Provider store={store}>
+      {/* <AuthWrapper> */}
+      <UserContextProvider>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <App />
+        </ErrorBoundary>
+      </UserContextProvider>
+      {/* </AuthWrapper> */}
+    </Provider>
   </Suspense>
 )
 
-ReactDOM.render(<MainLoader />, document.getElementById('root'))
+ReactDOM.render(<MainApp />, document.getElementById('root'))

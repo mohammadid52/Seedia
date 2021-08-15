@@ -67,9 +67,9 @@ const Selector = ({
                 static
                 className="pl-0 absolute z-10 mt-1 w-full bg-white dark:bg-gray-700 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
               >
-                {list.map((item) => (
+                {list.map((item, idx) => (
                   <Listbox.Option
-                    key={item.id}
+                    key={item.name + idx}
                     className={({ active }) =>
                       classNames(
                         active

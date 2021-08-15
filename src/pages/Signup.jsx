@@ -35,15 +35,19 @@ const Signup = () => {
   const [errors, setErrors] = useState([])
 
   const apiCall = async (values) => {
-    const res = await axios.post(links.BASE_API_URL + '/auth/register', {
+    const { data } = await axios.post(links.BASE_API_URL + '/auth/register', {
       password: values.password,
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
     })
-    if (res.status === 409) {
-      setErrors([...errors, 'User already exists'])
-    }
+
+    // if (res.status === 409) {
+    //   setErrors([...errors, 'User already exists'])
+    // }
+
+    // set token in localStorage
+    localStorage.setItem('access_token', data.data.access_token)
   }
 
   const onSubmit = (_values) => {
@@ -60,7 +64,7 @@ const Signup = () => {
       })
 
       apiCall(_values)
-      // history.push(links.CHOOSE_ACCOUNT)
+      history.push(links.DASHBAORD)
     } catch (error) {
       console.error(error)
     } finally {

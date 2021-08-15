@@ -17,8 +17,8 @@ const Error = ({ errors }: { errors: string[] }) => {
           </h3>
           <div className="mt-2 text-sm text-red-700 dark:text-red-400">
             <ul className="list-disc pl-5 space-y-1">
-              {map(errors, (error) => (
-                <li>{error}</li>
+              {map(errors, (error, idx) => (
+                <li key={idx}>{error}</li>
               ))}
             </ul>
           </div>

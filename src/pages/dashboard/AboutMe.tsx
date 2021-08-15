@@ -4,10 +4,9 @@ import faker from 'faker'
 const PersonalCard = ({
   className,
   user,
-  accountInfo,
 }: {
   className?: string
-  accountInfo?: any
+
   user?: any
 }) => {
   return (

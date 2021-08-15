@@ -5,6 +5,7 @@ const UserContext = createContext(null)
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [darkMode, setDarkMode] = useState<boolean>(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   const [values, setValues] = useState<IUser>({
     user: {
@@ -74,6 +75,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         setValues,
         darkMode,
         setDarkMode,
+        isLoaded,
+        setIsLoaded,
       }}
     >
       {children}

@@ -5,15 +5,15 @@ import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { adjustColors } from 'values/values'
-import Button from './atoms/Button'
+import Button from 'components/atoms/Button'
 import { useHistory } from 'react-router-dom'
-import Toggle from './ThemeToggle'
+import Toggle from 'components/ThemeToggle'
 import { classNames } from 'utils/classNames'
 import { useUserContext } from 'context/UserContext'
 import { RiProfileLine } from 'react-icons/ri'
 
-export default function Navigation() {
-  const { setDarkMode, darkMode, isLoggedIn } = useUserContext()
+export default function Navigation({ isUser }) {
+  const { setDarkMode, darkMode } = useUserContext()
 
   const [selected, setSelected] = useState(adjustColors[0])
 
@@ -136,7 +136,7 @@ export default function Navigation() {
                 </Popover.Button>
               </div>
 
-              {isLoggedIn ? (
+              {isUser ? (
                 <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                   <Popover.Group
                     as="nav"

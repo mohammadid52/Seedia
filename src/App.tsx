@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from 'react'
+import { lazy, useEffect } from 'react'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
@@ -15,6 +15,10 @@ import { useRouter } from 'hooks/useRouter'
 import Navigation from 'components/Navigation'
 import faker from 'faker'
 import { map } from 'lodash'
+import PrivateRoute from 'routes/PrivateRoute'
+import AuthContainer from 'containers/AuthContainer'
+import { getAuth } from 'helpers'
+import { useSelector } from 'react-redux'
 
 const Welcome = lazy(() => import('pages/Welcome'))
 const Profile = lazy(() => import('pages/profile'))
@@ -28,218 +32,214 @@ const EducationStep = lazy(() => import('pages/account/student/EducationStep'))
 
 library.add(fas)
 
-const App = () => {
-  const { setDarkMode, setIsLoggedIn } = useUserContext()
+const profileOne: IProfileOne = {
+  about: {
+    fullName: faker.name.findName(),
+    email: faker.internet.email(),
+    companyName: faker.company.companyName(),
+    currentCompany: faker.company.companyName(),
+    previousCompany: faker.company.companyName(),
+    livesIn: faker.address.cityName(),
+    maritalStatus: 'Married',
+    coverPicture: faker.image.nature(),
+    userImage: faker.image.avatar(),
+    jobTitle: faker.name.jobTitle(),
+    profileViews: faker.datatype.number(6000),
+    projects: faker.datatype.number(100),
+    connections: faker.datatype.number(10000),
+    companyAddress: faker.address.streetAddress(),
+  },
 
-  const profileOne: IProfileOne = {
-    about: {
+  background: {
+    interests: [
+      { name: 'Branding' },
+      { name: 'Web Design' },
+      { name: 'Mobile Design' },
+      { name: 'Development' },
+    ],
+    summary: faker.lorem.paragraph(),
+    experience: [
+      {
+        jobTitle: faker.name.jobTitle(),
+        companyName: faker.company.companyName(),
+        startedAt: faker.date.past().getFullYear().toString(),
+        endedAt: faker.date.past().getFullYear().toString(),
+        description: faker.lorem.paragraph(2),
+        companyAddress: '',
+      },
+      {
+        jobTitle: faker.name.jobTitle(),
+        companyName: faker.company.companyName(),
+        startedAt: faker.date.past().getFullYear().toString(),
+        endedAt: faker.date.past().getFullYear().toString(),
+        description: faker.lorem.paragraph(2),
+        companyAddress: '',
+      },
+    ],
+  },
+
+  peopleAlsoViewed: [
+    {
+      image: faker.image.avatar(),
       fullName: faker.name.findName(),
-      email: faker.internet.email(),
-      companyName: faker.company.companyName(),
-      currentCompany: faker.company.companyName(),
-      previousCompany: faker.company.companyName(),
-      livesIn: faker.address.cityName(),
-      maritalStatus: 'Married',
-      coverPicture: faker.image.nature(),
-      userImage: faker.image.avatar(),
-      jobTitle: faker.name.jobTitle(),
-      profileViews: faker.datatype.number(6000),
-      projects: faker.datatype.number(100),
-      connections: faker.datatype.number(10000),
-      companyAddress: faker.address.streetAddress(),
+      jobType: faker.name.jobType(),
     },
-
-    background: {
-      interests: [
-        { name: 'Branding' },
-        { name: 'Web Design' },
-        { name: 'Mobile Design' },
-        { name: 'Development' },
-      ],
-      summary: faker.lorem.paragraph(),
-      experience: [
-        {
-          jobTitle: faker.name.jobTitle(),
-          companyName: faker.company.companyName(),
-          startedAt: faker.date.past().getFullYear().toString(),
-          endedAt: faker.date.past().getFullYear().toString(),
-          description: faker.lorem.paragraph(2),
-          companyAddress: '',
-        },
-        {
-          jobTitle: faker.name.jobTitle(),
-          companyName: faker.company.companyName(),
-          startedAt: faker.date.past().getFullYear().toString(),
-          endedAt: faker.date.past().getFullYear().toString(),
-          description: faker.lorem.paragraph(2),
-          companyAddress: '',
-        },
-      ],
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
     },
-
-    peopleAlsoViewed: [
-      {
-        image: faker.image.avatar(),
-        fullName: faker.name.findName(),
-        jobType: faker.name.jobType(),
-      },
-      {
-        image: faker.image.avatar(),
-        fullName: faker.name.findName(),
-        jobType: faker.name.jobType(),
-      },
-      {
-        image: faker.image.avatar(),
-        fullName: faker.name.findName(),
-        jobType: faker.name.jobType(),
-      },
-      {
-        image: faker.image.avatar(),
-        fullName: faker.name.findName(),
-        jobType: faker.name.jobType(),
-      },
-      {
-        image: faker.image.avatar(),
-        fullName: faker.name.findName(),
-        jobType: faker.name.jobType(),
-      },
-      {
-        image: faker.image.avatar(),
-        fullName: faker.name.findName(),
-        jobType: faker.name.jobType(),
-      },
-      {
-        image: faker.image.avatar(),
-        fullName: faker.name.findName(),
-        jobType: faker.name.jobType(),
-      },
-      {
-        image: faker.image.avatar(),
-        fullName: faker.name.findName(),
-        jobType: faker.name.jobType(),
-      },
-    ],
-    recommendation: {
-      received: [
-        {
-          text: faker.lorem.paragraph(2),
-          user: {
-            fullName: faker.name.findName(),
-            userImage: faker.image.avatar(),
-          },
-        },
-        {
-          text: faker.lorem.paragraph(2),
-          user: {
-            fullName: faker.name.findName(),
-            userImage: faker.image.avatar(),
-          },
-        },
-      ],
-      given: [
-        {
-          text: faker.lorem.paragraph(2),
-          user: {
-            fullName: faker.name.findName(),
-            userImage: faker.image.avatar(),
-          },
-        },
-        {
-          text: faker.lorem.paragraph(2),
-          user: {
-            fullName: faker.name.findName(),
-            userImage: faker.image.avatar(),
-          },
-        },
-      ],
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
     },
-  }
-
-  const poAbout = profileOne.about
-
-  const profileTwo: IProfileTwo = {
-    about: {
-      fullName: poAbout.fullName,
-      email: poAbout.email,
-      companyName: poAbout.companyName,
-      companyAddress: poAbout.companyAddress,
-      jobTitle: poAbout.jobTitle,
-      userImage: poAbout.userImage,
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
     },
-    languages: [
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+  ],
+  recommendation: {
+    received: [
       {
-        langName: 'English',
-        langLevel: 'Full Professional Profiency',
+        text: faker.lorem.paragraph(2),
+        user: {
+          fullName: faker.name.findName(),
+          userImage: faker.image.avatar(),
+        },
       },
-      { langName: 'French', langLevel: 'Intermediate' },
-      { langName: 'Spanish', langLevel: 'Intermediate' },
-      { langName: 'Polish', langLevel: 'Full Professional Profiency' },
+      {
+        text: faker.lorem.paragraph(2),
+        user: {
+          fullName: faker.name.findName(),
+          userImage: faker.image.avatar(),
+        },
+      },
     ],
+    given: [
+      {
+        text: faker.lorem.paragraph(2),
+        user: {
+          fullName: faker.name.findName(),
+          userImage: faker.image.avatar(),
+        },
+      },
+      {
+        text: faker.lorem.paragraph(2),
+        user: {
+          fullName: faker.name.findName(),
+          userImage: faker.image.avatar(),
+        },
+      },
+    ],
+  },
+}
 
-    awards: [
-      {
-        awardName: 'Behance Interaction Featured',
-        awardFor: 'User Interface Design',
-      },
-      { awardName: 'Behance Product Design Featured', awardFor: 'Web Design' },
-      { awardName: 'Site Of The Month by Awwwards', awardFor: 'Web Design' },
-      {
-        awardName: 'CSS Beauty Award',
-        awardFor: 'UI / User Experience Design',
-      },
-    ],
-    skills: [
-      {
-        id: faker.datatype.uuid(),
-        name: 'User Interface Design',
-      },
-      {
-        id: faker.datatype.uuid(),
-        name: 'Web Design',
-      },
-      {
-        id: faker.datatype.uuid(),
-        name: 'Mobile Design',
-      },
-      {
-        id: faker.datatype.uuid(),
-        name: 'User Experience Knowledge',
-      },
-      {
-        id: faker.datatype.uuid(),
-        name: 'CSS / HTML',
-      },
-      {
-        id: faker.datatype.uuid(),
-        name: 'Fast Learning',
-      },
-    ],
+const poAbout = profileOne.about
 
-    experience: map(profileOne.background.experience, (exp) => ({
-      ...exp,
-      companyAddress: faker.address.streetAddress(),
-    })),
-    peopleAlsoViewed: [...profileOne.peopleAlsoViewed],
-    education: [
-      {
-        from: `${faker.date.past().getFullYear()}`,
-        to: `${faker.date.past().getFullYear()}`,
-        name: `Massachusetts Institue of Technology (MIT)`,
-        degree:
-          'Master of Fine Arts,Design and Technology, 77 Massachusetts Ave, USA',
-      },
-      {
-        from: `${faker.date.past().getFullYear()}`,
-        to: `${faker.date.past().getFullYear()}`,
-        name: `Stanford University`,
-        degree: 'Bachelor of Fine Arts,Stanford, USA',
-      },
-    ],
-  }
+const profileTwo: IProfileTwo = {
+  about: {
+    fullName: poAbout.fullName,
+    email: poAbout.email,
+    companyName: poAbout.companyName,
+    companyAddress: poAbout.companyAddress,
+    jobTitle: poAbout.jobTitle,
+    userImage: poAbout.userImage,
+  },
+  languages: [
+    {
+      langName: 'English',
+      langLevel: 'Full Professional Profiency',
+    },
+    { langName: 'French', langLevel: 'Intermediate' },
+    { langName: 'Spanish', langLevel: 'Intermediate' },
+    { langName: 'Polish', langLevel: 'Full Professional Profiency' },
+  ],
 
-  // #1 Fetch values from local storage
-  // #2 If value is not undefined setIsLoggedIn to true;
-  // #3 Otherwise setIsLoggedIn to false
+  awards: [
+    {
+      awardName: 'Behance Interaction Featured',
+      awardFor: 'User Interface Design',
+    },
+    { awardName: 'Behance Product Design Featured', awardFor: 'Web Design' },
+    { awardName: 'Site Of The Month by Awwwards', awardFor: 'Web Design' },
+    {
+      awardName: 'CSS Beauty Award',
+      awardFor: 'UI / User Experience Design',
+    },
+  ],
+  skills: [
+    {
+      id: faker.datatype.uuid(),
+      name: 'User Interface Design',
+    },
+    {
+      id: faker.datatype.uuid(),
+      name: 'Web Design',
+    },
+    {
+      id: faker.datatype.uuid(),
+      name: 'Mobile Design',
+    },
+    {
+      id: faker.datatype.uuid(),
+      name: 'User Experience Knowledge',
+    },
+    {
+      id: faker.datatype.uuid(),
+      name: 'CSS / HTML',
+    },
+    {
+      id: faker.datatype.uuid(),
+      name: 'Fast Learning',
+    },
+  ],
+
+  experience: map(profileOne.background.experience, (exp) => ({
+    ...exp,
+    companyAddress: faker.address.streetAddress(),
+  })),
+  peopleAlsoViewed: [...profileOne.peopleAlsoViewed],
+  education: [
+    {
+      from: `${faker.date.past().getFullYear()}`,
+      to: `${faker.date.past().getFullYear()}`,
+      name: `Massachusetts Institue of Technology (MIT)`,
+      degree:
+        'Master of Fine Arts,Design and Technology, 77 Massachusetts Ave, USA',
+    },
+    {
+      from: `${faker.date.past().getFullYear()}`,
+      to: `${faker.date.past().getFullYear()}`,
+      name: `Stanford University`,
+      degree: 'Bachelor of Fine Arts,Stanford, USA',
+    },
+  ],
+}
+
+const App = () => {
+  const { setDarkMode } = useUserContext()
 
   useEffect(() => {
     const loadTheme = () => {
@@ -261,106 +261,87 @@ const App = () => {
     return () => loadTheme()
   }, [setDarkMode])
 
-  const [accountInfo, setAccountInfo] = useState({})
-
-  useEffect(() => {
-    const fetchAccountType = () =>
-      window.localStorage.getItem('accountType') || 'Personal'
-
-    const fetchUserInfo = () => {
-      const json: any = window.localStorage.getItem('user')
-      return JSON.parse(json) || {}
-    }
-
-    const fetchAccountInfo = () => {
-      const accountType = fetchAccountType().toLocaleLowerCase()
-      const json: any = window.localStorage.getItem(accountType)
-      return JSON.parse(json) || {}
-    }
-
-    // const user = fetchUserInfo()
-    const accountInfo = fetchAccountInfo()
-    // if (filter(values(user), (d) => Boolean(d)).length > 0) {
-    setIsLoggedIn(true)
-    // } else {
-    // setIsLoggedIn(false)
-    // }
-
-    setAccountInfo({ ...accountInfo })
-
-    return () => {
-      fetchUserInfo()
-      fetchAccountInfo()
-    }
-  }, [setIsLoggedIn])
-
-  const RenderNav = () => {
+  const RenderNav = ({ isUser }: { isUser?: boolean }) => {
     const router = useRouter()
     const atHome = router.pathname === '/'
     const atAuthPages =
       router.pathname.includes('account') ||
       router.pathname.includes('edit-profile')
     return atHome ? (
-      <Navigation />
+      <Navigation isUser={isUser} />
     ) : atAuthPages ? null : (
       <DashboardHeader about={profileOne.about} />
     )
   }
 
+  const auth = useSelector((state) => getAuth(state))
+
+  const isUser = auth.isLoggedIn
+
   return (
     <Router>
-      <RenderNav />
-      <Switch>
-        {/* This is common page */}
-        <Route exact path="/" component={Welcome} />
-        <Route exact path="/login">
-          <Login setToken={() => {}} />
-        </Route>
+      <AuthContainer>
+        <>
+          <RenderNav isUser={isUser} />
+          <Switch>
+            {/* This is common page */}
+            <Route exact path="/" component={Welcome} />
+            {/* @ts-ignore */}
+            <PrivateRoute isPublic isUser={isUser} exact path="/login">
+              <Login />
+            </PrivateRoute>
 
-        <Route exact path="/signup" component={Signup} />
-        <Route exact path="/dashboard">
-          <Dashboard user={profileOne} accountInfo={accountInfo} />
-        </Route>
-        <Route exact path="/profile/1">
-          <Profile user={profileOne} />
-        </Route>
-        <Route exact path="/profile/2">
-          <ProfileTwo user={profileTwo} />
-        </Route>
-        <Route exact path="/choose-account" component={ChooseAccount} />
-        {/* <Route exact path="/email-verification" component={EmailVerification} /> */}
+            <Route exact path="/signup" component={Signup} />
+            <PrivateRoute
+              // @ts-ignore
+              exact
+              isUser={isUser}
+              path="/dashboard"
+            >
+              <Dashboard user={profileOne} />
+            </PrivateRoute>
+            <Route exact path="/profile/1">
+              <Profile user={profileOne} />
+            </Route>
+            <Route exact path="/profile/2">
+              <ProfileTwo user={profileTwo} />
+            </Route>
+            <Route exact path="/choose-account" component={ChooseAccount} />
+            {/* <Route exact path="/email-verification" component={EmailVerification} /> */}
 
-        {/* Personal Account routes */}
-        <Route
-          path="/account/personal/edit-profile/company"
-          component={PersonalSecondStep}
-        />
-        <Route path="/account/personal/edit-profile/location">
-          <LocationStep accountType="personal" />
-        </Route>
+            {/* Personal Account routes */}
+            <Route
+              path="/account/personal/edit-profile/company"
+              component={PersonalSecondStep}
+            />
+            <Route path="/account/personal/edit-profile/location">
+              <LocationStep accountType="personal" />
+            </Route>
 
-        {/* Student Account routes */}
-        <Route
-          path="/account/student/edit-profile/education"
-          component={EducationStep}
-        />
-        <Route path="/account/student/edit-profile/location">
-          <LocationStep accountType="student" />
-        </Route>
+            {/* Student Account routes */}
+            <Route
+              path="/account/student/edit-profile/education"
+              component={EducationStep}
+            />
+            <Route path="/account/student/edit-profile/location">
+              <LocationStep accountType="student" />
+            </Route>
 
-        {/* Business Account routes */}
-        <Route
-          path="/account/business/edit-profile/stepOne"
-          component={BusinessStepOne}
-        />
-        <Route
-          path="/account/business/edit-profile/stepTwo"
-          component={BusinessStepTwo}
-        />
+            {/* Business Account routes */}
+            <Route
+              path="/account/business/edit-profile/stepOne"
+              component={BusinessStepOne}
+            />
+            <Route
+              path="/account/business/edit-profile/stepTwo"
+              component={BusinessStepTwo}
+            />
 
-        {/* Error Page */}
-        <Route component={NotFound} />
-      </Switch>
+            {/* Error Page */}
+            <Route component={NotFound} />
+          </Switch>
+        </>
+      </AuthContainer>
     </Router>
   )
 }

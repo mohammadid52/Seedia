@@ -9,9 +9,10 @@
           "lib": "./src/lib",
           "assets": "./src/assets",
           "pages": "./src/pages",
-          "state": "./src/states",
+          "state": "./src/state",
           "context": "./src/context",
-          "containers": "./src/containers"
+          "containers": "./src/containers",
+          "helpers": "./src/helpers"
         }
       }
     ]

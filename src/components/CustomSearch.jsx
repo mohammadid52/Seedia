@@ -75,8 +75,8 @@ const CustomSearchPanel = () => {
         <HtmlTooltip
           title={
             <div>
-              {tooltipData.map((item) => (
-                <div className="p-1 text-sm">
+              {tooltipData.map((item, idx) => (
+                <div key={item.heading + idx} className="p-1 text-sm">
                   <strong className=" mb-1">
                     {item.heading}
                     <br />{' '}
@@ -88,7 +88,6 @@ const CustomSearchPanel = () => {
             </div>
           }
           placement="left"
-          disableTouchLisener
         >
           <div className="col-span-3 tooltip-ref ml-2">
             <Selector
@@ -140,7 +139,10 @@ const CustomSearchPanel = () => {
         {list.map((item, idx) => {
           return (
             <>
-              <div className="dark:text-white flex items-center justify-center  text-gray-600 link-hover cursor-pointer">
+              <div
+                key={item.name + idx}
+                className="dark:text-white flex items-center justify-center  text-gray-600 link-hover cursor-pointer"
+              >
                 {item.name}
               </div>
             </>
