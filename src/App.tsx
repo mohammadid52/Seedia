@@ -281,7 +281,7 @@ const App = () => {
   return (
     <Router>
       <AuthContainer>
-        <>
+        <div className="">
           <RenderNav isUser={isUser} />
           <Switch>
             {/* This is common page */}
@@ -370,7 +370,7 @@ const App = () => {
             {/* Error Page */}
             <Route component={NotFound} />
           </Switch>
-        </>
+        </div>
       </AuthContainer>
     </Router>
   )
