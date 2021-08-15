@@ -37,7 +37,6 @@ client.connect(
 
       const user = await usersCollection.findOne({
         insertedId: token._id,
-        // _id: token._id,
       })
 
       if (user) {

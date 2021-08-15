@@ -9,10 +9,11 @@ import { LOGIN } from 'initials'
 import FormInput from 'components/atoms/FormInput'
 import axios from 'axios'
 import { links } from 'constants/Links'
+import { useHistory } from 'react-router-dom'
 
 const Login = () => {
   const [isLoaded, setIsLoaded] = useState(true)
-
+  const history = useHistory()
   const validationSchema = Yup.object({
     email: Yup.string()
       .email('Invalid email address')
@@ -32,6 +33,7 @@ const Login = () => {
     // }
 
     // set token in localStorage
+    history.push(links.DASHBAORD)
     localStorage.setItem('access_token', data.data.access_token)
   }
 

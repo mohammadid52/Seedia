@@ -27,7 +27,9 @@ import { FiActivity } from 'react-icons/fi'
 import { useUserContext } from 'context/UserContext'
 import { IAbout } from 'interfaces/UniversalInterface'
 import { classNames } from 'utils/classNames'
-
+import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { logOut } from 'state/Redux/Actions/authActions'
 const settings = [
   {
     name: 'Settings & Privacy',
@@ -61,7 +63,7 @@ const settings = [
     name: 'Sign Out',
     description:
       'Get a better understanding of where your traffic is coming from.',
-    href: '/',
+
     icon: AiOutlineLogout,
   },
 ]
@@ -168,6 +170,8 @@ const businessApps = [
 
 const DashboardHeader = ({ about }: { about: IAbout }) => {
   const { setDarkMode, darkMode } = useUserContext()
+  const dispatch = useDispatch()
+  const history = useHistory()
 
   const navClass =
     'flex flex-col items-center font-medium text-base dark:text-gray-400 text-gray-500 link-hover'
@@ -337,25 +341,51 @@ const DashboardHeader = ({ about }: { about: IAbout }) => {
                       >
                         <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                           <div className="relative grid gap-6 bg-white dark:bg-gray-700 px-5 py-6 sm:gap-8 sm:p-8">
-                            {settings.map((item) => (
-                              <a
-                                key={item.name}
-                                href={item.href}
-                                className="-m-3 gradient-item p-3 mt-1 flex items-center text-left rounded-lg dark:hover:bg-gray-600 transition-all hover:bg-gray-50 justify-start cursor-pointer"
-                              >
-                                <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md  text-white sm:h-8 sm:w-8">
-                                  <item.icon
-                                    className="sm:h-4 sm:w-4 h-8 w-8"
-                                    aria-hidden="true"
-                                  />
+                            {settings.map((item) =>
+                              item.name === 'Sign Out' ? (
+                                <div
+                                  key={item.name}
+                                  onClick={() => {
+                                    dispatch(logOut(history))
+                                  }}
+                                  className="-m-3 gradient-item p-3 mt-1 flex items-center text-left rounded-lg dark:hover:bg-gray-600 transition-all hover:bg-gray-50 justify-start cursor-pointer"
+                                >
+                                  <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md  text-white sm:h-8 sm:w-8">
+                                    <item.icon
+                                      className="sm:h-4 sm:w-4 h-8 w-8"
+                                      aria-hidden="true"
+                                    />
+                                  </div>
+                                  <div className="ml-4">
+                                    <p className="text-base text-left font-medium mb-0 dark:text-white text-gray-700">
+                                      {item.name}
+                                    </p>
+                                  </div>
                                 </div>
-                                <div className="ml-4">
-                                  <p className="text-base text-left font-medium mb-0 dark:text-white text-gray-700">
-                                    {item.name}
-                                  </p>
-                                </div>
-                              </a>
-                            ))}
+                              ) : (
+                                <a
+                                  key={item.name}
+                                  href={item.href}
+                                  onClick={() => {
+                                    item.name === 'Sign Out' &&
+                                      dispatch(() => logOut(history))
+                                  }}
+                                  className="-m-3 gradient-item p-3 mt-1 flex items-center text-left rounded-lg dark:hover:bg-gray-600 transition-all hover:bg-gray-50 justify-start cursor-pointer"
+                                >
+                                  <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md  text-white sm:h-8 sm:w-8">
+                                    <item.icon
+                                      className="sm:h-4 sm:w-4 h-8 w-8"
+                                      aria-hidden="true"
+                                    />
+                                  </div>
+                                  <div className="ml-4">
+                                    <p className="text-base text-left font-medium mb-0 dark:text-white text-gray-700">
+                                      {item.name}
+                                    </p>
+                                  </div>
+                                </a>
+                              )
+                            )}
                             <div>
                               <Toggle
                                 enabled={darkMode}

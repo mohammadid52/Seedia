@@ -1,19 +1,19 @@
 import * as types from 'state/Redux/constants'
-import jwt_decode from 'jwt-decode'
-import axios from 'axios'
 import { links } from 'constants/Links'
 import { network } from 'helpers'
 import { isEmpty } from 'lodash'
 
-export const logOut = () => async (dispatch) => {
+export const logOut = (history) => async (dispatch) => {
   try {
-    // dispatch({ type: types.START_LOADING })
-    //   await firebase.auth().signOut()
+    dispatch({ type: types.START_LOADING })
+
+    localStorage.removeItem('access_token')
+    history.push('/')
     dispatch({ type: types.LOGOUT, msg: 'Logged out successfully' })
   } catch (error) {
     console.log(error)
   } finally {
-    // dispatch({ type: types.STOP_LOADING })
+    dispatch({ type: types.STOP_LOADING })
   }
 }
 
