@@ -8,7 +8,7 @@ import { IAbout } from 'interfaces/UniversalInterface'
 import NormalFormInput from 'components/atoms/NormalFormInput'
 import Selector from 'components/atoms/Selector'
 
-const About = ({ data }: { data: IAbout }) => {
+const About = ({ data, userData }: { data: IAbout; userData: any }) => {
   const [showModal, setShowModal] = useState(false)
 
   return (

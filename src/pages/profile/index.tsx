@@ -8,18 +8,22 @@ import Following from 'pages/profile/Following'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Layout from 'pages/profile/Layout'
 import { IProfileOne } from 'interfaces/UniversalInterface'
+import { useSelector } from 'react-redux'
+import { getAuth } from 'helpers'
 
 const Profile = ({ user }: { user: IProfileOne }) => {
   const [userData, setUserData] = useState(user)
+  const auth = useSelector((state) => getAuth(state))
 
+  const _userData = auth.user.data
   return (
     <div className="bg-gray-100 dark:bg-gray-800">
       <div className="mx-auto min-h-screen pt-8" style={{ maxWidth: '105rem' }}>
-        <Cover data={userData.about} />
+        <Cover userData={_userData} data={userData.about} />
 
         <div className="my-6">
           <Layout
-            firstCol={<About data={userData.about} />}
+            firstCol={<About userData={_userData} data={userData.about} />}
             secondCol={
               <div className="space-y-12">
                 <Background

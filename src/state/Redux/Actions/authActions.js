@@ -46,12 +46,21 @@ export const loadUser = () => async (dispatch) => {
     const user = await getUser()
 
     if (!isEmpty(user)) {
-      dispatch({ type: types.IS_LOGGED_IN, data: user })
+      dispatch({ type: types.SET_USER_DATA, data: user })
     } else {
-      dispatch({ type: types.IS_LOGGED_IN, data: {} })
+      dispatch({ type: types.SET_USER_DATA, data: {} })
     }
   } catch (error) {
   } finally {
     dispatch({ type: types.LOADER, data: true })
+  }
+}
+export const setUser = (user) => async (dispatch) => {
+  try {
+    if (!isEmpty(user)) {
+      dispatch({ type: types.SET_USER_DATA, data: user })
+    }
+  } catch (error) {
+    console.error(error)
   }
 }

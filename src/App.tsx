@@ -288,7 +288,7 @@ const App = () => {
 
   const user: { status: 'error' | 'success'; message: string; data?: any } =
     auth.user
-  const isUser = !isEmpty(user)
+  const isUser = !isEmpty(user) && user?.data?.accountFilled
 
   const userData = isUser ? user.data : false
 

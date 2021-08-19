@@ -10,6 +10,8 @@ import FormInput from 'components/atoms/FormInput'
 import axios from 'axios'
 import { links } from 'constants/Links'
 import { useHistory } from 'react-router-dom'
+import { setUser } from 'state/Redux/Actions/authActions'
+import { useDispatch } from 'react-redux'
 
 const Login = () => {
   const [isLoaded, setIsLoaded] = useState(true)
@@ -22,11 +24,14 @@ const Login = () => {
   })
 
   const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
   const apiCall = async (values) => {
     const { data } = await axios.post(links.BASE_API_URL + '/auth/login', {
       email: values.email,
       password: values.password,
     })
+
+    dispatch(setUser(data.data))
 
     // if (res.status === 409) {
     //   setErrors([...errors, 'User already exists'])

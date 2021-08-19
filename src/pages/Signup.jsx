@@ -10,6 +10,8 @@ import * as Yup from 'yup'
 import { links } from 'constants/Links'
 import Error from 'components/alerts/Error'
 import { SIGNUP } from 'initials'
+import { useDispatch } from 'react-redux'
+import { setUser } from 'state/Redux/Actions/authActions'
 
 const Signup = () => {
   const history = useHistory()
@@ -31,6 +33,7 @@ const Signup = () => {
 
   const [saving, setSaving] = useState(false)
   const [errors, setErrors] = useState([])
+  const dispatch = useDispatch()
 
   const onSubmit = async (_values) => {
     try {
@@ -41,6 +44,7 @@ const Signup = () => {
         lastName: _values.lastName,
         email: _values.email,
       })
+      dispatch(setUser(res.data.data))
       history.push(links.CHOOSE_ACCOUNT)
       localStorage.setItem('access_token', res.data.data.access_token)
     } catch (error) {
@@ -50,10 +54,6 @@ const Signup = () => {
       setSaving(false)
     }
   }
-
-  setTimeout(() => {
-    setIsLoaded(true)
-  }, 1000)
 
   return !isLoaded ? (
     <Loading />

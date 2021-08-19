@@ -17,6 +17,8 @@ import Layout from 'containers/Layout'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
 import { network } from 'helpers'
 import Error from 'components/alerts/Error'
+import { setUser } from 'state/Redux/Actions/authActions'
+import { useDispatch } from 'react-redux'
 
 const BusinessStepOne = ({ user }) => {
   const history = useHistory()
@@ -49,14 +51,18 @@ const BusinessStepOne = ({ user }) => {
     checkAccount()
   }, [])
 
+  const dispatch = useDispatch()
+
   const onSubmit = async (values) => {
     try {
       setSaving(true)
-      await network.post('/user/update', {
+      const { data } = await network.post('/user/update', {
         companyName: values.companyName,
         companyEmail: values.companyEmail,
         companyNumber: values.companyNumber,
       })
+      dispatch(setUser(data.data))
+
       history.push(links.BUSINESS_STEP_2)
     } catch (error) {
       setErrors([error.message])

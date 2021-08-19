@@ -21,7 +21,7 @@ const authReducer = (
       return state
     case types.LOGOUT:
       return state
-    case types.IS_LOGGED_IN:
+    case types.SET_USER_DATA:
       return {
         ...state,
         user: action.data,

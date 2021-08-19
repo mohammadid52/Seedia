@@ -14,6 +14,8 @@ import { PersonalStepOne } from 'initials'
 import { network } from 'helpers'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
 import { isEmpty } from 'lodash'
+import { setUser } from 'state/Redux/Actions/authActions'
+import { useDispatch } from 'react-redux'
 
 const StudentSecondStep = ({ user }) => {
   const [isLoaded, setIsLoaded] = useState(true)
@@ -46,16 +48,19 @@ const StudentSecondStep = ({ user }) => {
     }
   }, [company])
 
+  const dispatch = useDispatch()
+
   const onSubmit = async (values) => {
     setSaving(true)
     try {
-      await network.post('/user/update', {
+      const { data } = await network.post('/user/update', {
         company: {
           jobTitle: values.jobTitle,
           jobType: values.jobType,
           latestCompany: values.latestCompany,
         },
       })
+      dispatch(setUser(data.data))
 
       history.push(links.PERSONAL_STEP_2)
     } catch (error) {

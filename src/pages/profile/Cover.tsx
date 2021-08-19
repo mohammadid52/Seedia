@@ -1,6 +1,6 @@
 import { IAbout } from 'interfaces/UniversalInterface'
 
-const Cover = ({ data }: { data: IAbout }) => {
+const Cover = ({ data, userData }: { data?: IAbout; userData: any }) => {
   return (
     <main className="">
       <div className="relative">
@@ -24,9 +24,11 @@ const Cover = ({ data }: { data: IAbout }) => {
                 />
               </div>
               <h1 className="my-6 text-center text-2xl font-extrabold tracking-tight sm:text-2xl lg:text-4xl">
-                <span className="block text-white">{data.fullName}</span>
+                <span className="block text-white">
+                  {userData.firstName} {userData.lastName}
+                </span>
                 <span className="block text-white text-base tracking-wide font-medium">
-                  {data.jobTitle}
+                  {userData.company.jobTitle}
                 </span>
               </h1>
 

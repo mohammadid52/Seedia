@@ -13,6 +13,8 @@ import { map } from 'lodash'
 import { network } from 'helpers'
 import FormSelector from 'components/atoms/FormSelector'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
+import { setUser } from 'state/Redux/Actions/authActions'
+import { useDispatch } from 'react-redux'
 
 const yourhandle = require('countrycitystatejson')
 
@@ -41,10 +43,12 @@ const LastStep = ({ accountType = 'personal', user }) => {
     checkAccount()
   }, [])
 
+  const dispatch = useDispatch()
+
   const onSubmit = async (values) => {
     try {
       setSaving(true)
-      await network.post('/user/update', {
+      const { data } = await network.post('/user/update', {
         location: {
           country: values.country,
           pincode: values.pincode,
@@ -53,6 +57,8 @@ const LastStep = ({ accountType = 'personal', user }) => {
         },
         accountFilled: true,
       })
+
+      dispatch(setUser(data.data))
 
       history.push(links.DASHBAORD)
     } catch (error) {
