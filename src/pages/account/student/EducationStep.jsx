@@ -7,7 +7,7 @@ import Toggle from 'components/atoms/Toggle'
 import Loading from 'components/Loading'
 import { links } from 'constants/Links'
 import Layout from 'containers/Layout'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { wait } from 'utils/wait'
 import { yearList, yearListWithFuture } from 'values/values'
@@ -15,18 +15,43 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { StudentStepOne } from 'initials'
 import { useUserContext } from 'context/UserContext'
+import AnimatedDiv from 'components/animation/AnimatedDiv'
+import { isEmpty } from 'lodash'
 
-const EducationStep = () => {
+const EducationStep = ({ user }) => {
   const [isLoaded, setIsLoaded] = useState(false)
   const history = useHistory()
   const { values, setValues } = useUserContext()
+
+  const [initialState, setInitialState] = useState(StudentStepOne)
+
+  // const education = user.education
+
+  // useEffect(() => {
+  //   if (!isEmpty(education) && education.jobTitle) {
+  //     setInitialState({
+  //       jobTitle: company.jobTitle,
+  //       jobType: company.jobType,
+  //       latestCompany: company.latestCompany,
+  //     })
+  //   }
+  // }, [company])
   //capture inputs
 
-  setTimeout(() => {
-    setIsLoaded(true)
-  }, 1000)
-
   const [saving, setSaving] = useState(false)
+
+  /**
+   * Check if account is already selected
+   */
+  const checkAccount = () => {
+    if (user && user.hasOwnProperty('accountFilled') && user?.accountFilled) {
+      return history.push(links.DASHBAORD)
+    }
+  }
+
+  useEffect(() => {
+    checkAccount()
+  }, [])
 
   const onSubmit = (_values) => {
     setSaving(true)
@@ -67,18 +92,25 @@ const EducationStep = () => {
   ) : (
     <Layout
       title="Education Information"
+      withButton={
+        <TextButton
+          text="or create a business account"
+          onClick={() => history.push(links.BUSINESS_STEP_1)}
+        />
+      }
       subtitle={
         <p>
           Your profile helps you find new people and <br /> oppurtunites
         </p>
       }
     >
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <AnimatedDiv className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white dark:bg-gray-800 border border-white dark:border-gray-700 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
-            initialValues={StudentStepOne}
+            initialValues={initialState}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
+            enableReinitialize
           >
             <Form className="space-y-6">
               <FormInput
@@ -166,12 +198,7 @@ const EducationStep = () => {
             </Form>
           </Formik>
         </div>
-        <TextButton
-          onClick={history.goBack}
-          text="Go back"
-          className="inline-block mt-4"
-        />
-      </div>
+      </AnimatedDiv>
     </Layout>
   )
 }

@@ -1,18 +1,24 @@
 import Copyright from 'components/Copyright'
 import React from 'react'
+import AnimatedDiv from 'components/animation/AnimatedDiv'
 
 const Layout = ({
   title,
   subtitle,
   children,
+  withButton,
 }: {
   title?: string
   subtitle?: React.ReactNode
   children: React.ReactNode
+  withButton?: React.ReactNode
 }) => {
   return (
     <div className="min-h-screen dark:bg-gray-800 bg-gray-50 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md flex items-center flex-col ">
+      <AnimatedDiv
+        // @ts-ignore
+        className="sm:mx-auto sm:w-full sm:max-w-md flex items-center flex-col"
+      >
         <img
           className="mx-auto h-32 w-auto"
           src={process.env.PUBLIC_URL + '/logo.png'}
@@ -26,7 +32,8 @@ const Layout = ({
         {subtitle && (
           <p className="mt-2 text-center text-sm text-gray-600">{subtitle}</p>
         )}
-      </div>
+        {withButton && withButton}
+      </AnimatedDiv>
 
       {children}
       <Copyright />

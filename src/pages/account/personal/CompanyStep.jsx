@@ -1,88 +1,102 @@
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
-import Selector from 'components/atoms/Selector'
 import TextButton from 'components/atoms/TextButton'
 import Loading from 'components/Loading'
 import { links } from 'constants/Links'
 import Layout from 'containers/Layout'
 import { useHistory } from 'react-router-dom'
-import { wait } from 'utils/wait'
+
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { PersonalStepOne } from 'initials'
-import { useUserContext } from 'context/UserContext'
 
-const StudentSecondStep = () => {
-  const [isLoaded, setIsLoaded] = useState(false)
+import { network } from 'helpers'
+import AnimatedDiv from 'components/animation/AnimatedDiv'
+import { isEmpty } from 'lodash'
+
+const StudentSecondStep = ({ user }) => {
+  const [isLoaded, setIsLoaded] = useState(true)
   const history = useHistory()
-  const { values, setValues } = useUserContext()
-  console.log(
-    '🚀 ~ file: CompanyStep.jsx ~ line 20 ~ StudentSecondStep ~ values',
-    values
-  )
 
-  //capture inputs
+  const [initialState, setInitialState] = useState(PersonalStepOne)
 
-  const jobList = [
-    { id: '1', name: 'Web Developer' },
-    { id: '2', name: 'Web Designer' },
-  ]
+  const company = user.company
 
-  const onSubmit = (_values) => {
+  /**
+   * Check if account is already selected
+   */
+  const checkAccount = () => {
+    if (user && user.hasOwnProperty('accountFilled') && user?.accountFilled) {
+      return history.push(links.DASHBAORD)
+    }
+  }
+
+  useEffect(() => {
+    checkAccount()
+  }, [])
+
+  useEffect(() => {
+    if (!isEmpty(company) && company.jobTitle) {
+      setInitialState({
+        jobTitle: company.jobTitle,
+        jobType: company.jobType,
+        latestCompany: company.latestCompany,
+      })
+    }
+  }, [company])
+
+  const onSubmit = async (values) => {
     setSaving(true)
-    wait(3000).then(() => {
-      setSaving(false)
-      setValues({
-        ...values,
-        personal: {
-          ...values.personal,
-          company: {
-            ...values.company,
-            jobType: selectedJobType,
-            jobTitle: _values.jobTitle,
-            latestCompany: _values.latestCompany,
-          },
+    try {
+      await network.post('/user/update', {
+        company: {
+          jobTitle: values.jobTitle,
+          jobType: values.jobType,
+          latestCompany: values.latestCompany,
         },
       })
+
       history.push(links.PERSONAL_STEP_2)
-    })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setSaving(false)
+    }
   }
 
   const validationSchema = Yup.object({
-    jobTitle: Yup.string().required('Please add this field'),
-    latestCompany: Yup.string().required('Please add this field'),
+    jobTitle: Yup.string().required('Please add your job title'),
+    jobType: Yup.string().required('Please add your job type'),
+    latestCompany: Yup.string().required('Please add your latest company name'),
   })
 
-  setTimeout(() => {
-    setIsLoaded(true)
-  }, 1000)
-
   const [saving, setSaving] = useState(false)
-
-  const goBack = () => {
-    history.goBack()
-  }
-
-  const [selectedJobType, setSelectedJobType] = useState('')
 
   return !isLoaded ? (
     <Loading />
   ) : (
     <Layout
       title="Company Information"
+      withButton={
+        <TextButton
+          text="or create a student account"
+          onClick={() => history.push(links.STUDENT_STEP_1)}
+        />
+      }
       subtitle={
         <p>
           Your profile helps you find new people and <br /> oppurtunites
         </p>
       }
     >
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+      <AnimatedDiv className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white dark:bg-gray-800 border border-transparent dark:border-gray-700  py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
-            initialValues={PersonalStepOne}
+            initialValues={initialState}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
+            enableReinitialize
           >
             <Form className="space-y-6">
               <FormInput
@@ -91,15 +105,13 @@ const StudentSecondStep = () => {
                 name="jobTitle"
                 required
               />
-              <div className="mt-6">
-                <Selector
-                  label={'Job Type'}
-                  placeholder="Select one"
-                  list={jobList}
-                  selectedItem={selectedJobType}
-                  onSelect={(item) => setSelectedJobType(item.name)}
-                />
-              </div>
+              <FormInput
+                label="Job Type"
+                id="jobType"
+                name="jobType"
+                required
+              />
+
               <FormInput
                 label="Latest Company"
                 id="latestCompany"
@@ -120,12 +132,7 @@ const StudentSecondStep = () => {
             </Form>
           </Formik>
         </div>
-        <TextButton
-          text="Go back"
-          onClick={goBack}
-          className="inline-block mt-4"
-        />
-      </div>
+      </AnimatedDiv>
     </Layout>
   )
 }

@@ -44,7 +44,7 @@ export const loadUser = () => async (dispatch) => {
     dispatch({ type: types.LOADER, data: false })
 
     const user = await getUser()
-    console.log('🚀 ~ file: authActions.js ~ line 47 ~ loadUser ~ user', user)
+
     if (!isEmpty(user)) {
       dispatch({ type: types.IS_LOGGED_IN, data: user })
     } else {

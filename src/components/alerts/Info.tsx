@@ -5,7 +5,7 @@ const Info = ({
   color = 'blue',
   className = '',
 }: {
-  className: string
+  className?: string
   text: string
   color?: string
 }) => {

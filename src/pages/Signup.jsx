@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Loading from 'components/Loading'
 import Copyright from 'components/Copyright'
 import Button from 'components/atoms/Button'
@@ -8,15 +8,12 @@ import FormInput from 'components/atoms/FormInput'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { links } from 'constants/Links'
-
-import { useUserContext } from 'context/UserContext'
 import Error from 'components/alerts/Error'
-import { isEmpty } from 'lodash'
+import { SIGNUP } from 'initials'
 
 const Signup = () => {
   const history = useHistory()
   const [isLoaded, setIsLoaded] = useState(true)
-  const { setValues, values } = useUserContext()
 
   const validationSchema = Yup.object({
     firstName: Yup.string().required('Please enter your first name'),
@@ -35,39 +32,19 @@ const Signup = () => {
   const [saving, setSaving] = useState(false)
   const [errors, setErrors] = useState([])
 
-  const apiCall = async (values) => {
-    try {
-      const res = await axios.post(links.BASE_API_URL + '/auth/register', {
-        password: values.password,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-      })
-
-      history.push(links.DASHBAORD)
-      localStorage.setItem('access_token', res.data.data.access_token)
-    } catch (error) {
-      setErrors(['User with this email already exists'])
-    }
-
-    // set token in localStorage
-  }
-
-  const onSubmit = (_values) => {
+  const onSubmit = async (_values) => {
     try {
       setSaving(true)
-      setValues({
-        ...values,
-        user: {
-          ...values.user,
-          firstName: _values.firstName,
-          lastName: _values.lastName,
-          email: _values.email,
-        },
+      const res = await axios.post(links.BASE_API_URL + '/auth/register', {
+        password: _values.password,
+        firstName: _values.firstName,
+        lastName: _values.lastName,
+        email: _values.email,
       })
-
-      apiCall(_values)
+      history.push(links.CHOOSE_ACCOUNT)
+      localStorage.setItem('access_token', res.data.data.access_token)
     } catch (error) {
+      setErrors(['Oops! Something went wrong. Please try again.'])
       console.error(error)
     } finally {
       setSaving(false)
@@ -100,7 +77,7 @@ const Signup = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
-            initialValues={values.user}
+            initialValues={SIGNUP}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >

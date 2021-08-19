@@ -3,20 +3,42 @@ import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { classNames } from 'utils/classNames'
+import { useField } from 'formik'
 
-const Selector = ({
+interface SelecterProps {
+  list: { name: string }[]
+  placeholder?: string
+  label?: string
+  required?: boolean
+  selectedItem?: string
+  onSelect?: (event: any) => void
+  border?: boolean
+  name: string
+}
+
+const FormSelector = ({
   list,
   placeholder = '',
   label = '',
   required = false,
-  selectedItem = '',
+
   onSelect = () => {},
   border = true,
-  error = '',
-  keyName = 'name',
-}) => {
+  name,
+}: SelecterProps) => {
+  const [field, meta, helpers] = useField(name)
+
+  const { setValue, setTouched, setError } = helpers
+
+  const onOptionSelect = (selectedOption: { name: string }) => {
+    setValue(selectedOption.name)
+    onSelect(selectedOption)
+    setTouched(true)
+    setError(undefined)
+  }
+
   return (
-    <Listbox value={selectedItem} onChange={onSelect}>
+    <Listbox {...field} onChange={onOptionSelect}>
       {({ open }) => (
         <div>
           {label && (
@@ -29,16 +51,21 @@ const Selector = ({
           )}
           <div className="mt-1 relative">
             <Listbox.Button
+              onBlur={() => {
+                setError('This field is required')
+              }}
               className={`bg-white dark:bg-gray-800 relative w-full ${
                 border ? 'border' : ''
               } dark:border-gray-700 border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
             >
               <span
-                className={`block truncate  dark:text-white ${
-                  !selectedItem ? 'text-gray-600' : ''
+                className={`block truncate ${
+                  !field.value
+                    ? 'dark:text-gray-500 text-gray-400 '
+                    : 'dark:text-white text-gray-900'
                 }`}
               >
-                {selectedItem || placeholder}
+                {field.value || placeholder}
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon
@@ -47,9 +74,12 @@ const Selector = ({
                 />
               </span>
             </Listbox.Button>
-            {error && (
-              <p className="mt-2 transition-all duration-200 text-sm text-red-600">
-                {error}
+            {meta.touched && meta.error && (
+              <p
+                className="mt-2 transition-all duration-200 text-sm text-red-600 dark:text-red-500"
+                id={`${name}-error`}
+              >
+                {meta.error}
               </p>
             )}
 
@@ -86,7 +116,7 @@ const Selector = ({
                             'block truncate dark:text-white text-left'
                           )}
                         >
-                          {item[keyName]}
+                          {item.name}
                         </span>
 
                         {selected ? (
@@ -108,6 +138,9 @@ const Selector = ({
         </div>
       )}
     </Listbox>
+    //     )
+    //   }}
+    // </Field>
   )
 }
-export default Selector
+export default FormSelector

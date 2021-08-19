@@ -19,14 +19,13 @@ import PrivateRoute from 'routes/PrivateRoute'
 import AuthContainer from 'containers/AuthContainer'
 import { getAuth } from 'helpers'
 import { useSelector } from 'react-redux'
+import { links } from 'constants/Links'
 
 const Welcome = lazy(() => import('pages/Welcome'))
 const Profile = lazy(() => import('pages/profile'))
 const Signup = lazy(() => import('pages/Signup'))
 const Login = lazy(() => import('pages/Login'))
-const PersonalSecondStep = lazy(
-  () => import('pages/account/personal/CompanyStep')
-)
+const CompanyStep = lazy(() => import('pages/account/personal/CompanyStep'))
 const LocationStep = lazy(() => import('pages/account/personal/LocationStep'))
 const EducationStep = lazy(() => import('pages/account/student/EducationStep'))
 
@@ -261,12 +260,23 @@ const App = () => {
     return () => loadTheme()
   }, [setDarkMode])
 
-  const RenderNav = ({ isUser }: { isUser?: boolean }) => {
+  /**
+   * collection of pages to hide the navbar
+   */
+  const publicKeywords = [
+    '/account',
+    'edit-profile', // eg, if path contains 'edit-profile' then hide the navbar
+    '/login',
+    '/signup',
+    '/choose-account',
+  ]
+
+  const RenderNav = ({ isUser }: { isUser?: any }) => {
     const router = useRouter()
+
     const atHome = router.pathname === '/'
-    const atAuthPages =
-      router.pathname.includes('account') ||
-      router.pathname.includes('edit-profile')
+    const atAuthPages = publicKeywords.indexOf(router.pathname) !== -1
+
     return atHome ? (
       <Navigation isUser={isUser} />
     ) : atAuthPages ? null : (
@@ -276,7 +286,11 @@ const App = () => {
 
   const auth = useSelector((state) => getAuth(state))
 
-  const isUser = !isEmpty(auth.user)
+  const user: { status: 'error' | 'success'; message: string; data?: any } =
+    auth.user
+  const isUser = !isEmpty(user)
+
+  const userData = isUser ? user.data : false
 
   return (
     <Router>
@@ -322,50 +336,58 @@ const App = () => {
               exact
               isUser={isUser}
               path="/choose-account"
-              component={ChooseAccount}
-            />
+            >
+              <ChooseAccount user={userData} />
+            </PrivateRoute>
             {/* <Route exact path="/email-verification" component={EmailVerification} /> */}
 
             {/* Personal Account routes */}
             <PrivateRoute
               // @ts-ignore
-              path="/account/personal/edit-profile/company"
+              path={links.PERSONAL_STEP_1}
               isUser={isUser}
-              component={PersonalSecondStep}
-            />
-            {/* @ts-ignore */}
-            <PrivateRoute path="/account/personal/edit-profile/location">
-              <LocationStep accountType="personal" />
+            >
+              <CompanyStep user={userData} />
+            </PrivateRoute>
+            <PrivateRoute
+              // @ts-ignore
+              path={links.PERSONAL_STEP_2}
+              isUser={isUser}
+            >
+              <LocationStep user={userData} accountType="personal" />
             </PrivateRoute>
 
             {/* Student Account routes */}
             <PrivateRoute
               // @ts-ignore
-              path="/account/student/edit-profile/education"
-              isUser={isUser}
-              component={EducationStep}
-            />
-            <PrivateRoute
-              // @ts-ignore
-              path="/account/student/edit-profile/location"
+              path={links.STUDENT_STEP_1}
               isUser={isUser}
             >
-              <LocationStep accountType="student" />
+              <EducationStep user={userData} />
+            </PrivateRoute>
+            <PrivateRoute
+              // @ts-ignore
+              path={links.STUDENT_STEP_2}
+              isUser={isUser}
+            >
+              <LocationStep user={userData} accountType="student" />
             </PrivateRoute>
 
             {/* Business Account routes */}
             <PrivateRoute
               // @ts-ignore
-              path="/account/business/edit-profile/stepOne"
+              path={links.BUSINESS_STEP_1}
               isUser={isUser}
-              component={BusinessStepOne}
-            />
+            >
+              <BusinessStepOne user={userData} />
+            </PrivateRoute>
             <PrivateRoute
               // @ts-ignore
-              path="/account/business/edit-profile/stepTwo"
-              component={BusinessStepTwo}
+              path={links.BUSINESS_STEP_2}
               isUser={isUser}
-            />
+            >
+              <BusinessStepTwo user={userData} />
+            </PrivateRoute>
 
             {/* Error Page */}
             <Route component={NotFound} />

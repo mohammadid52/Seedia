@@ -13,10 +13,13 @@ export const LOGIN = {
 
 export const PersonalStepOne = {
   jobTitle: '',
+  jobType: '',
   latestCompany: '',
 }
 export const PersonalStepTwo = {
   country: '',
+  state: '',
+  city: '',
   pincode: '',
 }
 
@@ -31,22 +34,23 @@ export const StudentStepTwo = {
 }
 
 export const BusinessStepOneFields = {
-  company_name: '',
-  company_email: '',
-  re_company_email: '',
-  password: '',
-  company_number: '',
+  companyName: '',
+  companyEmail: '',
+  companyNumber: '',
 }
 
 export const BusinessStepTwoFields = {
-  company_country: '',
-  business_address: '',
-  additional_info: '',
-  postal_code: '',
-  place: '',
-  legal_number: '',
-  company_reg_number: '',
+  companyCountry: '',
+  businessAddress: '',
+  additionalInfo: '',
+  postalCode: '',
+  city: '',
+  legalNumber: '',
+  companyRegNumber: '',
   firstName: '',
   lastName: '',
-  mobile_number: '',
+  mobileNumber: '',
+  businessEntityType: '',
+  relationshipToCompany: '',
+  typeOfCompany: '',
 }

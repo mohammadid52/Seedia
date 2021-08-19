@@ -14,7 +14,7 @@ const PrivateRoute = ({
   ...rest
 }: {
   isPublic: boolean
-  isUser: boolean
+  isUser: any
   children?: any
   component?: any
 }) => {

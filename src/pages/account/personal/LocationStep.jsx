@@ -1,106 +1,75 @@
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
-import Selector from 'components/atoms/Selector'
 import TextButton from 'components/atoms/TextButton'
 import Loading from 'components/Loading'
 import { useHistory } from 'react-router-dom'
-import { wait } from 'utils/wait'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { PersonalStepTwo } from 'initials'
-import { useUserContext } from 'context/UserContext'
 import { links } from 'constants/Links'
 import Layout from 'containers/Layout'
 import { map } from 'lodash'
+import { network } from 'helpers'
+import FormSelector from 'components/atoms/FormSelector'
+import AnimatedDiv from 'components/animation/AnimatedDiv'
 
 const yourhandle = require('countrycitystatejson')
 
-const LastStep = ({ accountType = 'personal' }) => {
-  const [isLoaded, setIsLoaded] = useState(false)
+const LastStep = ({ accountType = 'personal', user }) => {
+  const [isLoaded, setIsLoaded] = useState(true)
   const history = useHistory()
-  const { values, setValues } = useUserContext()
 
   const [saving, setSaving] = useState(false)
 
-  setTimeout(() => {
-    setIsLoaded(true)
-  }, 1000)
-
   const goBack = () => {
-    history.push('/account/personal/edit-profile/company')
+    history.push(
+      accountType === 'personal' ? links.PERSONAL_STEP_1 : links.STUDENT_STEP_1
+    )
   }
 
-  // for test purpose
-
-  const addDataToLS = () => {
-    window.localStorage.setItem(accountType, JSON.stringify(values.personal))
-    window.localStorage.setItem('accountType', values.accountType)
-    console.log(`Successfully added ${accountType} account to local storage`)
+  /**
+   * Check if account is already selected
+   */
+  const checkAccount = () => {
+    if (user && user.hasOwnProperty('accountFilled') && user?.accountFilled) {
+      return history.push(links.DASHBAORD)
+    }
   }
 
-  // const validateOtherFields = () => {
-  //   let isValid = true
-  //   const { country, state, city } = selectedLocation
-  //   if (!country.longName || !country.shortName) {
-  //     isValid = false
-  //     errors.country = 'Please select country'
-  //   } else {
-  //     isValid = true
-  //     errors.country = ''
-  //   }
-  //   if (!state) {
-  //     isValid = false
-  //     errors.state = 'Please select state'
-  //   } else {
-  //     isValid = true
-  //     errors.state = ''
-  //   }
-  //   if (!city) {
-  //     isValid = false
-  //     errors.city = 'Please select city'
-  //   } else {
-  //     isValid = true
-  //     errors.city = ''
-  //   }
+  useEffect(() => {
+    checkAccount()
+  }, [])
 
-  //   setErrors({ ...errors })
-  //   return isValid
-  // }
-
-  const onSubmit = (_values) => {
+  const onSubmit = async (values) => {
     try {
       setSaving(true)
-      wait(3000).then(() => {
-        setSaving(false)
-        setValues({
-          ...values,
-          [accountType]: {
-            ...values[accountType],
-            location: {
-              ...values.location,
-              country: selectedLocation.country.longName,
-              state: selectedLocation.state,
-              city: selectedLocation.city,
-              pincode: _values.pincode,
-            },
-          },
-        })
-        addDataToLS()
-        history.push(links.DASHBAORD)
+      await network.post('/user/update', {
+        location: {
+          country: values.country,
+          pincode: values.pincode,
+          state: values.state,
+          city: values.city,
+        },
+        accountFilled: true,
       })
+
+      history.push(links.DASHBAORD)
     } catch (error) {
       console.error(error)
+    } finally {
+      setSaving(false)
     }
   }
   const validationSchema = Yup.object({
-    pincode: Yup.string().required('Please add this field'),
-  })
-
-  const [errors] = useState({
-    country: '',
-    state: '',
-    city: '',
+    state: Yup.string().required(),
+    country: Yup.string().required(),
+    city: Yup.string().required(),
+    pincode: Yup.string()
+      .required()
+      .matches(/^[0-9]+$/, 'Must be only digits')
+      .min(6, 'Must be exactly 6 digits')
+      .max(6, 'Must be exactly 6 digits'),
   })
 
   const [selectedLocation, setSelectedLocation] = useState({
@@ -111,16 +80,32 @@ const LastStep = ({ accountType = 'personal' }) => {
 
   const countries = yourhandle.getCountries()
 
+  const disabledItem = (msg) => [
+    {
+      name: msg,
+      disabled: true,
+    },
+  ]
+
   const updateStates = (shortName) => {
     const states = yourhandle.getStatesByShort(shortName)
     const updated = map(states, (state) => ({ name: state }))
-    setStateList(updated)
+    if (updated && updated.length > 0) {
+      setStateList(updated)
+    } else {
+      setStateList(disabledItem('No state found for selected country.'))
+    }
   }
 
   const updateCities = (shortName, state) => {
     const cities = yourhandle.getCities(shortName, state)
     const updated = map(cities, (city) => ({ name: city }))
-    setCityList(updated)
+
+    if (updated && updated.length > 0) {
+      setCityList(updated)
+    } else {
+      setCityList(disabledItem('No city found for selected state.'))
+    }
   }
 
   const [stateList, setStateList] = useState([])
@@ -131,7 +116,7 @@ const LastStep = ({ accountType = 'personal' }) => {
     <Loading />
   ) : (
     <Layout
-      title="Welcome, Mohammad!"
+      title={`Welcome, ${user?.firstName || 'Human'}!`}
       subtitle={
         <p>
           Create a profile, connect with acquaintances and discuss topics that
@@ -139,24 +124,24 @@ const LastStep = ({ accountType = 'personal' }) => {
         </p>
       }
     >
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+      <AnimatedDiv className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white  border border-transparent dark:border-gray-700  dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
             initialValues={PersonalStepTwo}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
           >
             <Form className="space-y-6">
-              <div className="mt-6">
-                <Selector
+              <div>
+                <FormSelector
                   label={'Country / region'}
                   list={countries}
+                  name="country"
                   required
-                  error={errors.country}
-                  selectedItem={selectedLocation.country.longName}
-                  placeholder={'Select location'}
+                  placeholder={'Select country'}
                   onSelect={(item) => {
                     updateStates(item.shortName)
+
                     setSelectedLocation({
                       ...selectedLocation,
                       country: {
@@ -167,14 +152,13 @@ const LastStep = ({ accountType = 'personal' }) => {
                   }}
                 />
               </div>
-              <div className="mt-6">
-                <Selector
-                  label={'State'}
+              <div>
+                <FormSelector
+                  label="State"
                   list={stateList}
-                  error={errors.state}
+                  name="state"
                   required
-                  selectedItem={selectedLocation.state}
-                  placeholder={'Select location'}
+                  placeholder={'Select state'}
                   onSelect={(item) => {
                     updateCities(selectedLocation.country.shortName, item.name)
                     setSelectedLocation({
@@ -184,14 +168,14 @@ const LastStep = ({ accountType = 'personal' }) => {
                   }}
                 />
               </div>
-              <div className="mt-6">
-                <Selector
+
+              <div>
+                <FormSelector
                   label={'Ctiy'}
+                  name="city"
                   list={cityList}
                   required
-                  error={errors.city}
-                  selectedItem={selectedLocation.city}
-                  placeholder={'Select location'}
+                  placeholder={'Select city'}
                   onSelect={(item) => {
                     setSelectedLocation({
                       ...selectedLocation,
@@ -204,6 +188,7 @@ const LastStep = ({ accountType = 'personal' }) => {
                 label="Postal Code"
                 id="pincode"
                 name="pincode"
+                placeholder="Postal Code"
                 required
               />
 
@@ -221,11 +206,11 @@ const LastStep = ({ accountType = 'personal' }) => {
           </Formik>
         </div>
         <TextButton
-          text="Go back"
+          text="Edit company details"
           onClick={goBack}
           className="inline-block mt-4"
         />
-      </div>
+      </AnimatedDiv>
     </Layout>
   )
 }

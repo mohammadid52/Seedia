@@ -10,7 +10,7 @@ const FormInput = ({
   type = 'text',
   placeholder,
   error,
-  value,
+  value = '',
   onChange,
   gridClass,
   required,
@@ -26,8 +26,8 @@ const FormInput = ({
   type?: string
   placeholder?: string
   error?: string
-  value: string
-  onChange: () => void
+  value?: string
+  onChange?: () => void
   gridClass?: string
   props?: any
   showPasswordButton?: boolean
@@ -64,6 +64,7 @@ const FormInput = ({
               <div className="mt-1 relative rounded-md shadow-sm">
                 <input
                   id={id}
+                  placeholder={placeholder}
                   type={
                     showPasswordButton ? (showPass ? 'text' : 'password') : type
                   }

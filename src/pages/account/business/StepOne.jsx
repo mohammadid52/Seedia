@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Loading from 'components/Loading'
 import Copyright from 'components/Copyright'
 import Button from 'components/atoms/Button'
@@ -12,62 +12,72 @@ import { wait } from 'utils/wait'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { BusinessStepOneFields } from '../../../initials'
-import { useUserContext } from 'context/UserContext'
 
-const BusinessStepOne = () => {
+import Layout from 'containers/Layout'
+import AnimatedDiv from 'components/animation/AnimatedDiv'
+import { network } from 'helpers'
+import Error from 'components/alerts/Error'
+
+const BusinessStepOne = ({ user }) => {
   const history = useHistory()
   const [isLoaded, setIsLoaded] = useState(true)
-  const { values, setValues } = useUserContext()
 
   const [saving, setSaving] = useState(false)
+  const [errors, setErrors] = useState([])
 
   const validationSchema = Yup.object({
-    company_name: Yup.string().required('Please enter legal company name'),
-    company_email: Yup.string()
+    companyName: Yup.string().required('Please enter legal company name'),
+    companyEmail: Yup.string()
       .email('Please enter valid email address')
-      .required('Please add legal company email address'),
+      .required('Please enter legal company email address'),
 
-    company_number: Yup.string().required('Please enter company number'),
+    companyNumber: Yup.string()
+      .matches(/^[0-9+()-]+$/, 'Must be only digits')
+      .required('Please enter company number'),
   })
 
-  setTimeout(() => {
-    setIsLoaded(true)
-  }, 1000)
+  /**
+   * Check if account is already selected
+   */
+  const checkAccount = () => {
+    if (user && user.hasOwnProperty('accountFilled') && user?.accountFilled) {
+      return history.push(links.DASHBAORD)
+    }
+  }
 
-  const onSubmit = (_values) => {
-    setSaving(true)
-    wait(3000).then(() => {
-      setSaving(false)
-      setValues({
-        ...values,
-        business: {
-          ...values.business,
-          name: _values.company_name,
-          email: _values.company_email,
-          number: _values.company_number,
-        },
+  useEffect(() => {
+    checkAccount()
+  }, [])
+
+  const onSubmit = async (values) => {
+    try {
+      setSaving(true)
+      await network.post('/user/update', {
+        companyName: values.companyName,
+        companyEmail: values.companyEmail,
+        companyNumber: values.companyNumber,
       })
       history.push(links.BUSINESS_STEP_2)
-    })
+    } catch (error) {
+      setErrors([error.message])
+      console.error(error)
+    } finally {
+      setSaving(false)
+    }
   }
   return !isLoaded ? (
     <Loading />
   ) : (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-800 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md flex items-center flex-col ">
-        <img
-          className="mx-auto h-32 w-auto"
-          src={process.env.PUBLIC_URL + '/logo.png'}
-          alt="Workflow"
+    <Layout
+      withButton={
+        <TextButton
+          text="or create a personal account"
+          onClick={() => history.push(links.PERSONAL_STEP_1)}
         />
-        <h2 className="dark:text-white mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Create business account
-        </h2>
-
-        <TextButton text="or create a personal account" onClick={() => {}} />
-      </div>
-
-      <div className="mt-0 sm:mx-auto sm:w-full sm:max-w-md">
+      }
+      title="Create business account"
+    >
+      <AnimatedDiv className="mt-0 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="mb-4">
           <Info text="Qualify for business seller limits, promotions and professional tools to expand your business" />
         </div>
@@ -80,22 +90,22 @@ const BusinessStepOne = () => {
             <Form className="space-y-6">
               <FormInput
                 label="Legal company name"
-                id="company_name"
-                name="company_name"
+                id="companyName"
+                name="companyName"
                 required
               />
               <FormInput
                 label="Legal company email address"
-                id="company_email"
-                name="company_email"
+                id="companyEmail"
+                name="companyEmail"
                 type="email"
                 required
               />
 
               <FormInput
                 label="Legal phone number of company"
-                id="company_number"
-                name="company_number"
+                id="companyNumber"
+                name="companyNumber"
                 required
               />
 
@@ -103,7 +113,7 @@ const BusinessStepOne = () => {
                 <p className="text-left text-xs dark:text-gray-400 tracking-wide leading-5 text-gray-600">
                   We regularly send you e-mails with special offers on 13RMS.
                   You can unsubsribe from these marketing messages at any time
-                  free of charge throw 13RMS or the links in the email.
+                  free of charge through 13RMS or the links in the email.
                 </p>
                 <p className="text-left text-xs dark:text-gray-400 tracking-wide leading-5 text-gray-600">
                   By selecting <strong>Register</strong>, you confirm that you
@@ -117,6 +127,10 @@ const BusinessStepOne = () => {
                     Privacy Statement.
                   </a>
                 </p>
+              </div>
+
+              <div hidden={errors.length === 0}>
+                <Error errors={errors} />
               </div>
 
               <div>
@@ -137,9 +151,8 @@ const BusinessStepOne = () => {
           text="Go back"
           className="inline-block mt-4"
         />
-      </div>
-      <Copyright />
-    </div>
+      </AnimatedDiv>
+    </Layout>
   )
 }
 export default BusinessStepOne

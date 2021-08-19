@@ -8,7 +8,7 @@ const InputWithDropdown = ({
   className,
   placeholder,
   required,
-}) => {
+}: any) => {
   return (
     <div>
       <label
@@ -24,7 +24,7 @@ const InputWithDropdown = ({
       </label>
 
       <Field name={name}>
-        {(props) => {
+        {(props: { field: any; meta: any }) => {
           const { field, meta } = props
 
           return (
@@ -38,9 +38,11 @@ const InputWithDropdown = ({
                   name="country"
                   className="focus:ring-yellow-500 focus:border-yellow-500 h-full py-0 pl-3 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md"
                 >
-                  {list.map((item) => (
-                    <option>{item.code}</option>
-                  ))}
+                  {list.map(
+                    (item: { code: string }): JSX.Element => (
+                      <option>{item.code}</option>
+                    )
+                  )}
                 </select>
               </div>
               <input

@@ -1,14 +1,13 @@
 import Layout from 'containers/Layout'
-import React from 'react'
+import { useEffect } from 'react'
 import { classNames } from 'utils/classNames'
 import { useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import Button from 'components/atoms/Button'
-import { wait } from 'utils/wait'
 import { useHistory } from 'react-router-dom'
 import { links } from 'constants/Links'
-import TextButton from 'components/atoms/TextButton'
-import { useUserContext } from 'context/UserContext'
+import { network } from 'helpers'
+import AnimatedDiv from 'components/animation/AnimatedDiv'
 
 const settings = [
   {
@@ -25,14 +24,26 @@ const settings = [
   },
 ]
 
-const ChooseAccount = () => {
+const ChooseAccount = ({ user }) => {
   const [selected, setSelected] = useState(settings[0])
   const history = useHistory()
-  const { setValues, values } = useUserContext()
 
   const [loading, setLoading] = useState(false)
 
-  const onNext = () => {
+  /**
+   * Check if account is already selected
+   */
+  const checkAccount = () => {
+    if (user && user.hasOwnProperty('accountType')) {
+      return history.push(links.DASHBAORD)
+    }
+  }
+
+  useEffect(() => {
+    checkAccount()
+  }, [])
+
+  const onNext = async () => {
     let path
     if (selected.name === 'Personal') {
       path = links.PERSONAL_STEP_1
@@ -41,23 +52,25 @@ const ChooseAccount = () => {
     } else {
       path = links.BUSINESS_STEP_1
     }
-    setLoading(true)
-    setValues({
-      ...values,
-      accountType: selected.name,
-    })
-    window.localStorage.setItem('accountType', selected.name)
-    console.log('Successfully added account type to local storage')
-    wait(1000).then(() => {
-      setLoading(false)
+
+    try {
+      setLoading(true)
+      await network.post(links.BASE_API_URL + '/user/update', {
+        accountType: selected.name.toLocaleLowerCase(),
+      })
+
       history.push(path || links.PERSONAL_STEP_1)
-    })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div>
       <Layout title="Choose account type" subtitle="">
-        <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
+        <AnimatedDiv className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white dark:border-gray-700 border border-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
             <RadioGroup value={selected} onChange={setSelected}>
               <RadioGroup.Label className="sr-only">
@@ -70,12 +83,10 @@ const ChooseAccount = () => {
                     value={setting}
                     className={({ checked }) =>
                       classNames(
-                        settingIdx === 0 ? 'rounded-md' : '',
-                        settingIdx === settings.length - 1 ? 'rounded-md' : '',
                         checked
                           ? 'bg-pink-50 dark:bg-gray-800 rounded-md dark:border-pink-700 border-pink-200 z-10'
-                          : 'border-gray-200 dark:border-gray-700',
-                        'relative border p-4 transition-all duration-200 flex cursor-pointer focus:outline-none'
+                          : 'border-gray-200 dark:border-gray-700 rounded-md',
+                        'relative border p-4 transition-all duration-200 flex overflow-hidden cursor-pointer focus:outline-none'
                       )
                     }
                   >
@@ -130,12 +141,7 @@ const ChooseAccount = () => {
               onClick={onNext}
             />
           </div>
-          <TextButton
-            onClick={history.goBack}
-            text="Go back"
-            className="inline-block mt-4"
-          />
-        </div>
+        </AnimatedDiv>
       </Layout>
     </div>
   )
