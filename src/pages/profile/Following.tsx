@@ -37,7 +37,7 @@ const Following = () => {
             return (
               <div
                 key={idx}
-                className="flex px-2 py-4 items-center justify-between w-72 flex-col dark:bg-gray-800 bg-gray-100 rounded-md relative p-4"
+                className="flex px-2 py-4 items-center justify-between w-72 border flex-col dark:border-gray-600 border-gray-200 rounded-md relative p-4"
               >
                 <img
                   src={faker.image.avatar()}

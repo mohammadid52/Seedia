@@ -41,7 +41,7 @@ const Recommendations = ({
               return (
                 <div
                   key={idx}
-                  className=" rounded-md pb-2 bg-gray-100 dark:bg-gray-800 relative w-full p-4"
+                  className=" rounded-md pb-2 border-gray-200 dark:border-gray-600 border relative w-full p-4"
                 >
                   <p className="my-2 mt-4 italic text-gray-500 dark:text-gray-400 text-center font-medium text-lg">
                     “ {recom.text} ”

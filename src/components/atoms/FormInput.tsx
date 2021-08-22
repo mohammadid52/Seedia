@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/solid'
-import { Field } from 'formik'
+import { Field, useField } from 'formik'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 
 const FormInput = ({
@@ -16,6 +16,8 @@ const FormInput = ({
   required,
   showPasswordButton = false,
   optional = false,
+  textarea = false,
+  setUnsavedChanges = () => {},
   ...props
 }: {
   label?: string
@@ -31,9 +33,12 @@ const FormInput = ({
   gridClass?: string
   props?: any
   showPasswordButton?: boolean
+  textarea?: boolean
+  setUnsavedChanges?: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const errorClass = `border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500`
   const [showPass, setShowPass] = useState(false)
+
   return (
     <div className={gridClass}>
       <div className="flex justify-between">
@@ -55,67 +60,105 @@ const FormInput = ({
         )}
       </div>
 
-      <Field name={name}>
-        {(props: any) => {
-          const { field, meta } = props
+      {textarea ? (
+        <Field name={name}>
+          {(props: any) => {
+            const { field, meta } = props
 
-          return (
-            <div>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <input
-                  id={id}
-                  placeholder={placeholder}
-                  type={
-                    showPasswordButton ? (showPass ? 'text' : 'password') : type
-                  }
-                  className={`block border w-full pr-10 ${
-                    error
-                      ? errorClass
-                      : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
-                  } sm:text-sm p-2 rounded-md dark:bg-gray-800 dark:border-gray-700 dark:text-white`}
-                  {...field}
-                />
-                <div className="flex items-center absolute transition-all duration-200 inset-y-0 right-0 pr-3 ">
-                  {meta.touched && meta.error && (
-                    <div className=" pointer-events-none">
-                      <ExclamationCircleIcon
-                        className="h-5 w-5 text-red-500 dark:text-red-400"
-                        aria-hidden="true"
-                      />
-                    </div>
-                  )}
-                  {showPasswordButton && field.value && (
-                    <div
-                      className="ml-2"
-                      onClick={() => setShowPass(!showPass)}
-                    >
-                      {showPass ? (
-                        <AiOutlineEyeInvisible
-                          className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-500"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <AiOutlineEye
-                          className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-500"
-                          aria-hidden="true"
-                        />
-                      )}
-                    </div>
-                  )}
+            return (
+              <div>
+                <div className="mt-1 relative rounded-md shadow-sm">
+                  <textarea
+                    id={id}
+                    placeholder={placeholder}
+                    type={type}
+                    className={`block border w-full pr-10 ${
+                      error
+                        ? errorClass
+                        : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
+                    } sm:text-sm p-2 rounded-md dark:bg-gray-800 dark:border-gray-700 dark:text-white`}
+                    {...field}
+                  />
                 </div>
+                {meta.touched && meta.error && (
+                  <p
+                    className="mt-2 transition-all duration-200 text-sm text-red-600 dark:text-red-500"
+                    id={`${name || id}-error`}
+                  >
+                    {meta.error}
+                  </p>
+                )}
               </div>
-              {meta.touched && meta.error && (
-                <p
-                  className="mt-2 transition-all duration-200 text-sm text-red-600 dark:text-red-500"
-                  id={`${name || id}-error`}
-                >
-                  {meta.error}
-                </p>
-              )}
-            </div>
-          )
-        }}
-      </Field>
+            )
+          }}
+        </Field>
+      ) : (
+        <Field name={name}>
+          {(props: any) => {
+            const { field, meta } = props
+
+            return (
+              <div>
+                <div className="mt-1 relative rounded-md shadow-sm">
+                  <input
+                    id={id}
+                    placeholder={placeholder}
+                    type={
+                      showPasswordButton
+                        ? showPass
+                          ? 'text'
+                          : 'password'
+                        : type
+                    }
+                    className={`block border w-full pr-10 ${
+                      error
+                        ? errorClass
+                        : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
+                    } sm:text-sm p-2 rounded-md dark:bg-gray-800 dark:border-gray-700 dark:text-white`}
+                    {...field}
+                  />
+                  <div className="flex items-center absolute transition-all duration-200 inset-y-0 right-0 pr-3 ">
+                    {meta.touched && meta.error && (
+                      <div className=" pointer-events-none">
+                        <ExclamationCircleIcon
+                          className="h-5 w-5 text-red-500 dark:text-red-400"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    )}
+                    {showPasswordButton && field.value && (
+                      <div
+                        className="ml-2"
+                        onClick={() => setShowPass(!showPass)}
+                      >
+                        {showPass ? (
+                          <AiOutlineEyeInvisible
+                            className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-500"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <AiOutlineEye
+                            className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-500"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {meta.touched && meta.error && (
+                  <p
+                    className="mt-2 transition-all duration-200 text-sm text-red-600 dark:text-red-500"
+                    id={`${name || id}-error`}
+                  >
+                    {meta.error}
+                  </p>
+                )}
+              </div>
+            )
+          }}
+        </Field>
+      )}
     </div>
   )
 }

@@ -6,7 +6,7 @@ import { classNames } from 'utils/classNames'
 import { useField } from 'formik'
 
 interface SelecterProps {
-  list: { name: string }[]
+  list: { name: string; id?: string }[]
   placeholder?: string
   label?: string
   required?: boolean

@@ -1,8 +1,8 @@
 import Card from 'components/atoms/Card'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import Section from 'components/atoms/Section'
 import { CgDetailsMore } from 'react-icons/cg'
-import { AiOutlineEdit, AiOutlineEye } from 'react-icons/ai'
+import { AiOutlineEdit } from 'react-icons/ai'
 import Button from 'components/atoms/Button'
 import { isEmpty, map, remove, update } from 'lodash'
 import Modal from 'components/atoms/Modal'
@@ -588,7 +588,12 @@ const Background = ({ userData }: { userData: any }) => {
         }
       />
 
-      <Modal open={showUnsaveModal} setOpen={setShowUnsaveModal}>
+      <Modal
+        hideCloseBtn
+        header="Discard changes"
+        open={showUnsaveModal}
+        setOpen={setShowUnsaveModal}
+      >
         <>
           <h1 className="text-lg dark:text-white text-gray-900 min-w-96">
             You have unsaved changes

@@ -4,7 +4,6 @@ import { isEmpty } from 'lodash'
 import React, { useContext, createContext, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from 'state/Redux/Actions/authActions'
-import { setValues } from 'state/Redux/Actions/userActions'
 
 const UserContext = createContext(null)
 
@@ -19,10 +18,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   const isUser = !isEmpty(values)
 
   const userData: IParent = isUser ? values : undefined
-  console.log(
-    '🚀 ~ file: UserContext.tsx ~ line 21 ~ UserContextProvider ~ userData',
-    userData
-  )
 
   return (
     <UserContext.Provider
