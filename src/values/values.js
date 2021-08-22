@@ -49,6 +49,23 @@ import venezuela from 'assets/images/countries/venezuela.png'
 import usa from 'assets/images/countries/usa.png'
 import ww from 'assets/images/countries/ww.png'
 
+import faker from 'faker'
+
+import { BiHelpCircle, BiStore } from 'react-icons/bi'
+import { IoIosSettings } from 'react-icons/io'
+import { GiReceiveMoney } from 'react-icons/gi'
+import {
+  AiOutlineLogout,
+  AiOutlineSearch,
+  AiOutlineUsergroupDelete,
+} from 'react-icons/ai'
+import { FaAdversal, FaMoneyBillAlt, FaConnectdevelop } from 'react-icons/fa'
+import { MdFindReplace, MdAttachMoney, MdLanguage } from 'react-icons/md'
+import { SiGoogleanalytics } from 'react-icons/si'
+import { FiActivity } from 'react-icons/fi'
+import { BsFilePost } from 'react-icons/bs'
+import { map } from 'lodash'
+
 export const adjustColors = [
   { name: 'Deuteranomaly', value: 1 },
   { name: 'Protanomaly', value: 2 },
@@ -132,6 +149,144 @@ export const my13Rms = [
   },
 ]
 
+export const settings = [
+  {
+    name: 'Settings & Privacy',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+    href: '#/',
+    icon: IoIosSettings,
+  },
+  {
+    name: 'Help',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+    href: '#/',
+    icon: BiHelpCircle,
+  },
+  {
+    name: 'Language',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+    href: '#/',
+    icon: MdLanguage,
+  },
+  {
+    name: 'Activity',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+    href: '#/',
+    icon: FiActivity,
+  },
+  {
+    name: 'Sign Out',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+
+    icon: AiOutlineLogout,
+  },
+]
+
+export const sellList = [
+  {
+    name: 'Products of your Interest',
+    href: '/#',
+  },
+  {
+    name: 'Business of your Interest',
+    href: '/#',
+  },
+  {
+    name: 'Purchase history',
+    href: '/#',
+  },
+  {
+    name: 'Recent activity',
+    href: '/#',
+  },
+  {
+    name: 'Buy again',
+    href: '/#',
+  },
+  {
+    name: 'Saved searches',
+    href: '/#',
+  },
+  {
+    name: 'Saved sellers',
+    href: '/#',
+  },
+  {
+    name: 'Saved Inbox',
+    href: '/#',
+  },
+]
+
+export const callsToAction = [
+  { name: 'Open Store', href: '/#', icon: BiStore },
+  { name: 'Sell', href: '/#', icon: GiReceiveMoney },
+]
+
+export const businessApps = [
+  {
+    icon: AiOutlineSearch,
+    name: 'Search for leads',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+  },
+  {
+    icon: BsFilePost,
+    name: 'Post a job',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+  },
+  {
+    icon: FaAdversal,
+    name: 'Advertise',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+  },
+  {
+    icon: FaMoneyBillAlt,
+    name: 'Sell products',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+  },
+  {
+    icon: AiOutlineUsergroupDelete,
+    name: 'Groups',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+  },
+  {
+    icon: MdFindReplace,
+    name: 'Pro finder',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+  },
+  {
+    icon: MdAttachMoney,
+    name: 'Salary',
+    description:
+      'Get a better understanding of where your traffic is coming from.',
+  },
+  {
+    icon: BsFilePost,
+    name: 'New product',
+    description: 'Lorem ipsum dolor sit amet',
+  },
+  {
+    icon: FaConnectdevelop,
+    name: 'New product developed',
+    description: 'Lorem ipsum dolor sit amet',
+  },
+  {
+    icon: SiGoogleanalytics,
+    name: 'Profile statistics',
+    description: 'Lorem ipsum dolor sit amet',
+  },
+]
+
 export const year = new Date().getFullYear()
 const startDate = 1950
 
@@ -147,6 +302,214 @@ const getYearList = (future = false) => {
 }
 export const yearList = getYearList()
 export const yearListWithFuture = getYearList(true)
+
+export const profileOne = {
+  about: {
+    fullName: faker.name.findName(),
+    email: faker.internet.email(),
+    companyName: faker.company.companyName(),
+    currentCompany: faker.company.companyName(),
+    previousCompany: faker.company.companyName(),
+    livesIn: faker.address.cityName(),
+    maritalStatus: 'Married',
+    coverPicture: faker.image.nature(),
+    userImage: faker.image.avatar(),
+    jobTitle: faker.name.jobTitle(),
+    profileViews: faker.datatype.number(6000),
+    projects: faker.datatype.number(100),
+    connections: faker.datatype.number(10000),
+    companyAddress: faker.address.streetAddress(),
+  },
+
+  background: {
+    interests: [
+      { name: 'Branding', id: '1ldfdfml' },
+      { name: 'Web Design', id: '213243lkdmf' },
+      { name: 'Mobile Design', id: '3342dsd' },
+      { name: 'Development', id: '445sf4' },
+    ],
+    summary: faker.lorem.paragraph(),
+    experiences: [
+      {
+        id: '9434dfm2lcm1',
+        jobTitle: faker.name.jobTitle(),
+        companyName: faker.company.companyName(),
+        joinDate: faker.date.past().getFullYear().toString(),
+        leaveDate: faker.date.past().getFullYear().toString(),
+        description: faker.lorem.paragraph(2),
+        companyAddress: '',
+      },
+      {
+        id: 'ssofj2983n1',
+        jobTitle: faker.name.jobTitle(),
+        companyName: faker.company.companyName(),
+        joinDate: faker.date.past().getFullYear().toString(),
+        leaveDate: faker.date.past().getFullYear().toString(),
+        description: faker.lorem.paragraph(2),
+        companyAddress: '',
+      },
+    ],
+  },
+
+  peopleAlsoViewed: [
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+    {
+      image: faker.image.avatar(),
+      fullName: faker.name.findName(),
+      jobType: faker.name.jobType(),
+    },
+  ],
+  recommendation: {
+    received: [
+      {
+        text: faker.lorem.paragraph(2),
+        user: {
+          fullName: faker.name.findName(),
+          userImage: faker.image.avatar(),
+        },
+      },
+      {
+        text: faker.lorem.paragraph(2),
+        user: {
+          fullName: faker.name.findName(),
+          userImage: faker.image.avatar(),
+        },
+      },
+    ],
+    given: [
+      {
+        text: faker.lorem.paragraph(2),
+        user: {
+          fullName: faker.name.findName(),
+          userImage: faker.image.avatar(),
+        },
+      },
+      {
+        text: faker.lorem.paragraph(2),
+        user: {
+          fullName: faker.name.findName(),
+          userImage: faker.image.avatar(),
+        },
+      },
+    ],
+  },
+}
+
+const poAbout = profileOne.about
+
+export const profileTwo = {
+  about: {
+    fullName: poAbout.fullName,
+    email: poAbout.email,
+    companyName: poAbout.companyName,
+    companyAddress: poAbout.companyAddress,
+    jobTitle: poAbout.jobTitle,
+    userImage: poAbout.userImage,
+  },
+  languages: [
+    {
+      langName: 'English',
+      langLevel: 'Full Professional Profiency',
+    },
+    { langName: 'French', langLevel: 'Intermediate' },
+    { langName: 'Spanish', langLevel: 'Intermediate' },
+    { langName: 'Polish', langLevel: 'Full Professional Profiency' },
+  ],
+
+  awards: [
+    {
+      awardName: 'Behance Interaction Featured',
+      awardFor: 'User Interface Design',
+    },
+    { awardName: 'Behance Product Design Featured', awardFor: 'Web Design' },
+    { awardName: 'Site Of The Month by Awwwards', awardFor: 'Web Design' },
+    {
+      awardName: 'CSS Beauty Award',
+      awardFor: 'UI / User Experience Design',
+    },
+  ],
+  skills: [
+    {
+      id: faker.datatype.uuid(),
+      name: 'User Interface Design',
+    },
+    {
+      id: faker.datatype.uuid(),
+      name: 'Web Design',
+    },
+    {
+      id: faker.datatype.uuid(),
+      name: 'Mobile Design',
+    },
+    {
+      id: faker.datatype.uuid(),
+      name: 'User Experience Knowledge',
+    },
+    {
+      id: faker.datatype.uuid(),
+      name: 'CSS / HTML',
+    },
+    {
+      id: faker.datatype.uuid(),
+      name: 'Fast Learning',
+    },
+  ],
+
+  experiences: map(profileOne.background.experiences, (exp) => ({
+    ...exp,
+    companyAddress: faker.address.streetAddress(),
+  })),
+  peopleAlsoViewed: [...profileOne.peopleAlsoViewed],
+  education: [
+    {
+      from: `${faker.date.past().getFullYear()}`,
+      to: `${faker.date.past().getFullYear()}`,
+      name: `Massachusetts Institue of Technology (MIT)`,
+      degree:
+        'Master of Fine Arts,Design and Technology, 77 Massachusetts Ave, USA',
+    },
+    {
+      from: `${faker.date.past().getFullYear()}`,
+      to: `${faker.date.past().getFullYear()}`,
+      name: `Stanford University`,
+      degree: 'Bachelor of Fine Arts,Stanford, USA',
+    },
+  ],
+}
 
 export const productsArray = [
   // { label: 'All', value: 'all' },

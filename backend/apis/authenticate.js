@@ -51,7 +51,7 @@ router.post('/login', async (req, res) => {
 })
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, firstName, lastName } = req.body
+    const { email, password, firstName, lastName, ...otherData } = req.body
 
     if (!(email && password && firstName && lastName)) {
       res.status(400).json(responseMsg('error', 'Please add all fields'))
@@ -71,6 +71,7 @@ router.post('/register', async (req, res) => {
       lastName,
       email: email.toLowerCase(),
       password: hashedPassword,
+      ...otherData,
     }
     const _user = await usersCollection.insertOne(user)
 

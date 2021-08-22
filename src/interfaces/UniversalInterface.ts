@@ -1,3 +1,5 @@
+import { User } from './UserInterface'
+
 export interface IAbout {
   currentCompany?: string
   companyAddress?: string
@@ -15,19 +17,61 @@ export interface IAbout {
   connections?: number
 }
 
+export interface IUser extends User {
+  fullName: string
+  profilePicture: string
+  profileViews?: number
+  maritalStatus?: string
+  projects?: number
+  connections?: number
+}
+
+export interface ICompany {
+  currentCompany?: string
+  companyAddress?: string
+  companyName?: string
+  jobTitle?: string
+}
+
+export interface ILocation {
+  livesIn: string
+  country: string
+  pincode: string
+  state: string
+  city: string
+}
+
+export interface IOther {
+  accountType: string
+  accountFilled: boolean
+  accountFinishedStep: string
+}
+
+export interface IParent {
+  user?: IUser
+  company?: ICompany
+  location?: ILocation
+  background?: IBackground
+  other?: IOther
+  // business?:{}
+}
+
 export interface IExperience {
   jobTitle: string
   companyName: string
-  startedAt: string
-  companyAddress: string
-  endedAt: string
+  startedAt?: string
+  companyAddress?: string
+  endedAt?: string
   description: string
+  leaveDate?: string
+  id: string
+  joinDate: string
 }
 
 export interface IBackground {
   summary: string
-  interests: { name: string }[]
-  experience: IExperience[]
+  interests: { name: string; id: string }[]
+  experiences: IExperience[]
 }
 
 export interface IPeopleAlsoViewed {
@@ -78,7 +122,7 @@ export interface IRecommendation {
 export interface IProfileTwo {
   about: IAbout
   peopleAlsoViewed: IPeopleAlsoViewed[]
-  experience: IExperience[]
+  experiences: IExperience[]
   education: Education[]
   skills: ISkill[]
   awards: IAward[]
@@ -89,6 +133,6 @@ export interface IProfile {
   about: IAbout
   background: IBackground
   peopleAlsoViewed: IPeopleAlsoViewed[]
-  experience: IExperience[]
+  experiences: IExperience[]
   education: Education[]
 }

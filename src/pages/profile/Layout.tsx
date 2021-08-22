@@ -15,7 +15,7 @@ const Layout = ({
     <div className="flex-grow w-full  mx-auto xl:px-8 justify-start items-start lg:flex">
       {/* Left sidebar & main wrapper */}
       <div className="flex-1 min-w-0 xl:flex items-start">
-        <div className="border-b border-gray-200 xl:border-b-0 xl:flex-shrink-0 xl:w-64">
+        <div className="border-b dark:border-gray-700 border-gray-200 xl:border-b-0 xl:flex-shrink-0 xl:w-64">
           <div className="h-full pl-4 pr-6 py-6 sm:pl-6 lg:pl-8 xl:pl-0">
             {/* Start left column area */}
             <div className="h-full relative">{firstCol}</div>

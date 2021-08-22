@@ -33,9 +33,12 @@ const Following = () => {
       }
       content={
         <div className="grid mt-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-          {map(following, (user) => {
+          {map(following, (user, idx) => {
             return (
-              <div className="flex px-2 py-4 items-center justify-between w-72 flex-col dark:bg-gray-800 bg-gray-100 rounded-md relative p-4">
+              <div
+                key={idx}
+                className="flex px-2 py-4 items-center justify-between w-72 flex-col dark:bg-gray-800 bg-gray-100 rounded-md relative p-4"
+              >
                 <img
                   src={faker.image.avatar()}
                   alt="user"

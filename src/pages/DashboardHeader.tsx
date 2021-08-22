@@ -3,172 +3,22 @@
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon, MenuIcon } from '@heroicons/react/outline'
-import {
-  BiHelpCircle,
-  BiMessageDetail,
-  BiStore,
-  BiUserCircle,
-} from 'react-icons/bi'
-import { IoIosSettings, IoMdNotificationsOutline } from 'react-icons/io'
+import { BiMessageDetail, BiUserCircle } from 'react-icons/bi'
+import { IoMdNotificationsOutline } from 'react-icons/io'
 import { GiReceiveMoney } from 'react-icons/gi'
-import {
-  AiOutlineHome,
-  AiOutlineLogout,
-  AiOutlineSearch,
-  AiOutlineUsergroupDelete,
-} from 'react-icons/ai'
+import { AiOutlineHome } from 'react-icons/ai'
 import Toggle from 'components/ThemeToggle'
-import { BsFilePost, BsPeople } from 'react-icons/bs'
+import { BsPeople } from 'react-icons/bs'
 import { CgWorkAlt } from 'react-icons/cg'
-import { FaAdversal, FaMoneyBillAlt, FaConnectdevelop } from 'react-icons/fa'
-import { MdFindReplace, MdAttachMoney, MdLanguage } from 'react-icons/md'
-import { SiGoogleanalytics } from 'react-icons/si'
-import { FiActivity } from 'react-icons/fi'
 import { useUserContext } from 'context/UserContext'
 import { IAbout } from 'interfaces/UniversalInterface'
 import { classNames } from 'utils/classNames'
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logOut } from 'state/Redux/Actions/authActions'
-const settings = [
-  {
-    name: 'Settings & Privacy',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-    href: '#/',
-    icon: IoIosSettings,
-  },
-  {
-    name: 'Help',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-    href: '#/',
-    icon: BiHelpCircle,
-  },
-  {
-    name: 'Language',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-    href: '#/',
-    icon: MdLanguage,
-  },
-  {
-    name: 'Activity',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-    href: '#/',
-    icon: FiActivity,
-  },
-  {
-    name: 'Sign Out',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
+import { businessApps, callsToAction, sellList, settings } from 'values/values'
 
-    icon: AiOutlineLogout,
-  },
-]
-
-const sellList = [
-  {
-    name: 'Products of your Interest',
-    href: '/#',
-  },
-  {
-    name: 'Business of your Interest',
-    href: '/#',
-  },
-  {
-    name: 'Purchase history',
-    href: '/#',
-  },
-  {
-    name: 'Recent activity',
-    href: '/#',
-  },
-  {
-    name: 'Buy again',
-    href: '/#',
-  },
-  {
-    name: 'Saved searches',
-    href: '/#',
-  },
-  {
-    name: 'Saved sellers',
-    href: '/#',
-  },
-  {
-    name: 'Saved Inbox',
-    href: '/#',
-  },
-]
-
-const callsToAction = [
-  { name: 'Open Store', href: '/#', icon: BiStore },
-  { name: 'Sell', href: '/#', icon: GiReceiveMoney },
-]
-
-const businessApps = [
-  {
-    icon: AiOutlineSearch,
-    name: 'Search for leads',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: BsFilePost,
-    name: 'Post a job',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: FaAdversal,
-    name: 'Advertise',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: FaMoneyBillAlt,
-    name: 'Sell products',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: AiOutlineUsergroupDelete,
-    name: 'Groups',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: MdFindReplace,
-    name: 'Pro finder',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: MdAttachMoney,
-    name: 'Salary',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: BsFilePost,
-    name: 'New product',
-    description: 'Lorem ipsum dolor sit amet',
-  },
-  {
-    icon: FaConnectdevelop,
-    name: 'New product developed',
-    description: 'Lorem ipsum dolor sit amet',
-  },
-  {
-    icon: SiGoogleanalytics,
-    name: 'Profile statistics',
-    description: 'Lorem ipsum dolor sit amet',
-  },
-]
-
-const DashboardHeader = ({ about }: { about: IAbout }) => {
+const DashboardHeader = ({ about, user }: { about: IAbout; user: any }) => {
   const { setDarkMode, darkMode } = useUserContext()
   const dispatch = useDispatch()
   const history = useHistory()
@@ -406,10 +256,11 @@ const DashboardHeader = ({ about }: { about: IAbout }) => {
                             </div>
                             <div>
                               <h4 className="text-lg dark:text-white font-bold">
-                                {about.fullName}
+                                {user.fullName ||
+                                  `${user.firstName} ${user.lastName}`}
                               </h4>
                               <p className="mt-1 text-gray-800 font-medium leading-3 dark:text-gray-400">
-                                {about.jobTitle}
+                                {user?.company?.jobTitle}
                               </p>
                             </div>
                           </div>

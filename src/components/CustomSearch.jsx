@@ -91,6 +91,7 @@ const CustomSearchPanel = () => {
         >
           <div className="col-span-3 tooltip-ref ml-2">
             <Selector
+              disableFocus
               selectedItem={selectedProduct.label}
               list={productsArray.map((product) => ({ name: product.label }))}
               required
@@ -107,10 +108,10 @@ const CustomSearchPanel = () => {
         </HtmlTooltip>
         <div className="col-span-5">
           <input
-            id="search"
+            id="home_search_panel"
             name="search"
             type="text"
-            className="relative dark:bg-gray-800 dark:text-white w-full border-none focus:outline-none text-sm  pl-3 pr-10 py-2 text-left  dark:placeholder-gray-400 placeholder-gray-500 h-full"
+            className="relative  dark:bg-gray-800 dark:text-white w-full border-none outline-none shadow-none focus:outline-none text-sm  pl-3 pr-10 py-2 text-left  dark:placeholder-gray-400 placeholder-gray-500 h-full"
             placeholder={searchPlaceHolder + ' ' + selectedProduct.label}
           />
         </div>
@@ -121,6 +122,7 @@ const CustomSearchPanel = () => {
               name: department.label,
             }))}
             border={false}
+            disableFocus
             required
             onSelect={(item) => {
               const selectedItem = find(

@@ -34,7 +34,7 @@ const Dashboard = ({ user }: { user: any }) => {
     fetchPosts()
     return () => {
       fetchUsers()
-      fetchPosts()
+      // fetchPosts()
     }
   }, [])
 
@@ -45,21 +45,21 @@ const Dashboard = ({ user }: { user: any }) => {
 
   return (
     // <Sidebar>
-    <div className="relative">
+    <div className="relative dark:bg-gray-800 min-h-screen">
       <div className="">
         <div
-          className={`h-auto flow-root transition-all duration-500 sidebar-${
+          className={`h-auto flow-root  transition-all duration-500 sidebar-${
             collapsed ? 'collapsed' : 'toggled'
           }`}
         >
           <DashboardLayout
-            firstColClass="md:hidden lg:block sm:hidden xl:block"
+            firstColClass="md:hidden lg:block sm:hidden xl:block "
             firstCol={<PersonalCard user={user} />}
             secondCol={
-              <div className="">
+              <div className="flex flex-col">
                 <PostInput posts={posts} setPosts={setPosts} />
                 <div className="relative">
-                  <div className="py-8 px-4 grid grid-cols-2 gap-4 sm:grid-cols-2 ">
+                  <div className="py-8  grid grid-cols-2 gap-4 sm:grid-cols-2 ">
                     {users.slice(0, 2).map((user) => {
                       return (
                         <ListCard key={faker.datatype.uuid()} user={user} />
@@ -75,7 +75,7 @@ const Dashboard = ({ user }: { user: any }) => {
               </div>
             }
             thirdCol={
-              <div className="">
+              <div className="space-y-12">
                 <SideCard />
                 <SideCard />
               </div>

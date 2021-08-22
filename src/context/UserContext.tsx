@@ -1,82 +1,38 @@
+import { getUserValues } from 'helpers'
+import { IParent } from 'interfaces/UniversalInterface'
+import { isEmpty } from 'lodash'
 import React, { useContext, createContext, useState } from 'react'
-import { IUser } from '../interfaces/UserInterface'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from 'state/Redux/Actions/authActions'
+import { setValues } from 'state/Redux/Actions/userActions'
+
 const UserContext = createContext(null)
 
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [darkMode, setDarkMode] = useState<boolean>(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const dispatch = useDispatch()
+  const [darkMode, setDarkMode] = useState(true)
+  const values = useSelector((state) => getUserValues(state))
 
-  const [values, setValues] = useState<IUser>({
-    user: {
-      firstName: '',
-      lastName: '',
-      profilePicture: '',
-      coverPicture: '',
-      email: '',
-    },
-    accountType: '',
-    personal: {
-      company: {
-        jobTitle: '',
-        jobType: '',
-        latestCompany: '',
-      },
-      location: {
-        country: '',
-        pincode: '',
-        city: '',
-        state: '',
-      },
-    },
-    student: {
-      education: {
-        education: '',
-        grade: '',
-        grade_subject: '',
-        start_year: '',
-        end_year: '',
-      },
-      location: {
-        country: '',
-        pincode: '',
-        city: '',
-        state: '',
-      },
-    },
-    business: {
-      name: '',
-      email: '',
-      number: '',
-      country: '',
-      address: '',
-      additionalInfo: '',
-      postalCode: '',
-      place: '',
-      legalNumber: '',
-      companyRegNumber: '',
-      firstName: '',
-      lastName: '',
+  const _setValues = (newData: any) => {
+    dispatch(setUser(newData))
+  }
+  const isUser = !isEmpty(values)
 
-      mobileNumber: '',
-      typeOfCompany: '',
-      bussinessEntityType: '',
-      relationshipToCompany: '',
-    },
-  })
+  const userData: IParent = isUser ? values : undefined
+  console.log(
+    '🚀 ~ file: UserContext.tsx ~ line 21 ~ UserContextProvider ~ userData',
+    userData
+  )
 
   return (
     <UserContext.Provider
       // @ts-ignore
       value={{
-        isLoggedIn,
-        setIsLoggedIn,
-        values,
-        setValues,
+        values: userData,
+        setValues: _setValues,
+        dispatch,
         darkMode,
         setDarkMode,
-        isLoaded,
-        setIsLoaded,
       }}
     >
       {children}

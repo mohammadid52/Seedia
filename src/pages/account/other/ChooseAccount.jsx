@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom'
 import { links } from 'constants/Links'
 import { network } from 'helpers'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
+import Error from 'components/alerts/Error'
 
 const settings = [
   {
@@ -33,11 +34,13 @@ const ChooseAccount = ({ user }) => {
   /**
    * Check if account is already selected
    */
+
   const checkAccount = () => {
     if (user && user.hasOwnProperty('accountType')) {
       return history.push(links.DASHBAORD)
     }
   }
+  const [errors, setErrors] = useState([])
 
   useEffect(() => {
     checkAccount()
@@ -56,12 +59,19 @@ const ChooseAccount = ({ user }) => {
     try {
       setLoading(true)
       await network.post(links.BASE_API_URL + '/user/update', {
-        accountType: selected.name.toLocaleLowerCase(),
+        ...user,
+        other: {
+          ...user.other,
+          accountFinishedStep: 'chooseAccount',
+          accountType: selected.name.toLocaleLowerCase(),
+        },
       })
-
+      setErrors([])
       history.push(path || links.PERSONAL_STEP_1)
     } catch (error) {
+      setErrors(['Oops! Something went wrong'])
       console.error(error)
+      setErrors([])
     } finally {
       setLoading(false)
     }
@@ -140,6 +150,7 @@ const ChooseAccount = ({ user }) => {
               gradient
               onClick={onNext}
             />
+            {errors.length > 0 && <Error errors={errors} />}
           </div>
         </AnimatedDiv>
       </Layout>

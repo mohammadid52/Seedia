@@ -23,6 +23,7 @@ interface IButton {
   loadingText?: string
   type?: 'button' | 'submit' | 'reset'
   size?: 'sm' | 'md' | 'lg' | 'xl'
+
   weight?: 'light' | 'medium' | 'semibold' | 'bold'
 }
 
@@ -49,30 +50,31 @@ const Button = ({
   loadingText = 'Processing',
   customClass = false,
 }: IButton) => {
+  const primaryClass = `${
+    invert
+      ? `text-${bgColor}-600  hover:text-${bgColor}-700`
+      : `text-white bg-${bgColor}-600 hover:bg-${bgColor}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${bgColor}-500`
+  }  flex items-center border border-transparent shadow-sm text-base font-medium rounded-md `
+  const secondaryClass = `flex items-center border border-transparent font-medium rounded dark:text-${bgColor}-400 dark:border-${bgColor}-400 text-${bgColor}-700 ${
+    invert
+      ? `hover:border-${bgColor}-300 dark:border-gray-600 dark:hover:border-gray-500  border-${bgColor}-200 border focus:ring-${bgColor}-500`
+      : `bg-${bgColor}-100 hover:bg-${bgColor}-200 focus:ring-${bgColor}-500`
+  }  focus:outline-none focus:ring-2 focus:ring-offset-2 `
+
+  const gradientClass = `${
+    invert
+      ? `gradient-text border border-gray-200 dark:border-gray-600 overflow-hidden  ${
+          gradientHover ? 'hover:gradient-border' : 'hover:border-gray-300'
+        }  rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${
+          gradientColor.x
+        }-500`
+      : `text-white via-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${gradientColor.x}-500 bg-gradient-to-br from-${gradientColor.x}-500 to-${gradientColor.y}-500`
+  } `
+
   const generateClass = () => {
-    const primaryClass = `${
-      onlyText
-        ? `text-${bgColor}-600 hover:text-${bgColor}-700 `
-        : `text-white bg-${bgColor}-600 hover:bg-${bgColor}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${bgColor}-500`
-    }  flex items-center border border-transparent shadow-sm text-base font-medium rounded-md `
-    const secondaryClass = `flex items-center border border-transparent font-medium rounded dark:text-${bgColor}-400 dark:border-${bgColor}-400 text-${bgColor}-700 ${
-      invert
-        ? `hover:border-${bgColor}-300 dark:border-gray-600 dark:hover:border-gray-500 {bgColor}- border-${bgColor}-200 border focus:ring-${bgColor}-500`
-        : `bg-${bgColor}-100 hover:bg-${bgColor}-200 focus:ring-${bgColor}-500`
-    }  focus:outline-none focus:ring-2 focus:ring-offset-2 `
     switch (true) {
       case gradient:
-        return `${
-          invert
-            ? `gradient-text border border-gray-200 dark:border-gray-600 overflow-hidden  ${
-                gradientHover
-                  ? 'hover:gradient-border'
-                  : 'hover:border-gray-300'
-              }  rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${
-                gradientColor.x
-              }-500`
-            : `text-white via-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${gradientColor.x}-500 bg-gradient-to-br from-${gradientColor.x}-500 to-${gradientColor.y}-500`
-        } `
+        return gradientClass
       case primary:
         return primaryClass
       case secondary:
@@ -107,7 +109,7 @@ const Button = ({
           ? className
           : `${generateClass()} ${generatePaddingAndTextSize()} ${rounded} font-${weight} ${className} ${
               fullWidth ? 'w-full' : ''
-            } transition-all duration-200`
+            } transition-all duration-200 `
       }`}
     >
       {loading && (

@@ -23,7 +23,6 @@ const ProfileTwo = ({ user }: { user: IProfileTwo }) => {
       <Header headerRef={headerRef} about={user.about} />
       <div className="mx-auto min-h-screen pt-8" style={{ maxWidth: '105rem' }}>
         <Layout
-          firstColClass=""
           firstCol={
             <div className="fixed ">
               <Card
@@ -46,7 +45,7 @@ const ProfileTwo = ({ user }: { user: IProfileTwo }) => {
           secondCol={
             <div className="space-y-12">
               <Cover about={user.about} />
-              <Experiences experience={user.experience} />
+              <Experiences experience={user.experiences} />
               <div className="grid-cols-1 grid  sm:grid-cols-2 lg:grid-cols-2">
                 <Skills skills={user.skills} />
                 <Awards awards={user.awards} />

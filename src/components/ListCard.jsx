@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { wait } from 'utils/wait'
 import Button from './atoms/Button'
+import Card from './atoms/Card'
 
 const ListCard = ({ user }) => {
   const [status, setStatus] = useState('no_connection')
@@ -27,55 +28,46 @@ const ListCard = ({ user }) => {
   }
 
   return (
-    <div className="mb-4 flex items-center justify-center">
-      <div className="float-left rounded-lg card-width  col">
-        <div className="rounded-lg p-3 customShadow">
-          <div className=" col-sm-12  card-title"></div>
-          <div>
-            <div className="text-center col">
-              <div>
-                <img
-                  // src={process.env.PUBLIC_URL + '/logo.png'}
-                  src={
-                    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80'
-                  }
-                  alt=""
-                  className="h-36 w-auto rounded-full inline-block"
+    <Card
+      className="mb-4 flex items-center justify-center"
+      content={
+        <div className="rounded-lg  text-center ">
+          <div className="">
+            <div>
+              <img
+                // src={process.env.PUBLIC_URL + '/logo.png'}
+                src={
+                  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80'
+                }
+                alt=""
+                className="h-36 w-auto rounded-full inline-block"
+              />
+            </div>
+
+            <div className=" mt-3 p-0 text-center space-y-2">
+              <h5 className="font-semibold dark:text-white text-gray-900">
+                {user.name}
+              </h5>
+              <p className="text-gray-400 font-semibold dark:text-gray-500">
+                Software Engineer at Google
+              </p>
+              <p className="italic tracking-wide text-center pb-0 mb-1 text-gray-400 dark:text-gray-500 text-xs">
+                Based on your profile
+              </p>
+              <div className="flex items-center justify-center">
+                <Button
+                  gradient
+                  onClick={onClick}
+                  size="sm"
+                  rounded="rounded-lg"
+                  label={generateStatus()}
                 />
               </div>
             </div>
           </div>
-          <div>
-            <div className=" mt-3 p-0 text-center col">
-              <h5 className="font-semibold">{user.name}</h5>
-              <p
-                style={{
-                  color: 'rgb(120, 113, 113)',
-                }}
-              >
-                <span>Software Engineer</span>
-                <span> at </span>
-                <span>Google</span>
-              </p>
-            </div>
-
-            <p className="italic text-center pb-0 mb-1 text-gray-400 text-xs">
-              Based on your profile
-            </p>
-
-            <div className="flex items-center justify-center">
-              <Button
-                gradient
-                onClick={onClick}
-                size="sm"
-                rounded="rounded-lg"
-                label={generateStatus()}
-              />
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
+      }
+    />
   )
 }
 

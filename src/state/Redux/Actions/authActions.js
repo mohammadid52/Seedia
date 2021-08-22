@@ -1,5 +1,5 @@
 import * as types from 'state/Redux/constants'
-import { links } from 'constants/Links'
+
 import { network } from 'helpers'
 import { isEmpty } from 'lodash'
 
@@ -45,10 +45,12 @@ export const loadUser = () => async (dispatch) => {
 
     const user = await getUser()
 
-    if (!isEmpty(user)) {
-      dispatch({ type: types.SET_USER_DATA, data: user })
+    if (!isEmpty(user.data)) {
+      dispatch({ type: types.SET_USER_DATA, data: user.data })
+      dispatch({ type: types.SET_VALUE, data: user.data })
     } else {
       dispatch({ type: types.SET_USER_DATA, data: {} })
+      dispatch({ type: types.SET_VALUE, data: {} })
     }
   } catch (error) {
   } finally {
@@ -58,6 +60,7 @@ export const loadUser = () => async (dispatch) => {
 export const setUser = (user) => async (dispatch) => {
   try {
     if (!isEmpty(user)) {
+      console.log('User set successfully: ', user)
       dispatch({ type: types.SET_USER_DATA, data: user })
     }
   } catch (error) {

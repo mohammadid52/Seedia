@@ -14,7 +14,6 @@ import { useDispatch } from 'react-redux'
 import { setUser } from 'state/Redux/Actions/authActions'
 
 const Signup = () => {
-  const history = useHistory()
   const [isLoaded, setIsLoaded] = useState(true)
 
   const validationSchema = Yup.object({
@@ -34,21 +33,34 @@ const Signup = () => {
   const [saving, setSaving] = useState(false)
   const [errors, setErrors] = useState([])
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const onSubmit = async (_values) => {
     try {
       setSaving(true)
-      const res = await axios.post(links.BASE_API_URL + '/auth/register', {
+      const data = {
         password: _values.password,
         firstName: _values.firstName,
         lastName: _values.lastName,
         email: _values.email,
+        fullName: _values.firstName + ' ' + _values.lastName,
+        other: {
+          accountFilled: false,
+          accountFinishedStep: 'signup',
+        },
+      }
+
+      const res = await axios.post(links.BASE_API_URL + '/auth/register', {
+        ...data,
       })
-      dispatch(setUser(res.data.data))
-      history.push(links.CHOOSE_ACCOUNT)
+
       localStorage.setItem('access_token', res.data.data.access_token)
+
+      dispatch(setUser(data))
+      setErrors([])
+      history.push(links.CHOOSE_ACCOUNT)
     } catch (error) {
-      setErrors(['Oops! Something went wrong. Please try again.'])
+      setErrors([error.message])
       console.error(error)
     } finally {
       setSaving(false)

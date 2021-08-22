@@ -4,24 +4,22 @@ import FormInput from 'components/atoms/FormInput'
 import Selector from 'components/atoms/Selector'
 import TextButton from 'components/atoms/TextButton'
 import Toggle from 'components/atoms/Toggle'
-import Loading from 'components/Loading'
 import { links } from 'constants/Links'
 import Layout from 'containers/Layout'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { wait } from 'utils/wait'
+
 import { yearList, yearListWithFuture } from 'values/values'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { StudentStepOne } from 'initials'
-import { useUserContext } from 'context/UserContext'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
-import { isEmpty } from 'lodash'
+import { network } from 'helpers'
+import { useDispatch } from 'react-redux'
+import { setUser } from 'state/Redux/Actions/authActions'
 
 const EducationStep = ({ user }) => {
-  const [isLoaded, setIsLoaded] = useState(false)
   const history = useHistory()
-  const { values, setValues } = useUserContext()
 
   const [initialState, setInitialState] = useState(StudentStepOne)
 
@@ -53,26 +51,28 @@ const EducationStep = ({ user }) => {
     checkAccount()
   }, [])
 
-  const onSubmit = (_values) => {
-    setSaving(true)
-    wait(3000).then(() => {
-      setSaving(false)
-      setValues({
-        ...values,
-        student: {
-          ...values.student,
-          education: {
-            ...values.education,
-            education: _values.education,
-            grade: _values.grade,
-            grade_subject: _values.grade_subject,
-            start_year: fields.start_year,
-            end_year: fields.end_year,
-          },
+  const dispatch = useDispatch()
+
+  const onSubmit = async (values) => {
+    try {
+      setSaving(true)
+      const { data } = await network.post('/user/update', {
+        education: {
+          education: values.education,
+          grade: values.grade,
+          grade_subject: values.grade_subject,
+          start_year: fields.start_year,
+          end_year: fields.end_year,
         },
       })
+      dispatch(setUser(data.data))
+
       history.push(links.STUDENT_STEP_2)
-    })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setSaving(false)
+    }
   }
 
   const validationSchema = Yup.object({
@@ -87,9 +87,7 @@ const EducationStep = ({ user }) => {
     above_sixteen: false,
   })
 
-  return !isLoaded ? (
-    <Loading />
-  ) : (
+  return (
     <Layout
       title="Education Information"
       withButton={

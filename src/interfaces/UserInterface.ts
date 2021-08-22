@@ -20,7 +20,7 @@ export interface PersonalAccount {
     jobTitle: string
     latestCompany: string
   }
-  location: {
+  location?: {
     country: string
     pincode: string
     state: string

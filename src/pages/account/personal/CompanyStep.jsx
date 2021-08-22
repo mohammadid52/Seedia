@@ -43,7 +43,7 @@ const StudentSecondStep = ({ user }) => {
       setInitialState({
         jobTitle: company.jobTitle,
         jobType: company.jobType,
-        latestCompany: company.latestCompany,
+        currentCompany: company.currentCompany,
       })
     }
   }, [company])
@@ -57,7 +57,7 @@ const StudentSecondStep = ({ user }) => {
         company: {
           jobTitle: values.jobTitle,
           jobType: values.jobType,
-          latestCompany: values.latestCompany,
+          currentCompany: values.currentCompany,
         },
       })
       dispatch(setUser(data.data))
@@ -73,7 +73,9 @@ const StudentSecondStep = ({ user }) => {
   const validationSchema = Yup.object({
     jobTitle: Yup.string().required('Please add your job title'),
     jobType: Yup.string().required('Please add your job type'),
-    latestCompany: Yup.string().required('Please add your latest company name'),
+    currentCompany: Yup.string().required(
+      'Please add your current company name'
+    ),
   })
 
   const [saving, setSaving] = useState(false)
@@ -118,9 +120,9 @@ const StudentSecondStep = ({ user }) => {
               />
 
               <FormInput
-                label="Latest Company"
-                id="latestCompany"
-                name="latestCompany"
+                label="Current Company"
+                id="currentCompany"
+                name="currentCompany"
                 required
               />
 

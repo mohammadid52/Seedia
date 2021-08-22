@@ -54,8 +54,12 @@ const LastStep = ({ accountType = 'personal', user }) => {
           pincode: values.pincode,
           state: values.state,
           city: values.city,
+          livesIn: `${values.city} ${values.country}`,
         },
-        accountFilled: true,
+        other: {
+          ...user.other,
+          accountFilled: true,
+        },
       })
 
       dispatch(setUser(data.data))

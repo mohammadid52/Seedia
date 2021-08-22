@@ -7,9 +7,9 @@ const TextButton = ({
   color = 'blue',
 }: {
   text: string
-  className: string
+  className?: string
   color?: string
-  onClick: () => void
+  onClick?: () => void
 }) => {
   return (
     <div

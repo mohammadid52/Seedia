@@ -3226,3 +3226,15 @@ input:checked + .slider:before {
     display: block;
   }
 }
+
+#home_search_panel {
+  box-shadow: none;
+  border-color: transparent;
+}
+
+button {
+  &:focus {
+    outline: none !important;
+  }
+  outline: none !important;
+}
