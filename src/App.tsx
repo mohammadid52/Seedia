@@ -137,7 +137,8 @@ const App = () => {
             </PrivateRoute>
             {/* @ts-ignore */}
             <PrivateRoute isUser={isUser} exact path="/profile/2">
-              <ProfileTwo user={profileTwo} />
+              {/* @ts-ignore */}
+              <ProfileTwo userData={userData} user={profileTwo} />
             </PrivateRoute>
             <PrivateRoute
               // @ts-ignore

@@ -58,6 +58,7 @@ const StudentSecondStep = ({ user }) => {
           jobTitle: values.jobTitle,
           jobType: values.jobType,
           currentCompany: values.currentCompany,
+          companyName: values.currentCompany,
         },
       })
       dispatch(setUser(data.data))

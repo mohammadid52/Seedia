@@ -19,6 +19,7 @@ interface IButton {
   customClass?: boolean
   shadow?: boolean
   gradientHover?: boolean
+  disabled?: boolean
 
   loadingText?: string
   type?: 'button' | 'submit' | 'reset'
@@ -49,6 +50,7 @@ const Button = ({
   loading = false,
   loadingText = 'Processing',
   customClass = false,
+  disabled = false,
 }: IButton) => {
   const primaryClass = `${
     invert
@@ -102,6 +104,7 @@ const Button = ({
     <button
       aria-hidden="true"
       onClick={onClick}
+      disabled={disabled}
       type={type}
       style={{ filter: shadow ? 'drop-shadow(2px 4px 6px pink)' : undefined }}
       className={`${
@@ -109,7 +112,7 @@ const Button = ({
           ? className
           : `${generateClass()} ${generatePaddingAndTextSize()} ${rounded} font-${weight} ${className} ${
               fullWidth ? 'w-full' : ''
-            } transition-all duration-200 `
+            } transition-all duration-200 ${disabled ? 'opacity-50' : ''}`
       }`}
     >
       {loading && (

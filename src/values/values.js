@@ -452,12 +452,18 @@ export const profileTwo = {
 
   awards: [
     {
+      id: 'test1',
       awardName: 'Behance Interaction Featured',
       awardFor: 'User Interface Design',
     },
-    { awardName: 'Behance Product Design Featured', awardFor: 'Web Design' },
+    {
+      id: 'test2',
+      awardName: 'Behance Product Design Featured',
+      awardFor: 'Web Design',
+    },
     { awardName: 'Site Of The Month by Awwwards', awardFor: 'Web Design' },
     {
+      id: 'test3',
       awardName: 'CSS Beauty Award',
       awardFor: 'UI / User Experience Design',
     },
@@ -510,6 +516,12 @@ export const profileTwo = {
     },
   ],
 }
+
+export const languageKnownLevel = [
+  { name: 'Beginner', id: '1' },
+  { name: 'Intermediate', id: '2' },
+  { name: 'Fluent', id: '3' },
+]
 
 export const productsArray = [
   // { label: 'All', value: 'all' },

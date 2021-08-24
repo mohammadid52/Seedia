@@ -223,7 +223,8 @@ const Background = ({ userData }: { userData: any }) => {
     setLocalFields({ ...localFields, [id]: value })
   }
 
-  const { about = {}, company = {} } = isEmpty(values) ? {} : values
+  const { background = {} } = isEmpty(values) ? {} : values
+  const { summary, interests, experiences }: IBackground = background
 
   const initialState = {
     interest: '',
@@ -249,13 +250,13 @@ const Background = ({ userData }: { userData: any }) => {
 
   const addOnTrigger = (type: string) => {
     if (type === 'summary') {
-      setLocalFields({ ...localFields, summary: about?.summary || '' })
+      setLocalFields({ ...localFields, summary: summary || '' })
     } else if (type === 'interests') {
-      setLocalFields({ ...localFields, interests: about?.interests || [] })
+      setLocalFields({ ...localFields, interests: interests || [] })
     } else if (type === 'experiences') {
       setLocalFields({
         ...localFields,
-        experiences: company?.experiences || [],
+        experiences: experiences || [],
       })
     }
   }
@@ -271,6 +272,7 @@ const Background = ({ userData }: { userData: any }) => {
     }
     setLocalFields({
       ...localFields,
+      // @ts-ignore
       experiences: [...localFields.experiences, newExperience],
     })
   }
@@ -284,16 +286,16 @@ const Background = ({ userData }: { userData: any }) => {
       if (showModal.type === 'summary') {
         updatedData = {
           ...userData,
-          about: {
-            ...about,
+          background: {
+            ...background,
             summary,
           },
         }
       } else if (showModal.type === 'interests') {
         updatedData = {
           ...userData,
-          about: {
-            ...about,
+          background: {
+            ...background,
             interests,
           },
         }
@@ -301,12 +303,12 @@ const Background = ({ userData }: { userData: any }) => {
         updatedData = {
           ...userData,
 
-          company: {
-            ...company,
+          background: {
+            ...background,
             experiences:
               localFields.experiences && localFields.experiences.length > 0
                 ? [...localFields.experiences]
-                : company.experiences,
+                : experiences,
           },
         }
       }
@@ -356,7 +358,9 @@ const Background = ({ userData }: { userData: any }) => {
   ) => {
     const { value, id } = e.target
     setUnsavedChanges(true)
-    update(localFields.experiences[idx], `${id}`, () => value)
+    if (localFields?.experiences && localFields?.experiences.length > 0) {
+      update(localFields?.experiences[idx], `${id}`, () => value)
+    }
     setLocalFields({ ...localFields })
   }
 
@@ -366,7 +370,9 @@ const Background = ({ userData }: { userData: any }) => {
     idx: number
   ) => {
     setUnsavedChanges(true)
-    update(localFields.experiences[idx], `${fieldName}`, () => name)
+    if (localFields?.experiences && localFields?.experiences.length > 0) {
+      update(localFields?.experiences[idx], `${fieldName}`, () => name)
+    }
     setLocalFields({ ...localFields })
   }
 
@@ -377,7 +383,9 @@ const Background = ({ userData }: { userData: any }) => {
 
   const onExperienceRemove = (id: string) => {
     setUnsavedChanges(true)
-    remove(localFields.experiences, (item) => item.id === id)
+    if (localFields?.experiences && localFields?.experiences.length > 0) {
+      remove(localFields.experiences, (item) => item.id === id)
+    }
     setLocalFields({ ...localFields })
   }
 
@@ -413,7 +421,13 @@ const Background = ({ userData }: { userData: any }) => {
           </div>
 
           <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
-            <Button gradient label="Save" onClick={onSave} loading={saving} />
+            <Button
+              gradient
+              disabled={saving}
+              label="Save"
+              onClick={onSave}
+              loading={saving}
+            />
           </div>
         </div>
       </Modal>
@@ -425,7 +439,7 @@ const Background = ({ userData }: { userData: any }) => {
               sectionTitle="Summary"
               Icon={CgDetailsMore}
               withSectionHeadings={
-                about.summary && (
+                summary && (
                   <div>
                     <Button
                       secondary
@@ -444,8 +458,8 @@ const Background = ({ userData }: { userData: any }) => {
               }
               content={
                 <div>
-                  {isAvailable('summary', about) ? (
-                    <p>{about.summary}</p>
+                  {isAvailable('summary', background) ? (
+                    <p>{summary}</p>
                   ) : (
                     <EmptyState
                       title="No summary found"
@@ -465,8 +479,8 @@ const Background = ({ userData }: { userData: any }) => {
               sectionTitle="Interests"
               Icon={CgDetailsMore}
               withSectionHeadings={
-                about.interests &&
-                about.interests.length > 0 && (
+                interests &&
+                interests.length > 0 && (
                   <div>
                     <Button
                       secondary
@@ -485,9 +499,9 @@ const Background = ({ userData }: { userData: any }) => {
               }
               content={
                 <div>
-                  {about.interests && about.interests.length > 0 ? (
+                  {interests && interests.length > 0 ? (
                     <div className="flex items-center flex-wrap justify-start gap-x-4">
-                      {map(about.interests, (interest: any, idx: number) => (
+                      {map(interests, (interest: any, idx: number) => (
                         <Button
                           key={interest.id}
                           className="pointer-events-none"
@@ -517,8 +531,8 @@ const Background = ({ userData }: { userData: any }) => {
               sectionTitle="Experiences"
               Icon={CgDetailsMore}
               withSectionHeadings={
-                company.experiences &&
-                company.experiences.length > 0 && (
+                experiences &&
+                experiences.length > 0 && (
                   <div>
                     <Button
                       secondary
@@ -537,8 +551,8 @@ const Background = ({ userData }: { userData: any }) => {
               }
               content={
                 <div className="space-y-8">
-                  {company.experiences && company.experiences.length > 0 ? (
-                    map(company.experiences, (exp, idx: number) => {
+                  {experiences && experiences.length > 0 ? (
+                    map(experiences, (exp, idx: number) => {
                       return (
                         <div
                           key={idx}
@@ -570,10 +584,7 @@ const Background = ({ userData }: { userData: any }) => {
                       btnText="Add experience"
                       BtnIcon={PlusIcon}
                       onBtnClick={() => {
-                        if (
-                          company?.experiences &&
-                          company.experiences.length === 0
-                        ) {
+                        if (experiences && experiences.length === 0) {
                           addNewExperience()
                         }
                         setShowModal({ show: true, type: 'experiences' })
@@ -617,7 +628,6 @@ const Background = ({ userData }: { userData: any }) => {
                 setShowUnsaveModal(false)
                 setLocalFields(initialState)
               }}
-              loading={saving}
             />
           </div>
         </>

@@ -58,6 +58,7 @@ export const loadUser = () => async (dispatch) => {
   }
 }
 export const setUser = (user) => async (dispatch) => {
+  console.log('sdsdon')
   try {
     if (!isEmpty(user)) {
       console.log('User set successfully: ', user)

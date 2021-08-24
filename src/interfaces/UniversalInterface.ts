@@ -17,6 +17,19 @@ export interface IAbout {
   connections?: number
 }
 
+export interface IModalProps extends IBlockProps {
+  setUnsavedChanges: React.Dispatch<React.SetStateAction<boolean>>
+  onCancel: () => void
+  setValues: (data: any) => void
+}
+
+export interface IBlockProps {
+  userData: IParent
+  setShowModal: React.Dispatch<
+    React.SetStateAction<{ show: boolean; type: string }>
+  >
+}
+
 export interface IUser extends User {
   fullName: string
   profilePicture: string
@@ -47,8 +60,8 @@ export interface IOther {
   accountFinishedStep: string
 }
 
-export interface IParent {
-  user?: IUser
+export interface IParent extends IUser {
+  // user?: IUser
   company?: ICompany
   location?: ILocation
   background?: IBackground
@@ -71,7 +84,11 @@ export interface IExperience {
 export interface IBackground {
   summary: string
   interests: { name: string; id: string }[]
-  experiences: IExperience[]
+  experiences?: IExperience[]
+  skills?: ISkill[]
+  awards?: IAward[]
+  education?: IEducation[]
+  languages?: ILanguage[]
 }
 
 export interface IPeopleAlsoViewed {
@@ -79,7 +96,8 @@ export interface IPeopleAlsoViewed {
   fullName: string
   jobType: string
 }
-export interface Education {
+export interface IEducation {
+  id: string
   from: string
   to: string
   degree: string
@@ -94,6 +112,7 @@ export interface ISkill {
 export interface IAward {
   awardName: string
   awardFor: string
+  id: string
 }
 
 export interface IProfileOne {
@@ -109,6 +128,7 @@ export interface IProfileOne {
 export interface ILanguage {
   langName: string
   langLevel: string
+  id: string
 }
 
 export interface IRecommendation {
@@ -123,7 +143,7 @@ export interface IProfileTwo {
   about: IAbout
   peopleAlsoViewed: IPeopleAlsoViewed[]
   experiences: IExperience[]
-  education: Education[]
+  education: IEducation[]
   skills: ISkill[]
   awards: IAward[]
   languages: ILanguage[]
@@ -134,5 +154,5 @@ export interface IProfile {
   background: IBackground
   peopleAlsoViewed: IPeopleAlsoViewed[]
   experiences: IExperience[]
-  education: Education[]
+  education: IEducation[]
 }

@@ -18,11 +18,7 @@ const Profile = ({
   return (
     <div className="bg-gray-100 dark:bg-gray-800">
       <div className="mx-auto min-h-screen pt-8" style={{ maxWidth: '105rem' }}>
-        <Cover
-          about={userData?.user}
-          company={userData?.company}
-          data={user.about}
-        />
+        <Cover about={userData} company={userData?.company} data={user.about} />
 
         <div className="my-6">
           <Layout

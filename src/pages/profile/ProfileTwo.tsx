@@ -1,4 +1,3 @@
-import React from 'react'
 import Layout from 'pages/profile/Layout'
 import Header from 'components/profileTwo/Header'
 import Cover from 'components/profileTwo/Cover'
@@ -10,28 +9,112 @@ import Skills from 'components/profileTwo/Skills'
 import Awards from 'components/profileTwo/Awards'
 import Education from 'components/profileTwo/Education'
 import Languages from 'components/profileTwo/Languages'
-import PeopleAlsoViewed from './PeopleAlsoViewed'
-import useOnScreen from 'hooks/useOnScreen'
-import { IProfileTwo } from 'interfaces/UniversalInterface'
+import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
+import { IParent, IProfileTwo } from 'interfaces/UniversalInterface'
+import { useState } from 'react'
+import Modal from 'components/atoms/Modal'
+import Button from 'components/atoms/Button'
 
-const ProfileTwo = ({ user }: { user: IProfileTwo }) => {
-  const headerRef = React.useRef()
-  const headerVisible = useOnScreen(headerRef)
+import * as constants from 'state/Redux/constants'
+import ExperienceTwoModal from 'components/modals/ExperienceTwoModal'
+import SkillsModal from 'components/modals/SkillsModal'
+import { useUserContext } from 'context/UserContext'
+import AwardsModal from 'components/modals/AwardsModal'
+import LanguagesModal from 'components/modals/LanguagesModal'
+
+const ProfileTwo = ({
+  user,
+  userData,
+}: {
+  user: IProfileTwo
+  userData: IParent
+}) => {
+  const [showModal, setShowModal] = useState({ show: false, type: '' })
+
+  const [unsavedChanges, setUnsavedChanges] = useState(false)
+
+  const [showUnsaveModal, setShowUnsaveModal] = useState(false)
+  const { setValues } = useUserContext()
+
+  const onCancel = () => {
+    if (unsavedChanges) {
+      setShowUnsaveModal(true)
+    } else {
+      setShowUnsaveModal(false)
+
+      setUnsavedChanges(false)
+    }
+    setShowModal({ show: false, type: '' })
+  }
+  const commonBlockProps = { setShowModal, userData }
+
+  const commonModalProps = {
+    ...commonBlockProps,
+    onCancel,
+    setUnsavedChanges,
+    setValues,
+  }
+
+  const renderModalContentByType = (type: string) => {
+    switch (type) {
+      case constants.PROFILE_TWO_EXPERIENCE:
+        return <ExperienceTwoModal {...commonModalProps} />
+      case constants.SKILLS:
+        return <SkillsModal {...commonModalProps} />
+      case constants.AWARDS:
+        return <AwardsModal {...commonModalProps} />
+      case constants.EDUCATION:
+        return <ExperienceTwoModal {...commonModalProps} />
+      case constants.LANGUAGES:
+        return <LanguagesModal {...commonModalProps} />
+
+      default:
+        return <div>No modal found. {type}</div>
+    }
+  }
+
+  const renderModalHeader = (type: string) => {
+    switch (type) {
+      case constants.PROFILE_TWO_EXPERIENCE:
+        return `Edit Experiences`
+      case constants.SKILLS:
+        return `Edit Skills`
+      case constants.AWARDS:
+        return `Edit Awards`
+      case constants.EDUCATION:
+        return `Edit Education`
+      case constants.LANGUAGES:
+        return `Edit Languages`
+
+      default:
+        return `Edit`
+    }
+  }
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 smooth-scroll">
-      <Header headerRef={headerRef} about={user.about} />
+      <div className="">
+        <Modal
+          open={showModal.show}
+          onClose={onCancel}
+          setOpen={() => setShowModal({ show: false, type: '' })}
+          header={renderModalHeader(showModal.type)}
+        >
+          <div className="">
+            <div className="overflow-y-auto min-w-132  custom-scroll-mini darker my-4">
+              {renderModalContentByType(showModal.type)}
+            </div>
+          </div>
+        </Modal>
+      </div>
+      <Header userData={userData} />
       <div className="mx-auto min-h-screen pt-8" style={{ maxWidth: '105rem' }}>
         <Layout
+          hideBorders
           firstCol={
-            <div className="fixed ">
+            <div className="">
               <Card
-                style={{
-                  transform: headerVisible
-                    ? 'translateY(0)'
-                    : 'translateY(-13rem)',
-                }}
-                className={`w-60 transition-transform duration-200`}
+                className={` transition-transform duration-200`}
                 secondary
                 cardTitle="Shortcuts"
                 content={
@@ -44,22 +127,72 @@ const ProfileTwo = ({ user }: { user: IProfileTwo }) => {
           }
           secondCol={
             <div className="space-y-12">
-              <Cover about={user.about} />
-              <Experiences experience={user.experiences} />
+              <Cover userData={userData} about={user.about} />
+              <Experiences {...commonBlockProps} />
               <div className="grid-cols-1 grid  sm:grid-cols-2 lg:grid-cols-2">
-                <Skills skills={user.skills} />
-                <Awards awards={user.awards} />
+                <Skills {...commonBlockProps} />
+                <Awards {...commonBlockProps} />
               </div>
               <Education data={user.education} />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
-                <Languages languages={user.languages} />
+                <Languages userData={userData} />
               </div>
             </div>
           }
-          thirdCol={<PeopleAlsoViewed data={user.peopleAlsoViewed} secondary />}
+          thirdCol={
+            <div className="space-y-12 xl:space-y-0">
+              <div className="xl:hidden block">
+                <Card
+                  className={`transition-transform duration-200`}
+                  secondary
+                  cardTitle="Shortcuts"
+                  content={
+                    <div>
+                      <Shortcuts />
+                    </div>
+                  }
+                />
+              </div>
+              <PeopleAlsoViewed data={user.peopleAlsoViewed} secondary />
+            </div>
+          }
         />
       </div>
       <CustomFooter />
+
+      <Modal
+        hideCloseBtn
+        header="Discard changes"
+        open={showUnsaveModal}
+        setOpen={setShowUnsaveModal}
+      >
+        <>
+          <h1 className="text-lg dark:text-white text-gray-900 min-w-96">
+            You have unsaved changes
+          </h1>
+          <p className="text-gray-500 ">Do you want to save it?</p>
+
+          <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
+            <Button
+              gradient
+              onClick={() => {
+                setShowUnsaveModal(false)
+                setShowModal({ show: false, type: '' })
+              }}
+              invert
+              label="No thanks"
+            />
+            <Button
+              gradient
+              label="Discard"
+              onClick={() => {
+                setShowUnsaveModal(false)
+                // setLocalFields({ ...initialState })
+              }}
+            />
+          </div>
+        </>
+      </Modal>
     </div>
   )
 }

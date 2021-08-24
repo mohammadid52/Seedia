@@ -1,7 +1,7 @@
 import Card from 'components/atoms/Card'
-import { IAbout } from 'interfaces/UniversalInterface'
+import { IAbout, IParent } from 'interfaces/UniversalInterface'
 
-const Cover = ({ about }: { about: IAbout }) => {
+const Cover = ({ about, userData }: { about: IAbout; userData?: IParent }) => {
   return (
     <div className="">
       <Card
@@ -19,9 +19,11 @@ const Cover = ({ about }: { about: IAbout }) => {
               <div className="overflow-hidden">
                 <div className=" px-4 pb-5 sm:px-6">
                   <div className="dark:text-white text-gray-900 text-xl font-medium border-b border-gray-200 dark:border-gray-600 pb-4 ">
-                    {about.jobTitle}{' '}
+                    {userData?.company?.jobTitle}{' '}
                     <span className="ml-2 dark:text-gray-400 text-gray-500 text-sm">
-                      - {about.companyName}
+                      -{' '}
+                      {userData?.company?.companyName ||
+                        userData?.company?.currentCompany}
                     </span>
                   </div>
 
@@ -31,7 +33,7 @@ const Cover = ({ about }: { about: IAbout }) => {
                         Full name
                       </dt>
                       <dd className="mt-1 text-sm text-gray-900 dark:text-white">
-                        {about.fullName}
+                        {userData?.fullName}
                       </dd>
                     </div>
 
@@ -40,7 +42,7 @@ const Cover = ({ about }: { about: IAbout }) => {
                         Email address
                       </dt>
                       <dd className="mt-1 text-sm text-gray-900 dark:text-white">
-                        {about.email}
+                        {userData?.email}
                       </dd>
                     </div>
                     <div className="sm:col-span-1">
@@ -48,7 +50,8 @@ const Cover = ({ about }: { about: IAbout }) => {
                         Company
                       </dt>
                       <dd className="mt-1 text-sm text-gray-900 dark:text-white">
-                        {about.companyName}
+                        {userData?.company?.companyName ||
+                          userData?.company?.currentCompany}
                       </dd>
                     </div>
                     <div className="sm:col-span-1">
