@@ -65,7 +65,7 @@ import { SiGoogleanalytics } from 'react-icons/si'
 import { FiActivity } from 'react-icons/fi'
 import { BsFilePost } from 'react-icons/bs'
 import { map } from 'lodash'
-
+import { nanoid } from 'nanoid'
 export const adjustColors = [
   { name: 'Deuteranomaly', value: 1 },
   { name: 'Protanomaly', value: 2 },
@@ -303,6 +303,15 @@ const getYearList = (future = false) => {
 export const yearList = getYearList()
 export const yearListWithFuture = getYearList(true)
 
+export const welcomeSearchLinks = [
+  { name: 'Receive quotes', href: '#/' },
+  { name: 'Trending', href: '#/' },
+  { name: 'Jobs', href: '#/' },
+  { name: 'Remarkable', href: '#/' },
+  { name: 'New', href: '#/' },
+]
+
+
 export const profileOne = {
   about: {
     fullName: faker.name.findName(),
@@ -442,12 +451,17 @@ export const profileTwo = {
   },
   languages: [
     {
+      id: '13434',
       langName: 'English',
       langLevel: 'Full Professional Profiency',
     },
-    { langName: 'French', langLevel: 'Intermediate' },
-    { langName: 'Spanish', langLevel: 'Intermediate' },
-    { langName: 'Polish', langLevel: 'Full Professional Profiency' },
+    { id: '134we34', langName: 'French', langLevel: 'Intermediate' },
+    { id: '134fdf34', langName: 'Spanish', langLevel: 'Intermediate' },
+    {
+      id: '1dfd343ewed4',
+      langName: 'Polish',
+      langLevel: 'Full Professional Profiency',
+    },
   ],
 
   awards: [
@@ -502,6 +516,7 @@ export const profileTwo = {
   peopleAlsoViewed: [...profileOne.peopleAlsoViewed],
   education: [
     {
+      id: nanoid(9),
       from: `${faker.date.past().getFullYear()}`,
       to: `${faker.date.past().getFullYear()}`,
       name: `Massachusetts Institue of Technology (MIT)`,
@@ -509,6 +524,7 @@ export const profileTwo = {
         'Master of Fine Arts,Design and Technology, 77 Massachusetts Ave, USA',
     },
     {
+      id: nanoid(9),
       from: `${faker.date.past().getFullYear()}`,
       to: `${faker.date.past().getFullYear()}`,
       name: `Stanford University`,

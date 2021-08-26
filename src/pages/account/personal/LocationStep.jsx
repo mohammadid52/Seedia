@@ -49,7 +49,9 @@ const LastStep = ({ accountType = 'personal', user }) => {
     try {
       setSaving(true)
       const { data } = await network.post('/user/update', {
+        ...user,
         location: {
+          ...user.location,
           country: values.country,
           pincode: values.pincode,
           state: values.state,
@@ -59,6 +61,7 @@ const LastStep = ({ accountType = 'personal', user }) => {
         other: {
           ...user.other,
           accountFilled: true,
+          accountFinishedStep: 'location',
         },
       })
 

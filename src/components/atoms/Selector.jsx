@@ -67,7 +67,7 @@ const Selector = ({
             >
               <Listbox.Options
                 static
-                className="pl-0 absolute z-10 mt-1 w-full bg-white dark:bg-gray-700 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                className="pl-0 scroll-dark-md min-w-48 absolute z-10 mt-1 w-full bg-white dark:bg-gray-700 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
               >
                 {list.map((item, idx) => (
                   <Listbox.Option

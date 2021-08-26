@@ -7,25 +7,33 @@ import Following from 'pages/profile/Following'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Layout from 'pages/profile/Layout'
 import { IParent, IProfileOne } from 'interfaces/UniversalInterface'
+import { useRouter } from 'hooks/useRouter'
 
 const Profile = ({
   user,
   userData,
 }: {
   user: IProfileOne
-  userData?: IParent
+  userData: IParent
 }) => {
+  const route: any = useRouter()
+  const userIdFromParam = route?.match?.params?.userId
+
+  // #1 first get userId from params
+  // #2 check user id from token decoded object
+  // #3 if it matches then current user is authUser (owner of profile)
+  const authUser = userIdFromParam === userData._id
   return (
     <div className="bg-gray-100 dark:bg-gray-800">
-      <div className="mx-auto min-h-screen pt-8" style={{ maxWidth: '105rem' }}>
+      <div className="mx-auto min-h-screen pt-8 max-w-440">
         <Cover about={userData} company={userData?.company} data={user.about} />
 
         <div className="my-6">
           <Layout
-            firstCol={<About userData={userData} />}
+            firstCol={<About authUser={authUser} userData={userData} />}
             secondCol={
               <div className="space-y-12">
-                <Background userData={userData} />
+                <Background authUser={authUser} userData={userData} />
                 <Recommendations recommendation={user.recommendation} />
                 <Following />
               </div>

@@ -64,6 +64,7 @@ export interface IOther {
 
 export interface IParent extends IUser {
   // user?: IUser
+  _id?: string
   company?: ICompany
   location?: ILocation
   background?: IBackground
@@ -114,7 +115,7 @@ export interface ISkill {
 export interface IAward {
   awardName: string
   awardFor: string
-  id: string
+  id?: string
 }
 
 export interface IProfileOne {

@@ -6,7 +6,11 @@ import { AiOutlineEdit } from 'react-icons/ai'
 import Button from 'components/atoms/Button'
 import { isEmpty, map, remove, update } from 'lodash'
 import Modal from 'components/atoms/Modal'
-import { IBackground, IExperience } from 'interfaces/UniversalInterface'
+import {
+  IBackground,
+  IExperience,
+  IParent,
+} from 'interfaces/UniversalInterface'
 import NormalFormInput from 'components/atoms/NormalFormInput'
 import { isAvailable } from 'utils/wait'
 import { useUserContext } from 'context/UserContext'
@@ -210,7 +214,13 @@ interface ILocalFields extends IBackground {
   interest: string
 }
 
-const Background = ({ userData }: { userData: any }) => {
+const Background = ({
+  userData,
+  authUser,
+}: {
+  userData: IParent
+  authUser: boolean
+}) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
 
   const { setValues, values } = useUserContext()
@@ -399,12 +409,7 @@ const Background = ({ userData }: { userData: any }) => {
         header="Edit Background"
       >
         <div>
-          <div
-            style={{
-              minHeight: '15rem',
-            }}
-            className="overflow-y-hidden min-w-256 p-2 custom-scroll-mini darker my-4 max-h-full"
-          >
+          <div className="overflow-y-hidden min-h-64 min-w-256 p-2 custom-scroll-mini darker my-4 max-h-full">
             <div className="space-y-12 ">
               <ModalContentByType
                 addNewExperience={addNewExperience}
@@ -439,6 +444,7 @@ const Background = ({ userData }: { userData: any }) => {
               sectionTitle="Summary"
               Icon={CgDetailsMore}
               withSectionHeadings={
+                authUser &&
                 summary && (
                   <div>
                     <Button
@@ -480,7 +486,8 @@ const Background = ({ userData }: { userData: any }) => {
               Icon={CgDetailsMore}
               withSectionHeadings={
                 interests &&
-                interests.length > 0 && (
+                interests.length > 0 &&
+                authUser && (
                   <div>
                     <Button
                       secondary
@@ -531,6 +538,7 @@ const Background = ({ userData }: { userData: any }) => {
               sectionTitle="Experiences"
               Icon={CgDetailsMore}
               withSectionHeadings={
+                authUser &&
                 experiences &&
                 experiences.length > 0 && (
                   <div>

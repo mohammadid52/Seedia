@@ -11,8 +11,15 @@ import { network } from 'helpers'
 import { useUserContext } from 'context/UserContext'
 import { isAvailable } from 'utils/wait'
 import { isEmpty } from 'lodash'
+import { IParent } from 'interfaces/UniversalInterface'
 
-const About = ({ userData }: { userData: any }) => {
+const About = ({
+  userData,
+  authUser,
+}: {
+  userData: IParent
+  authUser: boolean
+}) => {
   const { setValues, values } = useUserContext()
   const [showModal, setShowModal] = useState(false)
 
@@ -103,13 +110,7 @@ const About = ({ userData }: { userData: any }) => {
         header="Edit About"
       >
         <div>
-          <div
-            style={{
-              maxHeight: '15rem',
-              minHeight: '15rem',
-            }}
-            className="overflow-y-auto p-2 custom-scroll-mini darker my-4"
-          >
+          <div className="min-w-64 max-w-64 overflow-y-auto p-2 custom-scroll-mini darker my-4">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <NormalFormInput
                 name="currentCompany"
@@ -151,17 +152,19 @@ const About = ({ userData }: { userData: any }) => {
       <Card
         cardTitle="About"
         withCardHeadings={
-          <>
-            <Button
-              secondary
-              invert
-              bgColor="gray"
-              onClick={() => setShowModal(true)}
-              Icon={AiOutlineEdit}
-              size="sm"
-              label={'Edit'}
-            />
-          </>
+          authUser && (
+            <>
+              <Button
+                secondary
+                invert
+                bgColor="gray"
+                onClick={() => setShowModal(true)}
+                Icon={AiOutlineEdit}
+                size="sm"
+                label={'Edit'}
+              />
+            </>
+          )
         }
         content={
           <div className="space-y-4">

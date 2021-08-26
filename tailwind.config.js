@@ -111,6 +111,7 @@ module.exports = {
         196: '49rem',
         200: '50rem',
         256: '64rem',
+        440: '110rem',
       },
       maxHeight: {
         48: '12rem',

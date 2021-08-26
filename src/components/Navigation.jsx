@@ -13,7 +13,12 @@ import { useUserContext } from 'context/UserContext'
 import { RiProfileLine } from 'react-icons/ri'
 import { links } from 'constants/Links'
 
-export default function Navigation({ isUser, accountFilled = false }) {
+export default function Navigation({
+  isUser,
+
+  accountFilled = false,
+  userId = '',
+}) {
   const { setDarkMode, darkMode } = useUserContext()
 
   const [selected, setSelected] = useState(adjustColors[0])
@@ -131,7 +136,7 @@ export default function Navigation({ isUser, accountFilled = false }) {
                 </Popover.Group>
               </div>
               <div className="-mr-2 -my-2 md:hidden">
-                <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none ">
+                <Popover.Button className="bg-white dark:bg-gray-800 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none ">
                   <span className="sr-only">Open menu</span>
                   <MenuIcon className="h-6 w-6" aria-hidden="true" />
                 </Popover.Button>
@@ -179,7 +184,11 @@ export default function Navigation({ isUser, accountFilled = false }) {
                                 <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                                   <div className="relative grid gap-6 bg-white dark:bg-gray-700 px-5 py-6 sm:gap-8 sm:p-8">
                                     <div
-                                      onClick={() => history.push('/profile/1')}
+                                      onClick={() =>
+                                        history.push(
+                                          `/profile/${userId}/template=1`
+                                        )
+                                      }
                                       className="p-2 cursor-pointer pl-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600"
                                     >
                                       <p className="text-base flex items-center text-left font-medium dark:text-white text-gray-900 mb-0">
@@ -188,7 +197,11 @@ export default function Navigation({ isUser, accountFilled = false }) {
                                       </p>
                                     </div>
                                     <div
-                                      onClick={() => history.push('/profile/2')}
+                                      onClick={() =>
+                                        history.push(
+                                          `/profile/${userId}/template=2`
+                                        )
+                                      }
                                       className="rounded-lg pl-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 p-2"
                                     >
                                       <p className="text-base flex items-center text-left  font-medium dark:text-white text-gray-900 mb-0">

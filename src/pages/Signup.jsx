@@ -12,6 +12,7 @@ import Error from 'components/alerts/Error'
 import { SIGNUP } from 'initials'
 import { useDispatch } from 'react-redux'
 import { setUser } from 'state/Redux/Actions/authActions'
+import { useUserContext } from 'context/UserContext'
 
 const Signup = () => {
   const [isLoaded, setIsLoaded] = useState(true)
@@ -35,6 +36,8 @@ const Signup = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
+  const { setValues } = useUserContext()
+
   const onSubmit = async (_values) => {
     try {
       setSaving(true)
@@ -55,9 +58,9 @@ const Signup = () => {
       })
 
       localStorage.setItem('access_token', res.data.data.access_token)
-
-      dispatch(setUser(data))
+      setValues({ ...res.data.data, ...data })
       setErrors([])
+      dispatch(setUser(data))
       history.push(links.CHOOSE_ACCOUNT)
     } catch (error) {
       setErrors([error.message])

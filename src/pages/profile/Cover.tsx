@@ -38,8 +38,8 @@ const Cover = ({
                 </span>
               </h1>
 
-              <div className="flex items-center w-auto text-xl border-t  border-white">
-                <div className="border-r border-white px-8 py-4">
+              <div className="flex items-center w-auto text-xl sm:border-t  border-white flex-col sm:flex-row border-t-none">
+                <div className="sm:border-r border-r-none border-white px-8 py-4 sm:border-b-none border-b">
                   <div className="text-center  text-white tracking-wide font-bold">
                     {data?.profileViews}
                   </div>
@@ -47,7 +47,7 @@ const Cover = ({
                     profile views
                   </div>
                 </div>
-                <div className="border-r border-white px-8 py-4">
+                <div className="sm:border-r  border-r-none border-white px-8 py-4 sm:border-b-none border-b">
                   <div className="text-center text-white tracking-wide font-bold">
                     {data?.projects}
                   </div>
@@ -55,7 +55,7 @@ const Cover = ({
                     projects
                   </div>
                 </div>
-                <div className="px-8 py-4">
+                <div className="px-8 py-4 sm:border-b-none border-b">
                   <div className="text-center text-white tracking-wide font-bold ">
                     {data?.connections}+
                   </div>

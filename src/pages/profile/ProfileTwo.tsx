@@ -10,7 +10,7 @@ import Awards from 'components/profileTwo/Awards'
 import Education from 'components/profileTwo/Education'
 import Languages from 'components/profileTwo/Languages'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
-import { IProfileTwo } from 'interfaces/UniversalInterface'
+import { IParent, IProfileTwo } from 'interfaces/UniversalInterface'
 import { useState } from 'react'
 import Modal from 'components/atoms/Modal'
 import Button from 'components/atoms/Button'
@@ -22,21 +22,22 @@ import { useUserContext } from 'context/UserContext'
 import AwardsModal from 'components/modals/AwardsModal'
 import LanguagesModal from 'components/modals/LanguagesModal'
 import EducationModal from 'components/modals/EducationModal'
-import { getUserValues } from 'helpers'
-import { useSelector } from 'react-redux'
 import { useRouter } from 'hooks/useRouter'
 
-const ProfileTwo = ({ user }: { user: IProfileTwo }) => {
+const ProfileTwo = ({
+  user,
+  userData,
+}: {
+  user: IProfileTwo
+  userData: IParent
+}) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
-
-  const { match }: any = useRouter()
-  const userIdFromParam = match?.params?.userId
+  const route: any = useRouter()
+  const userIdFromParam = route?.match?.params?.userId
 
   // #1 first get userId from params
   // #2 check user id from token decoded object
   // #3 if it matches then current user is authUser (owner of profile)
-
-  const userData = useSelector((state) => getUserValues(state))
   const authUser = userIdFromParam === userData._id
 
   const [unsavedChanges, setUnsavedChanges] = useState(false)
@@ -117,7 +118,8 @@ const ProfileTwo = ({ user }: { user: IProfileTwo }) => {
         </Modal>
       </div>
       <Header userData={userData} />
-      <div className="mx-auto min-h-screen pt-8" style={{ maxWidth: '105rem' }}>
+      {/* stylelint-disabled  */}
+      <div className="mx-auto min-h-screen pt-8 max-w-440">
         <Layout
           hideBorders
           firstCol={

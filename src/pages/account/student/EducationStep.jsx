@@ -8,7 +8,7 @@ import { links } from 'constants/Links'
 import Layout from 'containers/Layout'
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-
+import { nanoid } from 'nanoid'
 import { yearList, yearListWithFuture } from 'values/values'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
@@ -57,12 +57,23 @@ const EducationStep = ({ user }) => {
     try {
       setSaving(true)
       const { data } = await network.post('/user/update', {
-        education: {
-          education: values.education,
-          grade: values.grade,
-          grade_subject: values.grade_subject,
-          start_year: fields.start_year,
-          end_year: fields.end_year,
+        ...user,
+        background: {
+          ...user.background,
+          education: [
+            {
+              id: nanoid(9),
+              name: values.education,
+              grade: values.grade,
+              grade_subject: values.grade_subject,
+              from: fields.start_year,
+              to: fields.end_year,
+            },
+          ],
+        },
+        other: {
+          ...user.other,
+          accountFinishedStep: 'education',
         },
       })
       dispatch(setUser(data.data))

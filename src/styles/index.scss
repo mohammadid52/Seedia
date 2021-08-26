@@ -3124,6 +3124,16 @@ input:checked + .slider:before {
   }
 }
 
+$gray-800: #1f2937;
+$gray-700: #374151;
+$gray-600: #4b5563;
+$gray-500: #6b7280;
+$gray-400: #9ca3af;
+$gray-300: #d1d5db;
+$gray-200: #e5e7eb;
+$gray-100: #f3f4f6;
+$gray-50: #f9fafb;
+
 .custom-scroll-mini::-webkit-scrollbar {
   width: 0.5rem;
 }
@@ -3141,6 +3151,7 @@ input:checked + .slider:before {
   background-color: rgb(55, 65, 81);
 }
 
+// ---------------------------- general scrollbar styles ----------------------------
 .dark ::-webkit-scrollbar {
   width: 1rem;
 }
@@ -3153,12 +3164,28 @@ input:checked + .slider:before {
   background-color: #374151;
   border-radius: 10px;
 }
+
 .dark ::-webkit-scrollbar-track-piece {
-  // box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-
-  // -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-
   background-color: rgba(31, 41, 55, 1);
+}
+
+// ----------------------  For MD dark scroll bar ------------------------------
+
+.dark .scroll-dark-md::-webkit-scrollbar {
+  width: 1rem;
+}
+
+.dark .scroll-dark-md::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.dark .scroll-dark-md::-webkit-scrollbar-thumb {
+  background-color: $gray-600;
+  border-radius: 0px;
+}
+
+.dark .scroll-dark-md::-webkit-scrollbar-track-piece {
+  background-color: $gray-700;
 }
 
 // Divider

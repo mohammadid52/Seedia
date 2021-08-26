@@ -94,7 +94,7 @@ const AwardsModal = ({
     }
   }
 
-  const onAwardRemove = (id: string) => {
+  const onAwardRemove = (id?: string) => {
     setUnsavedChanges(true)
     remove(localFields.awards, (item) => item.id === id)
     setLocalFields({ ...localFields })

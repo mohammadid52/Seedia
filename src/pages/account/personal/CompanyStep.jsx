@@ -17,7 +17,7 @@ import { isEmpty } from 'lodash'
 import { setUser } from 'state/Redux/Actions/authActions'
 import { useDispatch } from 'react-redux'
 
-const StudentSecondStep = ({ user }) => {
+const CompanyStep = ({ user }) => {
   const [isLoaded, setIsLoaded] = useState(true)
   const history = useHistory()
 
@@ -54,11 +54,17 @@ const StudentSecondStep = ({ user }) => {
     setSaving(true)
     try {
       const { data } = await network.post('/user/update', {
+        ...user,
         company: {
+          ...user.company,
           jobTitle: values.jobTitle,
           jobType: values.jobType,
           currentCompany: values.currentCompany,
           companyName: values.currentCompany,
+        },
+        other: {
+          ...user.other,
+          accountFinishedStep: 'company',
         },
       })
       dispatch(setUser(data.data))
@@ -145,4 +151,4 @@ const StudentSecondStep = ({ user }) => {
   )
 }
 
-export default StudentSecondStep
+export default CompanyStep

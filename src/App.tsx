@@ -81,7 +81,11 @@ const App = () => {
     const atAuthPages = publicKeywords.indexOf(router.pathname) !== -1
 
     return atHome ? (
-      <Navigation isUser={isUser} accountFilled={accountFilled} />
+      <Navigation
+        userId={userData?._id}
+        isUser={isUser}
+        accountFilled={accountFilled}
+      />
     ) : atAuthPages ? null : (
       <DashboardHeader user={user} about={profileOne.about} />
     )
@@ -95,6 +99,10 @@ const App = () => {
   const isUser = !isEmpty(values)
 
   const userData: IParent = isUser ? values : undefined
+
+  const getProfileById = () => {
+    // coming soon
+  }
 
   return (
     <Router>

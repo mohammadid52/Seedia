@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon, MenuIcon } from '@heroicons/react/outline'
 import { BiMessageDetail, BiUserCircle } from 'react-icons/bi'
@@ -16,12 +16,33 @@ import { classNames } from 'utils/classNames'
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logOut } from 'state/Redux/Actions/authActions'
-import { businessApps, callsToAction, sellList, settings } from 'values/values'
+import {
+  businessApps,
+  callsToAction,
+  departmentsArray,
+  productsArray,
+  sellList,
+  settings,
+} from 'values/values'
+import Selector from 'components/atoms/Selector'
+import { find } from 'lodash'
+import CountryListDropdown from 'components/CountryListDropdown'
 
 const DashboardHeader = ({ about, user }: { about: IAbout; user: any }) => {
   const { setDarkMode, darkMode } = useUserContext()
   const dispatch = useDispatch()
   const history = useHistory()
+
+  const [selectedProduct, setSelectedProduct] = useState<any>(productsArray[0])
+
+  const searchPlaceHolder =
+    ['products', 'bulk', 'all'].indexOf(selectedProduct.value) !== -1
+      ? 'Search'
+      : 'Find a'
+
+  const [selectedDepartment, setSelectedDepartment] = useState<any>(
+    departmentsArray[0]
+  )
 
   const navClass =
     'flex flex-col items-center font-medium text-base dark:text-gray-400 text-gray-500 link-hover'
@@ -40,6 +61,59 @@ const DashboardHeader = ({ about, user }: { about: IAbout; user: any }) => {
                   alt=""
                 />
               </a>
+              <div className="hidden rounded-xl h-12 ml-8 lg:flex dark:border-gray-700 border">
+                <div className="ml-2">
+                  <Selector
+                    disableFocus
+                    selectedItem={selectedProduct.label}
+                    list={productsArray.map((product) => ({
+                      name: product.label,
+                    }))}
+                    required
+                    border={false}
+                    onSelect={(item) => {
+                      const selectedItem = find(
+                        productsArray,
+                        (_item) => _item.label === item.name
+                      )
+                      setSelectedProduct(selectedItem)
+                    }}
+                  />
+                </div>
+
+                <div className="col-span-5">
+                  <input
+                    id="home_search_panel"
+                    name="search"
+                    type="text"
+                    className="relative  dark:bg-gray-800 dark:text-white w-full border-none outline-none shadow-none focus:outline-none text-sm  pl-3 pr-10 py-2 text-left  dark:placeholder-gray-400 placeholder-gray-500 h-full"
+                    placeholder={
+                      searchPlaceHolder + ' ' + selectedProduct.label
+                    }
+                  />
+                </div>
+                <div className="w-72">
+                  <Selector
+                    selectedItem={selectedDepartment.label}
+                    list={departmentsArray.map((department) => ({
+                      name: department.label,
+                    }))}
+                    border={false}
+                    disableFocus
+                    required
+                    onSelect={(item) => {
+                      const selectedItem = find(
+                        departmentsArray,
+                        (_item) => _item.label === item.name
+                      )
+                      setSelectedDepartment(selectedItem)
+                    }}
+                  />
+                </div>
+                <div className="relative flex items-center justify-center col-span-1">
+                  <CountryListDropdown />
+                </div>
+              </div>
             </div>
             <div className="-mr-2 -my-2 md:hidden">
               <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -256,8 +330,7 @@ const DashboardHeader = ({ about, user }: { about: IAbout; user: any }) => {
                             </div>
                             <div>
                               <h4 className="text-lg dark:text-white font-bold">
-                                {user.fullName ||
-                                  `${user.firstName} ${user.lastName}`}
+                                {user?.fullName}
                               </h4>
                               <p className="mt-1 text-gray-800 font-medium leading-3 dark:text-gray-400">
                                 {user?.company?.jobTitle}

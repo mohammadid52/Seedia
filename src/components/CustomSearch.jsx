@@ -2,21 +2,17 @@
 import React, { useState } from 'react'
 
 import Selector from 'components/atoms/Selector'
-import { productsArray, departmentsArray } from '../values/values'
+import {
+  productsArray,
+  departmentsArray,
+  welcomeSearchLinks,
+} from '../values/values'
 import CountryListDropdown from 'components/CountryListDropdown'
 import { find } from 'lodash'
 import Tooltip from '@material-ui/core/Tooltip'
 import { withStyles } from '@material-ui/core'
 
 const CustomSearchPanel = () => {
-  const list = [
-    { name: 'Receive quotes', href: '#/' },
-    { name: 'Trending', href: '#/' },
-    { name: 'Jobs', href: '#/' },
-    { name: 'Remarkable', href: '#/' },
-    { name: 'New', href: '#/' },
-  ]
-
   const [selectedProduct, setSelectedProduct] = useState(productsArray[0])
 
   const searchPlaceHolder =
@@ -138,7 +134,7 @@ const CustomSearchPanel = () => {
         </div>
       </div>
       <div className="grid space-x-12 sm:grid-cols-5 rounded-b-xl h-12 grid-cols-1 px-10 dark:border-gray-700 border">
-        {list.map((item, idx) => {
+        {welcomeSearchLinks.map((item, idx) => {
           return (
             <>
               <div
