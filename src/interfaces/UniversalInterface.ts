@@ -19,12 +19,14 @@ export interface IAbout {
 
 export interface IModalProps extends IBlockProps {
   setUnsavedChanges: React.Dispatch<React.SetStateAction<boolean>>
+  setShowUnsaveModal: React.Dispatch<React.SetStateAction<boolean>>
   onCancel: () => void
   setValues: (data: any) => void
 }
 
 export interface IBlockProps {
   userData: IParent
+  showEditOption?: boolean
   setShowModal: React.Dispatch<
     React.SetStateAction<{ show: boolean; type: string }>
   >

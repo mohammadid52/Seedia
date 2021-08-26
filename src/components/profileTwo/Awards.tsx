@@ -7,18 +7,18 @@ import EmptyState from 'components/atoms/EmptyState'
 import { PlusIcon } from '@heroicons/react/solid'
 import { AWARDS } from 'state/Redux/constants'
 
-const Awards = ({ userData, setShowModal }: IBlockProps) => {
+const Awards = ({ userData, setShowModal, showEditOption }: IBlockProps) => {
   const { background } = userData || {}
   const { awards = [] } = background || {}
-
+  const showContent: boolean = awards && awards.length > 0
   return (
     <>
       <Card
         secondary
         id="awards"
         withCardHeadings={
-          awards &&
-          awards.length > 0 && (
+          showContent &&
+          showEditOption && (
             <>
               <Button
                 secondary
@@ -40,7 +40,7 @@ const Awards = ({ userData, setShowModal }: IBlockProps) => {
             style={{ maxHeight: '15rem', minHeight: '20rem' }}
             className="overflow-y-auto  custom-scroll-mini"
           >
-            {awards && awards.length > 0 ? (
+            {showContent ? (
               <ol className="space-y-6 list-disc px-8 py-4 ">
                 {map(awards, (award, awardIdx) => (
                   <li
@@ -61,6 +61,7 @@ const Awards = ({ userData, setShowModal }: IBlockProps) => {
                 title="No awards"
                 subtitle="Showcase your awards here"
                 btnText="Add awards"
+                showEditOption={showEditOption}
                 BtnIcon={PlusIcon}
                 onBtnClick={() => {
                   setShowModal({ type: AWARDS, show: true })

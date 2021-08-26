@@ -24,15 +24,16 @@ const AwardsModal = ({
   onCancel,
   setUnsavedChanges,
   setValues,
+  setShowUnsaveModal,
 }: IModalProps) => {
   const { background } = userData || {}
   const { awards = [] } = background || {}
   const [localFields, setLocalFields] = useState(initialState)
   useEffect(() => {
-    if (!isEmpty(background)) {
-      setLocalFields((prev) => ({ ...prev, awards }))
+    if (!isEmpty(userData)) {
+      setLocalFields((prev) => ({ ...prev, awards: [...awards] }))
     }
-  }, [background])
+  }, [])
 
   const addAward = () => {
     const newAward: IAward = {
@@ -64,7 +65,7 @@ const AwardsModal = ({
 
         background: {
           ...background,
-          skills:
+          awards:
             localFields.awards && localFields.awards.length > 0
               ? [...localFields.awards]
               : awards,
@@ -81,6 +82,7 @@ const AwardsModal = ({
 
       // add data to local state
       onCancel()
+      setShowUnsaveModal(false)
       setUnsavedChanges(false)
       wait(500).then(() => {
         setLocalFields({ ...initialState })

@@ -40,6 +40,7 @@ const getUser = async () => {
 }
 
 export const loadUser = () => async (dispatch) => {
+  console.log('@loadUser -----------------------')
   try {
     dispatch({ type: types.LOADER, data: false })
 
@@ -58,10 +59,9 @@ export const loadUser = () => async (dispatch) => {
   }
 }
 export const setUser = (user) => async (dispatch) => {
-  console.log('sdsdon')
   try {
     if (!isEmpty(user)) {
-      console.log('User set successfully: ', user)
+      console.log('@setUser: User set successfully: ', user)
       dispatch({ type: types.SET_USER_DATA, data: user })
     }
   } catch (error) {

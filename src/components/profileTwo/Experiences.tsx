@@ -8,7 +8,11 @@ import { PlusIcon } from '@heroicons/react/solid'
 import { IBlockProps } from 'interfaces/UniversalInterface'
 import { PROFILE_TWO_EXPERIENCE } from 'state/Redux/constants'
 
-const Experiences = ({ userData, setShowModal }: IBlockProps) => {
+const Experiences = ({
+  userData,
+  setShowModal,
+  showEditOption,
+}: IBlockProps) => {
   const { background } = userData || {}
   const { experiences = [] } = background || {}
 
@@ -19,7 +23,8 @@ const Experiences = ({ userData, setShowModal }: IBlockProps) => {
         secondary
         withCardHeadings={
           experiences &&
-          experiences.length > 0 && (
+          experiences.length > 0 &&
+          showEditOption && (
             <>
               <Button
                 secondary
@@ -63,7 +68,7 @@ const Experiences = ({ userData, setShowModal }: IBlockProps) => {
                             aria-hidden="true"
                           />
                         ) : null}
-                        <li className="relative  flex items-center  justify-between group">
+                        <div className="relative  flex items-center  justify-between group">
                           <div className="relative  flex items-start group">
                             <span className="h-9 flex items-center ">
                               <span
@@ -96,7 +101,7 @@ const Experiences = ({ userData, setShowModal }: IBlockProps) => {
                               {moment(step.to).format('MMMM YYYY')}
                             </span>
                           </div>
-                        </li>
+                        </div>
                       </>
                     </li>
                   ))
@@ -106,6 +111,7 @@ const Experiences = ({ userData, setShowModal }: IBlockProps) => {
                     subtitle="Get started by adding a new experience to your profile."
                     btnText="Add experience"
                     BtnIcon={PlusIcon}
+                    showEditOption={showEditOption}
                     onBtnClick={() => {
                       setShowModal({ type: PROFILE_TWO_EXPERIENCE, show: true })
                     }}

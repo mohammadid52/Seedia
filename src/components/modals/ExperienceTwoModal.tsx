@@ -1,16 +1,17 @@
 import NormalFormInput from 'components/atoms/NormalFormInput'
 import Selector from 'components/atoms/Selector'
 import { IExperience, IModalProps } from 'interfaces/UniversalInterface'
-import { map, remove, update } from 'lodash'
-import React, { Fragment, useState } from 'react'
+import { isEmpty, map, remove, update } from 'lodash'
+import React, { Fragment, useEffect, useState } from 'react'
 import { nanoid } from 'nanoid'
 import { yearList } from 'values/values'
 import Divider from 'components/atoms/Divider'
 import { BiTrashAlt } from 'react-icons/bi'
 import { wait } from 'utils/wait'
-import { useUserContext } from 'context/UserContext'
 import { network } from 'helpers'
 import Button from 'components/atoms/Button'
+import DatePicker from 'components/atoms/DatePicker'
+import TextButton from 'components/atoms/TextButton'
 
 const initialState: { experiences: IExperience[] } = {
   experiences: [],
@@ -19,12 +20,20 @@ const initialState: { experiences: IExperience[] } = {
 const ExperienceTwoModal = ({
   userData,
   onCancel,
+  setValues,
   setUnsavedChanges,
+  setShowUnsaveModal,
 }: IModalProps) => {
   const [localFields, setLocalFields] = useState(initialState)
-  const { setValues } = useUserContext()
+
   const { background } = userData || {}
   const { experiences = [] } = background || {}
+
+  useEffect(() => {
+    if (!isEmpty(userData)) {
+      setLocalFields({ experiences: [...experiences] })
+    }
+  }, [])
   const addNewExperience = () => {
     const newExperience: IExperience = {
       id: nanoid(6),
@@ -62,7 +71,7 @@ const ExperienceTwoModal = ({
 
   const getValue = (fieldName: string, idx: number): string => {
     // @ts-ignore
-    return experiences[idx][fieldName]
+    return localFields.experiences[idx][fieldName]
   }
 
   const onExperienceRemove = (id: string) => {
@@ -98,6 +107,7 @@ const ExperienceTwoModal = ({
 
       // add data to local state
       onCancel()
+      setShowUnsaveModal(false)
       setUnsavedChanges(false)
       wait(500).then(() => {
         setLocalFields({ ...initialState })
@@ -109,11 +119,14 @@ const ExperienceTwoModal = ({
     }
   }
 
+  const showContent: boolean =
+    localFields.experiences && localFields.experiences.length > 0
+
   return (
-    <div>
-      <div className="divider dark:divider">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {localFields.experiences && localFields.experiences.length > 0 ? (
+    <div className="">
+      <div className="">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+          {showContent ? (
             <>
               {map(localFields.experiences, (experience, idx: number) => (
                 <Fragment key={idx}>
@@ -135,29 +148,27 @@ const ExperienceTwoModal = ({
                     placeholder="What was/is the company name? "
                     onChange={(e) => onExperienceFieldUpdate(e, idx)}
                   />
-                  <Selector
-                    key="joinDate"
+
+                  <DatePicker
                     required
-                    selectedItem={getValue('joinDate', idx)}
-                    list={yearList}
-                    label={'Join date'}
                     placeholder="Started from"
-                    onSelect={(item) => {
-                      onExperienceSelectUpdate('joinDate', item.name, idx)
-                    }}
+                    label={'Join date'}
+                    date={getValue('joinDate', idx)}
+                    setDate={(date: string) =>
+                      onExperienceSelectUpdate('joinDate', date, idx)
+                    }
                   />
-                  <Selector
-                    key="leaveDate"
+                  <DatePicker
                     required
-                    selectedItem={getValue('leaveDate', idx)}
-                    list={yearList}
-                    label={'Leave date'}
                     placeholder="Left on"
-                    onSelect={(item) => {
-                      onExperienceSelectUpdate('leaveDate', item.name, idx)
-                    }}
+                    label={'Leave date'}
+                    date={getValue('leaveDate', idx)}
+                    setDate={(date: string) =>
+                      onExperienceSelectUpdate('leaveDate', date, idx)
+                    }
                   />
-                  <div className="col-span-2">
+
+                  <div className="col-span-4">
                     <NormalFormInput
                       id="description"
                       textarea
@@ -168,8 +179,9 @@ const ExperienceTwoModal = ({
                       onChange={(e) => onExperienceFieldUpdate(e, idx)}
                     />
                   </div>
-                  <div className="col-span-2 ">
+                  <div className="col-span-4">
                     <Divider
+                      className="cursor-pointer hover:text-red-600 text-red-500"
                       withButton
                       Icon={BiTrashAlt}
                       onBtnClick={() => onExperienceRemove(experience.id)}
@@ -179,15 +191,13 @@ const ExperienceTwoModal = ({
               ))}
             </>
           ) : null}
-          <div className="col-span-2">
-            <Button
-              className="mx-auto"
-              onClick={addNewExperience}
-              label="Add new experience"
-              bgColor="yellow"
-              size="sm"
-            />
-          </div>
+        </div>
+        <div className=" flex items-center justify-start">
+          <TextButton
+            text="Add new experience"
+            className="mx-auto"
+            onClick={addNewExperience}
+          />
         </div>
       </div>
       <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
@@ -196,6 +206,7 @@ const ExperienceTwoModal = ({
           loading={saving}
           disabled={saving}
           onClick={onSave}
+          hidden={!showContent}
           label="Save"
         />
       </div>

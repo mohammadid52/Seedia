@@ -7,9 +7,11 @@ import { map } from 'lodash'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { SKILLS } from 'state/Redux/constants'
 
-const Skills = ({ userData, setShowModal }: IBlockProps) => {
-  const { background } = userData || {}
-  const { skills = [] } = background || {}
+const Skills = ({ setShowModal, userData, showEditOption }: IBlockProps) => {
+  const {
+    background: { skills = [] },
+  }: any = userData
+
   return (
     <>
       <Card
@@ -19,7 +21,8 @@ const Skills = ({ userData, setShowModal }: IBlockProps) => {
         cardTitle="Skills"
         withCardHeadings={
           skills &&
-          skills.length > 0 && (
+          skills.length > 0 &&
+          showEditOption && (
             <>
               <Button
                 secondary
@@ -55,6 +58,7 @@ const Skills = ({ userData, setShowModal }: IBlockProps) => {
                 title="No skills"
                 subtitle="Add new skills to enhance your profile."
                 btnText="Add skills"
+                showEditOption={showEditOption}
                 BtnIcon={PlusIcon}
                 onBtnClick={() => {
                   setShowModal({ type: SKILLS, show: true })

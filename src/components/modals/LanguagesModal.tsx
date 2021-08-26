@@ -24,6 +24,7 @@ const LanguagesModal = ({
   userData,
   onCancel,
   setUnsavedChanges,
+  setShowUnsaveModal,
   setValues,
 }: IModalProps) => {
   const { background } = userData || {}
@@ -32,14 +33,14 @@ const LanguagesModal = ({
   const [localFields, setLocalFields] = useState(initialState)
 
   useEffect(() => {
-    if (!isEmpty(background)) {
+    if (!isEmpty(userData)) {
       setLocalFields((prev) => ({
         ...prev,
-        languages,
+        languages: [...languages],
         langLevel: languageKnownLevel[1].name,
       }))
     }
-  }, [background])
+  }, [])
 
   const addLanguage = () => {
     const newLangauge: ILanguage = {
@@ -89,6 +90,7 @@ const LanguagesModal = ({
       // add data to local state
       onCancel()
       setUnsavedChanges(false)
+      setShowUnsaveModal(false)
       wait(500).then(() => {
         setLocalFields({ ...initialState })
       })
@@ -112,13 +114,7 @@ const LanguagesModal = ({
   }
   return (
     <div>
-      <div
-        style={{
-          maxHeight: '15rem',
-          minHeight: '20rem',
-        }}
-        className="overflow-y-auto min-w-132  custom-scroll-mini darker my-4"
-      >
+      <div className="overflow-y-auto min-w-132  custom-scroll-mini darker my-4">
         {localFields.languages && localFields.languages.length > 0 && (
           <ol className="space-y-6 list-disc p-4 ">
             {map(localFields.languages, (lang, langIdx) => (
@@ -146,37 +142,32 @@ const LanguagesModal = ({
           </ol>
         )}
       </div>
-      <div className="">
-        <h3 className="text-gray-900 dark:text-gray-500 mb-2">New Language:</h3>
-        <div className="flex border border-gray-200 dark:border-gray-700 p-4 rounded-md items-center flex-col space-y-2">
-          <div className="flex items-center gap-x-2">
-            <NormalFormInput
-              placeholder="Enter new language"
-              value={localFields.langName}
-              onChange={onChange}
-              name="langName"
-              fullWidth
-            />
 
-            <Selector
-              list={languageKnownLevel}
-              placeholder="Select level"
-              onSelect={onLanguageLevelUpdate}
-              selectedItem={localFields.langLevel}
-            />
-          </div>
-          <Button
-            onClick={addLanguage}
-            disabled={
-              localFields.langName.length <= 3 || !localFields.langLevel
-            }
-            size="sm"
-            gradient
-            label="Add"
-            fullWidth
-          />
-        </div>
+      <div className="flex border border-gray-200 dark:border-gray-700 justify-start p-4 rounded-md  items-center  gap-2">
+        <NormalFormInput
+          placeholder="Enter new language"
+          value={localFields.langName}
+          onChange={onChange}
+          name="langName"
+          fullWidth
+        />
+
+        <Selector
+          list={languageKnownLevel}
+          placeholder="Select level"
+          onSelect={onLanguageLevelUpdate}
+          selectedItem={localFields.langLevel}
+        />
+
+        <Button
+          onClick={addLanguage}
+          disabled={localFields.langName.length <= 3 || !localFields.langLevel}
+          size="sm"
+          gradient
+          label="Add"
+        />
       </div>
+
       <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
         <Button
           disabled={saving}

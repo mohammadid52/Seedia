@@ -20,6 +20,7 @@ interface IButton {
   shadow?: boolean
   gradientHover?: boolean
   disabled?: boolean
+  hidden?: boolean
 
   loadingText?: string
   type?: 'button' | 'submit' | 'reset'
@@ -51,12 +52,13 @@ const Button = ({
   loadingText = 'Processing',
   customClass = false,
   disabled = false,
+  hidden = false,
 }: IButton) => {
   const primaryClass = `${
     invert
-      ? `text-${bgColor}-600  hover:text-${bgColor}-700`
-      : `text-white bg-${bgColor}-600 hover:bg-${bgColor}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${bgColor}-500`
-  }  flex items-center border border-transparent shadow-sm text-base font-medium rounded-md `
+      ? `text-${bgColor}-600 border border-transparent hover:border-${bgColor}-200 `
+      : `text-white bg-${bgColor}-600 border-transparent hover:bg-${bgColor}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${bgColor}-500`
+  }  flex items-center border  shadow-sm text-base font-medium rounded-md `
   const secondaryClass = `flex items-center border border-transparent font-medium rounded dark:text-${bgColor}-400 dark:border-${bgColor}-400 text-${bgColor}-700 ${
     invert
       ? `hover:border-${bgColor}-300 dark:border-gray-600 dark:hover:border-gray-500  border-${bgColor}-200 border focus:ring-${bgColor}-500`
@@ -105,6 +107,7 @@ const Button = ({
       aria-hidden="true"
       onClick={onClick}
       disabled={disabled}
+      hidden={hidden}
       type={type}
       style={{ filter: shadow ? 'drop-shadow(2px 4px 6px pink)' : undefined }}
       className={`${

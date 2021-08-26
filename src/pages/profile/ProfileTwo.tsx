@@ -10,7 +10,7 @@ import Awards from 'components/profileTwo/Awards'
 import Education from 'components/profileTwo/Education'
 import Languages from 'components/profileTwo/Languages'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
-import { IParent, IProfileTwo } from 'interfaces/UniversalInterface'
+import { IProfileTwo } from 'interfaces/UniversalInterface'
 import { useState } from 'react'
 import Modal from 'components/atoms/Modal'
 import Button from 'components/atoms/Button'
@@ -21,15 +21,23 @@ import SkillsModal from 'components/modals/SkillsModal'
 import { useUserContext } from 'context/UserContext'
 import AwardsModal from 'components/modals/AwardsModal'
 import LanguagesModal from 'components/modals/LanguagesModal'
+import EducationModal from 'components/modals/EducationModal'
+import { getUserValues } from 'helpers'
+import { useSelector } from 'react-redux'
+import { useRouter } from 'hooks/useRouter'
 
-const ProfileTwo = ({
-  user,
-  userData,
-}: {
-  user: IProfileTwo
-  userData: IParent
-}) => {
+const ProfileTwo = ({ user }: { user: IProfileTwo }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
+
+  const { match }: any = useRouter()
+  const userIdFromParam = match?.params?.userId
+
+  // #1 first get userId from params
+  // #2 check user id from token decoded object
+  // #3 if it matches then current user is authUser (owner of profile)
+
+  const userData = useSelector((state) => getUserValues(state))
+  const authUser = userIdFromParam === userData._id
 
   const [unsavedChanges, setUnsavedChanges] = useState(false)
 
@@ -44,15 +52,16 @@ const ProfileTwo = ({
 
       setUnsavedChanges(false)
     }
-    setShowModal({ show: false, type: '' })
+    setShowModal({ ...showModal, show: false })
   }
-  const commonBlockProps = { setShowModal, userData }
+  const commonBlockProps = { setShowModal, userData, showEditOption: authUser }
 
   const commonModalProps = {
     ...commonBlockProps,
     onCancel,
     setUnsavedChanges,
     setValues,
+    setShowUnsaveModal,
   }
 
   const renderModalContentByType = (type: string) => {
@@ -64,7 +73,7 @@ const ProfileTwo = ({
       case constants.AWARDS:
         return <AwardsModal {...commonModalProps} />
       case constants.EDUCATION:
-        return <ExperienceTwoModal {...commonModalProps} />
+        return <EducationModal {...commonModalProps} />
       case constants.LANGUAGES:
         return <LanguagesModal {...commonModalProps} />
 
@@ -101,7 +110,7 @@ const ProfileTwo = ({
           header={renderModalHeader(showModal.type)}
         >
           <div className="">
-            <div className="overflow-y-auto min-w-132  custom-scroll-mini darker my-4">
+            <div className="overflow-y-auto min-w-132  custom-scroll-mini darker my-4 px-1">
               {renderModalContentByType(showModal.type)}
             </div>
           </div>
@@ -133,9 +142,9 @@ const ProfileTwo = ({
                 <Skills {...commonBlockProps} />
                 <Awards {...commonBlockProps} />
               </div>
-              <Education data={user.education} />
+              <Education {...commonBlockProps} />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
-                <Languages userData={userData} />
+                <Languages {...commonBlockProps} />
               </div>
             </div>
           }
@@ -177,7 +186,7 @@ const ProfileTwo = ({
               gradient
               onClick={() => {
                 setShowUnsaveModal(false)
-                setShowModal({ show: false, type: '' })
+                setShowModal({ ...showModal, show: true })
               }}
               invert
               label="No thanks"

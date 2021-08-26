@@ -1,7 +1,6 @@
 import { IModalProps, ISkill } from 'interfaces/UniversalInterface'
 import React, { useEffect, useState } from 'react'
 import { nanoid } from 'nanoid'
-import { useUserContext } from 'context/UserContext'
 import { network } from 'helpers'
 import { wait } from 'utils/wait'
 import { isEmpty, map, remove } from 'lodash'
@@ -19,18 +18,20 @@ const SkillsModal = ({
   onCancel,
   setUnsavedChanges,
   setValues,
+  setShowUnsaveModal,
 }: IModalProps) => {
   const { background } = userData || {}
   const { skills = [] } = background || {}
 
-  const [localFields, setLocalFields] = useState(initialState)
+  const [localFields, setLocalFields] = useState({ ...initialState })
 
   useEffect(() => {
-    if (!isEmpty(background)) {
-      setLocalFields((prev) => ({ ...prev, skills }))
+    if (!isEmpty(userData)) {
+      setLocalFields({ skillText: '', skills: [...skills] })
     }
-  }, [background])
+  }, [])
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUnsavedChanges(true)
     const { name, value } = e.target
     setLocalFields({ ...localFields, [name]: value })
   }
@@ -75,6 +76,7 @@ const SkillsModal = ({
       // add data to local state
       onCancel()
       setUnsavedChanges(false)
+      setShowUnsaveModal(false)
       wait(500).then(() => {
         setLocalFields({ ...initialState })
       })
@@ -90,6 +92,7 @@ const SkillsModal = ({
     remove(localFields.skills, (item) => item.id === id)
     setLocalFields({ ...localFields })
   }
+
   return (
     <div>
       <div className="my-2">

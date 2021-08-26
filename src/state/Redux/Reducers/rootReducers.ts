@@ -4,5 +4,5 @@ import userReducer from 'state/Redux/Reducers/userReducers'
 
 export default combineReducers({
   auth: authReducer,
-  user: userReducer,
+  // user: userReducer,
 })

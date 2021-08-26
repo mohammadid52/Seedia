@@ -1,4 +1,4 @@
-import { lazy, useEffect } from 'react'
+import { lazy, useEffect, useState } from 'react'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
@@ -131,12 +131,20 @@ const App = () => {
             >
               <Dashboard user={profileOne} />
             </PrivateRoute>
-            {/* @ts-ignore */}
-            <PrivateRoute isUser={isUser} exact path="/profile/1">
+            <PrivateRoute
+              isUser={isUser}
+              // @ts-ignore
+              exact
+              path="/profile/:userId/template=1"
+            >
               <Profile userData={userData} user={profileOne} />
             </PrivateRoute>
-            {/* @ts-ignore */}
-            <PrivateRoute isUser={isUser} exact path="/profile/2">
+            <PrivateRoute
+              isUser={isUser}
+              // @ts-ignore
+              exact
+              path="/profile/:userId/template=2"
+            >
               {/* @ts-ignore */}
               <ProfileTwo userData={userData} user={profileTwo} />
             </PrivateRoute>

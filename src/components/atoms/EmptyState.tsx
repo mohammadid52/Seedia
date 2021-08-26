@@ -7,12 +7,14 @@ const EmptyState = ({
   btnText,
   BtnIcon,
   onBtnClick,
+  showEditOption,
 }: {
   title: string
   subtitle?: string
   iconUrl?: string
   btnText?: string
   BtnIcon?: any
+  showEditOption?: boolean
   onBtnClick?: () => void
 }) => {
   return (
@@ -25,16 +27,20 @@ const EmptyState = ({
       <h3 className="mt-2 text-sm font-medium dark:text-gray-300 text-gray-900">
         {title}
       </h3>
-      <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
-      <div className="mt-6">
-        <Button
-          size="sm"
-          label={btnText}
-          gradient
-          Icon={BtnIcon}
-          onClick={onBtnClick}
-        />
-      </div>
+      {showEditOption && (
+        <>
+          <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
+          <div className="mt-6">
+            <Button
+              size="sm"
+              label={btnText}
+              gradient
+              Icon={BtnIcon}
+              onClick={onBtnClick}
+            />
+          </div>
+        </>
+      )}
     </div>
   )
 }
