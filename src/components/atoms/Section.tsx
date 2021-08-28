@@ -19,7 +19,7 @@ const Section: React.FC<SectionProps> = ({
   return (
     <div className="space-y-6 text-gray-600 dark:text-white">
       <div className="flex items-center justify-between">
-        <div>
+        <div className="flex items-center">
           <Icon />
           <span className="ml-2">{sectionTitle}</span>
         </div>

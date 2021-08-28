@@ -62,13 +62,19 @@ export interface IOther {
   accountFinishedStep: string
 }
 
-export interface IParent extends IUser {
+export interface IParent {
   // user?: IUser
   _id?: string
+  fullName: string
+  profileViews?: number
+  maritalStatus?: string
   company?: ICompany
   location?: ILocation
   background?: IBackground
   other?: IOther
+  coverPicture?: string
+  email?: string
+  profilePicture?: string
   // business?:{}
 }
 

@@ -8,6 +8,9 @@ import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Layout from 'pages/profile/Layout'
 import { IParent, IProfileOne } from 'interfaces/UniversalInterface'
 import { useRouter } from 'hooks/useRouter'
+import { network } from 'helpers'
+import { useEffect } from 'react'
+import { useUserContext } from 'context/UserContext'
 
 const Profile = ({
   user,
@@ -19,21 +22,39 @@ const Profile = ({
   const route: any = useRouter()
   const userIdFromParam = route?.match?.params?.userId
 
+  const { setValues } = useUserContext()
+
   // #1 first get userId from params
   // #2 check user id from token decoded object
   // #3 if it matches then current user is authUser (owner of profile)
   const authUser = userIdFromParam === userData._id
+
+  const getProfileById = async () => {
+    if (!authUser) {
+      const { data } = await network.get('/user/' + userIdFromParam)
+      setValues({ ...data.data })
+    } else {
+      setValues({ ...userData })
+    }
+  }
+
+  // useEffect(() => {
+  //   getProfileById()
+  // }, [route?.match?.params])
+
+  const commonProps = { authUser, userData }
+
   return (
     <div className="bg-gray-100 dark:bg-gray-800">
       <div className="mx-auto min-h-screen pt-8 max-w-440">
-        <Cover about={userData} company={userData?.company} data={user.about} />
+        <Cover {...commonProps} />
 
         <div className="my-6">
           <Layout
-            firstCol={<About authUser={authUser} userData={userData} />}
+            firstCol={<About {...commonProps} />}
             secondCol={
               <div className="space-y-12">
-                <Background authUser={authUser} userData={userData} />
+                <Background {...commonProps} />
                 <Recommendations recommendation={user.recommendation} />
                 <Following />
               </div>

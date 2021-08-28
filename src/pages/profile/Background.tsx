@@ -234,7 +234,11 @@ const Background = ({
   }
 
   const { background = {} } = isEmpty(values) ? {} : values
-  const { summary, interests, experiences }: IBackground = background
+  const {
+    summary = '',
+    interests = [],
+    experiences = [],
+  }: IBackground = background
 
   const initialState = {
     interest: '',
@@ -262,11 +266,11 @@ const Background = ({
     if (type === 'summary') {
       setLocalFields({ ...localFields, summary: summary || '' })
     } else if (type === 'interests') {
-      setLocalFields({ ...localFields, interests: interests || [] })
+      setLocalFields({ ...localFields, interests: [...interests] || [] })
     } else if (type === 'experiences') {
       setLocalFields({
         ...localFields,
-        experiences: experiences || [],
+        experiences: [...experiences] || [],
       })
     }
   }
@@ -334,9 +338,6 @@ const Background = ({
       // add data to local state
       setShowModal({ ...showModal, show: false })
       setUnsavedChanges(false)
-      if (!showModal.show) {
-        setLocalFields(initialState)
-      }
     } catch (error) {
       console.error(error)
     } finally {
@@ -474,6 +475,7 @@ const Background = ({
                       onBtnClick={() =>
                         setShowModal({ show: true, type: 'summary' })
                       }
+                      showEditOption={authUser}
                       BtnIcon={PlusIcon}
                       iconUrl={'/summary.png'}
                     />
@@ -525,6 +527,7 @@ const Background = ({
                       subtitle="Get started by adding your interests to your profile."
                       btnText="Add interests"
                       BtnIcon={PlusIcon}
+                      showEditOption={authUser}
                       iconUrl={'/interest.png'}
                       onBtnClick={() =>
                         setShowModal({ show: true, type: 'interests' })
@@ -591,6 +594,7 @@ const Background = ({
                       subtitle="Get started by adding a new experience to your profile."
                       btnText="Add experience"
                       BtnIcon={PlusIcon}
+                      showEditOption={authUser}
                       onBtnClick={() => {
                         if (experiences && experiences.length === 0) {
                           addNewExperience()

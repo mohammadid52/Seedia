@@ -36,10 +36,7 @@ const Awards = ({ userData, setShowModal, showEditOption }: IBlockProps) => {
         className="ml-6"
         cardTitle="Awards"
         content={
-          <div
-            style={{ maxHeight: '15rem', minHeight: '20rem' }}
-            className="overflow-y-auto  custom-scroll-mini"
-          >
+          <div className="min-h-64 overflow-y-auto  custom-scroll-mini">
             {showContent ? (
               <ol className="space-y-6 list-disc px-8 py-4 ">
                 {map(awards, (award, awardIdx) => (

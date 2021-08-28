@@ -96,10 +96,7 @@ const SkillsModal = ({
   return (
     <div>
       <div className="my-2">
-        <div
-          style={{ maxHeight: '15rem' }}
-          className="overflow-y-auto  custom-scroll-mini darker"
-        >
+        <div className="overflow-y-auto max-h-64 custom-scroll-mini darker">
           {localFields.skills && localFields.skills.length > 0 && (
             <ul className="gap-y-6 list-disc py-4 ">
               {map(localFields.skills, (skill, idx: number) => {

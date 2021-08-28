@@ -18,7 +18,7 @@ const EmptyState = ({
   onBtnClick?: () => void
 }) => {
   return (
-    <div className="text-center border dark:border-gray-600 border-gray-300 border-dashed p-4 py-12 rounded-lg">
+    <div className="text-center border flex flex-col items-center justify-evenly dark:border-gray-600 border-gray-300 border-dashed p-4 py-12 rounded-lg">
       <img
         alt="experience"
         className="h-12 w-12"

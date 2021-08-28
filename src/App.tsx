@@ -100,10 +100,6 @@ const App = () => {
 
   const userData: IParent = isUser ? values : undefined
 
-  const getProfileById = () => {
-    // coming soon
-  }
-
   return (
     <Router>
       <AuthContainer>

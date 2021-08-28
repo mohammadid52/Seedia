@@ -6,7 +6,7 @@ import { RadioGroup } from '@headlessui/react'
 import Button from 'components/atoms/Button'
 import { useHistory } from 'react-router-dom'
 import { links } from 'constants/Links'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
 import Error from 'components/alerts/Error'
 
@@ -58,14 +58,23 @@ const ChooseAccount = ({ user }) => {
 
     try {
       setLoading(true)
-      await network.post(links.BASE_API_URL + '/user/update', {
-        ...user,
-        other: {
-          ...user.other,
-          accountFinishedStep: 'chooseAccount',
-          accountType: selected.name.toLocaleLowerCase(),
+
+      const token = getAccessToken()
+
+      await network.post(
+        links.BASE_API_URL + '/user/update',
+        {
+          ...user,
+          other: {
+            ...user.other,
+            accountFinishedStep: 'chooseAccount',
+            accountType: selected.name.toLocaleLowerCase(),
+          },
         },
-      })
+        {
+          headers: { Authorization: token },
+        }
+      )
       setErrors([])
       history.push(path || links.PERSONAL_STEP_1)
     } catch (error) {

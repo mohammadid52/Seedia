@@ -4,6 +4,7 @@ const cors = require('cors')
 
 const mongodb = require('mongodb')
 const authenticationRouter = require('./apis/authenticate')
+const mediaUploadRouter = require('./apis/mediaUpload')
 const userRouter = require('./apis/user')
 const app = express()
 const bodyParser = require('body-parser')
@@ -33,6 +34,8 @@ client.connect(
     app.use('/user', passUserCollection, userRouter)
 
     app.use('/auth', passUserCollection, authenticationRouter)
+
+    app.use('/uploadImage', mediaUploadRouter)
 
     app.get('/', (req, res) => {
       res.sendFile(path.join(__dirname, 'build', 'index.html'))

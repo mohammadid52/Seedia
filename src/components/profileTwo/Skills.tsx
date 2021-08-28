@@ -8,9 +8,8 @@ import { AiOutlineEdit } from 'react-icons/ai'
 import { SKILLS } from 'state/Redux/constants'
 
 const Skills = ({ setShowModal, userData, showEditOption }: IBlockProps) => {
-  const {
-    background: { skills = [] },
-  }: any = userData
+  const { background } = userData || {}
+  const { skills = [] } = background || {}
 
   return (
     <>
@@ -38,10 +37,7 @@ const Skills = ({ setShowModal, userData, showEditOption }: IBlockProps) => {
           )
         }
         content={
-          <div
-            style={{ maxHeight: '15rem', minHeight: '20rem' }}
-            className="overflow-y-auto  custom-scroll-mini "
-          >
+          <div className="overflow-y-auto min-h-64   custom-scroll-mini ">
             {skills && skills.length > 0 ? (
               <ol className="space-y-6 list-disc px-8 py-4 ">
                 {map(skills, (skill, idx: number) => (

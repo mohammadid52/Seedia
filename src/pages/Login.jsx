@@ -7,11 +7,10 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { LOGIN } from 'initials'
 import FormInput from 'components/atoms/FormInput'
-import axios from 'axios'
 import { links } from 'constants/Links'
 import { useHistory } from 'react-router-dom'
-import { setUser } from 'state/Redux/Actions/authActions'
-import { useDispatch } from 'react-redux'
+import { network } from 'helpers'
+import { useUserContext } from 'context/UserContext'
 
 const Login = () => {
   const [isLoaded, setIsLoaded] = useState(true)
@@ -23,15 +22,19 @@ const Login = () => {
     password: Yup.string().required('Please add password').min(6).max(20),
   })
 
+  const { setValues } = useUserContext()
+
   const [loading, setLoading] = useState(false)
-  const dispatch = useDispatch()
+
   const apiCall = async (values) => {
-    const { data } = await axios.post(links.BASE_API_URL + '/auth/login', {
+    const { data } = await network.post('/auth/login', {
       email: values.email,
       password: values.password,
     })
 
-    dispatch(setUser(data.data))
+    //@ts-ignore
+    delete data._id
+    setValues({ ...data.data, ...data })
 
     // if (res.status === 409) {
     //   setErrors([...errors, 'User already exists'])

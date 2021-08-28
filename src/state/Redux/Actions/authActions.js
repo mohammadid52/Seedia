@@ -41,7 +41,6 @@ const getUser = async () => {
 }
 
 export const loadUser = () => async (dispatch) => {
-  console.log('@loadUser -----------------------')
   try {
     dispatch({ type: types.LOADER, data: false })
 

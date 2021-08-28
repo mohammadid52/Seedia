@@ -3,7 +3,6 @@ import Loading from 'components/Loading'
 import Copyright from 'components/Copyright'
 import Button from 'components/atoms/Button'
 import { useHistory } from 'react-router-dom'
-import axios from 'axios'
 import FormInput from 'components/atoms/FormInput'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
@@ -13,6 +12,7 @@ import { SIGNUP } from 'initials'
 import { useDispatch } from 'react-redux'
 import { setUser } from 'state/Redux/Actions/authActions'
 import { useUserContext } from 'context/UserContext'
+import { network } from 'helpers'
 
 const Signup = () => {
   const [isLoaded, setIsLoaded] = useState(true)
@@ -53,11 +53,13 @@ const Signup = () => {
         },
       }
 
-      const res = await axios.post(links.BASE_API_URL + '/auth/register', {
+      const res = await network.post('/auth/register', {
         ...data,
       })
 
       localStorage.setItem('access_token', res.data.data.access_token)
+      //@ts-ignore
+      delete data._id
       setValues({ ...res.data.data, ...data })
       setErrors([])
       dispatch(setUser(data))

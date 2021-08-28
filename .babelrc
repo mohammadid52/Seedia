@@ -12,7 +12,8 @@
           "state": "./src/state",
           "context": "./src/context",
           "containers": "./src/containers",
-          "helpers": "./src/helpers"
+          "helpers": "./src/helpers",
+          "images": "./src/images"
         }
       }
     ]

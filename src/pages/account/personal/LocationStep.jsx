@@ -10,11 +10,10 @@ import { PersonalStepTwo } from 'initials'
 import { links } from 'constants/Links'
 import Layout from 'containers/Layout'
 import { map } from 'lodash'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import FormSelector from 'components/atoms/FormSelector'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
-import { setUser } from 'state/Redux/Actions/authActions'
-import { useDispatch } from 'react-redux'
+import { useUserContext } from 'context/UserContext'
 
 const yourhandle = require('countrycitystatejson')
 
@@ -43,12 +42,14 @@ const LastStep = ({ accountType = 'personal', user }) => {
     checkAccount()
   }, [])
 
-  const dispatch = useDispatch()
+  const { setValues } = useUserContext()
 
   const onSubmit = async (values) => {
     try {
+      const token = getAccessToken()
       setSaving(true)
-      const { data } = await network.post('/user/update', {
+
+      let updatedData = {
         ...user,
         location: {
           ...user.location,
@@ -63,9 +64,20 @@ const LastStep = ({ accountType = 'personal', user }) => {
           accountFilled: true,
           accountFinishedStep: 'location',
         },
-      })
+      }
+      await network.post(
+        '/user/update',
+        {
+          ...updatedData,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
 
-      dispatch(setUser(data.data))
+      //@ts-ignore
+      delete updatedData._id
+      setValues({ ...updatedData })
 
       history.push(links.DASHBAORD)
     } catch (error) {

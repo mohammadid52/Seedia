@@ -115,7 +115,9 @@ const Button = ({
           ? className
           : `${generateClass()} ${generatePaddingAndTextSize()} ${rounded} font-${weight} ${className} ${
               fullWidth ? 'w-full' : ''
-            } transition-all duration-200 ${disabled ? 'opacity-50' : ''}`
+            } transition-all flex items-center duration-200 ${
+              disabled ? 'opacity-50' : ''
+            }`
       }`}
     >
       {loading && (

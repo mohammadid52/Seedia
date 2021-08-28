@@ -11,11 +11,10 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { PersonalStepOne } from 'initials'
 
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
 import { isEmpty } from 'lodash'
-import { setUser } from 'state/Redux/Actions/authActions'
-import { useDispatch } from 'react-redux'
+import { useUserContext } from 'context/UserContext'
 
 const CompanyStep = ({ user }) => {
   const [isLoaded, setIsLoaded] = useState(true)
@@ -48,12 +47,12 @@ const CompanyStep = ({ user }) => {
     }
   }, [company])
 
-  const dispatch = useDispatch()
-
+  const { setValues } = useUserContext()
   const onSubmit = async (values) => {
     setSaving(true)
     try {
-      const { data } = await network.post('/user/update', {
+      const token = getAccessToken()
+      let updatedData = {
         ...user,
         company: {
           ...user.company,
@@ -66,8 +65,20 @@ const CompanyStep = ({ user }) => {
           ...user.other,
           accountFinishedStep: 'company',
         },
-      })
-      dispatch(setUser(data.data))
+      }
+      await network.post(
+        '/user/update',
+        {
+          ...updatedData,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
+
+      //@ts-ignore
+      delete updatedData._id
+      setValues({ ...updatedData })
 
       history.push(links.PERSONAL_STEP_2)
     } catch (error) {
