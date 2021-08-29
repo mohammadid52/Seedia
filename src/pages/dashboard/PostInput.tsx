@@ -4,7 +4,6 @@ import NormalFormInput from 'components/atoms/NormalFormInput'
 import { useState } from 'react'
 import { BiCalendarEvent } from 'react-icons/bi'
 import { BsCameraVideo } from 'react-icons/bs'
-import { FcStackOfPhotos, FcVideoCall } from 'react-icons/fc'
 import { HiOutlinePhotograph } from 'react-icons/hi'
 import { RiArticleLine } from 'react-icons/ri'
 
@@ -39,7 +38,11 @@ const PostInput = ({ setPosts, posts }: { posts: any; setPosts: any }) => {
           <div className="">
             <div className=" flex items-center justify-between">
               <div className="flex w-full">
-                <img src="/logo.png" alt="" className="h-14 w-auto" />
+                <img
+                  src={process.env.PUBLIC_URL + '/logo.png'}
+                  alt="13RMS"
+                  className="h-14 w-auto"
+                />
                 <NormalFormInput
                   value=""
                   className="rounded-full h-12 mx-4 px-4 dark:text-white"

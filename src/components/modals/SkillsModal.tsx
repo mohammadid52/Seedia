@@ -65,7 +65,7 @@ const SkillsModal = ({
         },
       }
       //@ts-ignore
-      delete updatedData._id
+      delete updatedData.password
 
       setValues({ ...updatedData })
 

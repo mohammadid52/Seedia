@@ -6,6 +6,8 @@ import { AiOutlineEdit } from 'react-icons/ai'
 import React from 'react'
 import { network } from 'helpers'
 import { useUserContext } from 'context/UserContext'
+import getImageURL from 'utils/getImageURL'
+import Badge from 'components/atoms/Badge'
 
 const Cover = ({
   company,
@@ -20,6 +22,9 @@ const Cover = ({
     type: '',
     show: false,
   })
+
+  const accountType = userData?.other?.accountType || 'personal'
+
   const [saving, setSaving] = useState(false)
 
   const [_image, setImage] = useState('')
@@ -32,7 +37,8 @@ const Cover = ({
 
   const { setValues } = useUserContext()
 
-  const onSave = async () => {
+  const onSave = async (e: any) => {
+    e.preventDefault()
     setSaving(true)
 
     const fd = new FormData()
@@ -52,7 +58,8 @@ const Cover = ({
           ...userData,
           [isCover ? 'coverPicture' : 'profilePicture']: data.data.filename,
         }
-        delete updatedData._id
+        //@ts-ignore
+        delete updatedData.password
 
         setValues({ ...updatedData })
 
@@ -76,14 +83,11 @@ const Cover = ({
     //@ts-ignore
     profileImageSelectorRef?.current?.click()
 
-  const getBaseImageUrl = (fileName?: string): string => {
-    return `${process.env.PUBLIC_URL}/images/${fileName}`
-  }
-
   const coverImageStyles =
     'max-h-72 rounded-md sm:overflow-hidden w-full  object-cover'
   const profileImageStyles = 'md:h-32 md:w-32 sm:h-12 sm:w-12 rounded-full'
   const isCover = showImageModal.type === 'cover'
+
   return (
     <>
       <Modal
@@ -122,6 +126,7 @@ const Cover = ({
               loading={saving}
               disabled={saving}
               onClick={onSave}
+              type="submit"
               label="Save"
             />
           </div>
@@ -157,7 +162,7 @@ const Cover = ({
                   className="h-full w-full object-cover"
                   src={
                     userData?.coverPicture &&
-                    getBaseImageUrl(userData?.coverPicture)
+                    getImageURL(userData?.coverPicture)
                   }
                   alt="People working on laptops"
                 />
@@ -167,24 +172,42 @@ const Cover = ({
                 <div className="relative">
                   <img
                     src={
-                      userData?.profilePicture &&
-                      getBaseImageUrl(userData?.profilePicture)
+                      userData?.profilePicture
+                        ? getImageURL(userData?.profilePicture)
+                        : 'https://robohash.org/honey?set=set1'
                     }
                     className="md:h-32 md:w-32 sm:h-12 shadow-xl sm:w-12 rounded-full"
                     alt="user"
                   />
                 </div>
-                <h1 className="my-6 text-center text-2xl font-extrabold tracking-tight sm:text-2xl lg:text-4xl">
-                  <span className="block text-white">{userData?.fullName}</span>
+                <h1 className="my-6 relative text-center text-2xl font-extrabold tracking-tight sm:text-2xl lg:text-4xl">
+                  <span className="block text-white">
+                    {userData?.fullName}{' '}
+                    <Badge
+                      className="absolute -right-20 top-0"
+                      label={accountType}
+                      textSize="xs"
+                      rounded=""
+                      color={
+                        accountType === 'business'
+                          ? 'pink'
+                          : accountType === 'personal'
+                          ? 'yellow'
+                          : 'blue'
+                      }
+                    />
+                  </span>
                   <span className="block text-white text-base tracking-wide font-medium">
-                    {company?.jobTitle}
+                    {accountType === 'personal'
+                      ? company?.jobTitle
+                      : userData.business?.name}
                   </span>
                 </h1>
 
                 <div className="flex items-center w-auto text-xl sm:border-t  border-white flex-col sm:flex-row border-t-none">
                   <div className="sm:border-r border-r-none border-white px-8 py-4 sm:border-b-none border-b">
                     <div className="text-center  text-white tracking-wide font-bold">
-                      {99}
+                      {userData.pwvpCount || 0}
                     </div>
                     <div className="text-gray-300 font-medium uppercase text-base mt-1 tracking-tight ">
                       profile views

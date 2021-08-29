@@ -7,20 +7,21 @@ import Info from 'components/alerts/Info'
 import Divider from 'components/atoms/Divider'
 import TextButton from 'components/atoms/TextButton'
 import { links } from 'constants/Links'
-import { wait } from 'utils/wait'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { BusinessStepTwoFields } from 'initials'
 import Layout from 'containers/Layout'
 import FormSelector from 'components/atoms/FormSelector'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import Error from 'components/alerts/Error'
+import { IParent } from 'interfaces/UniversalInterface'
+import { useUserContext } from 'context/UserContext'
 const yourhandle = require('countrycitystatejson')
 
-const BusinessStepTwo = ({ user }: { user: any }) => {
+const BusinessStepTwo = ({ userData }: { userData: IParent }) => {
   const history = useHistory()
-  const [isLoaded, setIsLoaded] = useState(true)
+  const [isLoaded] = useState(true)
 
   const [saving, setSaving] = useState(false)
   const countries = yourhandle.getCountries()
@@ -29,7 +30,11 @@ const BusinessStepTwo = ({ user }: { user: any }) => {
    * Check if account is already selected
    */
   const checkAccount = () => {
-    if (user && user.hasOwnProperty('accountFilled') && user?.accountFilled) {
+    if (
+      userData &&
+      userData?.other?.hasOwnProperty('accountFilled') &&
+      userData?.other?.accountFilled
+    ) {
       return history.push(links.DASHBAORD)
     }
   }
@@ -39,7 +44,7 @@ const BusinessStepTwo = ({ user }: { user: any }) => {
   }, [])
 
   const validationSchema = Yup.object({
-    companyCountry: Yup.string().required('Please select company country'),
+    businessCountry: Yup.string().required('Please select business country'),
     businessAddress: Yup.string().required('Please enter business address'),
     postalCode: Yup.string()
       .required('Postal code is a required field')
@@ -50,41 +55,62 @@ const BusinessStepTwo = ({ user }: { user: any }) => {
     businessEntityType: Yup.string().required(
       'Please enter business entity type'
     ),
-    typeOfCompany: Yup.string().required('Please enter type of company'),
-    relationshipToCompany: Yup.string().required(
-      'Please enter your relationship with company'
+    typeOfBusiness: Yup.string().required('Please enter type of business'),
+    relationshipToBusiness: Yup.string().required(
+      'Please enter your relationship with business'
     ),
     legalNumber: Yup.string()
       .matches(/^[0-9+()-]+$/, 'Must be only digits')
-      .required('Please enter company legal number'),
+      .required('Please enter business legal number'),
     mobileNumber: Yup.string()
       .matches(/^[0-9+()-]+$/, 'Must be only digits')
-      .required('Please enter company legal number'),
+      .required('Please enter business legal number'),
   })
 
   const [errors, setErrors] = useState<string[]>([])
+  const { setValues } = useUserContext()
 
   const onSubmit = async (values: typeof BusinessStepTwoFields) => {
     try {
+      const token = getAccessToken()
+
       setSaving(true)
-      await network.post('/user/update', {
-        accountFilled: true,
+
+      const updatedData = {
+        ...userData,
+        other: {
+          ...userData.other,
+          accountFinishedStep: 'business-step-2',
+          accountFilled: true,
+        },
         location: {
-          country: values.companyCountry,
+          ...userData.location,
+          country: values.businessCountry,
           address: values.businessAddress,
           postalCode: values.postalCode,
           city: values.city,
         },
-        company: {
+        business: {
+          ...userData.business,
           additionalInfo: values.additionalInfo,
           legalNumber: values.legalNumber,
-          companyRegNumber: values.companyRegNumber,
-          typeOfCompany: values.typeOfCompany,
+          businessRegNumber: values.businessRegNumber,
+          typeOfBusiness: values.typeOfBusiness,
           bussinessEntityType: values.businessEntityType,
+          relationshipToBusiness: values.relationshipToBusiness,
         },
         mobileNumber: values.mobileNumber,
-        relationshipToCompany: values.relationshipToCompany,
-      })
+      }
+      //@ts-ignore
+      delete updatedData.password
+      setValues({ ...updatedData })
+      await network.post(
+        '/user/update',
+        { ...updatedData },
+        {
+          headers: { Authorization: token },
+        }
+      )
       history.push(links.DASHBAORD)
     } catch (error) {
       setErrors([error.message])
@@ -113,9 +139,9 @@ const BusinessStepTwo = ({ user }: { user: any }) => {
           >
             <Form className="space-y-6">
               <FormSelector
-                label="Legal company country"
+                label="Legal business country"
                 list={countries}
-                name="companyCountry"
+                name="businessCountry"
                 required
                 placeholder="Select country"
               />
@@ -167,13 +193,13 @@ const BusinessStepTwo = ({ user }: { user: any }) => {
 
               <div>
                 <FormSelector
-                  name="typeOfCompany"
+                  name="typeOfBusiness"
                   list={[
                     { name: 'Test business 1' },
                     { name: 'Test business 2' },
                   ]}
-                  placeholder="Select type of company"
-                  label="Type of company"
+                  placeholder="Select type of business"
+                  label="Type of business"
                   required
                 />
               </div>
@@ -194,8 +220,8 @@ const BusinessStepTwo = ({ user }: { user: any }) => {
                 <FormInput
                   label="Company registration number"
                   optional
-                  id="companyRegNumber"
-                  name="companyRegNumber"
+                  id="businessRegNumber"
+                  name="businessRegNumber"
                 />
               </div>
               <Divider />
@@ -209,14 +235,15 @@ const BusinessStepTwo = ({ user }: { user: any }) => {
 
               <div>
                 <FormSelector
-                  name="relationshipToCompany"
+                  name="relationshipToBusiness"
                   list={[
+                    { name: 'Owner' },
                     { name: 'CEO' },
                     { name: 'Human Resources Manager' },
                     { name: 'Business Administrator' },
                   ]}
                   required
-                  label="Relationship to company"
+                  label="Relationship to business"
                   placeholder="Select relationship"
                 />
               </div>

@@ -34,23 +34,23 @@ export const StudentStepTwo = {
 }
 
 export const BusinessStepOneFields = {
-  companyName: '',
-  companyEmail: '',
-  companyNumber: '',
+  name: '',
+  email: '',
+  number: '',
 }
 
 export const BusinessStepTwoFields = {
-  companyCountry: '',
+  businessCountry: '',
   businessAddress: '',
   additionalInfo: '',
   postalCode: '',
   city: '',
   legalNumber: '',
-  companyRegNumber: '',
+  businessRegNumber: '',
   firstName: '',
   lastName: '',
   mobileNumber: '',
   businessEntityType: '',
-  relationshipToCompany: '',
-  typeOfCompany: '',
+  relationshipToBusiness: '',
+  typeOfBusiness: '',
 }

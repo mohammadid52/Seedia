@@ -11,7 +11,7 @@ import Education from 'components/profileTwo/Education'
 import Languages from 'components/profileTwo/Languages'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import { IParent, IProfileTwo } from 'interfaces/UniversalInterface'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from 'components/atoms/Modal'
 import Button from 'components/atoms/Button'
 
@@ -23,6 +23,9 @@ import AwardsModal from 'components/modals/AwardsModal'
 import LanguagesModal from 'components/modals/LanguagesModal'
 import EducationModal from 'components/modals/EducationModal'
 import { useRouter } from 'hooks/useRouter'
+import { network } from 'helpers'
+import ProfileStrength from 'components/ProfileStrength'
+import ProductsDetails from 'components/profileTwo/ProductsDetails'
 
 const ProfileTwo = ({
   user,
@@ -35,10 +38,25 @@ const ProfileTwo = ({
   const route: any = useRouter()
   const userIdFromParam = route?.match?.params?.userId
 
+  const myId = userData._id
+
   // #1 first get userId from params
   // #2 check user id from token decoded object
   // #3 if it matches then current user is authUser (owner of profile)
   const authUser = userIdFromParam === userData._id
+
+  const getProfileById = async () => {
+    if (!authUser) {
+      const { data } = await network.post('/user/getById/' + userIdFromParam)
+      setValues({ ...data.data, _id: myId })
+    } else {
+      setValues({ ...userData })
+    }
+  }
+
+  useEffect(() => {
+    getProfileById()
+  }, [userIdFromParam])
 
   const [unsavedChanges, setUnsavedChanges] = useState(false)
 
@@ -101,6 +119,8 @@ const ProfileTwo = ({
     }
   }
 
+  const isBusiness = userData?.other?.accountType === 'business'
+
   return (
     <div className="bg-gray-100 dark:bg-gray-800 smooth-scroll">
       <div className="">
@@ -139,15 +159,28 @@ const ProfileTwo = ({
           secondCol={
             <div className="space-y-12">
               <Cover userData={userData} about={user.about} />
-              <Experiences {...commonBlockProps} />
-              <div className="grid-cols-1 grid  sm:grid-cols-2 lg:grid-cols-2">
-                <Skills {...commonBlockProps} />
-                <Awards {...commonBlockProps} />
-              </div>
-              <Education {...commonBlockProps} />
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
-                <Languages {...commonBlockProps} />
-              </div>
+              {authUser && (
+                <ProfileStrength
+                  secondary
+                  userData={userData}
+                  authUser={authUser}
+                />
+              )}
+
+              {!isBusiness && <Experiences {...commonBlockProps} />}
+              {!isBusiness && (
+                <div className="grid-cols-1 grid  sm:grid-cols-2 lg:grid-cols-2">
+                  <Skills {...commonBlockProps} />
+                  <Awards {...commonBlockProps} />
+                </div>
+              )}
+              {!isBusiness && <Education {...commonBlockProps} />}
+              {!isBusiness && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
+                  <Languages {...commonBlockProps} />
+                </div>
+              )}
+              {isBusiness && <ProductsDetails />}
             </div>
           }
           thirdCol={
@@ -164,7 +197,11 @@ const ProfileTwo = ({
                   }
                 />
               </div>
-              <PeopleAlsoViewed data={user.peopleAlsoViewed} secondary />
+              <PeopleAlsoViewed
+                userData={userData}
+                authUser={authUser}
+                secondary
+              />
             </div>
           }
         />

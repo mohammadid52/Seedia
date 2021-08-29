@@ -33,7 +33,7 @@ const Signup = () => {
 
   const [saving, setSaving] = useState(false)
   const [errors, setErrors] = useState([])
-  const dispatch = useDispatch()
+
   const history = useHistory()
 
   const { setValues } = useUserContext()
@@ -47,6 +47,10 @@ const Signup = () => {
         lastName: _values.lastName,
         email: _values.email,
         fullName: _values.firstName + ' ' + _values.lastName,
+        coverPicture: 'https://source.unsplash.com/1600x900/?nature,water',
+        profilePicture: `https://robohash.org/honey?set=set${
+          Math.floor(Math.random() * 9) + 1
+        }`,
         other: {
           accountFilled: false,
           accountFinishedStep: 'signup',
@@ -58,11 +62,10 @@ const Signup = () => {
       })
 
       localStorage.setItem('access_token', res.data.data.access_token)
-      //@ts-ignore
-      delete data._id
+
+      delete data.password
       setValues({ ...res.data.data, ...data })
-      setErrors([])
-      dispatch(setUser(data))
+
       history.push(links.CHOOSE_ACCOUNT)
     } catch (error) {
       setErrors([error.message])
@@ -92,7 +95,7 @@ const Signup = () => {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+        <div className="bg-white dark:border-gray-700 border border-transparent dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
             initialValues={SIGNUP}
             validationSchema={validationSchema}

@@ -52,6 +52,7 @@ export interface ILocation {
   livesIn: string
   country: string
   pincode: string
+  address?: string
   state: string
   city: string
 }
@@ -74,8 +75,29 @@ export interface IParent {
   other?: IOther
   coverPicture?: string
   email?: string
+  piv?: string[]
+  mobileNumber: string
+  pwvp?: string[]
+  following?: string[]
+  followers?: string[]
+  pivCount?: number
+  pwvpCount?: number
   profilePicture?: string
-  // business?:{}
+  recommendation?: {
+    given: IRecommendation[]
+    received: IRecommendation[]
+  }
+  business?: {
+    name: string
+    email: string
+    number: string
+    additionalInfo: string
+    legalNumber: string
+    businessRegNumber: string
+    typeOfBusiness: string
+    bussinessEntityType: string
+    relationshipToBusiness: string
+  }
 }
 
 export interface IExperience {
@@ -142,10 +164,8 @@ export interface ILanguage {
 
 export interface IRecommendation {
   text: string
-  user: {
-    fullName: string
-    userImage: string
-  }
+  userId?: string
+  user?: IParent
 }
 
 export interface IProfileTwo {

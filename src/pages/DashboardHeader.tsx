@@ -11,9 +11,9 @@ import Toggle from 'components/ThemeToggle'
 import { BsPeople } from 'react-icons/bs'
 import { CgWorkAlt } from 'react-icons/cg'
 import { useUserContext } from 'context/UserContext'
-import { IAbout } from 'interfaces/UniversalInterface'
+import { IParent } from 'interfaces/UniversalInterface'
 import { classNames } from 'utils/classNames'
-import { useHistory } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logOut } from 'state/Redux/Actions/authActions'
 import {
@@ -25,10 +25,12 @@ import {
   settings,
 } from 'values/values'
 import Selector from 'components/atoms/Selector'
-import { find } from 'lodash'
+import { find, map } from 'lodash'
 import CountryListDropdown from 'components/CountryListDropdown'
+import { links as _links } from 'constants/Links'
+import getImageURL from 'utils/getImageURL'
 
-const DashboardHeader = ({ about, user }: { about: IAbout; user: any }) => {
+const DashboardHeader = ({ userData }: { userData: IParent }) => {
   const { setDarkMode, darkMode } = useUserContext()
   const dispatch = useDispatch()
   const history = useHistory()
@@ -43,6 +45,14 @@ const DashboardHeader = ({ about, user }: { about: IAbout; user: any }) => {
   const [selectedDepartment, setSelectedDepartment] = useState<any>(
     departmentsArray[0]
   )
+
+  const links = [
+    { href: '/#', title: 'Home', Icon: AiOutlineHome },
+    { href: '/#', title: 'My Network', Icon: BsPeople },
+    { href: '/#', title: 'Jobs', Icon: CgWorkAlt },
+    { href: '/#', title: 'Messaging', Icon: BiMessageDetail },
+    { href: '/#', title: 'Notifications', Icon: IoMdNotificationsOutline },
+  ]
 
   const navClass =
     'flex flex-col items-center font-medium text-base dark:text-gray-400 text-gray-500 link-hover'
@@ -116,35 +126,19 @@ const DashboardHeader = ({ about, user }: { about: IAbout; user: any }) => {
               </div>
             </div>
             <div className="-mr-2 -my-2 md:hidden">
-              <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+              <Popover.Button className="bg-white dark:bg-gray-800 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                 <span className="sr-only">Open menu</span>
                 <MenuIcon className="h-6 w-6" aria-hidden="true" />
               </Popover.Button>
             </div>
 
             <Popover.Group as="nav" className="hidden md:flex space-x-10">
-              <a href="/#" className={navClass}>
-                <AiOutlineHome />
-                <span className="hidden lg:block">Home</span>
-              </a>
-              <a href="/#" className={navClass}>
-                <BsPeople />
-
-                <span className="hidden lg:block">My Network</span>
-              </a>
-              <a href="/#" className={navClass}>
-                <CgWorkAlt />
-                <span className="hidden lg:block">Jobs</span>
-              </a>
-              <a href="/#" className={navClass}>
-                <BiMessageDetail />
-                <span className="hidden lg:block">Messaging</span>
-              </a>
-              <a href="/#" className={navClass}>
-                <IoMdNotificationsOutline />
-
-                <span className="hidden lg:block">Notifications</span>
-              </a>
+              {map(links, (link, idx) => (
+                <NavLink key={idx} to={link.href} className={navClass}>
+                  <link.Icon />
+                  <span className="hidden ml-2 xl:block">{link.title}</span>
+                </NavLink>
+              ))}
               <Popover className="relative">
                 {({ open }) => (
                   <>
@@ -154,14 +148,14 @@ const DashboardHeader = ({ about, user }: { about: IAbout; user: any }) => {
                         `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
                       )}
                     >
-                      <span className={navClass}>
+                      <span className={`${navClass}`}>
                         <GiReceiveMoney className="" />
-                        <span className="hidden lg:block">
+                        <span className="hidden lg:flex items-center">
                           Sell{' '}
                           <ChevronDownIcon
                             className={classNames(
                               open ? 'text-gray-600' : 'text-gray-400',
-                              'h-4 w-4 group-hover:text-gray-500'
+                              'h-4 w-4 group-hover:text-gray-500 ml-2'
                             )}
                             aria-hidden="true"
                           />
@@ -236,12 +230,12 @@ const DashboardHeader = ({ about, user }: { about: IAbout; user: any }) => {
                     >
                       <span className={navClass}>
                         <BiUserCircle className="" />
-                        <span className="hidden lg:block">
+                        <span className="hidden lg:flex items-center">
                           My 13RMS{' '}
                           <ChevronDownIcon
                             className={classNames(
                               open ? 'text-gray-600' : 'text-gray-400',
-                              'h-4 w-4 group-hover:text-gray-500'
+                              'h-4 w-4 group-hover:text-gray-500 ml-2'
                             )}
                             aria-hidden="true"
                           />
@@ -324,16 +318,27 @@ const DashboardHeader = ({ about, user }: { about: IAbout; user: any }) => {
                             <div className=" flex-shrink-0">
                               <img
                                 className="h-14 mr-6 rounded-full w-14 drop-shadow-lg"
-                                src={about.userImage}
+                                src={
+                                  userData?.profilePicture
+                                    ? getImageURL(userData?.profilePicture)
+                                    : 'https://robohash.org/honey?set=set1'
+                                }
                                 alt="user"
                               />
                             </div>
                             <div>
-                              <h4 className="text-lg dark:text-white font-bold">
-                                {user?.fullName}
-                              </h4>
+                              <NavLink
+                                to={`${_links.getProfileById(
+                                  userData?._id,
+                                  '1'
+                                )}`}
+                              >
+                                <h4 className="hover:underline text-lg dark:text-white font-bold">
+                                  {userData?.fullName}
+                                </h4>
+                              </NavLink>
                               <p className="mt-1 text-gray-800 font-medium leading-3 dark:text-gray-400">
-                                {user?.company?.jobTitle}
+                                {userData?.company?.jobTitle}
                               </p>
                             </div>
                           </div>
@@ -355,12 +360,12 @@ const DashboardHeader = ({ about, user }: { about: IAbout; user: any }) => {
                     >
                       <span className={navClass}>
                         <BiUserCircle className="" />
-                        <span className="hidden lg:block">
+                        <span className="hidden lg:flex items-center">
                           Business Apps{' '}
                           <ChevronDownIcon
                             className={classNames(
                               open ? 'text-gray-600' : 'text-gray-400',
-                              'h-4 w-4 group-hover:text-gray-500'
+                              'h-4 w-4 group-hover:text-gray-500 ml-2'
                             )}
                             aria-hidden="true"
                           />

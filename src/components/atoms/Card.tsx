@@ -8,10 +8,12 @@ const Card = ({
   cardTitleStyles = '',
   className = '',
   id = '',
+  privateCard = false,
   secondary = false,
   style,
 }: {
   cardTitle?: string
+  privateCard?: boolean
   className?: string
   content?: React.ReactNode
   withCardHeadings?: boolean | React.ReactNode
@@ -39,7 +41,12 @@ const Card = ({
                   : 'text-lg font-medium text-gray-900 dark:text-white'
               }   ${cardTitleStyles}`}
             >
-              {cardTitle}
+              {cardTitle}{' '}
+              {privateCard && (
+                <span className="ml-2 text-xs italic text-gray-400">
+                  {'Private to you'}
+                </span>
+              )}
             </h4>
             {withCardHeadings ? (
               <div className="flex-shrink-0 flex">{withCardHeadings}</div>

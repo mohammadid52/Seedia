@@ -29,7 +29,7 @@ router.post('/login', async (req, res) => {
     if (user) {
       const matched = await bcrypt.compare(password, user.password)
       if (matched) {
-        const token = generateToken(matched)
+        const token = generateToken({ ...user, id: user._id })
         user.access_token = token
 
         return res

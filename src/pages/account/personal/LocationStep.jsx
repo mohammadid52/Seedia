@@ -76,7 +76,7 @@ const LastStep = ({ accountType = 'personal', user }) => {
       )
 
       //@ts-ignore
-      delete updatedData._id
+      delete updatedData.password
       setValues({ ...updatedData })
 
       history.push(links.DASHBAORD)

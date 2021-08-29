@@ -6,41 +6,36 @@ import Recommendations from 'pages/profile/Recommendations'
 import Following from 'pages/profile/Following'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Layout from 'pages/profile/Layout'
-import { IParent, IProfileOne } from 'interfaces/UniversalInterface'
+import { IParent } from 'interfaces/UniversalInterface'
 import { useRouter } from 'hooks/useRouter'
 import { network } from 'helpers'
 import { useEffect } from 'react'
 import { useUserContext } from 'context/UserContext'
+import ProfileStrength from 'components/ProfileStrength'
 
-const Profile = ({
-  user,
-  userData,
-}: {
-  user: IProfileOne
-  userData: IParent
-}) => {
+const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
   const userIdFromParam = route?.match?.params?.userId
 
   const { setValues } = useUserContext()
+  const myId = userData._id
 
   // #1 first get userId from params
   // #2 check user id from token decoded object
   // #3 if it matches then current user is authUser (owner of profile)
   const authUser = userIdFromParam === userData._id
-
   const getProfileById = async () => {
     if (!authUser) {
-      const { data } = await network.get('/user/' + userIdFromParam)
-      setValues({ ...data.data })
+      const { data } = await network.post('/user/getById/' + userIdFromParam)
+      setValues({ ...data.data, _id: myId })
     } else {
       setValues({ ...userData })
     }
   }
 
-  // useEffect(() => {
-  //   getProfileById()
-  // }, [route?.match?.params])
+  useEffect(() => {
+    getProfileById()
+  }, [userIdFromParam])
 
   const commonProps = { authUser, userData }
 
@@ -51,15 +46,21 @@ const Profile = ({
 
         <div className="my-6">
           <Layout
-            firstCol={<About {...commonProps} />}
+            firstCol={
+              <div className="space-y-12">{<About {...commonProps} />}</div>
+            }
             secondCol={
               <div className="space-y-12">
+                {authUser && <ProfileStrength {...commonProps} />}
                 <Background {...commonProps} />
-                <Recommendations recommendation={user.recommendation} />
-                <Following />
+                <Recommendations recommendation={userData.recommendation} />
+                <Following
+                  list={userData.following}
+                  interests={userData?.background?.interests}
+                />
               </div>
             }
-            thirdCol={<PeopleAlsoViewed data={user.peopleAlsoViewed} />}
+            thirdCol={<PeopleAlsoViewed {...commonProps} />}
           />
         </div>
       </div>

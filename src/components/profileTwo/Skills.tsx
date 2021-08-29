@@ -14,7 +14,7 @@ const Skills = ({ setShowModal, userData, showEditOption }: IBlockProps) => {
   return (
     <>
       <Card
-        className="mr-6"
+        className="mr-0 sm:mr-6"
         id="skills"
         secondary
         cardTitle="Skills"

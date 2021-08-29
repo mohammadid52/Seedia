@@ -1,6 +1,4 @@
-import { lazy, useEffect, useState } from 'react'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
+import { lazy, useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { IParent } from 'interfaces/UniversalInterface'
 import Dashboard from 'pages/dashboard'
@@ -30,7 +28,7 @@ const CompanyStep = lazy(() => import('pages/account/personal/CompanyStep'))
 const LocationStep = lazy(() => import('pages/account/personal/LocationStep'))
 const EducationStep = lazy(() => import('pages/account/student/EducationStep'))
 
-library.add(fas)
+// library.add(fas)
 
 const App = () => {
   const { setDarkMode } = useUserContext()
@@ -68,11 +66,9 @@ const App = () => {
 
   const RenderNav = ({
     isUser,
-    user,
     accountFilled,
   }: {
     isUser?: any
-    user: any
     accountFilled?: boolean
   }) => {
     const router = useRouter()
@@ -87,7 +83,7 @@ const App = () => {
         accountFilled={accountFilled}
       />
     ) : atAuthPages ? null : (
-      <DashboardHeader user={user} about={profileOne.about} />
+      <DashboardHeader userData={userData} />
     )
   }
 
@@ -104,11 +100,7 @@ const App = () => {
     <Router>
       <AuthContainer>
         <div className="">
-          <RenderNav
-            accountFilled={accountFilled}
-            user={userData}
-            isUser={isUser}
-          />
+          <RenderNav accountFilled={accountFilled} isUser={isUser} />
           <Switch>
             {/* This is common page */}
             <Route exact path="/" component={Welcome} />
@@ -133,7 +125,7 @@ const App = () => {
               isUser={isUser}
               path="/dashboard"
             >
-              <Dashboard user={profileOne} />
+              <Dashboard userData={userData} user={profileOne} />
             </PrivateRoute>
             <PrivateRoute
               isUser={isUser}
@@ -141,7 +133,7 @@ const App = () => {
               exact
               path="/profile/:userId/template=1"
             >
-              <Profile userData={userData} user={profileOne} />
+              <Profile userData={userData} />
             </PrivateRoute>
             <PrivateRoute
               isUser={isUser}
@@ -200,14 +192,14 @@ const App = () => {
               path={links.BUSINESS_STEP_1}
               isUser={isUser}
             >
-              <BusinessStepOne user={userData} />
+              <BusinessStepOne userData={userData} />
             </PrivateRoute>
             <PrivateRoute
               // @ts-ignore
               path={links.BUSINESS_STEP_2}
               isUser={isUser}
             >
-              <BusinessStepTwo user={userData} />
+              <BusinessStepTwo userData={userData} />
             </PrivateRoute>
 
             {/* Error Page */}

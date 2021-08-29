@@ -5,6 +5,8 @@ export const links = {
   LOGIN: '/login',
   SIGNUP: '/signup',
   PROFILE: '/profile',
+  getProfileById: (id?: string, template?: string) =>
+    `/profile/${id}/template=${template}`,
   DASHBAORD: '/dashboard',
   CHOOSE_ACCOUNT: '/choose-account',
   PERSONAL_STEP_1: dynamicRoute('personal', 'company'),

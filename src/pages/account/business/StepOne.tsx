@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Loading from 'components/Loading'
-import Copyright from 'components/Copyright'
+
 import Button from 'components/atoms/Button'
 import { useHistory } from 'react-router-dom'
 
@@ -8,41 +8,46 @@ import FormInput from 'components/atoms/FormInput'
 import Info from 'components/alerts/Info'
 import TextButton from 'components/atoms/TextButton'
 import { links } from 'constants/Links'
-import { wait } from 'utils/wait'
+
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { BusinessStepOneFields } from '../../../initials'
 
 import Layout from 'containers/Layout'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import Error from 'components/alerts/Error'
-import { setUser } from 'state/Redux/Actions/authActions'
-import { useDispatch } from 'react-redux'
 
-const BusinessStepOne = ({ user }) => {
+import { IParent } from 'interfaces/UniversalInterface'
+import { useUserContext } from 'context/UserContext'
+
+const BusinessStepOne = ({ userData }: { userData: IParent }) => {
   const history = useHistory()
-  const [isLoaded, setIsLoaded] = useState(true)
+  const [isLoaded] = useState(true)
 
   const [saving, setSaving] = useState(false)
-  const [errors, setErrors] = useState([])
+  const [errors, setErrors] = useState<string[]>([])
 
   const validationSchema = Yup.object({
-    companyName: Yup.string().required('Please enter legal company name'),
-    companyEmail: Yup.string()
+    name: Yup.string().required('Please enter legal business name'),
+    email: Yup.string()
       .email('Please enter valid email address')
-      .required('Please enter legal company email address'),
+      .required('Please enter legal business email address'),
 
-    companyNumber: Yup.string()
+    number: Yup.string()
       .matches(/^[0-9+()-]+$/, 'Must be only digits')
-      .required('Please enter company number'),
+      .required('Please enter business number'),
   })
 
   /**
    * Check if account is already selected
    */
   const checkAccount = () => {
-    if (user && user.hasOwnProperty('accountFilled') && user?.accountFilled) {
+    if (
+      userData &&
+      userData?.other?.hasOwnProperty('accountFilled') &&
+      userData?.other?.accountFilled
+    ) {
       return history.push(links.DASHBAORD)
     }
   }
@@ -51,17 +56,38 @@ const BusinessStepOne = ({ user }) => {
     checkAccount()
   }, [])
 
-  const dispatch = useDispatch()
+  const { setValues } = useUserContext()
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: typeof BusinessStepOneFields) => {
     try {
       setSaving(true)
-      const { data } = await network.post('/user/update', {
-        companyName: values.companyName,
-        companyEmail: values.companyEmail,
-        companyNumber: values.companyNumber,
-      })
-      dispatch(setUser(data.data))
+      const token = getAccessToken()
+
+      const updatedData = {
+        ...userData,
+        business: {
+          ...userData.business,
+          name: values.name,
+          email: values.email,
+          number: values.number,
+        },
+        other: {
+          ...userData.other,
+          accountFinishedStep: 'business-step-1',
+        },
+      }
+
+      await network.post(
+        '/user/update',
+        { ...updatedData },
+        {
+          headers: { Authorization: token },
+        }
+      )
+
+      //@ts-ignore
+      delete updatedData.password
+      setValues({ ...updatedData })
 
       history.push(links.BUSINESS_STEP_2)
     } catch (error) {
@@ -95,23 +121,23 @@ const BusinessStepOne = ({ user }) => {
           >
             <Form className="space-y-6">
               <FormInput
-                label="Legal company name"
-                id="companyName"
-                name="companyName"
+                label="Legal business name"
+                id="name"
+                name="name"
                 required
               />
               <FormInput
-                label="Legal company email address"
-                id="companyEmail"
-                name="companyEmail"
+                label="Legal business email address"
+                id="email"
+                name="email"
                 type="email"
                 required
               />
 
               <FormInput
-                label="Legal phone number of company"
-                id="companyNumber"
-                name="companyNumber"
+                label="Legal phone number of business"
+                id="number"
+                name="number"
                 required
               />
 
@@ -146,7 +172,7 @@ const BusinessStepOne = ({ user }) => {
                   type="submit"
                   gradient
                   loading={saving}
-                  label="Finish Submit"
+                  label="Next"
                 />
               </div>
             </Form>

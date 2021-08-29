@@ -3,13 +3,16 @@ import { motion } from 'framer-motion'
 const AnimatedDiv = ({
   children,
   delay = 0.3,
+  className,
   ...rest
 }: {
-  delay: number
+  delay?: number
+  className?: string
   children: React.ReactNode
 }) => {
   return (
     <motion.div
+      className={className}
       {...rest}
       initial="hidden"
       animate="visible"

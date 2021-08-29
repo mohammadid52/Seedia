@@ -5,38 +5,11 @@ import DashboardLayout from 'pages/DashboardLayout'
 import ListCard from 'components/ListCard'
 import PostInput from './PostInput'
 import PersonalCard from './AboutMe'
-import faker from 'faker'
+// import faker from 'faker'
+import { IParent } from 'interfaces/UniversalInterface'
 
-const Dashboard = ({ user }: { user: any }) => {
+const Dashboard = ({ user, userData }: { user: any; userData: IParent }) => {
   const [users, setUsers] = useState([])
-
-  const BASE_URL = 'https://dummyapi.io/data/api/'
-  const APP_ID = '61059484a441674e99287b7f'
-
-  const fetchUsers = () => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((response) => response.json())
-      .then((json) => setUsers(json))
-  }
-  const fetchPosts = () => {
-    setPostLoading(true)
-    fetch(`${BASE_URL}post`, { headers: { 'app-id': APP_ID } })
-      .then((response) => response.json())
-      .then((json) => setPosts(json.data))
-      .finally(() => {
-        setPostLoading(false)
-      })
-    // .finally(() => setPostLoading(false))
-  }
-
-  useEffect(() => {
-    fetchUsers()
-    fetchPosts()
-    return () => {
-      fetchUsers()
-      // fetchPosts()
-    }
-  }, [])
 
   const [posts, setPosts] = useState([])
   const [postLoading, setPostLoading] = useState(false)
@@ -54,16 +27,14 @@ const Dashboard = ({ user }: { user: any }) => {
         >
           <DashboardLayout
             firstColClass="md:hidden lg:block sm:hidden xl:block "
-            firstCol={<PersonalCard user={user} />}
+            firstCol={<PersonalCard userData={userData} />}
             secondCol={
               <div className="flex flex-col">
                 <PostInput posts={posts} setPosts={setPosts} />
                 <div className="relative">
                   <div className="py-8  grid grid-cols-2 gap-4 sm:grid-cols-2 ">
-                    {users.slice(0, 2).map((user) => {
-                      return (
-                        <ListCard key={faker.datatype.uuid()} user={user} />
-                      )
+                    {users.slice(0, 2).map((user, idx) => {
+                      return <ListCard key={idx} user={user} />
                     })}
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 interface IButton {
   label?: string
-  onClick?: () => void
+  onClick?: any
   Icon?: any
   bgColor?: string
   rounded?: string
@@ -115,7 +115,7 @@ const Button = ({
           ? className
           : `${generateClass()} ${generatePaddingAndTextSize()} ${rounded} font-${weight} ${className} ${
               fullWidth ? 'w-full' : ''
-            } transition-all flex items-center duration-200 ${
+            } transition-all flex items-center justify-center duration-200 ${
               disabled ? 'opacity-50' : ''
             }`
       }`}

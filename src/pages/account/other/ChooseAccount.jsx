@@ -9,6 +9,7 @@ import { links } from 'constants/Links'
 import { getAccessToken, network } from 'helpers'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
 import Error from 'components/alerts/Error'
+import { useUserContext } from 'context/UserContext'
 
 const settings = [
   {
@@ -45,6 +46,7 @@ const ChooseAccount = ({ user }) => {
   useEffect(() => {
     checkAccount()
   }, [])
+  const { setValues } = useUserContext()
 
   const onNext = async () => {
     let path
@@ -61,20 +63,26 @@ const ChooseAccount = ({ user }) => {
 
       const token = getAccessToken()
 
+      const updatedData = {
+        ...user,
+        other: {
+          ...user.other,
+          accountFinishedStep: 'chooseAccount',
+          accountType: selected.name.toLocaleLowerCase(),
+        },
+      }
+
       await network.post(
-        links.BASE_API_URL + '/user/update',
+        '/user/update',
         {
-          ...user,
-          other: {
-            ...user.other,
-            accountFinishedStep: 'chooseAccount',
-            accountType: selected.name.toLocaleLowerCase(),
-          },
+          ...updatedData,
         },
         {
           headers: { Authorization: token },
         }
       )
+      setValues({ ...updatedData })
+
       setErrors([])
       history.push(path || links.PERSONAL_STEP_1)
     } catch (error) {

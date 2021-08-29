@@ -327,7 +327,8 @@ const Background = ({
         }
       }
 
-      delete updatedData._id
+      //@ts-ignore
+      delete updatedData.password
 
       setValues({ ...updatedData })
 
