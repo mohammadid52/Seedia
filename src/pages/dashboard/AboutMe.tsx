@@ -6,8 +6,6 @@ import { useUserContext } from 'context/UserContext'
 import { network } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import React, { useState } from 'react'
-
-import { NavLink } from 'react-router-dom'
 import getImageURL from 'utils/getImageURL'
 
 const PersonalCard = ({
@@ -121,7 +119,7 @@ const PersonalCard = ({
                     <img
                       className={`${
                         !userData?.profilePicture ? '' : ''
-                      } h-16 w-16 rounded-corners-gradient-borders border-2 border-transparent rounded-full z-20`}
+                      } h-16 w-16 border-gradient border-2 border-transparent rounded-full z-20`}
                       src={
                         userData?.profilePicture
                           ? getImageURL(userData?.profilePicture)
@@ -133,12 +131,12 @@ const PersonalCard = ({
 
                   <div className="">
                     <div className="text-center">
-                      <NavLink
-                        to={`${links.getProfileById(userData?._id, '1')}`}
+                      <div
+                        onClick={() => links.getProfileById(userData?._id, '1')}
                         className="mt-4 mb-1 text-base hover:underline cursor-pointer  font-extrabold text-center dark:text-white"
                       >
                         {userData?.fullName}
-                      </NavLink>
+                      </div>
 
                       <p className="dark:text-gray-400 mb-2 text-sm text-center">
                         {userData?.company?.jobTitle}

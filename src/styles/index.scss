@@ -270,7 +270,7 @@ button {
   outline: none !important;
 }
 
-.rounded-corners-gradient-borders {
+.border-gradient {
   background-image: linear-gradient($gray-800, $gray-800),
     radial-gradient(circle at top left, $pink, $yellow);
   background-origin: border-box;

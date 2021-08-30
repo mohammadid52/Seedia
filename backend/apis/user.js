@@ -47,6 +47,56 @@ router.post('/getUsers', auth, async (req, res) => {
     return res.status(202).json(responseMsg('error', 'Error', error.message))
   }
 })
+
+// /user
+router.post('/giveRecommendation/:id', auth, async (req, res) => {
+  const token = req.user
+  const userId = req.params.id
+
+  const text = req.body.text
+
+  const usersCollection = res.locals.usersCollection
+
+  try {
+    const user = await usersCollection.findOne({ _id: ObjectId(userId) })
+    const me = await usersCollection.findOne({ _id: ObjectId(token.id) })
+
+    const user_o_r = user?.recommendation?.received || []
+    const user_o_g = user?.recommendation?.given || []
+    const user_n_r = { text: text, userId: token.id }
+    const user_r = { received: [...user_o_r, user_n_r], given: [...user_o_g] }
+    if (user) {
+      await usersCollection.updateOne(
+        { _id: user._id },
+        { $set: { recommendation: user_r } },
+        { new: true }
+      )
+    } else {
+      return res.status(403).json(responseMsg('error', "Can't find user"))
+    }
+
+    const me_o_r = me?.recommendation?.received || []
+    const me_o_g = me?.recommendation?.given || []
+    const me_n_g = { text: text, userId: userId }
+    const me_r = { received: [...me_o_r], given: [...me_o_g, me_n_g] }
+    if (me) {
+      await usersCollection.updateOne(
+        { _id: me._id },
+        { $set: { recommendation: me_r } },
+        { new: true }
+      )
+      return res
+        .status(202)
+        .json(responseMsg('success', 'Fetch successfully', user))
+    } else {
+      return res.status(403).json(responseMsg('error', "Can't find me"))
+    }
+  } catch (error) {
+    console.error(error)
+    return res.status(202).json(responseMsg('error', 'Error', error.message))
+  }
+})
+
 // /user
 router.post('/suggestedUser', auth, async (req, res) => {
   const interests = req.body.interests
@@ -71,15 +121,21 @@ router.post('/suggestedUser', auth, async (req, res) => {
   }
 })
 // /user
-router.post('/getAll', auth, async (req, res) => {
+router.post('/getAll/:id', auth, async (req, res) => {
   const limit = req.body.limit
+  const id = req.params.id
 
   const usersCollection = res.locals.usersCollection
   const token = req.user
 
   try {
     const list = await usersCollection
-      .find({ _id: { $not: { $eq: ObjectId(token.id) } } })
+      .find({
+        $and: [
+          { _id: { $not: { $eq: ObjectId(token.id) } } },
+          { _id: { $not: { $eq: ObjectId(id) } } },
+        ],
+      })
       .limit(limit)
       .toArray()
 

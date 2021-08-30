@@ -17,7 +17,7 @@ import { isEmpty } from 'lodash'
 import { useUserContext } from 'context/UserContext'
 
 const CompanyStep = ({ user }) => {
-  const [isLoaded, setIsLoaded] = useState(true)
+  const [isLoaded] = useState(true)
   const history = useHistory()
 
   const [initialState, setInitialState] = useState(PersonalStepOne)

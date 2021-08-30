@@ -10,7 +10,6 @@ import NormalFormInput from 'components/atoms/NormalFormInput'
 import Selector from 'components/atoms/Selector'
 import { network } from 'helpers'
 import { useUserContext } from 'context/UserContext'
-import { isAvailable } from 'utils/wait'
 import { isEmpty } from 'lodash'
 import { IParent } from 'interfaces/UniversalInterface'
 
@@ -48,7 +47,7 @@ const About = ({
   const isBusiness = accountType === 'business'
   useEffect(() => {
     if (!isEmpty(userData)) {
-      if (isBusiness) {
+      if (!isBusiness) {
         setLocalFields({
           currentCompany:
             company?.currentCompany || company.latestCompany || '',
@@ -69,7 +68,7 @@ const About = ({
 
   const [saving, setSaving] = useState(false)
 
-  const initialState = isBusiness ? companyInitState : businessInitState
+  const initialState = !isBusiness ? companyInitState : businessInitState
 
   const [localFields, setLocalFields] = useState(initialState)
 
@@ -99,7 +98,7 @@ const About = ({
 
       let updatedData = { ...userData }
 
-      if (isBusiness) {
+      if (!isBusiness) {
         updatedData = {
           ...userData,
           maritalStatus,
@@ -192,7 +191,7 @@ const About = ({
       >
         <div>
           <div className="min-w-256  overflow-y-auto p-2 custom-scroll-mini darker my-4">
-            {isBusiness ? (
+            {!isBusiness ? (
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <NormalFormInput
                   name="currentCompany"
@@ -280,7 +279,7 @@ const About = ({
           )
         }
         content={
-          isBusiness ? (
+          !isBusiness ? (
             <div className="space-y-4">
               <KeyValue label="Current company" text={company.currentCompany} />
               <KeyValue

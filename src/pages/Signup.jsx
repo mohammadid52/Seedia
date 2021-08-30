@@ -9,13 +9,11 @@ import * as Yup from 'yup'
 import { links } from 'constants/Links'
 import Error from 'components/alerts/Error'
 import { SIGNUP } from 'initials'
-import { useDispatch } from 'react-redux'
-import { setUser } from 'state/Redux/Actions/authActions'
 import { useUserContext } from 'context/UserContext'
 import { network } from 'helpers'
 
 const Signup = () => {
-  const [isLoaded, setIsLoaded] = useState(true)
+  const [isLoaded] = useState(true)
 
   const validationSchema = Yup.object({
     firstName: Yup.string().required('Please enter your first name'),
@@ -47,10 +45,7 @@ const Signup = () => {
         lastName: _values.lastName,
         email: _values.email,
         fullName: _values.firstName + ' ' + _values.lastName,
-        coverPicture: 'https://source.unsplash.com/1600x900/?nature,water',
-        profilePicture: `https://robohash.org/honey?set=set${
-          Math.floor(Math.random() * 9) + 1
-        }`,
+
         other: {
           accountFilled: false,
           accountFinishedStep: 'signup',

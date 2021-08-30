@@ -71,7 +71,7 @@ const ProfileStrength = ({
       secondary
       content={
         <div className="pt-4 pb-2">
-          <div className="gap-x-4 border-gray-600 border relative mb-4 py-4 rounded-full flex items-center  justify-around">
+          <div className="gap-x-4 border-gray-300 dark:border-gray-600 border relative mb-4 py-4 rounded-full flex items-center  justify-around">
             {map(totalStars, (starIdx) =>
               finishedStars === starIdx || finishedStars > starIdx ? (
                 <AiFillStar

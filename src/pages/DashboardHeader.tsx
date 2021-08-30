@@ -327,16 +327,15 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                               />
                             </div>
                             <div>
-                              <NavLink
-                                to={`${_links.getProfileById(
-                                  userData?._id,
-                                  '1'
-                                )}`}
+                              <h4
+                                onClick={() =>
+                                  _links.getProfileById(userData?._id, '1')
+                                }
+                                className="hover:underline text-lg dark:text-white font-bold"
                               >
-                                <h4 className="hover:underline text-lg dark:text-white font-bold">
-                                  {userData?.fullName}
-                                </h4>
-                              </NavLink>
+                                {userData?.fullName}
+                              </h4>
+
                               <p className="mt-1 text-gray-800 font-medium leading-3 dark:text-gray-400">
                                 {userData?.company?.jobTitle}
                               </p>

@@ -53,7 +53,10 @@ const Profile = ({ userData }: { userData: IParent }) => {
               <div className="space-y-12">
                 {authUser && <ProfileStrength {...commonProps} />}
                 <Background {...commonProps} />
-                <Recommendations recommendation={userData.recommendation} />
+                <Recommendations
+                  {...commonProps}
+                  recommendation={userData.recommendation}
+                />
                 <Following
                   list={userData.following}
                   interests={userData?.background?.interests}

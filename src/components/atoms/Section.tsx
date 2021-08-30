@@ -1,5 +1,4 @@
-import { Transition } from '@headlessui/react'
-import React, { Fragment } from 'react'
+import React from 'react'
 
 interface SectionProps {
   sectionTitle: string

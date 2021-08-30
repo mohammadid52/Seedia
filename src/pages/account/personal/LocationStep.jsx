@@ -18,7 +18,7 @@ import { useUserContext } from 'context/UserContext'
 const yourhandle = require('countrycitystatejson')
 
 const LastStep = ({ accountType = 'personal', user }) => {
-  const [isLoaded, setIsLoaded] = useState(true)
+  const [isLoaded] = useState(true)
   const history = useHistory()
 
   const [saving, setSaving] = useState(false)

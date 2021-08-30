@@ -223,7 +223,7 @@ const Cover = ({
                   </div>
                   <div className="px-8 py-4 sm:border-b-none border-b">
                     <div className="text-center text-white tracking-wide font-bold ">
-                      {919}+
+                      {userData?.followers?.length || 0}
                     </div>
                     <div className="text-gray-300 font-medium uppercase text-base mt-1 tracking-tight ">
                       connections

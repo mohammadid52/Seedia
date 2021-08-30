@@ -14,27 +14,11 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { StudentStepOne } from 'initials'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
-import { network } from 'helpers'
-import { useDispatch } from 'react-redux'
-import { setUser } from 'state/Redux/Actions/authActions'
+import { getAccessToken, network } from 'helpers'
+import { useUserContext } from 'context/UserContext'
 
 const EducationStep = ({ user }) => {
   const history = useHistory()
-
-  const [initialState, setInitialState] = useState(StudentStepOne)
-
-  // const education = user.education
-
-  // useEffect(() => {
-  //   if (!isEmpty(education) && education.jobTitle) {
-  //     setInitialState({
-  //       jobTitle: company.jobTitle,
-  //       jobType: company.jobType,
-  //       latestCompany: company.latestCompany,
-  //     })
-  //   }
-  // }, [company])
-  //capture inputs
 
   const [saving, setSaving] = useState(false)
 
@@ -51,12 +35,14 @@ const EducationStep = ({ user }) => {
     checkAccount()
   }, [])
 
-  const dispatch = useDispatch()
+  const { setValues } = useUserContext()
 
   const onSubmit = async (values) => {
     try {
+      const token = getAccessToken()
+
       setSaving(true)
-      const { data } = await network.post('/user/update', {
+      const updatedData = {
         ...user,
         background: {
           ...user.background,
@@ -75,8 +61,19 @@ const EducationStep = ({ user }) => {
           ...user.other,
           accountFinishedStep: 'education',
         },
-      })
-      dispatch(setUser(data.data))
+      }
+      await network.post(
+        '/user/update',
+        {
+          ...updatedData,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
+      //@ts-ignore
+      delete updatedData.password
+      setValues({ ...updatedData })
 
       history.push(links.STUDENT_STEP_2)
     } catch (error) {
@@ -116,7 +113,7 @@ const EducationStep = ({ user }) => {
       <AnimatedDiv className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white dark:bg-gray-800 border border-white dark:border-gray-700 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
-            initialValues={initialState}
+            initialValues={StudentStepOne}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
             enableReinitialize

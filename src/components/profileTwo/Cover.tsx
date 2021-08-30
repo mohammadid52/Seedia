@@ -100,7 +100,7 @@ const Cover = ({ about, userData }: { about: IAbout; userData?: IParent }) => {
               <span className="sr-only">13RMS</span>
               <img
                 onClick={showFileExplorerForProfile}
-                className="rounded-corners-gradient-borders border-transparent border-4 h-36 w-36 xs:h-56 xs:w-56 sm:w-48 cursor-pointer sm:h-full sm:w-42 rounded-full shadow-xl"
+                className="border-gradient border-transparent border-4 h-36 w-36 xs:h-56 xs:w-56 sm:w-48 cursor-pointer sm:h-full sm:w-42 rounded-full shadow-xl"
                 src={
                   userData?.profilePicture
                     ? getImageURL(userData?.profilePicture)

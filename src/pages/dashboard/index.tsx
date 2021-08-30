@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Post from 'components/Post'
 import SideCard from 'components/SideCard'
 import DashboardLayout from 'pages/DashboardLayout'
@@ -9,10 +9,10 @@ import PersonalCard from './AboutMe'
 import { IParent } from 'interfaces/UniversalInterface'
 
 const Dashboard = ({ user, userData }: { user: any; userData: IParent }) => {
-  const [users, setUsers] = useState([])
+  const [users] = useState([])
 
   const [posts, setPosts] = useState([])
-  const [postLoading, setPostLoading] = useState(false)
+  const [postLoading] = useState(false)
 
   const [collapsed] = useState(true)
 
