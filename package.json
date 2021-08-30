@@ -62,7 +62,8 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "server": "nodemon backend/app.js",
+    "dev": "nodemon backend/app.js",
+    "prod": "node backend/app.js",
     "deploy": "rm -rf backend/build/ && rm -rf build && npm run build && cp -r build ./backend/"
   },
   "eslintConfig": {
