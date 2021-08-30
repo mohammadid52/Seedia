@@ -15,5 +15,8 @@ export const links = {
   STUDENT_STEP_2: dynamicRoute('student', 'location'),
   BUSINESS_STEP_1: dynamicRoute('business', 'stepOne'),
   BUSINESS_STEP_2: dynamicRoute('business', 'stepTwo'),
-  BASE_API_URL: 'http://localhost:3005',
+  BASE_API_URL:
+    process.env.NODE_ENV === 'production'
+      ? 'http://tradingpost13rms.com'
+      : 'http://localhost:3005',
 }

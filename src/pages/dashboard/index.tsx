@@ -18,15 +18,15 @@ const Dashboard = ({ user, userData }: { user: any; userData: IParent }) => {
 
   return (
     // <Sidebar>
-    <div className="relative dark:bg-gray-800 min-h-screen">
+    <div className="relative  dark:bg-gray-800 bg-gray-100 min-h-screen">
       <div className="">
         <div
-          className={`h-auto flow-root  transition-all duration-500 sidebar-${
+          className={`h-auto pt-4 flow-root  transition-all duration-500 sidebar-${
             collapsed ? 'collapsed' : 'toggled'
           }`}
         >
           <DashboardLayout
-            firstColClass="md:hidden lg:block sm:hidden xl:block "
+            firstColClass="md:hidden  lg:block sm:hidden xl:block "
             firstCol={<PersonalCard userData={userData} />}
             secondCol={
               <div className="flex flex-col">
