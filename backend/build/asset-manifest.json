@@ -1,10 +1,10 @@
 {
   "files": {
     "main.css": "/static/css/main.7149dac0.chunk.css",
-    "main.js": "/static/js/main.20300f7f.chunk.js",
-    "main.js.map": "/static/js/main.20300f7f.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.dc18c807.js",
-    "runtime-main.js.map": "/static/js/runtime-main.dc18c807.js.map",
+    "main.js": "/static/js/main.676ce505.chunk.js",
+    "main.js.map": "/static/js/main.676ce505.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.232ea38e.js",
+    "runtime-main.js.map": "/static/js/runtime-main.232ea38e.js.map",
     "static/css/2.c1efd4d8.chunk.css": "/static/css/2.c1efd4d8.chunk.css",
     "static/js/2.47a79949.chunk.js": "/static/js/2.47a79949.chunk.js",
     "static/js/2.47a79949.chunk.js.map": "/static/js/2.47a79949.chunk.js.map",
@@ -14,8 +14,8 @@
     "static/js/4.b61932d3.chunk.js.map": "/static/js/4.b61932d3.chunk.js.map",
     "static/js/5.2d2e8226.chunk.js": "/static/js/5.2d2e8226.chunk.js",
     "static/js/5.2d2e8226.chunk.js.map": "/static/js/5.2d2e8226.chunk.js.map",
-    "static/js/6.9ab9e969.chunk.js": "/static/js/6.9ab9e969.chunk.js",
-    "static/js/6.9ab9e969.chunk.js.map": "/static/js/6.9ab9e969.chunk.js.map",
+    "static/js/6.b57d5e86.chunk.js": "/static/js/6.b57d5e86.chunk.js",
+    "static/js/6.b57d5e86.chunk.js.map": "/static/js/6.b57d5e86.chunk.js.map",
     "static/js/7.0754d7b7.chunk.js": "/static/js/7.0754d7b7.chunk.js",
     "static/js/7.0754d7b7.chunk.js.map": "/static/js/7.0754d7b7.chunk.js.map",
     "static/js/8.a09bdd82.chunk.js": "/static/js/8.a09bdd82.chunk.js",
@@ -29,7 +29,6 @@
     "static/css/main.7149dac0.chunk.css.map": "/static/css/main.7149dac0.chunk.css.map",
     "static/js/2.47a79949.chunk.js.LICENSE.txt": "/static/js/2.47a79949.chunk.js.LICENSE.txt",
     "static/js/3.b8147c82.chunk.js.LICENSE.txt": "/static/js/3.b8147c82.chunk.js.LICENSE.txt",
-    "static/media/13RMS.45341eaf.png": "/static/media/13RMS.45341eaf.png",
     "static/media/australia.41d2fffa.png": "/static/media/australia.41d2fffa.png",
     "static/media/belarus.51fb97c6.png": "/static/media/belarus.51fb97c6.png",
     "static/media/brazil.0ae031e7.png": "/static/media/brazil.0ae031e7.png",
@@ -43,10 +42,10 @@
     "static/media/ww.343ee5c6.png": "/static/media/ww.343ee5c6.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.dc18c807.js",
+    "static/js/runtime-main.232ea38e.js",
     "static/css/2.c1efd4d8.chunk.css",
     "static/js/2.47a79949.chunk.js",
     "static/css/main.7149dac0.chunk.css",
-    "static/js/main.20300f7f.chunk.js"
+    "static/js/main.676ce505.chunk.js"
   ]
 }

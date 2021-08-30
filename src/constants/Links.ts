@@ -1,6 +1,8 @@
 const dynamicRoute = (accountType: string = 'personal', step: string = '') =>
   `/account/${accountType}/edit-profile/${step}`
 
+console.log('NODE ENV', process.env.NODE_ENV)
+
 export const links = {
   LOGIN: '/login',
   SIGNUP: '/signup',
