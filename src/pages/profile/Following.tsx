@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { map } from 'lodash'
 import Button from 'components/atoms/Button'
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import Section from 'components/atoms/Section'
 import { CgDetailsMore } from 'react-icons/cg'
 import { IParent } from 'interfaces/UniversalInterface'
@@ -24,11 +24,14 @@ const Following = ({
   const [following, setFollowing] = useState([])
   const [suggestedUsers, setSuggestedUsers] = useState([])
   const [allUsers, setAllUsers] = useState([])
+  const token = getAccessToken()
 
   const fetchFollowingUsers = async () => {
     try {
       const config = { users: list }
-      const { data } = await network.post('/user/getUsers', config)
+      const { data } = await network.post('/user/getUsers', config, {
+        headers: { Authorization: token },
+      })
       setFollowing(data.data)
     } catch (error) {
       console.error(error)
@@ -37,7 +40,9 @@ const Following = ({
   const fetchSuggestedUsers = async () => {
     try {
       const config = { interests: interests }
-      const { data } = await network.post('/user/suggestedUser', config)
+      const { data } = await network.post('/user/suggestedUser', config, {
+        headers: { Authorization: token },
+      })
       setSuggestedUsers(data.data)
     } catch (error) {
       console.error(error)
@@ -49,7 +54,10 @@ const Following = ({
       const config = { limit: 6 }
       const { data } = await network.post(
         `/user/getAll/${userIdFromParam}`,
-        config
+        config,
+        {
+          headers: { Authorization: token },
+        }
       )
       setAllUsers(data.data)
     } catch (error) {

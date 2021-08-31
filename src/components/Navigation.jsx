@@ -219,15 +219,6 @@ export default function Navigation({
                     </Popover.Group>
                   )}
 
-                  {!accountFilled && (
-                    <Button
-                      onClick={() => history.push(links.CHOOSE_ACCOUNT)}
-                      className="mx-4 "
-                      label="Choose account"
-                      invert
-                      gradient
-                    />
-                  )}
                   <Button
                     onClick={() => history.push(links.DASHBAORD)}
                     className="mx-4 "

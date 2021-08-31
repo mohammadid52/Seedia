@@ -18,6 +18,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   const isUser = !isEmpty(values)
 
   const userData: IParent = isUser ? values : undefined
+  const [showSidebar, setShowSidebar] = useState(false)
 
   return (
     <UserContext.Provider
@@ -28,6 +29,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         dispatch,
         darkMode,
         setDarkMode,
+        showSidebar,
+        setShowSidebar,
       }}
     >
       {children}

@@ -132,9 +132,15 @@ const About = ({
       delete updatedData.password
       setValues({ ...updatedData })
 
-      await network.post('/user/update', {
-        ...updatedData,
-      })
+      await network.post(
+        '/user/update',
+        {
+          ...updatedData,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
 
       // add data to local state
       setShowModal(false)

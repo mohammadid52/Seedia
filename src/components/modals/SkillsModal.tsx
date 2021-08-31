@@ -1,7 +1,7 @@
 import { IModalProps, ISkill } from 'interfaces/UniversalInterface'
 import React, { useEffect, useState } from 'react'
 import { nanoid } from 'nanoid'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import { wait } from 'utils/wait'
 import { isEmpty, map, remove } from 'lodash'
 import Button from 'components/atoms/Button'
@@ -47,6 +47,7 @@ const SkillsModal = ({
       skillText: '',
     })
   }
+  const token = getAccessToken()
 
   const [saving, setSaving] = useState(false)
   const onSave = async () => {
@@ -69,9 +70,15 @@ const SkillsModal = ({
 
       setValues({ ...updatedData })
 
-      await network.post('/user/update', {
-        ...updatedData,
-      })
+      await network.post(
+        '/user/update',
+        {
+          ...updatedData,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
 
       // add data to local state
       onCancel()

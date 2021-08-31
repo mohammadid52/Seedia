@@ -16,6 +16,7 @@ import { classNames } from 'utils/classNames'
 import { NavLink, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logOut } from 'state/Redux/Actions/authActions'
+import { MenuAlt2Icon } from '@heroicons/react/outline'
 import {
   businessApps,
   callsToAction,
@@ -57,20 +58,20 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
   const navClass =
     'flex flex-col items-center font-medium text-base dark:text-gray-400 text-gray-500 link-hover'
 
+  const { showSidebar, setShowSidebar } = useUserContext()
+
   return (
     <Popover className="relative dark:bg-gray-800 bg-white">
       {({ open }) => (
         <>
           <div className="flex justify-between items-center py-3 border-b-2 dark:border-gray-700 border-gray-100  sm:px-6 md:justify-start md:space-x-10">
             <div className="flex justify-start lg:w-0 lg:flex-1">
-              <a href="/#">
-                <span className="sr-only">13RMS</span>
-                <img
-                  className="h-8 w-auto sm:h-10"
-                  src={process.env.PUBLIC_URL + '/logo.png'}
-                  alt=""
-                />
-              </a>
+              <div
+                className="flex items-center cursor-pointer hover:bg-gray-600 rounded p-2 justify-center"
+                onClick={() => setShowSidebar(!showSidebar)}
+              >
+                <MenuAlt2Icon className="h-6 w-6 dark:text-white text-gray-900" />
+              </div>
               <div className="hidden rounded-xl h-12 ml-8 lg:flex dark:border-gray-700 border">
                 <div className="ml-2">
                   <Selector
@@ -304,6 +305,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                                 </a>
                               )
                             )}
+
                             <div>
                               <Toggle
                                 enabled={darkMode}
@@ -329,7 +331,9 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                             <div>
                               <h4
                                 onClick={() =>
-                                  _links.getProfileById(userData?._id, '1')
+                                  history.push(
+                                    _links.getProfileById(userData?._id, '1')
+                                  )
                                 }
                                 className="hover:underline text-lg dark:text-white font-bold"
                               >

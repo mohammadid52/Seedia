@@ -10,7 +10,7 @@ import { links } from 'constants/Links'
 import Error from 'components/alerts/Error'
 import { SIGNUP } from 'initials'
 import { useUserContext } from 'context/UserContext'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 
 const Signup = () => {
   const [isLoaded] = useState(true)
@@ -51,10 +51,17 @@ const Signup = () => {
           accountFinishedStep: 'signup',
         },
       }
+      const token = getAccessToken()
 
-      const res = await network.post('/auth/register', {
-        ...data,
-      })
+      const res = await network.post(
+        '/auth/register',
+        {
+          ...data,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
 
       localStorage.setItem('access_token', res.data.data.access_token)
 

@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid'
 import Divider from 'components/atoms/Divider'
 import { BiTrashAlt } from 'react-icons/bi'
 import { wait } from 'utils/wait'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import Button from 'components/atoms/Button'
 import DatePicker from 'components/atoms/DatePicker'
 import TextButton from 'components/atoms/TextButton'
@@ -71,6 +71,7 @@ const ExperienceTwoModal = ({
     // @ts-ignore
     return localFields.experiences[idx][fieldName]
   }
+  const token = getAccessToken()
 
   const onExperienceRemove = (id: string) => {
     setUnsavedChanges(true)
@@ -99,9 +100,15 @@ const ExperienceTwoModal = ({
 
       setValues({ ...updatedData })
 
-      await network.post('/user/update', {
-        ...updatedData,
-      })
+      await network.post(
+        '/user/update',
+        {
+          ...updatedData,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
 
       // add data to local state
       onCancel()

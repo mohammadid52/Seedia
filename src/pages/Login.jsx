@@ -9,7 +9,7 @@ import { LOGIN } from 'initials'
 import FormInput from 'components/atoms/FormInput'
 import { links } from 'constants/Links'
 import { useHistory } from 'react-router-dom'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import { useUserContext } from 'context/UserContext'
 
 const Login = () => {
@@ -23,14 +23,21 @@ const Login = () => {
   })
 
   const { setValues } = useUserContext()
+  const token = getAccessToken()
 
   const [loading, setLoading] = useState(false)
 
   const apiCall = async (values) => {
-    const { data } = await network.post('/auth/login', {
-      email: values.email,
-      password: values.password,
-    })
+    const { data } = await network.post(
+      '/auth/login',
+      {
+        email: values.email,
+        password: values.password,
+      },
+      {
+        headers: { Authorization: token },
+      }
+    )
 
     //@ts-ignore
     delete data._id

@@ -1,7 +1,7 @@
 import { IEducation, IModalProps } from 'interfaces/UniversalInterface'
 import React, { Fragment, useEffect, useState } from 'react'
 import { nanoid } from 'nanoid'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import NormalFormInput from 'components/atoms/NormalFormInput'
 import { isEmpty, map, remove, update } from 'lodash'
 import Button from 'components/atoms/Button'
@@ -64,6 +64,8 @@ const EducationModal = ({
 
   const [saving, setSaving] = useState(false)
 
+  const token = getAccessToken()
+
   const onSave = async () => {
     try {
       setSaving(true)
@@ -84,9 +86,15 @@ const EducationModal = ({
 
       setValues({ ...updatedData })
 
-      await network.post('/user/update', {
-        ...updatedData,
-      })
+      await network.post(
+        '/user/update',
+        {
+          ...updatedData,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
 
       // add data to local state
       onCancel()

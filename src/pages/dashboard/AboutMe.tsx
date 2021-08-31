@@ -3,9 +3,10 @@ import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
 import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import getImageURL from 'utils/getImageURL'
 
 const PersonalCard = ({
@@ -18,6 +19,7 @@ const PersonalCard = ({
 }) => {
   const [showModal, setShowModal] = useState(false)
   const [saving, setSaving] = useState(false)
+  const token = getAccessToken()
 
   const [_image, setImage] = useState('')
 
@@ -28,6 +30,8 @@ const PersonalCard = ({
   }
   const { setValues } = useUserContext()
 
+  const history = useHistory()
+
   const onSave = async () => {
     setSaving(true)
 
@@ -37,6 +41,7 @@ const PersonalCard = ({
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: token,
       },
     }
 
@@ -53,9 +58,15 @@ const PersonalCard = ({
 
         setValues({ ...updatedData })
 
-        await network.post('/user/update', {
-          ...updatedData,
-        })
+        await network.post(
+          '/user/update',
+          {
+            ...updatedData,
+          },
+          {
+            headers: { Authorization: token },
+          }
+        )
         setShowModal(false)
       }
     } catch (error) {
@@ -132,7 +143,9 @@ const PersonalCard = ({
                   <div className="">
                     <div className="text-center">
                       <div
-                        onClick={() => links.getProfileById(userData?._id, '1')}
+                        onClick={() =>
+                          history.push(links.getProfileById(userData?._id, '1'))
+                        }
                         className="mt-4 mb-1 text-base hover:underline cursor-pointer  font-extrabold text-center dark:text-white"
                       >
                         {userData?.fullName}

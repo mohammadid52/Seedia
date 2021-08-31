@@ -4,7 +4,7 @@ import { ICompany, IParent } from 'interfaces/UniversalInterface'
 import { useState } from 'react'
 import { AiOutlineEdit } from 'react-icons/ai'
 import React from 'react'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import { useUserContext } from 'context/UserContext'
 import getImageURL from 'utils/getImageURL'
 import Badge from 'components/atoms/Badge'
@@ -22,6 +22,7 @@ const Cover = ({
     type: '',
     show: false,
   })
+  const token = getAccessToken()
 
   const accountType = userData?.other?.accountType || 'personal'
 
@@ -47,6 +48,7 @@ const Cover = ({
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: token,
       },
     }
 
@@ -63,9 +65,15 @@ const Cover = ({
 
         setValues({ ...updatedData })
 
-        await network.post('/user/update', {
-          ...updatedData,
-        })
+        await network.post(
+          '/user/update',
+          {
+            ...updatedData,
+          },
+          {
+            headers: { Authorization: token },
+          }
+        )
         setShowImageModal({ show: false, type: '' })
       }
     } catch (error) {

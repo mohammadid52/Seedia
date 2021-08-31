@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { languageKnownLevel } from 'values/values'
 import { BiTrashAlt } from 'react-icons/bi'
 import { nanoid } from 'nanoid'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import NormalFormInput from 'components/atoms/NormalFormInput'
 import { isEmpty, map, remove } from 'lodash'
 import Button from 'components/atoms/Button'
@@ -62,6 +62,7 @@ const LanguagesModal = ({
   }
 
   const [saving, setSaving] = useState(false)
+  const token = getAccessToken()
 
   const onSave = async () => {
     try {
@@ -83,9 +84,15 @@ const LanguagesModal = ({
 
       setValues({ ...updatedData })
 
-      await network.post('/user/update', {
-        ...updatedData,
-      })
+      await network.post(
+        '/user/update',
+        {
+          ...updatedData,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
 
       // add data to local state
       onCancel()

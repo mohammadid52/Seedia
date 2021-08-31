@@ -14,7 +14,7 @@ import {
 import NormalFormInput from 'components/atoms/NormalFormInput'
 import { isAvailable } from 'utils/wait'
 import { useUserContext } from 'context/UserContext'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import Selector from 'components/atoms/Selector'
 import { yearList } from 'values/values'
 import { nanoid } from 'nanoid'
@@ -247,6 +247,7 @@ const Background = ({
     experiences: [],
   }
   const [localFields, setLocalFields] = useState<ILocalFields>(initialState)
+  const token = getAccessToken()
 
   const onInterestAdd = () => {
     if (localFields.interest) {
@@ -332,9 +333,15 @@ const Background = ({
 
       setValues({ ...updatedData })
 
-      await network.post('/user/update', {
-        ...updatedData,
-      })
+      await network.post(
+        '/user/update',
+        {
+          ...updatedData,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
 
       // add data to local state
       setShowModal({ ...showModal, show: false })

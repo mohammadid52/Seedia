@@ -1,6 +1,6 @@
 import * as types from 'state/Redux/constants'
 
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import { isEmpty } from 'lodash'
 
 export const logOut = (history) => async (dispatch) => {
@@ -35,8 +35,15 @@ export const loader = (val) => (dispatch) => {
   dispatch({ type: types.LOADER, data: val })
 }
 
+const token = getAccessToken()
 const getUser = async () => {
-  const { data } = await network.post('/user')
+  const { data } = await network.post(
+    '/user',
+    {},
+    {
+      headers: { Authorization: token },
+    }
+  )
   return data
 }
 

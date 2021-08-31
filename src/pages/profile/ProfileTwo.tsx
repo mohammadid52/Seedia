@@ -23,9 +23,10 @@ import AwardsModal from 'components/modals/AwardsModal'
 import LanguagesModal from 'components/modals/LanguagesModal'
 import EducationModal from 'components/modals/EducationModal'
 import { useRouter } from 'hooks/useRouter'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import ProfileStrength from 'components/ProfileStrength'
 import ProductsDetails from 'components/profileTwo/ProductsDetails'
+import Sidebar from 'components/Sidebar'
 
 const ProfileTwo = ({
   user,
@@ -44,10 +45,17 @@ const ProfileTwo = ({
   // #2 check user id from token decoded object
   // #3 if it matches then current user is authUser (owner of profile)
   const authUser = userIdFromParam === userData._id
+  const token = getAccessToken()
 
   const getProfileById = async () => {
     if (!authUser) {
-      const { data } = await network.post('/user/getById/' + userIdFromParam)
+      const { data } = await network.post(
+        '/user/getById/' + userIdFromParam,
+        {},
+        {
+          headers: { Authorization: token },
+        }
+      )
       setValues({ ...data.data, _id: myId })
     } else {
       setValues({ ...userData })
@@ -123,6 +131,8 @@ const ProfileTwo = ({
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 smooth-scroll">
+      <Sidebar id={userData._id} />
+
       <div className="">
         <Modal
           open={showModal.show}

@@ -2,7 +2,7 @@ import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
 import { useUserContext } from 'context/UserContext'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import { IAbout, IParent } from 'interfaces/UniversalInterface'
 import React, { useState } from 'react'
 import getImageURL from 'utils/getImageURL'
@@ -19,6 +19,7 @@ const Cover = ({ about, userData }: { about: IAbout; userData?: IParent }) => {
     setShowModal(true)
   }
   const { setValues } = useUserContext()
+  const token = getAccessToken()
 
   const onSave = async () => {
     setSaving(true)
@@ -29,6 +30,7 @@ const Cover = ({ about, userData }: { about: IAbout; userData?: IParent }) => {
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: token,
       },
     }
 
@@ -45,9 +47,15 @@ const Cover = ({ about, userData }: { about: IAbout; userData?: IParent }) => {
 
         setValues({ ...updatedData })
 
-        await network.post('/user/update', {
-          ...updatedData,
-        })
+        await network.post(
+          '/user/update',
+          {
+            ...updatedData,
+          },
+          {
+            headers: { Authorization: token },
+          }
+        )
         setShowModal(false)
       }
     } catch (error) {

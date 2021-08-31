@@ -1,6 +1,6 @@
 import Card from 'components/atoms/Card'
 import { links } from 'constants/Links'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
@@ -16,11 +16,14 @@ const PeopleAlsoViewed = ({
   userData?: IParent
 }) => {
   const [list, setList] = useState([])
+  const token = getAccessToken()
 
   const fetchPeopleYouViewedList = async () => {
     try {
       const config = { users: userData?.piv }
-      const { data } = await network.post('/user/getUsers', config)
+      const { data } = await network.post('/user/getUsers', config, {
+        headers: { Authorization: token },
+      })
       setList(data.data)
     } catch (error) {
       console.error(error)

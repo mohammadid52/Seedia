@@ -2,7 +2,7 @@ import Card from 'components/atoms/Card'
 import { useEffect, useState } from 'react'
 import { map } from 'lodash'
 import { IParent, IRecommendation } from 'interfaces/UniversalInterface'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import Tabs from 'components/atoms/Tabs'
 import Button from 'components/atoms/Button'
 import Modal from 'components/atoms/Modal'
@@ -30,7 +30,9 @@ const Recommendations = ({
       const config = {
         users: map(recommendation?.received, (g) => g.userId),
       }
-      const { data } = await network.post('/user/getUsers', config)
+      const { data } = await network.post('/user/getUsers', config, {
+        headers: { Authorization: token },
+      })
 
       const _r = map(data.data, (r, idx: number) => ({
         text: recommendation?.received[idx]?.text || 'Not found',
@@ -49,7 +51,9 @@ const Recommendations = ({
       const config = {
         users: map(recommendation?.given, (g) => g.userId),
       }
-      const { data } = await network.post('/user/getUsers', config)
+      const { data } = await network.post('/user/getUsers', config, {
+        headers: { Authorization: token },
+      })
 
       const _g = map(data.data, (g, idx: number) => ({
         text: recommendation?.given[idx].text,
@@ -98,6 +102,7 @@ const Recommendations = ({
   const userIdFromParam = route?.match?.params?.userId
 
   const { setValues } = useUserContext()
+  const token = getAccessToken()
 
   const onSave = async (values: any) => {
     setSaving(true)
@@ -106,7 +111,10 @@ const Recommendations = ({
         const config = { text: values.recommendation }
         await network.post(
           `/user/giveRecommendation/${userIdFromParam}`,
-          config
+          config,
+          {
+            headers: { Authorization: token },
+          }
         )
         onCancel()
 

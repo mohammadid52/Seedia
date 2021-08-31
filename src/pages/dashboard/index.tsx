@@ -7,6 +7,7 @@ import PostInput from './PostInput'
 import PersonalCard from './AboutMe'
 // import faker from 'faker'
 import { IParent } from 'interfaces/UniversalInterface'
+import Sidebar from 'components/Sidebar'
 
 const Dashboard = ({ user, userData }: { user: any; userData: IParent }) => {
   const [users] = useState([])
@@ -19,7 +20,9 @@ const Dashboard = ({ user, userData }: { user: any; userData: IParent }) => {
   return (
     // <Sidebar>
     <div className="relative  dark:bg-gray-800 bg-gray-100 min-h-screen">
-      <div className="">
+      <div className="flex">
+        <Sidebar id={userData._id} />
+
         <div
           className={`h-auto pt-4 flow-root  transition-all duration-500 sidebar-${
             collapsed ? 'collapsed' : 'toggled'

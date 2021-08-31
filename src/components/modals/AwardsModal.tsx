@@ -5,7 +5,7 @@ import { isEmpty, map, remove } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { BiTrashAlt } from 'react-icons/bi'
 import { nanoid } from 'nanoid'
-import { network } from 'helpers'
+import { getAccessToken, network } from 'helpers'
 import { wait } from 'utils/wait'
 import Button from 'components/atoms/Button'
 
@@ -53,6 +53,7 @@ const AwardsModal = ({
     const { name, value } = e.target
     setLocalFields({ ...localFields, [name]: value })
   }
+  const token = getAccessToken()
 
   const [saving, setSaving] = useState(false)
 
@@ -76,9 +77,15 @@ const AwardsModal = ({
 
       setValues({ ...updatedData })
 
-      await network.post('/user/update', {
-        ...updatedData,
-      })
+      await network.post(
+        '/user/update',
+        {
+          ...updatedData,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
 
       // add data to local state
       onCancel()
