@@ -16,7 +16,7 @@ const SideCard = () => {
       cardTitle="13RMS News"
       content={
         <div className="text-left  cursor-pointer ">
-          <ul className="p-0 space-y-2">
+          <ul className="flex flex-col gap-y-4">
             {map(news, (_news, idx: number) => (
               <li key={idx} className=" pl-2">
                 <h6 className="text-xs font-semibold mb-1 uppercase link-hover dark:text-white text-gray-900 ">

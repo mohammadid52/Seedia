@@ -1,7 +1,6 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Disclosure } from '@headlessui/react'
-import { HomeIcon, UsersIcon, ColorSwatchIcon } from '@heroicons/react/outline'
-import { links } from 'constants/Links'
+import { HomeIcon, ColorSwatchIcon } from '@heroicons/react/outline'
 import { useUserContext } from 'context/UserContext'
 import { classNames } from 'utils/classNames'
 import { adjustColors } from 'values/values'
@@ -9,15 +8,7 @@ import { adjustColors } from 'values/values'
 export default function Sidebar({ id }: { id?: string }) {
   const navigation = [
     { name: 'Dashboard', icon: HomeIcon, current: true, href: '/dashboard' },
-    {
-      name: 'Profile',
-      icon: UsersIcon,
-      current: false,
-      children: [
-        { name: 'First Template', href: links.getProfileById(id, '1') },
-        { name: 'Second Template', href: links.getProfileById(id, '2') },
-      ],
-    },
+
     {
       name: 'Adjust colors',
       icon: ColorSwatchIcon,

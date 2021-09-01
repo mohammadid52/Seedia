@@ -81,7 +81,7 @@ const BusinessStepTwo = ({ userData }: { userData: IParent }) => {
         other: {
           ...userData.other,
           accountFinishedStep: 'business-step-2',
-          accountFilled: true,
+          accountFilled: false,
         },
         location: {
           ...userData.location,
@@ -111,7 +111,7 @@ const BusinessStepTwo = ({ userData }: { userData: IParent }) => {
           headers: { Authorization: token },
         }
       )
-      history.push(links.DASHBAORD)
+      history.push(links.CHOOSE_TEMPLATE)
     } catch (error) {
       setErrors([error.message])
       console.error(error)

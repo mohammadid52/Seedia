@@ -19,6 +19,7 @@ import { getUserValues } from 'helpers'
 import { useSelector } from 'react-redux'
 import { links } from 'constants/Links'
 import { profileOne, profileTwo } from 'values/values'
+import ChooseTemplate from 'pages/account/other/ChooseTemplate'
 
 const Welcome = lazy(() => import('pages/Welcome'))
 const Profile = lazy(() => import('pages/profile/ProfileOne'))
@@ -67,9 +68,11 @@ const App = () => {
   const RenderNav = ({
     isUser,
     accountFilled,
+    template,
   }: {
     isUser?: any
     accountFilled?: boolean
+    template: 1 | 2
   }) => {
     const router = useRouter()
 
@@ -80,6 +83,7 @@ const App = () => {
       <Navigation
         userId={userData?._id}
         isUser={isUser}
+        template={template}
         accountFilled={accountFilled}
       />
     ) : atAuthPages ? null : (
@@ -96,11 +100,17 @@ const App = () => {
 
   const userData: IParent = isUser ? values : undefined
 
+  const template = userData?.other?.template || 1
+
   return (
     <Router>
       <AuthContainer>
         <div className="">
-          <RenderNav accountFilled={accountFilled} isUser={isUser} />
+          <RenderNav
+            template={template}
+            accountFilled={accountFilled}
+            isUser={isUser}
+          />
           <Switch>
             {/* This is common page */}
             <Route exact path="/" component={Welcome} />
@@ -127,23 +137,27 @@ const App = () => {
             >
               <Dashboard userData={userData} user={profileOne} />
             </PrivateRoute>
-            <PrivateRoute
-              isUser={isUser}
-              // @ts-ignore
-              exact
-              path="/profile/:userId/template=1"
-            >
-              <Profile userData={userData} />
-            </PrivateRoute>
-            <PrivateRoute
-              isUser={isUser}
-              // @ts-ignore
-              exact
-              path="/profile/:userId/template=2"
-            >
-              {/* @ts-ignore */}
-              <ProfileTwo userData={userData} user={profileTwo} />
-            </PrivateRoute>
+            {template === 1 ? (
+              <PrivateRoute
+                isUser={isUser}
+                // @ts-ignore
+                exact
+                path="/profile/:userId/template=1"
+              >
+                <Profile userData={userData} />
+              </PrivateRoute>
+            ) : (
+              <PrivateRoute
+                isUser={isUser}
+                // @ts-ignore
+                exact
+                path="/profile/:userId/template=2"
+              >
+                {/* @ts-ignore */}
+                <ProfileTwo userData={userData} user={profileTwo} />
+              </PrivateRoute>
+            )}
+
             <PrivateRoute
               // @ts-ignore
               exact
@@ -200,6 +214,13 @@ const App = () => {
               isUser={isUser}
             >
               <BusinessStepTwo userData={userData} />
+            </PrivateRoute>
+            <PrivateRoute
+              // @ts-ignore
+              path={links.CHOOSE_TEMPLATE}
+              isUser={isUser}
+            >
+              <ChooseTemplate user={userData} />
             </PrivateRoute>
 
             {/* Error Page */}

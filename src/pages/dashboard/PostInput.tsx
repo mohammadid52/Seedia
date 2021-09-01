@@ -6,8 +6,17 @@ import { BiCalendarEvent } from 'react-icons/bi'
 import { BsCameraVideo } from 'react-icons/bs'
 import { HiOutlinePhotograph } from 'react-icons/hi'
 import { RiArticleLine } from 'react-icons/ri'
+import getImageURL from 'utils/getImageURL'
 
-const PostInput = ({ setPosts, posts }: { posts: any; setPosts: any }) => {
+const PostInput = ({
+  setPosts,
+  posts,
+  profilePicture,
+}: {
+  posts: any
+  setPosts: any
+  profilePicture?: string
+}) => {
   const [postText, setPostText] = useState('')
 
   const onCreatePost = () => {
@@ -39,7 +48,11 @@ const PostInput = ({ setPosts, posts }: { posts: any; setPosts: any }) => {
             <div className=" flex items-center justify-between">
               <div className="flex w-full">
                 <img
-                  src={process.env.PUBLIC_URL + '/logo.png'}
+                  src={
+                    profilePicture
+                      ? getImageURL(profilePicture)
+                      : 'https://robohash.org/honey?set=set1'
+                  }
                   alt="13RMS"
                   className="h-14 w-auto"
                 />

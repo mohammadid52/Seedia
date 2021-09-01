@@ -68,7 +68,6 @@ export const loadUser = () => async (dispatch) => {
 export const setUser = (user) => async (dispatch) => {
   try {
     if (!isEmpty(user)) {
-      console.log('@setUser: User set successfully: ', user)
       dispatch({ type: types.SET_USER_DATA, data: user })
     }
   } catch (error) {

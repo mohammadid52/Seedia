@@ -10,12 +10,11 @@ import { useHistory } from 'react-router-dom'
 import Toggle from 'components/ThemeToggle'
 import { classNames } from 'utils/classNames'
 import { useUserContext } from 'context/UserContext'
-import { RiProfileLine } from 'react-icons/ri'
 import { links } from 'constants/Links'
 
 export default function Navigation({
   isUser,
-
+  template = 1,
   accountFilled = false,
   userId = '',
 }) {
@@ -145,78 +144,15 @@ export default function Navigation({
               {isUser ? (
                 <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                   {accountFilled && (
-                    <Popover.Group
-                      as="nav"
-                      className="hidden ml-6 md:flex space-x-10"
-                    >
-                      <Popover className="relative">
-                        {({ open }) => (
-                          <>
-                            <Popover.Button
-                              className={classNames(
-                                open ? 'text-gray-900' : 'text-gray-500',
-                                'group bg-white dark:bg-gray-800 rounded-md inline-flex items-center text-base font-medium link-hover focus:outline-none '
-                              )}
-                            >
-                              <Button
-                                // onClick={() => history.push('/profile')}
-                                className="mx-4 "
-                                label="Profile"
-                                gradient
-                                invert
-                              />
-                            </Popover.Button>
-
-                            <Transition
-                              show={open}
-                              as={Fragment}
-                              enter="transition ease-out duration-200"
-                              enterFrom="opacity-0 translate-y-1"
-                              enterTo="opacity-100 translate-y-0"
-                              leave="transition ease-in duration-150"
-                              leaveFrom="opacity-100 translate-y-0"
-                              leaveTo="opacity-0 translate-y-1"
-                            >
-                              <Popover.Panel
-                                static
-                                className="absolute z-10  mt-4 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
-                              >
-                                <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                                  <div className="relative grid gap-6 bg-white dark:bg-gray-700 px-5 py-6 sm:gap-8 sm:p-8">
-                                    <div
-                                      onClick={() =>
-                                        history.push(
-                                          `/profile/${userId}/template=1`
-                                        )
-                                      }
-                                      className="p-2 cursor-pointer pl-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600"
-                                    >
-                                      <p className="text-base flex items-center text-left font-medium dark:text-white text-gray-900 mb-0">
-                                        <RiProfileLine className="mr-2" />
-                                        Profile one
-                                      </p>
-                                    </div>
-                                    <div
-                                      onClick={() =>
-                                        history.push(
-                                          `/profile/${userId}/template=2`
-                                        )
-                                      }
-                                      className="rounded-lg pl-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 p-2"
-                                    >
-                                      <p className="text-base flex items-center text-left  font-medium dark:text-white text-gray-900 mb-0">
-                                        <RiProfileLine className="mr-2" />
-                                        Profile two
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </Popover.Panel>
-                            </Transition>
-                          </>
-                        )}
-                      </Popover>
-                    </Popover.Group>
+                    <Button
+                      onClick={() =>
+                        history.push(links.getProfileById(userId, template))
+                      }
+                      className="mx-4 "
+                      label="Profile"
+                      gradient
+                      invert
+                    />
                   )}
 
                   <Button

@@ -147,7 +147,7 @@ const ProfileTwo = ({
           </div>
         </Modal>
       </div>
-      <Header userData={userData} />
+      {/* <Header userData={userData} /> */}
       {/* stylelint-disabled  */}
       <div className="mx-auto min-h-screen pt-8 max-w-440">
         <Layout
@@ -169,13 +169,6 @@ const ProfileTwo = ({
           secondCol={
             <div className="space-y-12">
               <Cover userData={userData} about={user.about} />
-              {authUser && (
-                <ProfileStrength
-                  secondary
-                  userData={userData}
-                  authUser={authUser}
-                />
-              )}
 
               {!isBusiness && <Experiences {...commonBlockProps} />}
               {!isBusiness && (
@@ -195,6 +188,13 @@ const ProfileTwo = ({
           }
           thirdCol={
             <div className="space-y-12 xl:space-y-0">
+              {authUser && (
+                <ProfileStrength
+                  secondary
+                  userData={userData}
+                  authUser={authUser}
+                />
+              )}
               <div className="xl:hidden block">
                 <Card
                   className={`transition-transform duration-200`}

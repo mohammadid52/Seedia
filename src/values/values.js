@@ -66,6 +66,7 @@ import { FiActivity } from 'react-icons/fi'
 import { BsFilePost } from 'react-icons/bs'
 import map from 'lodash/map'
 import { nanoid } from 'nanoid'
+import { CgProfile } from 'react-icons/cg'
 
 export const adjustColors = [
   { name: 'Deuteranomaly', value: 1 },
@@ -152,32 +153,10 @@ export const my13Rms = [
 
 export const settings = [
   {
-    name: 'Settings & Privacy',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
+    name: 'View profile',
+    description: '',
     href: '#/',
-    icon: IoIosSettings,
-  },
-  {
-    name: 'Help',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-    href: '#/',
-    icon: BiHelpCircle,
-  },
-  {
-    name: 'Language',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-    href: '#/',
-    icon: MdLanguage,
-  },
-  {
-    name: 'Activity',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-    href: '#/',
-    icon: FiActivity,
+    icon: CgProfile,
   },
   {
     name: 'Sign Out',

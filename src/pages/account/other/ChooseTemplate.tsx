@@ -10,24 +10,20 @@ import { getAccessToken, network } from 'helpers'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
 import Error from 'components/alerts/Error'
 import { useUserContext } from 'context/UserContext'
+import { IParent } from 'interfaces/UniversalInterface'
 
 const settings = [
   {
-    name: 'Personal',
-    description: 'If you are creating account for personal use, select this',
+    name: 'Template One',
+    description: '',
   },
   {
-    name: 'Student',
-    description: 'If you are student then select this',
-  },
-  {
-    name: 'Business',
-    description:
-      'If you are creating account for the business then select this',
+    name: 'Template Two',
+    description: '',
   },
 ]
 
-const ChooseAccount = ({ user }) => {
+const ChooseTemplate = ({ user }: { user: IParent }) => {
   const [selected, setSelected] = useState(settings[0])
   const history = useHistory()
 
@@ -38,11 +34,16 @@ const ChooseAccount = ({ user }) => {
    */
 
   const checkAccount = () => {
-    if (user && user.hasOwnProperty('accountType')) {
+    if (
+      user &&
+      user.other &&
+      user?.other.hasOwnProperty('accountFilled') &&
+      user.other.accountFilled
+    ) {
       return history.push(links.DASHBAORD)
     }
   }
-  const [errors, setErrors] = useState([])
+  const [errors, setErrors] = useState<string[]>([])
 
   useEffect(() => {
     checkAccount()
@@ -50,15 +51,6 @@ const ChooseAccount = ({ user }) => {
   const { setValues } = useUserContext()
 
   const onNext = async () => {
-    let path
-    if (selected.name === 'Personal') {
-      path = links.PERSONAL_STEP_1
-    } else if (selected.name === 'Student') {
-      path = links.STUDENT_STEP_1
-    } else {
-      path = links.BUSINESS_STEP_1
-    }
-
     try {
       setLoading(true)
 
@@ -68,8 +60,9 @@ const ChooseAccount = ({ user }) => {
         ...user,
         other: {
           ...user.other,
-          accountFinishedStep: 'chooseAccount',
-          accountType: selected.name.toLocaleLowerCase(),
+          accountFilled: true,
+          accountFinishedStep: 'ChooseTemplate',
+          template: selected.name === 'Template One' ? 1 : 2,
         },
       }
 
@@ -85,7 +78,7 @@ const ChooseAccount = ({ user }) => {
       setValues({ ...updatedData })
 
       setErrors([])
-      history.push(path || links.PERSONAL_STEP_1)
+      history.push(links.DASHBAORD)
     } catch (error) {
       setErrors(['Oops! Something went wrong'])
       console.error(error)
@@ -97,7 +90,7 @@ const ChooseAccount = ({ user }) => {
 
   return (
     <div>
-      <Layout title="Choose account type" subtitle="">
+      <Layout title="Choose profile template" subtitle="">
         <AnimatedDiv className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white dark:border-gray-700 border border-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
             <RadioGroup value={selected} onChange={setSelected}>
@@ -114,46 +107,42 @@ const ChooseAccount = ({ user }) => {
                         checked
                           ? 'bg-pink-50 dark:bg-gray-800 rounded-md dark:border-pink-700 border-pink-200 z-10'
                           : 'border-gray-200 dark:border-gray-700 rounded-md',
-                        'relative border p-4 transition-all duration-200 flex overflow-hidden cursor-pointer focus:outline-none'
+                        'relative items-center justify-between border p-4 transition-all duration-200 flex overflow-hidden cursor-pointer focus:outline-none'
                       )
                     }
                   >
                     {({ active, checked }) => (
                       <>
-                        <span
-                          className={classNames(
-                            checked
-                              ? 'bg-pink-600 border-transparent'
-                              : 'bg-white border-gray-300',
-                            active ? 'ring-2 ring-offset-2 ring-pink-500' : '',
-                            'h-4 w-4 mt-0.5 cursor-pointer rounded-full border flex items-center justify-center'
-                          )}
-                          aria-hidden="true"
-                        >
-                          <span className="rounded-full bg-white w-1.5 h-1.5" />
-                        </span>
-                        <div className="ml-3 flex flex-col items-start">
-                          <RadioGroup.Label
-                            as="span"
+                        <div className="flex items-center justify-center">
+                          <span
                             className={classNames(
                               checked
-                                ? 'gradient-text'
-                                : 'dark:text-white text-gray-900',
-                              'block text-sm font-medium mb-2'
+                                ? 'bg-pink-600 border-transparent'
+                                : 'bg-white border-gray-300',
+                              active
+                                ? 'ring-2 ring-offset-2 ring-pink-500'
+                                : '',
+                              'h-4 w-4 mt-0.5 cursor-pointer rounded-full border flex items-center justify-center'
                             )}
+                            aria-hidden="true"
                           >
-                            {setting.name}
-                          </RadioGroup.Label>
-                          <RadioGroup.Description
-                            as="span"
-                            className={classNames(
-                              checked ? 'gradient-text' : 'text-gray-500',
-                              'block text-sm'
-                            )}
-                          >
-                            {setting.description}
-                          </RadioGroup.Description>
+                            <span className="rounded-full bg-white w-1.5 h-1.5" />
+                          </span>
+                          <div className="ml-3 flex flex-col items-start">
+                            <RadioGroup.Label
+                              as="span"
+                              className={classNames(
+                                checked
+                                  ? 'gradient-text'
+                                  : 'dark:text-white text-gray-900',
+                                'block text-sm font-medium mb-2'
+                              )}
+                            >
+                              {setting.name}
+                            </RadioGroup.Label>
+                          </div>
                         </div>
+                        <div>Text</div>
                       </>
                     )}
                   </RadioGroup.Option>
@@ -176,4 +165,4 @@ const ChooseAccount = ({ user }) => {
   )
 }
 
-export default ChooseAccount
+export default ChooseTemplate

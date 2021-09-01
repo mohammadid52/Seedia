@@ -216,7 +216,10 @@ const Following = ({
                           <div>
                             <h4
                               onClick={() =>
-                                links.getProfileById(user._id, '1')
+                                links.getProfileById(
+                                  user._id,
+                                  user?.other?.template || 1
+                                )
                               }
                               className="dark:text-white hover:underline cursor-pointer text-gray-900 font-semibold tracking-wide text-lg"
                             >

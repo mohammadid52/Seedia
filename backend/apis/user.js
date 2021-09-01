@@ -16,6 +16,7 @@ router.post('/', auth, async (req, res) => {
 
   if (user) {
     delete user.password
+
     return res
       .status(202)
       .json(responseMsg('success', 'Authentication successfully', user))
@@ -199,6 +200,7 @@ router.post('/getById/:id', auth, async (req, res) => {
           : [token.id]
       const pwvpCount = pwvp.length
       delete user.password
+
       await usersCollection.updateOne(
         { _id: user._id },
         { $set: { pwvp, pwvpCount } },
@@ -229,6 +231,8 @@ router.post('/update', auth, async (req, res) => {
     if (user) {
       try {
         delete dataToUpdate._id
+        delete dataToUpdate.access_token
+
         await usersCollection.updateOne(
           { _id: user._id },
           { $set: { ...dataToUpdate } },
@@ -236,6 +240,7 @@ router.post('/update', auth, async (req, res) => {
         )
 
         delete user.password
+
         return res.status(202).json(
           responseMsg('success', 'Data updated successfully', {
             ...dataToUpdate,

@@ -169,8 +169,9 @@ const Cover = ({
                 <img
                   className="h-full w-full object-cover"
                   src={
-                    userData?.coverPicture &&
-                    getImageURL(userData?.coverPicture)
+                    userData?.coverPicture
+                      ? getImageURL(userData?.coverPicture)
+                      : 'https://source.unsplash.com/1600x900/?nature,water'
                   }
                   alt="People working on laptops"
                 />

@@ -1,9 +1,8 @@
 import { IParent } from 'interfaces/UniversalInterface'
 import React, { useEffect, useState } from 'react'
 import Card from 'components/atoms/Card'
-import { AiOutlineStar, AiFillStar } from 'react-icons/ai'
-
-import { filter, map, values } from 'lodash'
+import 'styles/loader.scss'
+import { filter, values } from 'lodash'
 
 const ProfileStrength = ({
   userData,
@@ -14,20 +13,11 @@ const ProfileStrength = ({
   authUser: boolean
   secondary?: boolean
 }) => {
-  const starClass = `h-12 w-12 `
-
-  const totalStars = [0, 1, 2, 3, 4]
-
-  const [finishedStars, setFinishedStars] = useState(0)
-
   const [nextStepText, setNextStepText] = useState('')
 
   const accountType = userData.other?.accountType
 
-  const activeClass = `transform  scale-125 text-yellow-300`
-  const finishedStarClass = `text-yellow-300`
-
-  const unfinishedStarsClass = `text-gray-300 dark:text-gray-500`
+  const [progress, setProgress] = useState(20)
 
   const generateFinishStep = () => {
     const mainKeys = {
@@ -59,7 +49,7 @@ const ProfileStrength = ({
 
     const arrLen = filter(vals, (value: any) => Boolean(value))
 
-    setFinishedStars(arrLen.length - 1)
+    setProgress(arrLen.length * 20)
   }
 
   useEffect(() => {
@@ -70,25 +60,20 @@ const ProfileStrength = ({
     <Card
       secondary
       content={
-        <div className="pt-4 pb-2">
-          <div className="gap-x-4 border-gray-300 dark:border-gray-600 border relative mb-4 py-4 rounded-full flex items-center  justify-around">
-            {map(totalStars, (starIdx) =>
-              finishedStars === starIdx || finishedStars > starIdx ? (
-                <AiFillStar
-                  key={starIdx}
-                  className={`${starClass} ${
-                    finishedStars === starIdx ? activeClass : finishedStarClass
-                  }`}
-                />
-              ) : (
-                <AiOutlineStar
-                  key={starIdx}
-                  className={`${starClass} ${unfinishedStarsClass}`}
-                />
-              )
-            )}
+        <div className=" pb-2 flex flex-col items-center">
+          <div
+            className={`progress-circle ${
+              progress >= 50 ? 'over50' : ''
+            } p${progress}`}
+          >
+            <span>{progress}%</span>
+            <div className="left-half-clipper">
+              <div className="transition-all duration-1000 first50-bar"></div>
+              <div className="value-bar transition-all duration-1000"></div>
+            </div>
           </div>
-          <h4 className="dark:text-white text-lg font-medium text-gray-900 text-center">
+
+          <h4 className="dark:text-gray-400  text-sm font-medium text-gray-600 text-center">
             {nextStepText}
           </h4>
         </div>

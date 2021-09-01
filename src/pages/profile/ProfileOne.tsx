@@ -62,7 +62,6 @@ const Profile = ({ userData }: { userData: IParent }) => {
               }
               secondCol={
                 <div className="space-y-12">
-                  {authUser && <ProfileStrength {...commonProps} />}
                   <Background {...commonProps} />
                   <Recommendations
                     {...commonProps}
@@ -74,7 +73,12 @@ const Profile = ({ userData }: { userData: IParent }) => {
                   />
                 </div>
               }
-              thirdCol={<PeopleAlsoViewed {...commonProps} />}
+              thirdCol={
+                <div className="space-y-12">
+                  {authUser && <ProfileStrength {...commonProps} />}
+                  <PeopleAlsoViewed {...commonProps} />
+                </div>
+              }
             />
           </div>
         </div>

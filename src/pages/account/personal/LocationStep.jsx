@@ -61,7 +61,7 @@ const LastStep = ({ accountType = 'personal', user }) => {
         },
         other: {
           ...user.other,
-          accountFilled: true,
+          accountFilled: false,
           accountFinishedStep: 'location',
         },
       }
@@ -79,7 +79,7 @@ const LastStep = ({ accountType = 'personal', user }) => {
       delete updatedData.password
       setValues({ ...updatedData })
 
-      history.push(links.DASHBAORD)
+      history.push(links.CHOOSE_TEMPLATE)
     } catch (error) {
       console.error(error)
     } finally {

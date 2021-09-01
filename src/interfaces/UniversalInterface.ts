@@ -61,6 +61,7 @@ export interface IOther {
   accountType: string
   accountFilled: boolean
   accountFinishedStep: string
+  template: 1 | 2
 }
 
 export interface IParent {

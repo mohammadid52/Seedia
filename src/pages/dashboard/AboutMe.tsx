@@ -28,6 +28,7 @@ const PersonalCard = ({
     setImage(img)
     setShowModal(true)
   }
+
   const { setValues } = useUserContext()
 
   const history = useHistory()
@@ -144,7 +145,12 @@ const PersonalCard = ({
                     <div className="text-center">
                       <div
                         onClick={() =>
-                          history.push(links.getProfileById(userData?._id, '1'))
+                          history.push(
+                            links.getProfileById(
+                              userData?._id,
+                              userData?.other?.template || 1
+                            )
+                          )
                         }
                         className="mt-4 mb-1 text-base hover:underline cursor-pointer  font-extrabold text-center dark:text-white"
                       >
