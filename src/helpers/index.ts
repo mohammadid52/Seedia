@@ -14,6 +14,6 @@ const token = getAccessToken()
 
 export const network = axios.create({
   baseURL: links.BASE_API_URL,
-  timeout: 1000,
+  timeout: 100000,
   headers: { Authorization: token },
 })

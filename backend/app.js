@@ -22,7 +22,6 @@ client.connect(
   URI,
   { useNewUrlParser: true, useUnifiedTopology: true },
   (err, client) => {
-    console.error(err)
     const db = client.db('13rms')
     const usersCollection = db.collection('users')
 

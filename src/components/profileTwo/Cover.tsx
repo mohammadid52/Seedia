@@ -5,7 +5,6 @@ import { useUserContext } from 'context/UserContext'
 import { getAccessToken, network } from 'helpers'
 import { IAbout, IParent } from 'interfaces/UniversalInterface'
 import React, { useState } from 'react'
-import getImageURL from 'utils/getImageURL'
 
 const Cover = ({ about, userData }: { about: IAbout; userData?: IParent }) => {
   const [saving, setSaving] = useState(false)
@@ -37,10 +36,10 @@ const Cover = ({ about, userData }: { about: IAbout; userData?: IParent }) => {
     try {
       const { data } = await network.post('/uploadImage', fd, config)
 
-      if (data && data.data && data.data.filename) {
+      if (data && data.data && data.data.location) {
         const updatedData = {
           ...userData,
-          profilePicture: data.data.filename,
+          profilePicture: data.data.location,
         }
         //@ts-ignore
         delete updatedData.password
@@ -111,7 +110,7 @@ const Cover = ({ about, userData }: { about: IAbout; userData?: IParent }) => {
                 className="border-gradient border-transparent border-4 h-36 w-36 xs:h-56 xs:w-56 sm:w-48 cursor-pointer sm:h-full sm:w-42 rounded-full shadow-xl"
                 src={
                   userData?.profilePicture
-                    ? getImageURL(userData?.profilePicture)
+                    ? userData?.profilePicture
                     : 'https://robohash.org/honey?set=set1'
                 }
                 alt=""
