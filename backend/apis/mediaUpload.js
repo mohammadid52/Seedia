@@ -2,37 +2,41 @@
 const router = require('express').Router()
 const { responseMsg } = require('../utils')
 const multer = require('multer')
-const path = require('path')
+var aws = require('aws-sdk')
+var multerS3 = require('multer-s3')
 
-const imageStorage = multer.diskStorage({
-  destination: 'public/images',
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      file.fieldname + '_' + Date.now() + path.extname(file.originalname)
-    )
-  },
+aws.config.update({
+  secretAccessKey: process.env.S3_ACCESS_KEY,
+  accessKeyId: process.env.S3_SECRET_KEY,
+  region: 'us-east-1',
+  signatureVersion: 'v4',
 })
 
-const imageUpload = multer({
-  storage: imageStorage,
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(png|jpg)$/)) {
-      return cb(new Error('Please upload a Image'))
-    }
-    cb(undefined, true)
-  },
+var s3 = new aws.S3()
+
+var upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'user',
+    key: function (req, file, cb) {
+      cb(
+        'error occurred',
+        `${new Date().toLocaleString()}_${file.originalname}`
+      )
+    },
+  }),
 })
 
 router.post(
   '/',
-  imageUpload.single('image'),
+  upload.single('image'),
   async (req, res) => {
     res
       .status(202)
       .json(responseMsg('success', 'Uploaded Successfully', req.file))
   },
   (error, req, res, next) => {
+    console.error('🚀 ~ file: mediaUpload.js ~ line 39 ~ error', error)
     res.status(400).json(responseMsg('error', error.message))
   }
 )
