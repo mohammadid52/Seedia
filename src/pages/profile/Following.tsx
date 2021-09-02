@@ -131,7 +131,7 @@ const Following = ({
                       className="h-20 mb-2 rounded-full w-20 "
                     />
                     <div className="my-2 flex items-center justify-between flex-col">
-                      <h5 className="text-gray-700 font-semibold text-lg dark:text-gray-200">
+                      <h5 className="text-gray-700 text-center font-semibold text-lg dark:text-gray-200">
                         {user.fullName}
                       </h5>
                       <p className="text-gray-400 text-center font-medium text-base dark:text-gray-400">
@@ -139,6 +139,8 @@ const Following = ({
                           ? user.business?.name
                           : user.company?.companyName}
                       </p>
+                    </div>
+                    <div className="absolute bottom-1 items-center flex justify-center">
                       <Button
                         gradient
                         gradientHover={false}
@@ -188,7 +190,7 @@ const Following = ({
                     {map(allUsers, (user: IParent) => {
                       const isBusiness = user.other?.accountType === 'business'
                       return (
-                        <div className="relative flex border border-gray-300 dark:border-gray-600 h-72 w-60 rounded-xl relative flex-col items-center ">
+                        <div className="flex border border-gray-300 dark:border-gray-600 h-72 w-60 rounded-xl relative flex-col items-center ">
                           <Badge
                             className="mt-1 mr-1 absolute top-0 right-0"
                             textSize="xs"
@@ -234,7 +236,7 @@ const Following = ({
                               </h3>
                             </div>
                           </div>
-                          <div className="relative bottom-1 items-center flex justify-center">
+                          <div className="absolute bottom-1 items-center flex justify-center">
                             <Button
                               gradient
                               gradientHover={false}
