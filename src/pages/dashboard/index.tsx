@@ -2,23 +2,17 @@ import { useState } from 'react'
 import Post from 'components/Post'
 import SideCard from 'components/SideCard'
 import DashboardLayout from 'pages/DashboardLayout'
-import ListCard from 'components/ListCard'
 import PostInput from './PostInput'
 import PersonalCard from './AboutMe'
-// import faker from 'faker'
 import { IParent } from 'interfaces/UniversalInterface'
-import Sidebar from 'components/Sidebar'
 
-const Dashboard = ({ user, userData }: { user: any; userData: IParent }) => {
-  const [users] = useState([])
-
+const Dashboard = ({ userData }: { userData: IParent }) => {
   const [posts, setPosts] = useState([])
   const [postLoading] = useState(false)
 
   const [collapsed] = useState(true)
 
   return (
-    // <Sidebar>
     <div className="relative  dark:bg-gray-800 bg-gray-100 min-h-screen">
       <div
         className={`h-auto pt-4 flow-root  transition-all duration-500 sidebar-${
@@ -35,13 +29,13 @@ const Dashboard = ({ user, userData }: { user: any; userData: IParent }) => {
                 posts={posts}
                 setPosts={setPosts}
               />
-              <div className="relative">
+              {/* <div className="relative">
                 <div className="py-8  grid grid-cols-2 gap-4 sm:grid-cols-2 ">
                   {users.slice(0, 2).map((user, idx) => {
                     return <ListCard key={idx} user={user} />
                   })}
                 </div>
-              </div>
+              </div> */}
               {postLoading ? (
                 <div className="p-4 text-center">loading</div>
               ) : (

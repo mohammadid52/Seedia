@@ -1,5 +1,4 @@
 import Layout from 'pages/profile/Layout'
-import Header from 'components/profileTwo/Header'
 import Cover from 'components/profileTwo/Cover'
 import Card from 'components/atoms/Card'
 import CustomFooter from 'components/CustomFooter'
@@ -10,7 +9,7 @@ import Awards from 'components/profileTwo/Awards'
 import Education from 'components/profileTwo/Education'
 import Languages from 'components/profileTwo/Languages'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
-import { IParent, IProfileTwo } from 'interfaces/UniversalInterface'
+import { IParent } from 'interfaces/UniversalInterface'
 import { useEffect, useState } from 'react'
 import Modal from 'components/atoms/Modal'
 import Button from 'components/atoms/Button'
@@ -26,15 +25,8 @@ import { useRouter } from 'hooks/useRouter'
 import { getAccessToken, network } from 'helpers'
 import ProfileStrength from 'components/ProfileStrength'
 import ProductsDetails from 'components/profileTwo/ProductsDetails'
-import Sidebar from 'components/Sidebar'
 
-const ProfileTwo = ({
-  user,
-  userData,
-}: {
-  user: IProfileTwo
-  userData: IParent
-}) => {
+const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
   const route: any = useRouter()
   const userIdFromParam = route?.match?.params?.userId
@@ -131,8 +123,6 @@ const ProfileTwo = ({
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 smooth-scroll">
-      <Sidebar id={userData._id} />
-
       <div className="">
         <Modal
           open={showModal.show}
@@ -168,7 +158,7 @@ const ProfileTwo = ({
           }
           secondCol={
             <div className="space-y-12">
-              <Cover userData={userData} about={user.about} />
+              <Cover userData={userData} />
 
               {!isBusiness && <Experiences {...commonBlockProps} />}
               {!isBusiness && (

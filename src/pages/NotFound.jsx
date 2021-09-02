@@ -4,6 +4,8 @@ const NotFound = ({
   errorCode = '404',
   errorTitle = 'Page not found',
   errorMessage = 'Please check the URL in the address bar and try again.',
+  tryAgain = null,
+  tryAgainText = 'Go back home',
 }) => {
   const history = useHistory()
   return (
@@ -22,14 +24,16 @@ const NotFound = ({
             </div>
             <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent">
               <Button
-                label="Go back home"
-                onClick={() => history.push('/')}
+                label={tryAgainText}
+                onClick={
+                  tryAgain ? () => tryAgain() : history.push('/dashboard')
+                }
                 gradient
                 shadow
               />
               <Button
                 label="Contact support"
-                onClick={() => history.push('/')}
+                onClick={() => history.push('/dashboard')}
                 customClass
                 className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-600 bg-pink-100 text-pink-500 px-4 py-2 rounded font-medium "
               />

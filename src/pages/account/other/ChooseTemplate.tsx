@@ -142,7 +142,7 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
                             </RadioGroup.Label>
                           </div>
                         </div>
-                        <div>Text</div>
+                        <div></div>
                       </>
                     )}
                   </RadioGroup.Option>

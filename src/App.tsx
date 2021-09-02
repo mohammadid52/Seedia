@@ -18,7 +18,6 @@ import AuthContainer from 'containers/AuthContainer'
 import { getUserValues } from 'helpers'
 import { useSelector } from 'react-redux'
 import { links } from 'constants/Links'
-import { profileOne, profileTwo } from 'values/values'
 import ChooseTemplate from 'pages/account/other/ChooseTemplate'
 
 const Welcome = lazy(() => import('pages/Welcome'))
@@ -28,8 +27,6 @@ const Login = lazy(() => import('pages/Login'))
 const CompanyStep = lazy(() => import('pages/account/personal/CompanyStep'))
 const LocationStep = lazy(() => import('pages/account/personal/LocationStep'))
 const EducationStep = lazy(() => import('pages/account/student/EducationStep'))
-
-// library.add(fas)
 
 const App = () => {
   const { setDarkMode } = useUserContext()
@@ -135,7 +132,7 @@ const App = () => {
               isUser={isUser}
               path="/dashboard"
             >
-              <Dashboard userData={userData} user={profileOne} />
+              <Dashboard userData={userData} />
             </PrivateRoute>
             {template === 1 ? (
               <PrivateRoute
@@ -154,7 +151,7 @@ const App = () => {
                 path="/profile/:userId/template=2"
               >
                 {/* @ts-ignore */}
-                <ProfileTwo userData={userData} user={profileTwo} />
+                <ProfileTwo userData={userData} />
               </PrivateRoute>
             )}
 

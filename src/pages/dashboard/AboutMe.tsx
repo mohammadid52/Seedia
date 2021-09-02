@@ -67,10 +67,11 @@ const PersonalCard = ({
             headers: { Authorization: token },
           }
         )
-        setShowModal(false)
       }
     } catch (error) {
       console.error(error.message)
+    } finally {
+      setShowModal(false)
     }
     setSaving(false)
   }

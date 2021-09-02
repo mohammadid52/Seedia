@@ -3,10 +3,10 @@ import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
 import { useUserContext } from 'context/UserContext'
 import { getAccessToken, network } from 'helpers'
-import { IAbout, IParent } from 'interfaces/UniversalInterface'
+import { IParent } from 'interfaces/UniversalInterface'
 import React, { useState } from 'react'
 
-const Cover = ({ about, userData }: { about: IAbout; userData?: IParent }) => {
+const Cover = ({ userData }: { userData?: IParent }) => {
   const [saving, setSaving] = useState(false)
   const [showModal, setShowModal] = useState(false)
 

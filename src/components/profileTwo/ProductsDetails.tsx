@@ -1,56 +1,8 @@
 import Card from 'components/atoms/Card'
-import faker from 'faker'
 import { map } from 'lodash'
 
 const ProductsDetails = () => {
-  const fakeProducts = [
-    {
-      name: faker.commerce.productName(),
-      image: faker.image.food(240, 288),
-      description: faker.lorem.sentence(10),
-    },
-
-    {
-      name: faker.commerce.productName(),
-      image: faker.image.food(240, 288),
-      description: faker.lorem.sentence(10),
-    },
-
-    {
-      name: faker.commerce.productName(),
-      image: faker.image.food(240, 288),
-      description: faker.lorem.sentence(10),
-    },
-
-    {
-      name: faker.commerce.productName(),
-      image: faker.image.food(240, 288),
-      description: faker.lorem.sentence(10),
-    },
-    {
-      name: faker.commerce.productName(),
-      image: faker.image.food(240, 288),
-      description: faker.lorem.sentence(10),
-    },
-
-    {
-      name: faker.commerce.productName(),
-      image: faker.image.food(240, 288),
-      description: faker.lorem.sentence(10),
-    },
-
-    {
-      name: faker.commerce.productName(),
-      image: faker.image.food(240, 288),
-      description: faker.lorem.sentence(10),
-    },
-
-    {
-      name: faker.commerce.productName(),
-      image: faker.image.food(240, 288),
-      description: faker.lorem.sentence(10),
-    },
-  ]
+  const fakeProducts = [0, 1, 2, 3, 4, 5, 6, 7]
   return (
     <Card
       secondary
@@ -61,17 +13,18 @@ const ProductsDetails = () => {
             <div className="h-72 border border-gray-600 rounded-xl w-60">
               <div className="h-1/2">
                 <img
-                  src={product.image}
+                  src={'https://source.unsplash.com/random/240x288'}
                   alt="no img"
                   className="h-full rounded-t-xl w-full"
                 />
               </div>
               <div className="p-4">
                 <div className="text-white font-medium text-lg">
-                  {product.name}
+                  Lorem ipsum dolor
                 </div>
                 <div className="text-gray-400 mt-2 font-medium whitespace-normal text-xs">
-                  {product.description}
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Maxime mollitia, molestiae quas
                 </div>
               </div>
             </div>

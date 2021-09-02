@@ -15,15 +15,14 @@ import NotFound from 'pages/NotFound'
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
     <NotFound
+      tryAgain={resetErrorBoundary}
+      tryAgainText="Try again"
       errorCode={'403'}
       errorTitle={'Oops! Something went wrong'}
       errorMessage={error.message}
     />
   )
 }
-
-// latest test server
-// https://611807137e05ef00074bcb13--festive-mcclintock-bdc127.netlify.app/
 
 const MainApp = () => (
   <Suspense fallback={<Loading />}>
