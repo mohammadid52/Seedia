@@ -53,7 +53,7 @@ const PostInput = ({
                       : 'https://robohash.org/honey?set=set1'
                   }
                   alt="13RMS"
-                  className="h-14 w-auto"
+                  className="h-14 w-auto rounded-full"
                 />
                 <NormalFormInput
                   value=""
