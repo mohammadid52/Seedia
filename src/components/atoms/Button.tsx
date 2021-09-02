@@ -25,7 +25,7 @@ interface IButton {
   loadingText?: string
   type?: 'button' | 'submit' | 'reset'
   size?: 'sm' | 'md' | 'lg' | 'xl'
-
+  style?: any
   weight?: 'light' | 'medium' | 'semibold' | 'bold'
 }
 
@@ -53,6 +53,7 @@ const Button = ({
   customClass = false,
   disabled = false,
   hidden = false,
+  style,
 }: IButton) => {
   const primaryClass = `${
     invert
@@ -109,7 +110,10 @@ const Button = ({
       disabled={disabled}
       hidden={hidden}
       type={type}
-      style={{ filter: shadow ? 'drop-shadow(2px 4px 6px pink)' : undefined }}
+      style={{
+        ...style,
+        filter: shadow ? 'drop-shadow(2px 4px 6px pink)' : undefined,
+      }}
       className={`${
         customClass
           ? className

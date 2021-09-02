@@ -217,7 +217,7 @@ router.post('/getById/:id', auth, async (req, res) => {
   }
 })
 
-router.post('/deleteAccount', auth, async (req, res) => {
+router.delete('/', auth, async (req, res) => {
   const token = req.user
 
   const usersCollection = res.locals.usersCollection

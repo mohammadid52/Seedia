@@ -59,13 +59,9 @@ export default function Settings({ userData }: { userData: IParent }) {
 
   const deleteAccount = async () => {
     try {
-      await network.post(
-        '/user/deleteAccount',
-        {},
-        {
-          headers: { Authorization: token },
-        }
-      )
+      await network.delete('/user', {
+        headers: { Authorization: token },
+      })
       dispatch(logOut(history))
     } catch (error) {
       console.error(error.message)
@@ -99,7 +95,7 @@ export default function Settings({ userData }: { userData: IParent }) {
             />
             <Button
               primary
-              bgColor="red"
+              style={{ background: 'red' }}
               label="Delete"
               onClick={deleteAccount}
             />
