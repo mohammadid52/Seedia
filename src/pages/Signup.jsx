@@ -47,6 +47,7 @@ const Signup = () => {
         fullName: _values.firstName + ' ' + _values.lastName,
 
         other: {
+          createdOn: new Date(),
           accountFilled: false,
           accountFinishedStep: 'signup',
         },

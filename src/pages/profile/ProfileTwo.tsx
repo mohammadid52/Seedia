@@ -25,6 +25,7 @@ import { useRouter } from 'hooks/useRouter'
 import { getAccessToken, network } from 'helpers'
 import ProfileStrength from 'components/ProfileStrength'
 import ProductsDetails from 'components/profileTwo/ProductsDetails'
+import Sidebar from 'components/Sidebar'
 
 const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
@@ -123,6 +124,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 smooth-scroll">
+      <Sidebar />
       <div className="">
         <Modal
           open={showModal.show}
@@ -177,7 +179,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
             </div>
           }
           thirdCol={
-            <div className="space-y-12 xl:space-y-0">
+            <div className="space-y-12">
               {authUser && (
                 <ProfileStrength
                   secondary
@@ -222,7 +224,8 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
 
           <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
             <Button
-              gradient
+              secondary
+              bgColor="gray"
               onClick={() => {
                 setShowUnsaveModal(false)
                 setShowModal({ ...showModal, show: true })

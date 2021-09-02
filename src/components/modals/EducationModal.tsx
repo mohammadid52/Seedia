@@ -146,7 +146,7 @@ const EducationModal = ({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
           {localFields.education && localFields.education.length > 0 ? (
             <>
-              {map(localFields.education, (experience, idx: number) => (
+              {map(localFields.education, (_education, idx: number) => (
                 <Fragment key={idx}>
                   <NormalFormInput
                     placeholder="Institution name"
@@ -189,7 +189,7 @@ const EducationModal = ({
                       className="cursor-pointer hover:text-red-600 text-red-500"
                       withButton
                       Icon={BiTrashAlt}
-                      onBtnClick={() => onEducationRemove(experience.id)}
+                      onBtnClick={() => onEducationRemove(_education.id)}
                     />
                   </div>
                 </Fragment>
@@ -199,7 +199,7 @@ const EducationModal = ({
         </div>
         <div className=" flex items-center justify-start">
           <TextButton
-            text="Add new experience"
+            text="Add new education"
             className="mx-auto"
             onClick={addEducation}
           />

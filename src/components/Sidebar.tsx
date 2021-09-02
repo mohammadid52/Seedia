@@ -5,7 +5,7 @@ import { useUserContext } from 'context/UserContext'
 import { classNames } from 'utils/classNames'
 import { adjustColors } from 'values/values'
 
-export default function Sidebar({ id }: { id?: string }) {
+export default function Sidebar() {
   const navigation = [
     { name: 'Dashboard', icon: HomeIcon, current: true, href: '/dashboard' },
 

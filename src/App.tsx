@@ -27,6 +27,7 @@ const Login = lazy(() => import('pages/Login'))
 const CompanyStep = lazy(() => import('pages/account/personal/CompanyStep'))
 const LocationStep = lazy(() => import('pages/account/personal/LocationStep'))
 const EducationStep = lazy(() => import('pages/account/student/EducationStep'))
+const Settings = lazy(() => import('pages/Settings'))
 
 const App = () => {
   const { setDarkMode } = useUserContext()
@@ -218,6 +219,13 @@ const App = () => {
               isUser={isUser}
             >
               <ChooseTemplate user={userData} />
+            </PrivateRoute>
+            <PrivateRoute
+              // @ts-ignore
+              path={links.SETTINGS}
+              isUser={isUser}
+            >
+              <Settings userData={userData} />
             </PrivateRoute>
 
             {/* Error Page */}

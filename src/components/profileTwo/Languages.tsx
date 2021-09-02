@@ -36,7 +36,7 @@ const Languages = ({ userData, setShowModal, showEditOption }: IBlockProps) => {
         id="language"
         cardTitle="Languages"
         content={
-          <div className="max-h-64 min-h-56 overflow-y-auto  custom-scroll-mini">
+          <div className=" overflow-y-auto scroll-dark-md">
             <ol className="space-y-6 list-disc px-8 py-4 ">
               {languages && languages.length > 0 ? (
                 map(languages, (lang, awardIdx) => (

@@ -10,6 +10,7 @@ export const links = {
   getProfileById: (id?: string, template?: 1 | 2) =>
     `/profile/${id}/template=${template}`,
   DASHBAORD: '/dashboard',
+  SETTINGS: '/settings',
   CHOOSE_ACCOUNT: '/choose-account',
   CHOOSE_TEMPLATE: '/choose-template',
   PERSONAL_STEP_1: dynamicRoute('personal', 'company'),

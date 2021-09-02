@@ -217,6 +217,37 @@ router.post('/getById/:id', auth, async (req, res) => {
   }
 })
 
+router.post('/deleteAccount', auth, async (req, res) => {
+  const token = req.user
+
+  const usersCollection = res.locals.usersCollection
+
+  try {
+    const user = await usersCollection.findOne({ _id: ObjectId(token.id) })
+
+    if (user) {
+      try {
+        await usersCollection.deleteOne({ _id: user._id })
+
+        return res
+          .status(202)
+          .json(responseMsg('success', 'Account deleted successfully', {}))
+      } catch (error) {
+        return res.status(403).json(responseMsg('error', error.message))
+      }
+    } else {
+      return res
+        .status(403)
+        .json(
+          responseMsg('error', 'Cannot find user. Please check credentials')
+        )
+    }
+  } catch (error) {
+    console.error(error.message)
+    return res.status(403)
+  }
+})
+
 // user/update
 router.post('/update', auth, async (req, res) => {
   const token = req.user

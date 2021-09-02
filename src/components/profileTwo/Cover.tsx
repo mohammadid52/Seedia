@@ -187,20 +187,20 @@ const Cover = ({ userData }: { userData?: IParent }) => {
                     {isBusiness ? (
                       <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                          Relationship to business
+                        </dt>
+                        <div className="mt-1 text-sm text-gray-900 dark:text-white">
+                          {userData?.business?.relationshipToBusiness}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Company address
                         </dt>
                         <dd className="mt-1 text-sm text-gray-900 dark:text-white">
                           {userData?.location?.address ||
                             userData?.location?.livesIn}
-                        </dd>
-                      </div>
-                    ) : (
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          Relationship to business
-                        </dt>
-                        <dd className="mt-1 text-sm text-gray-900 dark:text-white">
-                          {userData?.business?.relationshipToBusiness}
                         </dd>
                       </div>
                     )}

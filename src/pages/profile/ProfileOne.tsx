@@ -12,6 +12,7 @@ import { getAccessToken, network } from 'helpers'
 import { useEffect } from 'react'
 import { useUserContext } from 'context/UserContext'
 import ProfileStrength from 'components/ProfileStrength'
+import Sidebar from 'components/Sidebar'
 
 const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
@@ -49,6 +50,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800">
+      <Sidebar />
       <div className="flex">
         <div className="mx-auto min-h-screen pt-8 max-w-440">
           <Cover {...commonProps} />
