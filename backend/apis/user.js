@@ -21,7 +21,7 @@ router.post('/', auth, async (req, res) => {
       .status(202)
       .json(responseMsg('success', 'Authentication successfully', user))
   } else {
-    return res.status(403).json(responseMsg('error', 'Invalid user access'))
+    return res.status(203).json(responseMsg('error', 'Invalid user access'))
   }
 })
 
@@ -41,7 +41,7 @@ router.post('/getUsers', auth, async (req, res) => {
         .status(202)
         .json(responseMsg('success', 'Fetch successfully', user))
     } else {
-      return res.status(403).json(responseMsg('error', "Can't find user"))
+      return res.status(203).json(responseMsg('error', "Can't find user"))
     }
   } catch (error) {
     console.error(error)
@@ -73,7 +73,7 @@ router.post('/giveRecommendation/:id', auth, async (req, res) => {
         { new: true }
       )
     } else {
-      return res.status(403).json(responseMsg('error', "Can't find user"))
+      return res.status(203).json(responseMsg('error', "Can't find user"))
     }
 
     const me_o_r = me?.recommendation?.received || []
@@ -90,7 +90,7 @@ router.post('/giveRecommendation/:id', auth, async (req, res) => {
         .status(202)
         .json(responseMsg('success', 'Fetch successfully', user))
     } else {
-      return res.status(403).json(responseMsg('error', "Can't find me"))
+      return res.status(201).json(responseMsg('error', "Can't find me"))
     }
   } catch (error) {
     console.error(error)
@@ -114,7 +114,7 @@ router.post('/suggestedUser', auth, async (req, res) => {
         .status(202)
         .json(responseMsg('success', 'Fetch successfully', list))
     } else {
-      return res.status(403).json(responseMsg('error', "Can't find user"))
+      return res.status(202).json(responseMsg('error', "Can't find user"))
     }
   } catch (error) {
     console.error(error)
@@ -145,7 +145,7 @@ router.post('/getAll/:id', auth, async (req, res) => {
         .status(202)
         .json(responseMsg('success', 'Fetch successfully', list))
     } else {
-      return res.status(403).json(responseMsg('error', "Can't find user"))
+      return res.status(202).json(responseMsg('error', "Can't find user"))
     }
   } catch (error) {
     console.error(error)
@@ -210,10 +210,11 @@ router.post('/getById/:id', auth, async (req, res) => {
         .status(202)
         .json(responseMsg('success', 'Authentication successfully', user))
     } else {
-      return res.status(403).json(responseMsg('error', 'No user found'))
+      return res.status(202).json(responseMsg('error', 'No user found'))
     }
   } catch (error) {
     console.error(error.message)
+    return res.status(202).json(responseMsg('error', error.message))
   }
 })
 
@@ -233,18 +234,18 @@ router.delete('/', auth, async (req, res) => {
           .status(202)
           .json(responseMsg('success', 'Account deleted successfully', {}))
       } catch (error) {
-        return res.status(403).json(responseMsg('error', error.message))
+        return res.status(203).json(responseMsg('error', error.message))
       }
     } else {
       return res
-        .status(403)
+        .status(203)
         .json(
           responseMsg('error', 'Cannot find user. Please check credentials')
         )
     }
   } catch (error) {
     console.error(error.message)
-    return res.status(403)
+    return res.status(203).json(responseMsg('error', error.message))
   }
 })
 
@@ -278,18 +279,18 @@ router.post('/update', auth, async (req, res) => {
           })
         )
       } catch (error) {
-        return res.status(403).json(responseMsg('error', error.message))
+        return res.status(203).json(responseMsg('error', error.message))
       }
     } else {
       return res
-        .status(403)
+        .status(203)
         .json(
           responseMsg('error', 'Cannot find user. Please check credentials')
         )
     }
   } catch (error) {
     console.error(error.message)
-    return res.status(403)
+    return res.status(203).json(responseMsg('error', error.message))
   }
 })
 

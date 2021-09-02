@@ -13,8 +13,6 @@ import { useUserContext } from 'context/UserContext'
 import { getAccessToken, network } from 'helpers'
 
 const Signup = () => {
-  const [isLoaded] = useState(true)
-
   const validationSchema = Yup.object({
     firstName: Yup.string().required('Please enter your first name'),
     lastName: Yup.string().required('Please enter your last name'),
@@ -39,13 +37,12 @@ const Signup = () => {
   const onSubmit = async (_values) => {
     try {
       setSaving(true)
-      const data = {
+      const updatedData = {
         password: _values.password,
         firstName: _values.firstName,
         lastName: _values.lastName,
         email: _values.email,
         fullName: _values.firstName + ' ' + _values.lastName,
-
         other: {
           createdOn: new Date(),
           accountFilled: false,
@@ -54,33 +51,39 @@ const Signup = () => {
       }
       const token = getAccessToken()
 
-      const res = await network.post(
+      const { data } = await network.post(
         '/auth/register',
         {
-          ...data,
+          ...updatedData,
         },
         {
           headers: { Authorization: token },
         }
       )
 
-      localStorage.setItem('access_token', res.data.data.access_token)
+      if (data.status === 'error') {
+        if (!errors.includes(data.message)) {
+          setErrors([...errors, data.message])
+        }
+      } else {
+        setErrors([])
+        localStorage.setItem('access_token', data.data.access_token)
 
-      delete data.password
-      setValues({ ...res.data.data, ...data })
+        delete updatedData.password
+        setValues({ ...updatedData })
 
-      history.push(links.CHOOSE_ACCOUNT)
+        history.push(links.CHOOSE_ACCOUNT)
+      }
     } catch (error) {
-      setErrors([error.message])
+      setErrors([...errors, error.message])
+
       console.error(error)
     } finally {
       setSaving(false)
     }
   }
 
-  return !isLoaded ? (
-    <Loading />
-  ) : (
+  return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-800 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md flex items-center flex-col ">
         <img

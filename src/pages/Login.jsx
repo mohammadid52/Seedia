@@ -1,6 +1,4 @@
-import React, { useState } from 'react'
-
-import Loading from 'components/Loading'
+import { useState } from 'react'
 import Button from 'components/atoms/Button'
 import Layout from 'containers/Layout'
 import { Formik, Form } from 'formik'
@@ -11,9 +9,9 @@ import { links } from 'constants/Links'
 import { useHistory } from 'react-router-dom'
 import { getAccessToken, network } from 'helpers'
 import { useUserContext } from 'context/UserContext'
+import Error from 'components/alerts/Error'
 
 const Login = () => {
-  const [isLoaded, setIsLoaded] = useState(true)
   const history = useHistory()
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -26,45 +24,42 @@ const Login = () => {
   const token = getAccessToken()
 
   const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState([])
 
-  const apiCall = async (values) => {
-    const { data } = await network.post(
-      '/auth/login',
-      {
-        email: values.email,
-        password: values.password,
-      },
-      {
-        headers: { Authorization: token },
-      }
-    )
-
-    //@ts-ignore
-    delete data._id
-    setValues({ ...data.data, ...data })
-
-    // if (res.status === 409) {
-    //   setErrors([...errors, 'User already exists'])
-    // }
-
-    // set token in localStorage
-    history.push(links.DASHBAORD)
-    localStorage.setItem('access_token', data.data.access_token)
-  }
-
-  const onSubmit = async (_values) => {
+  const onSubmit = async (values) => {
     setLoading(true)
+    try {
+      const { data } = await network.post(
+        '/auth/login',
+        {
+          email: values.email,
+          password: values.password,
+        },
+        {
+          headers: { Authorization: token },
+        }
+      )
 
-    apiCall(_values)
+      if (data.status === 'error') {
+        if (!errors.includes(data.message)) {
+          setErrors([...errors, data.message])
+        }
+      } else {
+        setErrors([])
+
+        setValues({ ...data.data, ...data })
+
+        history.push(links.DASHBAORD)
+        localStorage.setItem('access_token', data.data.access_token)
+      }
+    } catch (error) {
+      setErrors([...errors, error.message])
+    } finally {
+      setLoading(false)
+    }
   }
 
-  setTimeout(() => {
-    setIsLoaded(true)
-  }, 1000)
-
-  return !isLoaded ? (
-    <Loading />
-  ) : (
+  return (
     <Layout
       title="Sign in to your account"
       subtitle={
@@ -100,6 +95,10 @@ const Login = () => {
                   loading={loading}
                   label="Login"
                 />
+              </div>
+
+              <div hidden={errors.length === 0}>
+                <Error errors={errors} />
               </div>
             </Form>
           </Formik>

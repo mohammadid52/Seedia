@@ -62,7 +62,7 @@ export interface IOther {
   accountFilled: boolean
   accountFinishedStep: string
   template: 1 | 2
-  createdOn: string
+  createdOn: string | Date
 }
 
 export interface IParent {

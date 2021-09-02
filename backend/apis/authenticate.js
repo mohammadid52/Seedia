@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body
     if (!(email && password)) {
-      res.status(400).json(responseMsg('error', 'All input is required'))
+      res.status(203).json(responseMsg('error', 'All input is required'))
     }
     const usersCollection = res.locals.usersCollection
     const user = await usersCollection.findOne({ email })
@@ -37,16 +37,17 @@ router.post('/login', async (req, res) => {
           .json(responseMsg('success', 'Logged In Successfully', user))
       } else {
         return res
-          .status(401)
+          .status(203)
           .json(responseMsg('error', 'Invalid password or email'))
       }
     } else {
       res
-        .status(401)
+        .status(203)
         .json(responseMsg('error', "User don't exist. Please register"))
     }
   } catch (error) {
     console.error(error)
+    res.status(203).json(responseMsg('error', error.message))
   }
 })
 router.post('/register', async (req, res) => {
@@ -54,14 +55,14 @@ router.post('/register', async (req, res) => {
     const { email, password, firstName, lastName, ...otherData } = req.body
 
     if (!(email && password && firstName && lastName)) {
-      res.status(400).json(responseMsg('error', 'Please add all fields'))
+      res.status(203).json(responseMsg('error', 'Please add all fields'))
     }
     const usersCollection = res.locals.usersCollection
 
     const alreadyExists = await usersCollection.findOne({ email })
 
     if (alreadyExists) {
-      return res.status(409).json(responseMsg('error', 'User Already Exists'))
+      return res.status(203).json(responseMsg('error', 'User Already Exists'))
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
