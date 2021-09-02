@@ -188,7 +188,7 @@ const Following = ({
                     {map(allUsers, (user: IParent) => {
                       const isBusiness = user.other?.accountType === 'business'
                       return (
-                        <div className="flex border border-gray-300 dark:border-gray-600 h-72 w-60 rounded-xl relative flex-col items-center ">
+                        <div className="relative flex border border-gray-300 dark:border-gray-600 h-72 w-60 rounded-xl relative flex-col items-center ">
                           <Badge
                             className="mt-1 mr-1 absolute top-0 right-0"
                             textSize="xs"
@@ -221,7 +221,7 @@ const Following = ({
                                   user?.other?.template || 1
                                 )
                               }
-                              className="dark:text-white hover:underline cursor-pointer text-gray-900 font-semibold tracking-wide text-lg"
+                              className="dark:text-white text-center hover:underline cursor-pointer text-gray-900 font-semibold tracking-wide text-lg"
                             >
                               {user.fullName}
                             </h4>
@@ -233,21 +233,21 @@ const Following = ({
                                   : user.company?.companyName}
                               </h3>
                             </div>
-                            <div className="items-center flex justify-center">
-                              <Button
-                                gradient
-                                gradientHover={false}
-                                className="mt-6"
-                                invert
-                                rounded="rounded-full"
-                                label={
-                                  // @ts-ignore
-                                  following.includes(user?._id)
-                                    ? 'Following'
-                                    : 'Follow'
-                                }
-                              />
-                            </div>
+                          </div>
+                          <div className="relative bottom-1 items-center flex justify-center">
+                            <Button
+                              gradient
+                              gradientHover={false}
+                              className="mt-6"
+                              invert
+                              rounded="rounded-full"
+                              label={
+                                // @ts-ignore
+                                following.includes(user?._id)
+                                  ? 'Following'
+                                  : 'Follow'
+                              }
+                            />
                           </div>
                         </div>
                       )
