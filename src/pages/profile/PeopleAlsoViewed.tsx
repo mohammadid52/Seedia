@@ -4,7 +4,6 @@ import { getAccessToken, network } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import getImageURL from 'utils/getImageURL'
 
 const PeopleAlsoViewed = ({
   secondary = false,
@@ -69,7 +68,7 @@ const PeopleAlsoViewed = ({
                     <img
                       src={
                         people.profilePicture
-                          ? getImageURL(people.profilePicture)
+                          ? people.profilePicture
                           : 'https://robohash.org/honey?set=set1'
                       }
                       alt="user_image"

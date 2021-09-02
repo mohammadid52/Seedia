@@ -8,7 +8,7 @@ import Section from 'components/atoms/Section'
 import { CgDetailsMore } from 'react-icons/cg'
 import { IParent } from 'interfaces/UniversalInterface'
 import Badge from 'components/atoms/Badge'
-import getImageURL from 'utils/getImageURL'
+
 import { links } from 'constants/Links'
 import { useRouter } from 'hooks/useRouter'
 
@@ -124,7 +124,7 @@ const Following = ({
                     <img
                       src={
                         user.profilePicture
-                          ? getImageURL(user.profilePicture)
+                          ? user.profilePicture
                           : 'https://robohash.org/honey?set=set1'
                       }
                       alt="user"
@@ -206,7 +206,7 @@ const Following = ({
                             <img
                               src={
                                 user?.profilePicture
-                                  ? getImageURL(user?.profilePicture)
+                                  ? user?.profilePicture
                                   : 'https://robohash.org/honey?set=set1'
                               }
                               alt={user.fullName}

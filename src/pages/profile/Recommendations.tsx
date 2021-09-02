@@ -10,7 +10,6 @@ import { Form, Formik } from 'formik'
 import FormInput from 'components/atoms/FormInput'
 import * as Yup from 'yup'
 import { useRouter } from 'hooks/useRouter'
-import getImageURL from 'utils/getImageURL'
 import { useUserContext } from 'context/UserContext'
 
 const Recommendations = ({
@@ -210,7 +209,7 @@ const Recommendations = ({
                           <img
                             src={
                               recom?.user?.profilePicture
-                                ? getImageURL(recom?.user?.profilePicture)
+                                ? recom?.user?.profilePicture
                                 : 'https://robohash.org/honey?set=set1'
                             }
                             alt="by-name"
@@ -255,7 +254,7 @@ const Recommendations = ({
                           <img
                             src={
                               recom?.user?.profilePicture
-                                ? getImageURL(recom?.user?.profilePicture)
+                                ? recom?.user?.profilePicture
                                 : 'https://robohash.org/honey?set=set1'
                             }
                             alt="by-name"

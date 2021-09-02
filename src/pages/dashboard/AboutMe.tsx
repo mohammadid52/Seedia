@@ -7,7 +7,6 @@ import { getAccessToken, network } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import getImageURL from 'utils/getImageURL'
 
 const PersonalCard = ({
   className,
@@ -134,7 +133,7 @@ const PersonalCard = ({
                       } h-16 w-16 border-gradient border-2 border-transparent rounded-full z-20`}
                       src={
                         userData?.profilePicture
-                          ? getImageURL(userData?.profilePicture)
+                          ? userData?.profilePicture
                           : 'https://robohash.org/honey?set=set1'
                       }
                       alt={userData?.fullName}

@@ -20,7 +20,7 @@ import { classNames } from 'utils/classNames'
 import { NavLink, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logOut } from 'state/Redux/Actions/authActions'
-import { MenuAlt2Icon } from '@heroicons/react/outline'
+
 import {
   adjustColors,
   businessApps,
@@ -34,7 +34,6 @@ import Selector from 'components/atoms/Selector'
 import { find, map } from 'lodash'
 import CountryListDropdown from 'components/CountryListDropdown'
 import { links as _links } from 'constants/Links'
-import getImageURL from 'utils/getImageURL'
 
 const DashboardHeader = ({ userData }: { userData: IParent }) => {
   const { setDarkMode, darkMode } = useUserContext()
@@ -63,8 +62,6 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
 
   const navClass =
     'flex flex-col items-center font-medium text-base dark:text-gray-400 text-gray-500 link-hover'
-
-  const { showSidebar, setShowSidebar } = useUserContext()
 
   const isBusiness = userData?.other?.accountType === 'business'
 
@@ -430,7 +427,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                                 className="h-14 mr-6 rounded-full w-14 drop-shadow-lg"
                                 src={
                                   userData?.profilePicture
-                                    ? getImageURL(userData?.profilePicture)
+                                    ? userData?.profilePicture
                                     : 'https://robohash.org/honey?set=set1'
                                 }
                                 alt="user"

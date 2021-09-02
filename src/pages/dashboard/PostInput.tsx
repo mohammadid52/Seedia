@@ -6,7 +6,6 @@ import { BiCalendarEvent } from 'react-icons/bi'
 import { BsCameraVideo } from 'react-icons/bs'
 import { HiOutlinePhotograph } from 'react-icons/hi'
 import { RiArticleLine } from 'react-icons/ri'
-import getImageURL from 'utils/getImageURL'
 
 const PostInput = ({
   setPosts,
@@ -50,7 +49,7 @@ const PostInput = ({
                 <img
                   src={
                     profilePicture
-                      ? getImageURL(profilePicture)
+                      ? profilePicture
                       : 'https://robohash.org/honey?set=set1'
                   }
                   alt="13RMS"
