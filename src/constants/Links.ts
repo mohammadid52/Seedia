@@ -1,7 +1,7 @@
 const dynamicRoute = (accountType: string = 'personal', step: string = '') =>
   `/account/${accountType}/edit-profile/${step}`
 
-console.log('NODE ENV', process.env.NODE_ENV)
+console.log('REACT_APP_BASE_URL', process.env.REACT_APP_BASE_URL)
 
 export const links = {
   LOGIN: '/login',
@@ -18,5 +18,5 @@ export const links = {
   STUDENT_STEP_2: dynamicRoute('student', 'location'),
   BUSINESS_STEP_1: dynamicRoute('business', 'stepOne'),
   BUSINESS_STEP_2: dynamicRoute('business', 'stepTwo'),
-  BASE_API_URL: process.env.REACT_BASE_API_URL,
+  BASE_API_URL: process.env.REACT_APP_BASE_URL,
 }

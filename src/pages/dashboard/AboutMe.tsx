@@ -49,10 +49,10 @@ const PersonalCard = ({
     try {
       const { data } = await network.post('/uploadImage', fd, config)
 
-      if (data && data.data && data.data.filename) {
+      if (data && data.data && data.data.location) {
         const updatedData = {
           ...userData,
-          profilePicture: data.data.filename,
+          profilePicture: data.data.location,
         }
         //@ts-ignore
         delete updatedData.password

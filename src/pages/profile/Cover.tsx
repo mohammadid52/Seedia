@@ -6,7 +6,6 @@ import { AiOutlineEdit } from 'react-icons/ai'
 import React from 'react'
 import { getAccessToken, network } from 'helpers'
 import { useUserContext } from 'context/UserContext'
-import getImageURL from 'utils/getImageURL'
 import Badge from 'components/atoms/Badge'
 
 const Cover = ({
@@ -55,10 +54,10 @@ const Cover = ({
     try {
       const { data } = await network.post('/uploadImage', fd, config)
 
-      if (data && data.data && data.data.filename) {
+      if (data && data.data && data.data.location) {
         const updatedData = {
           ...userData,
-          [isCover ? 'coverPicture' : 'profilePicture']: data.data.filename,
+          [isCover ? 'coverPicture' : 'profilePicture']: data.data.location,
         }
         //@ts-ignore
         delete updatedData.password
@@ -170,7 +169,7 @@ const Cover = ({
                   className="h-full w-full object-cover"
                   src={
                     userData?.coverPicture
-                      ? getImageURL(userData?.coverPicture)
+                      ? userData?.coverPicture
                       : 'https://source.unsplash.com/1600x900/?nature,water'
                   }
                   alt="People working on laptops"
@@ -182,7 +181,7 @@ const Cover = ({
                   <img
                     src={
                       userData?.profilePicture
-                        ? getImageURL(userData?.profilePicture)
+                        ? userData?.profilePicture
                         : 'https://robohash.org/honey?set=set1'
                     }
                     className="md:h-32 md:w-32 sm:h-12 shadow-xl sm:w-12 rounded-full"
