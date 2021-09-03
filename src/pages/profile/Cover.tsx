@@ -184,7 +184,7 @@ const Cover = ({
                         ? userData?.profilePicture
                         : 'https://robohash.org/honey?set=set1'
                     }
-                    className="md:h-32 md:w-32 sm:h-12 shadow-xl sm:w-12 rounded-full"
+                    className="md:h-32 md:w-32 sm:h-12 border-gradient border-transparent border-4 shadow-xl sm:w-12 rounded-full"
                     alt="user"
                   />
                 </div>
@@ -223,7 +223,7 @@ const Cover = ({
                   </div>
                   <div className="sm:border-r  border-r-none border-white px-8 py-4 sm:border-b-none border-b">
                     <div className="text-center text-white tracking-wide font-bold">
-                      {12}
+                      {userData.projects ? userData.projects.length : 0}
                     </div>
                     <div className="text-gray-300 font-medium uppercase text-base mt-1 tracking-tight ">
                       projects

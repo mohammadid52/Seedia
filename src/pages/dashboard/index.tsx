@@ -5,6 +5,7 @@ import DashboardLayout from 'pages/DashboardLayout'
 import PostInput from './PostInput'
 import PersonalCard from './AboutMe'
 import { IParent } from 'interfaces/UniversalInterface'
+import Sidebar from 'components/Sidebar'
 
 const Dashboard = ({ userData }: { userData: IParent }) => {
   const [posts, setPosts] = useState([])
@@ -14,6 +15,8 @@ const Dashboard = ({ userData }: { userData: IParent }) => {
 
   return (
     <div className="relative  dark:bg-gray-800 bg-gray-100 min-h-screen">
+      <Sidebar />
+
       <div
         className={`h-auto pt-4 flow-root  transition-all duration-500 sidebar-${
           collapsed ? 'collapsed' : 'toggled'

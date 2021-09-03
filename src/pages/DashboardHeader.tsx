@@ -49,7 +49,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
   )
 
   const links = [
-    { href: '/#', title: 'Home', Icon: AiOutlineHome },
+    { href: '/dashboard', title: 'Home', Icon: AiOutlineHome },
     { href: '/#', title: 'My Network', Icon: BsPeople },
     { href: '/#', title: 'Jobs', Icon: CgWorkAlt },
     { href: '/#', title: 'Messaging', Icon: BiMessageDetail },
@@ -74,6 +74,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                 <MenuAlt2Icon className="h-6 w-6 dark:text-white text-gray-900" />
               </div>
               <img
+                onClick={() => history.push('/')}
                 src={process.env.PUBLIC_URL + '/logo.png'}
                 className="h-12 w-12"
                 alt="13RMS"

@@ -82,6 +82,7 @@ export interface IParent {
   pwvp?: string[]
   following?: string[]
   followers?: string[]
+  projects: string[]
   pivCount?: number
   pwvpCount?: number
   profilePicture?: string
