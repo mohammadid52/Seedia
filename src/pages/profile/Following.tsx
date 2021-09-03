@@ -11,11 +11,14 @@ import Badge from 'components/atoms/Badge'
 
 import { links } from 'constants/Links'
 import { useRouter } from 'hooks/useRouter'
+import { useHistory } from 'react-router-dom'
 
 const Following = ({
   list,
   interests,
+  showSingleCard,
 }: {
+  showSingleCard?: boolean
   list?: string[]
   interests?: { name: string; id: string }[]
 }) => {
@@ -51,7 +54,7 @@ const Following = ({
 
   const fetchAllUsers = async () => {
     try {
-      const config = { limit: 6 }
+      const config = { limit: 4 }
       const { data } = await network.post(
         `/user/getAll/${userIdFromParam}`,
         config,
@@ -83,6 +86,8 @@ const Following = ({
     }
   }, [userIdFromParam])
 
+  const history = useHistory()
+
   return (
     <Card
       cardTitle="Following"
@@ -112,9 +117,16 @@ const Following = ({
       content={
         <div>
           {following.length > 0 ? (
-            <div className="grid mt-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+            <div
+              className={`${
+                showSingleCard
+                  ? 'grid-cols-1 gap-y-4'
+                  : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4'
+              } grid mt-6 `}
+            >
               {map(following, (user: IParent, idx) => {
                 const isBusiness = user.other?.accountType === 'business'
+                const isPersonal = user.other?.accountType === 'personal'
 
                 return (
                   <div
@@ -186,9 +198,16 @@ const Following = ({
             content={
               <div>
                 {allUsers.length > 0 ? (
-                  <div className="grid gap-6 grid-cols-1 sm:grid-cols-4 ">
+                  <div
+                    className={`${
+                      showSingleCard
+                        ? 'grid-cols-1 gap-y-6'
+                        : 'gap-6 grid-cols-1 sm:grid-cols-4'
+                    } grid  `}
+                  >
                     {map(allUsers, (user: IParent) => {
                       const isBusiness = user.other?.accountType === 'business'
+                      const isPersonal = user.other?.accountType === 'personal'
                       return (
                         <div className="flex border border-gray-300 dark:border-gray-600 h-72 w-60 rounded-xl relative flex-col items-center ">
                           <Badge
@@ -218,9 +237,11 @@ const Following = ({
                           <div>
                             <h4
                               onClick={() =>
-                                links.getProfileById(
-                                  user._id,
-                                  user?.other?.template || 1
+                                history.push(
+                                  links.getProfileById(
+                                    user._id,
+                                    user?.other?.template || 1
+                                  )
                                 )
                               }
                               className="dark:text-white text-center hover:underline cursor-pointer text-gray-900 font-semibold tracking-wide text-lg"
@@ -232,11 +253,14 @@ const Following = ({
                               <h3 className=" text-gray-400 font-medium">
                                 {isBusiness
                                   ? user.business?.name
-                                  : user.company?.companyName}
+                                  : isPersonal
+                                  ? user.company?.companyName
+                                  : user.background?.education &&
+                                    user.background?.education[0].name}
                               </h3>
                             </div>
                           </div>
-                          <div className="absolute bottom-1 items-center flex justify-center">
+                          <div className="absolute bottom-3 items-center flex justify-center">
                             <Button
                               gradient
                               gradientHover={false}

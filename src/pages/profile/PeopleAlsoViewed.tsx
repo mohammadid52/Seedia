@@ -45,8 +45,9 @@ const PeopleAlsoViewed = ({
       content={
         <div className="space-y-4">
           {list && list.length > 0 ? (
-            list.map((people: any, idx: number) => {
-              const accountType = people.other.accountType
+            list.map((people: IParent, idx: number) => {
+              const isBusiness = people?.other?.accountType === 'business'
+              const isPersonal = people?.other?.accountType === 'personal'
               return (
                 <div
                   key={idx}
@@ -80,9 +81,12 @@ const PeopleAlsoViewed = ({
                       {people.fullName}
                     </h4>
                     <p className="mt-1 text-gray-400 font-medium">
-                      {accountType === 'business'
-                        ? people.business.name
-                        : people.company.companyName}
+                      {isBusiness
+                        ? people?.business?.name
+                        : isPersonal
+                        ? people?.company?.companyName
+                        : people.background?.education &&
+                          people.background?.education[0].name}
                     </p>
                   </div>
                   <hr />

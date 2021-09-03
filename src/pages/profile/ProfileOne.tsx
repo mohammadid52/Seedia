@@ -13,6 +13,9 @@ import { useEffect } from 'react'
 import { useUserContext } from 'context/UserContext'
 import ProfileStrength from 'components/ProfileStrength'
 import Sidebar from 'components/Sidebar'
+import jwt_decode from 'jwt-decode'
+import { useDispatch } from 'react-redux'
+import { loadUser } from 'state/Redux/Actions/authActions'
 
 const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
@@ -36,14 +39,23 @@ const Profile = ({ userData }: { userData: IParent }) => {
           headers: { Authorization: token },
         }
       )
-      setValues({ ...data.data, _id: myId })
+
+      // @ts-ignore
+      var decoded = jwt_decode(token)
+      // @ts-ignore
+      setValues({ ...data.data, myId: decoded.id })
     } else {
-      setValues({ ...userData })
+      setValues({ ...userData, myId: myId })
     }
   }
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
     getProfileById()
+    return () => {
+      dispatch(loadUser())
+    }
   }, [userIdFromParam])
 
   const commonProps = { authUser, userData }

@@ -4,9 +4,16 @@ import Modal from 'components/atoms/Modal'
 import { useUserContext } from 'context/UserContext'
 import { getAccessToken, network } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
+import { noop } from 'lodash'
 import React, { useState } from 'react'
 
-const Cover = ({ userData }: { userData?: IParent }) => {
+const Cover = ({
+  userData,
+  authUser,
+}: {
+  authUser: boolean
+  userData?: IParent
+}) => {
   const [saving, setSaving] = useState(false)
   const [showModal, setShowModal] = useState(false)
 
@@ -73,41 +80,45 @@ const Cover = ({ userData }: { userData?: IParent }) => {
 
   return (
     <div className="">
-      <Modal
-        header={`Profile Photo`}
-        disableBackdropClose
-        open={showModal}
-        setOpen={setShowModal}
-      >
-        <div className={`sm:min-w-64 sm:min-h-64`}>
-          <div className={`relative min-h-48 flex items-center justify-center`}>
-            {_image && (
-              <img
-                className={`shadow-xl md:h-32 md:w-32 sm:h-12 sm:w-12 rounded-full`}
-                src={URL.createObjectURL(_image)}
-                alt="People working on laptops"
+      {authUser && (
+        <Modal
+          header={`Profile Photo`}
+          disableBackdropClose
+          open={showModal}
+          setOpen={setShowModal}
+        >
+          <div className={`sm:min-w-64 sm:min-h-64`}>
+            <div
+              className={`relative min-h-48 flex items-center justify-center`}
+            >
+              {_image && (
+                <img
+                  className={`shadow-xl md:h-32 md:w-32 sm:h-12 sm:w-12 rounded-full`}
+                  src={URL.createObjectURL(_image)}
+                  alt="People working on laptops"
+                />
+              )}
+            </div>
+            <div className="mt-5 sm:mt-4 flex justify-end  items-center">
+              <Button
+                gradient
+                loading={saving}
+                disabled={saving}
+                onClick={onSave}
+                label="Save"
               />
-            )}
+            </div>
           </div>
-          <div className="mt-5 sm:mt-4 flex justify-end  items-center">
-            <Button
-              gradient
-              loading={saving}
-              disabled={saving}
-              onClick={onSave}
-              label="Save"
-            />
-          </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
       <Card
         content={
           <div className="flex items-center justify-start">
             <div className="">
               <span className="sr-only">13RMS</span>
               <img
-                onClick={showFileExplorerForProfile}
-                className="border-gradient border-transparent border-4 h-36 w-36 xs:h-56 xs:w-56 sm:w-48 cursor-pointer sm:h-full sm:w-42 rounded-full shadow-xl"
+                onClick={() => (authUser ? showFileExplorerForProfile() : noop)}
+                className="border-gradient border-transparent border-4 h-36 w-36 xs:h-56 xs:w-56 cursor-pointer sm:h-44 sm:w-44 rounded-full shadow-xl"
                 src={
                   userData?.profilePicture
                     ? userData?.profilePicture
@@ -122,7 +133,7 @@ const Cover = ({ userData }: { userData?: IParent }) => {
               ref={profileImageSelectorRef}
               className="hidden"
               type="file"
-              onChange={onImageSelect}
+              onChange={(e) => (authUser ? onImageSelect(e) : noop)}
               accept="image/x-png,image/jpeg"
             />
             <div className="ml-4 max-w-256">

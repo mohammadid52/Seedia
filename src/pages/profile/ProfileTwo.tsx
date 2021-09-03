@@ -26,6 +26,10 @@ import { getAccessToken, network } from 'helpers'
 import ProfileStrength from 'components/ProfileStrength'
 import ProductsDetails from 'components/profileTwo/ProductsDetails'
 import Sidebar from 'components/Sidebar'
+import Following from './Following'
+import jwt_decode from 'jwt-decode'
+import { useDispatch } from 'react-redux'
+import { loadUser } from 'state/Redux/Actions/authActions'
 
 const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
@@ -49,14 +53,23 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
           headers: { Authorization: token },
         }
       )
-      setValues({ ...data.data, _id: myId })
+
+      // @ts-ignore
+      var decoded = jwt_decode(token)
+      // @ts-ignore
+      setValues({ ...data.data, myId: decoded.id })
     } else {
       setValues({ ...userData })
     }
   }
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
     getProfileById()
+    return () => {
+      dispatch(loadUser())
+    }
   }, [userIdFromParam])
 
   const [unsavedChanges, setUnsavedChanges] = useState(false)
@@ -122,6 +135,8 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
 
   const isBusiness = userData?.other?.accountType === 'business'
 
+  const commonBlockProps2 = { authUser, userData }
+
   return (
     <div className="bg-gray-100 dark:bg-gray-800 smooth-scroll">
       <Sidebar />
@@ -139,7 +154,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
           </div>
         </Modal>
       </div>
-      {/* <Header userData={userData} /> */}
+
       {/* stylelint-disabled  */}
       <div className="mx-auto min-h-screen pt-8 max-w-440">
         <Layout
@@ -160,7 +175,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
           }
           secondCol={
             <div className="space-y-12">
-              <Cover userData={userData} />
+              <Cover {...commonBlockProps2} />
 
               {!isBusiness && <Experiences {...commonBlockProps} />}
               {!isBusiness && (
@@ -175,18 +190,13 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                   <Languages {...commonBlockProps} />
                 </div>
               )}
+
               {isBusiness && <ProductsDetails />}
             </div>
           }
           thirdCol={
             <div className="space-y-12">
-              {authUser && (
-                <ProfileStrength
-                  secondary
-                  userData={userData}
-                  authUser={authUser}
-                />
-              )}
+              {authUser && <ProfileStrength secondary {...commonBlockProps2} />}
               <div className="xl:hidden block">
                 <Card
                   className={`transition-transform duration-200`}
@@ -199,11 +209,12 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                   }
                 />
               </div>
-              <PeopleAlsoViewed
-                userData={userData}
-                authUser={authUser}
-                secondary
+              <Following
+                showSingleCard
+                list={userData.following}
+                interests={userData?.background?.interests}
               />
+              <PeopleAlsoViewed {...commonBlockProps2} secondary />
             </div>
           }
         />

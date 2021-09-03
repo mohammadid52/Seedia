@@ -85,6 +85,7 @@ export interface IParent {
   pivCount?: number
   pwvpCount?: number
   profilePicture?: string
+  myId?: string
   recommendation?: {
     given: IRecommendation[]
     received: IRecommendation[]

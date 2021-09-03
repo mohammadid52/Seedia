@@ -16,8 +16,10 @@ const Recommendations = ({
   recommendation,
   authUser,
   userData,
+  secondary = false,
 }: {
   authUser: boolean
+  secondary?: boolean
   userData: IParent
   recommendation?: { received: IRecommendation[]; given: IRecommendation[] }
 }) => {
@@ -179,6 +181,7 @@ const Recommendations = ({
         </div>
       </Modal>
       <Card
+        secondary={secondary}
         cardTitle="Recommendations"
         withCardHeadings={
           <>
