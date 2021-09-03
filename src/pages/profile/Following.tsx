@@ -90,6 +90,7 @@ const Following = ({
 
   return (
     <Card
+      className="mb-12"
       cardTitle="Following"
       withCardHeadings={
         following.length > 6 && (
@@ -126,7 +127,6 @@ const Following = ({
             >
               {map(following, (user: IParent, idx) => {
                 const isBusiness = user.other?.accountType === 'business'
-                const isPersonal = user.other?.accountType === 'personal'
 
                 return (
                   <div
@@ -139,7 +139,7 @@ const Following = ({
                           ? user.profilePicture
                           : 'https://robohash.org/honey?set=set1'
                       }
-                      alt="user"
+                      alt=""
                       className="h-20 mb-2 rounded-full w-20 "
                     />
                     <div className="my-2 flex items-center justify-between flex-col">
@@ -209,7 +209,10 @@ const Following = ({
                       const isBusiness = user.other?.accountType === 'business'
                       const isPersonal = user.other?.accountType === 'personal'
                       return (
-                        <div className="flex border border-gray-300 dark:border-gray-600 h-72 w-60 rounded-xl relative flex-col items-center ">
+                        <div
+                          key={user._id}
+                          className="flex border border-gray-300 dark:border-gray-600 h-72 w-60 rounded-xl relative flex-col items-center "
+                        >
                           <Badge
                             className="mt-1 mr-1 absolute top-0 right-0"
                             textSize="xs"
@@ -230,7 +233,7 @@ const Following = ({
                                   ? user?.profilePicture
                                   : 'https://robohash.org/honey?set=set1'
                               }
-                              alt={user.fullName}
+                              alt=""
                               className="h-24 border-gradient border-4 border-transparent w-24 rounded-full shadow-xl"
                             />
                           </div>

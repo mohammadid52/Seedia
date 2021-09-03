@@ -55,7 +55,7 @@ const PeopleAlsoViewed = ({
                     return history.push(
                       links.getProfileById(
                         people._id,
-                        userData?.other?.template || 1
+                        people?.other?.template || 1
                       )
                     )
                   }}

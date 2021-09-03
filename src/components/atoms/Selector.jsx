@@ -71,6 +71,7 @@ const Selector = ({
               >
                 {list.map((item, idx) => (
                   <Listbox.Option
+                    style={{ zIndex: 9999 }}
                     disabled={item.hasOwnProperty('disabled')}
                     key={item.name + idx}
                     className={({ active }) =>
@@ -78,7 +79,7 @@ const Selector = ({
                         active
                           ? 'text-white bg-gradient-to-r from-pink-500 to-yellow-500'
                           : 'text-gray-900',
-                        'cursor-default select-none relative py-2 pl-3 pr-9'
+                        'cursor-default  select-none relative py-2 pl-3 pr-9'
                       )
                     }
                     value={item}

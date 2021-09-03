@@ -135,26 +135,17 @@ const App = () => {
             >
               <Dashboard userData={userData} />
             </PrivateRoute>
-            {template === 1 ? (
-              <PrivateRoute
-                isUser={isUser}
-                // @ts-ignore
-                exact
-                path="/profile/:userId/template=1"
-              >
+            <PrivateRoute
+              isUser={isUser}
+              // @ts-ignore
+              path="/profile/:userId/:template/:viewMode"
+            >
+              {template === 1 ? (
                 <Profile userData={userData} />
-              </PrivateRoute>
-            ) : (
-              <PrivateRoute
-                isUser={isUser}
-                // @ts-ignore
-                exact
-                path="/profile/:userId/template=2"
-              >
-                {/* @ts-ignore */}
+              ) : (
                 <ProfileTwo userData={userData} />
-              </PrivateRoute>
-            )}
+              )}
+            </PrivateRoute>
 
             <PrivateRoute
               // @ts-ignore

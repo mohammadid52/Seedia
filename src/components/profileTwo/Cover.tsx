@@ -118,7 +118,7 @@ const Cover = ({
               <span className="sr-only">13RMS</span>
               <img
                 onClick={() => (authUser ? showFileExplorerForProfile() : noop)}
-                className="border-gradient border-transparent border-4 h-36 w-36 xs:h-56 xs:w-56 cursor-pointer sm:h-44 sm:w-44 rounded-full shadow-xl"
+                className="border-gradient border-transparent border-4 h-36 w-36 sm:h-44 sm:w-44 cursor-pointer rounded-full shadow-xl"
                 src={
                   userData?.profilePicture
                     ? userData?.profilePicture

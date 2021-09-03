@@ -59,9 +59,7 @@ import { FaAdversal, FaMoneyBillAlt, FaConnectdevelop } from 'react-icons/fa'
 import { MdFindReplace, MdAttachMoney } from 'react-icons/md'
 import { SiGoogleanalytics } from 'react-icons/si'
 import { BsFilePost } from 'react-icons/bs'
-import { CgProfile } from 'react-icons/cg'
 import { FiSettings } from 'react-icons/fi'
-import { links } from 'constants/Links'
 
 export const adjustColors = [
   { name: 'Deuteranomaly', value: 1 },

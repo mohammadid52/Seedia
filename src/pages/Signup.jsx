@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Loading from 'components/Loading'
 import Copyright from 'components/Copyright'
 import Button from 'components/atoms/Button'
 import { useHistory } from 'react-router-dom'

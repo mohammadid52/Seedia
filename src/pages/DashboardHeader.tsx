@@ -66,19 +66,24 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
       {({ open }) => (
         <>
           <div className="flex justify-between items-center py-3 border-b-2 dark:border-gray-700 border-gray-100  sm:px-6 md:justify-start md:space-x-10">
-            <div className="flex justify-start lg:w-0 lg:flex-1">
+            <div className="flex justify-start items-center lg:w-0 lg:flex-1">
               <div
-                className="flex items-center cursor-pointer hover:bg-gray-600 rounded p-2 justify-center"
+                title="sidebar"
+                className="flex items-center h-9 w-9 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-2 justify-center"
+                tabIndex={0}
                 onClick={() => setShowSidebar(!showSidebar)}
               >
                 <MenuAlt2Icon className="h-6 w-6 dark:text-white text-gray-900" />
               </div>
-              <img
-                onClick={() => history.push('/')}
-                src={process.env.PUBLIC_URL + '/logo.png'}
-                className="h-12 w-12"
-                alt="13RMS"
-              />
+              <div className="ml-2">
+                <img
+                  title="13RMS"
+                  onClick={() => history.push('/')}
+                  src={process.env.PUBLIC_URL + '/logo.png'}
+                  className="h-14 w-14 "
+                  alt="13RMS"
+                />
+              </div>
               <div className="hidden rounded-xl h-12 ml-8 lg:flex dark:border-gray-700 border">
                 <div className="ml-2">
                   <Selector
@@ -99,7 +104,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                   />
                 </div>
 
-                <div className="col-span-5">
+                <div className="w-40">
                   <input
                     id="home_search_panel"
                     name="search"
@@ -110,7 +115,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                     }
                   />
                 </div>
-                <div className="w-72">
+                <div className="w-56">
                   <Selector
                     selectedItem={selectedDepartment.label}
                     list={departmentsArray.map((department) => ({
@@ -142,9 +147,16 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
 
             <Popover.Group as="nav" className="hidden md:flex space-x-10">
               {map(links, (link, idx) => (
-                <NavLink key={idx} to={link.href} className={navClass}>
+                <NavLink
+                  key={idx}
+                  title={link.title}
+                  to={link.href}
+                  className={navClass}
+                >
                   <link.Icon />
-                  <span className="hidden ml-2 xl:block">{link.title}</span>
+                  <span className="hidden text-sm ml-2 xl:block">
+                    {link.title}
+                  </span>
                 </NavLink>
               ))}
               <Popover className="relative">
@@ -158,7 +170,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                     >
                       <span className={`${navClass}`}>
                         <GiReceiveMoney className="" />
-                        <span className="hidden lg:flex items-center">
+                        <span className="hidden lg:flex text-sm items-center">
                           Sell{' '}
                           <ChevronDownIcon
                             className={classNames(
@@ -238,7 +250,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                     >
                       <span className={navClass}>
                         <BiUserCircle className="" />
-                        <span className="hidden lg:flex items-center">
+                        <span className="hidden lg:flex text-sm items-center">
                           My 13RMS{' '}
                           <ChevronDownIcon
                             className={classNames(
@@ -272,7 +284,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                                 onClick={() =>
                                   history.push(
                                     _links.getProfileById(
-                                      userData._id,
+                                      userData.myId,
                                       userData.other?.template || 1
                                     )
                                   )
@@ -339,7 +351,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                                 onClick={() =>
                                   history.push(
                                     _links.getProfileById(
-                                      userData?._id,
+                                      userData?.myId,
                                       userData?.other?.template || 1
                                     )
                                   )
@@ -374,7 +386,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                     >
                       <span className={navClass}>
                         <BiUserCircle className="" />
-                        <span className="hidden lg:flex items-center">
+                        <span className="hidden lg:flex text-sm items-center">
                           Business Apps{' '}
                           <ChevronDownIcon
                             className={classNames(

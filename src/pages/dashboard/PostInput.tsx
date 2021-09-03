@@ -53,7 +53,7 @@ const PostInput = ({
                       : 'https://robohash.org/honey?set=set1'
                   }
                   alt="13RMS"
-                  className="h-14 w-auto rounded-full"
+                  className="h-14 w-14 border-gradient border-transparent border-2 rounded-full"
                 />
                 <NormalFormInput
                   value=""
@@ -74,35 +74,34 @@ const PostInput = ({
           </div>
           <div className="flex items-center justify-between">
             <Button
-              bgColor="blue"
-              primary
+              gradient
               invert
-              className="dark:border-gray-600"
+              // className="dark:border-gray-600"
               Icon={HiOutlinePhotograph}
               label="Photo"
             />
             <Button
-              primary
+              gradient
               Icon={BsCameraVideo}
-              className="dark:border-gray-600"
-              bgColor="green"
+              // className="dark:border-gray-600"
+              bgColor="blue"
               invert
               label="Video"
             />
             <Button
-              primary
+              gradient
               Icon={BiCalendarEvent}
-              className="dark:border-gray-600"
+              // className="dark:border-gray-600"
               invert
-              bgColor="yellow"
+              bgColor="blue"
               label="Event"
             />
             <Button
-              primary
+              gradient
               Icon={RiArticleLine}
               invert
-              className="dark:border-gray-600"
-              bgColor="pink"
+              // className="dark:border-gray-600"
+              bgColor="blue"
               label="Write articles"
             />
           </div>

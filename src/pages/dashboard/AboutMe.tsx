@@ -131,7 +131,7 @@ const PersonalCard = ({
                     <img
                       className={`${
                         !userData?.profilePicture ? '' : ''
-                      } h-16 w-16 border-gradient border-2 border-transparent rounded-full z-20`}
+                      } h-16 w-16 border-gradient border-2 border-transparent rounded-full`}
                       src={
                         userData?.profilePicture
                           ? userData?.profilePicture
@@ -147,7 +147,7 @@ const PersonalCard = ({
                         onClick={() =>
                           history.push(
                             links.getProfileById(
-                              userData?._id,
+                              userData?.myId,
                               userData?.other?.template || 1
                             )
                           )

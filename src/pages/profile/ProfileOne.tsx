@@ -16,19 +16,21 @@ import Sidebar from 'components/Sidebar'
 import jwt_decode from 'jwt-decode'
 import { useDispatch } from 'react-redux'
 import { loadUser } from 'state/Redux/Actions/authActions'
+import PublicProfileCard from 'components/PublicProfileCard'
 
 const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
-  const userIdFromParam = route?.match?.params?.userId
+  const { viewMode, userId: userIdFromParam } = route?.match?.params
 
   const { setValues } = useUserContext()
-  const myId = userData._id
 
   // #1 first get userId from params
   // #2 check user id from token decoded object
   // #3 if it matches then current user is authUser (owner of profile)
-  const authUser = userIdFromParam === userData._id
+  const authUser = userIdFromParam === userData.myId && viewMode === 'private'
   const token = getAccessToken()
+  // @ts-ignore
+  var decoded = jwt_decode(token)
 
   const getProfileById = async () => {
     if (!authUser) {
@@ -41,11 +43,11 @@ const Profile = ({ userData }: { userData: IParent }) => {
       )
 
       // @ts-ignore
-      var decoded = jwt_decode(token)
       // @ts-ignore
       setValues({ ...data.data, myId: decoded.id })
     } else {
-      setValues({ ...userData, myId: myId })
+      // @ts-ignore
+      setValues({ ...userData, myId: decoded.id })
     }
   }
 
@@ -87,6 +89,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
               }
               thirdCol={
                 <div className="space-y-12">
+                  {userIdFromParam === userData.myId && <PublicProfileCard />}
                   {authUser && <ProfileStrength {...commonProps} />}
                   <PeopleAlsoViewed {...commonProps} />
                 </div>

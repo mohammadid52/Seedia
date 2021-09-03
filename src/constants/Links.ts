@@ -7,8 +7,11 @@ export const links = {
   LOGIN: '/login',
   SIGNUP: '/signup',
   PROFILE: '/profile',
-  getProfileById: (id?: string, template?: 1 | 2) =>
-    `/profile/${id}/template=${template}`,
+  getProfileById: (
+    id?: string,
+    template?: 1 | 2,
+    viewMode: string = 'private'
+  ) => `/profile/${id}/${template}/${viewMode}`,
   DASHBAORD: '/dashboard',
   SETTINGS: '/settings',
   CHOOSE_ACCOUNT: '/choose-account',

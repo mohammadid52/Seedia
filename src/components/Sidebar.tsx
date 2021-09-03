@@ -4,6 +4,7 @@ import { HomeIcon, ColorSwatchIcon } from '@heroicons/react/outline'
 import { useUserContext } from 'context/UserContext'
 import { classNames } from 'utils/classNames'
 import { adjustColors } from 'values/values'
+import Toggle from './ThemeToggle'
 
 export default function Sidebar() {
   const navigation = [
@@ -16,17 +17,17 @@ export default function Sidebar() {
       children: adjustColors,
     },
   ]
-  const { showSidebar } = useUserContext()
+  const { showSidebar, darkMode, setDarkMode } = useUserContext()
   return (
     <div
       style={{ zIndex: 99999 }}
-      className={`flex h-screen fixed  transition-all duration-200 ${
-        showSidebar ? 'max-w-56 w-full border-r' : 'max-w-0'
-      } flex-col flex-grow  dark:border-gray-600 border-gray-200 pt-5 pb-4 bg-white dark:bg-gray-700 overflow-y-auto`}
+      className={`flex h-screen  fixed transition-all  duration-200 ${
+        showSidebar ? 'max-w-64 w-full border-r' : 'max-w-0'
+      } flex-col flex-grow  dark:border-gray-600 border-gray-200 pt-5 pb-4 bg-whiet dark:bg-gray-700 overflow-y-auto`}
     >
-      <div className="mt-5 flex-grow flex flex-col">
+      <div className="mt-5 px-4 flex-grow flex flex-col">
         <nav
-          className="flex-1 px-2 space-y-4 bg-white dark:bg-gray-700"
+          className="flex-1 px-2 min-w-full whitespace-nowrap space-y-4 bg-white dark:bg-gray-700"
           aria-label="Sidebar"
         >
           {navigation.map((item) =>
@@ -98,6 +99,13 @@ export default function Sidebar() {
               </Disclosure>
             )
           )}
+          <div>
+            <Toggle
+              enabled={darkMode}
+              text="Select theme"
+              setEnabled={setDarkMode}
+            />
+          </div>
         </nav>
       </div>
     </div>

@@ -30,19 +30,22 @@ import Following from './Following'
 import jwt_decode from 'jwt-decode'
 import { useDispatch } from 'react-redux'
 import { loadUser } from 'state/Redux/Actions/authActions'
+import PublicProfileCard from 'components/PublicProfileCard'
 
 const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
   const route: any = useRouter()
-  const userIdFromParam = route?.match?.params?.userId
 
-  const myId = userData._id
+  const { viewMode, userId: userIdFromParam } = route?.match?.params
 
   // #1 first get userId from params
   // #2 check user id from token decoded object
   // #3 if it matches then current user is authUser (owner of profile)
-  const authUser = userIdFromParam === userData._id
+  const authUser = userIdFromParam === userData.myId && viewMode === 'private'
+
   const token = getAccessToken()
+  // @ts-ignore
+  var decoded = jwt_decode(token)
 
   const getProfileById = async () => {
     if (!authUser) {
@@ -55,11 +58,10 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
       )
 
       // @ts-ignore
-      var decoded = jwt_decode(token)
-      // @ts-ignore
       setValues({ ...data.data, myId: decoded.id })
     } else {
-      setValues({ ...userData })
+      // @ts-ignore
+      setValues({ ...userData, myId: decoded.id })
     }
   }
 
@@ -195,7 +197,10 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
             </div>
           }
           thirdCol={
-            <div className="space-y-12">
+            <div className="">
+              {userIdFromParam === userData.myId && (
+                <PublicProfileCard secondary />
+              )}
               {authUser && <ProfileStrength secondary {...commonBlockProps2} />}
               <div className="xl:hidden block">
                 <Card

@@ -2,6 +2,7 @@ import * as types from 'state/Redux/constants'
 
 import { getAccessToken, network } from 'helpers'
 import { isEmpty } from 'lodash'
+import jwt_decode from 'jwt-decode'
 
 export const logOut = (history) => async (dispatch) => {
   try {
@@ -54,8 +55,15 @@ export const loadUser = () => async (dispatch) => {
     const user = await getUser()
 
     if (!isEmpty(user.data)) {
-      dispatch({ type: types.SET_USER_DATA, data: user.data })
-      dispatch({ type: types.SET_VALUE, data: user.data })
+      var decoded = jwt_decode(token)
+      dispatch({
+        type: types.SET_USER_DATA,
+        data: { ...user.data, myId: decoded.id },
+      })
+      dispatch({
+        type: types.SET_VALUE,
+        data: { ...user.data, myId: decoded.id },
+      })
     } else {
       dispatch({ type: types.SET_USER_DATA, data: {} })
       dispatch({ type: types.SET_VALUE, data: {} })
@@ -68,7 +76,11 @@ export const loadUser = () => async (dispatch) => {
 export const setUser = (user) => async (dispatch) => {
   try {
     if (!isEmpty(user)) {
-      dispatch({ type: types.SET_USER_DATA, data: user })
+      var decoded = jwt_decode(token)
+      dispatch({
+        type: types.SET_USER_DATA,
+        data: { ...user, myId: decoded.id },
+      })
     }
   } catch (error) {
     console.error(error)
