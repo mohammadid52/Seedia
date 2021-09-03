@@ -9,7 +9,7 @@ const PublicProfileCard = ({ secondary }: { secondary?: boolean }) => {
       className="mb-12"
       secondary={secondary}
       content={
-        <div className="min-h-20 mb-6 flex items-center justify-center">
+        <div className="min-h-20 flex items-center justify-center">
           <a
             href={`${match.url.replace('/private', '/public')}`}
             className="dark:text-gray-400 hover:underline link-hover"

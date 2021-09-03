@@ -90,7 +90,9 @@ const Profile = ({ userData }: { userData: IParent }) => {
               thirdCol={
                 <div className="space-y-12">
                   {userIdFromParam === userData.myId && <PublicProfileCard />}
-                  {authUser && <ProfileStrength {...commonProps} />}
+                  {userIdFromParam === userData.myId && (
+                    <ProfileStrength {...commonProps} />
+                  )}
                   <PeopleAlsoViewed {...commonProps} />
                 </div>
               }
