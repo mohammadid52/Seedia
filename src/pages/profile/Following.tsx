@@ -166,31 +166,17 @@ const Following = ({
                 )
               })}
             </div>
-          ) : (
-            <div>
-              <p className="text-center text-gray-400">
-                You are not following anyone yet.
-              </p>
-            </div>
-          )}
+          ) : null}
 
-          <Section
-            sectionTitle="Suggested users"
-            Icon={CgDetailsMore}
-            content={
-              <div>
-                {suggestedUsers.length > 0 ? (
-                  <div></div>
-                ) : (
-                  <div>
-                    <p className="text-center text-gray-400">
-                      No suggested users found
-                    </p>
-                  </div>
-                )}
-              </div>
-            }
-          />
+          {suggestedUsers && suggestedUsers.length > 0 && (
+            <Section
+              sectionTitle="Suggested users"
+              Icon={CgDetailsMore}
+              content={
+                <div>{suggestedUsers.length > 0 ? <div></div> : null}</div>
+              }
+            />
+          )}
 
           <Section
             sectionTitle="Random users"
@@ -282,13 +268,7 @@ const Following = ({
                       )
                     })}
                   </div>
-                ) : (
-                  <div>
-                    <p className="text-center text-gray-400">
-                      No random users found
-                    </p>
-                  </div>
-                )}
+                ) : null}
               </div>
             }
           />

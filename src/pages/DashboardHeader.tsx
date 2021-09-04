@@ -80,7 +80,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                   title="13RMS"
                   onClick={() => history.push('/')}
                   src={process.env.PUBLIC_URL + '/logo.png'}
-                  className="h-14 w-14 "
+                  className="h-20 w-20 "
                   alt="13RMS"
                 />
               </div>
