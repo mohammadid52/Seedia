@@ -67,7 +67,7 @@ const ChooseAccount = ({ user }) => {
       const updatedData = {
         ...user,
         other: {
-          ...user.other,
+          ...user?.other,
           accountFinishedStep: 'chooseAccount',
           accountType: selected.name.toLocaleLowerCase(),
         },

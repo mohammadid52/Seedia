@@ -85,6 +85,7 @@ export interface IParent {
   projects: string[]
   pivCount?: number
   pwvpCount?: number
+  profileUrl?: string
   profilePicture?: string
   myId?: string
   recommendation?: {

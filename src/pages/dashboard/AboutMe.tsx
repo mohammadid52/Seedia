@@ -147,7 +147,7 @@ const PersonalCard = ({
                         onClick={() =>
                           history.push(
                             links.getProfileById(
-                              userData?.myId,
+                              userData?.profileUrl,
                               userData?.other?.template || 1
                             )
                           )

@@ -54,7 +54,7 @@ const PeopleAlsoViewed = ({
                   onClick={() => {
                     return history.push(
                       links.getProfileById(
-                        people._id,
+                        people.profileUrl,
                         people?.other?.template || 1
                       )
                     )

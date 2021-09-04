@@ -18,6 +18,13 @@ import { useDispatch } from 'react-redux'
 import { loadUser } from 'state/Redux/Actions/authActions'
 import PublicProfileCard from 'components/PublicProfileCard'
 
+const getUniqId = (str?: string) => {
+  if (str) {
+    const arr = str.split('_')
+    return arr[arr.length - 1]
+  }
+}
+
 const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
   const { viewMode, userId: userIdFromParam } = route?.match?.params
@@ -27,7 +34,8 @@ const Profile = ({ userData }: { userData: IParent }) => {
   // #1 first get userId from params
   // #2 check user id from token decoded object
   // #3 if it matches then current user is authUser (owner of profile)
-  const authUser = userIdFromParam === userData.myId && viewMode === 'private'
+  const authUser =
+    getUniqId(userIdFromParam) === userData.myId && viewMode === 'private'
   const token = getAccessToken()
   // @ts-ignore
   var decoded = jwt_decode(token)
@@ -89,7 +97,9 @@ const Profile = ({ userData }: { userData: IParent }) => {
               }
               thirdCol={
                 <div className="space-y-12">
-                  {userIdFromParam === userData.myId && <PublicProfileCard />}
+                  {userIdFromParam === userData.myId && (
+                    <PublicProfileCard userData={userData} />
+                  )}
                   {userIdFromParam === userData.myId && (
                     <ProfileStrength {...commonProps} />
                   )}

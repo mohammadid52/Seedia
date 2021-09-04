@@ -41,7 +41,16 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
   // #1 first get userId from params
   // #2 check user id from token decoded object
   // #3 if it matches then current user is authUser (owner of profile)
-  const authUser = userIdFromParam === userData.myId && viewMode === 'private'
+
+  const getUniqId = (str?: string) => {
+    if (str) {
+      const arr = str.split('_')
+      return arr[arr.length - 1]
+    }
+  }
+
+  const authUser =
+    getUniqId(userIdFromParam) === userData.myId && viewMode === 'private'
 
   const token = getAccessToken()
   // @ts-ignore
@@ -198,8 +207,8 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
           }
           thirdCol={
             <div className="">
-              {userIdFromParam === userData.myId && (
-                <PublicProfileCard secondary />
+              {userIdFromParam === userData.profileUrl && (
+                <PublicProfileCard secondary userData={userData} />
               )}
               {authUser && <ProfileStrength secondary {...commonBlockProps2} />}
               <div className="xl:hidden block">

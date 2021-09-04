@@ -284,7 +284,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                                 onClick={() =>
                                   history.push(
                                     _links.getProfileById(
-                                      userData.myId,
+                                      userData.profileUrl,
                                       userData.other?.template || 1
                                     )
                                   )
@@ -351,7 +351,7 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                                 onClick={() =>
                                   history.push(
                                     _links.getProfileById(
-                                      userData?.myId,
+                                      userData?.profileUrl,
                                       userData?.other?.template || 1
                                     )
                                   )

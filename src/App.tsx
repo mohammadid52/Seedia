@@ -79,7 +79,7 @@ const App = () => {
 
     return atHome ? (
       <Navigation
-        userId={userData?._id}
+        userId={userData?.profileUrl}
         isUser={isUser}
         template={template}
         accountFilled={accountFilled}
@@ -138,7 +138,7 @@ const App = () => {
             <PrivateRoute
               isUser={isUser}
               // @ts-ignore
-              path="/profile/:userId/:template/:viewMode"
+              path="/:userId/:template/:viewMode"
             >
               {template === 1 ? (
                 <Profile userData={userData} />

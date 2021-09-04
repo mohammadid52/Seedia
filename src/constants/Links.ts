@@ -11,7 +11,7 @@ export const links = {
     id?: string,
     template?: 1 | 2,
     viewMode: string = 'private'
-  ) => `/profile/${id}/${template}/${viewMode}`,
+  ) => `/${id}/${template}/${viewMode}`,
   DASHBAORD: '/dashboard',
   SETTINGS: '/settings',
   CHOOSE_ACCOUNT: '/choose-account',
@@ -23,4 +23,5 @@ export const links = {
   BUSINESS_STEP_1: dynamicRoute('business', 'stepOne'),
   BUSINESS_STEP_2: dynamicRoute('business', 'stepTwo'),
   BASE_API_URL: process.env.REACT_APP_BASE_URL,
+  // BASE_API_URL: 'http://localhost:3005',
 }

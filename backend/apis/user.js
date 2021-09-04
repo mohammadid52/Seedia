@@ -59,7 +59,7 @@ router.post('/giveRecommendation/:id', auth, async (req, res) => {
   const usersCollection = res.locals.usersCollection
 
   try {
-    const user = await usersCollection.findOne({ _id: ObjectId(userId) })
+    const user = await usersCollection.findOne({ profileUrl: userId })
     const me = await usersCollection.findOne({ _id: ObjectId(token.id) })
 
     const user_o_r = user?.recommendation?.received || []
@@ -134,7 +134,7 @@ router.post('/getAll/:id', auth, async (req, res) => {
       .find({
         $and: [
           { _id: { $not: { $eq: ObjectId(token.id) } } },
-          { _id: { $not: { $eq: ObjectId(id) } } },
+          { profileUrl: { $not: { $eq: id } } },
         ],
       })
       .limit(limit)
@@ -160,7 +160,7 @@ router.post('/getById/:id', auth, async (req, res) => {
   const usersCollection = res.locals.usersCollection
 
   try {
-    const user = await usersCollection.findOne({ _id: ObjectId(id) })
+    const user = await usersCollection.findOne({ profileUrl: id })
 
     // People who viewed profile
     const checkCurrentId = (pwvp = [], _id = '') => {
@@ -177,10 +177,10 @@ router.post('/getById/:id', auth, async (req, res) => {
       // People i viewed
       const piv =
         me.piv && me.piv.length > 0
-          ? checkCurrentId(me.piv, id)
+          ? checkCurrentId(me.piv, user._id)
             ? [...me.piv]
-            : [...me.piv, id]
-          : [id]
+            : [...me.piv, user._id]
+          : [user._id]
       const pivCount = piv.length
       delete user.password
 

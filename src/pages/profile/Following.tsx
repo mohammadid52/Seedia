@@ -31,11 +31,11 @@ const Following = ({
 
   const fetchFollowingUsers = async () => {
     try {
-      const config = { users: list }
-      const { data } = await network.post('/user/getUsers', config, {
-        headers: { Authorization: token },
-      })
-      setFollowing(data.data)
+      // const config = { users: list }
+      // const { data } = await network.post('/user/getUsers', config, {
+      //   headers: { Authorization: token },
+      // })
+      // setFollowing(data.data)
     } catch (error) {
       console.error(error)
     }
@@ -54,15 +54,15 @@ const Following = ({
 
   const fetchAllUsers = async () => {
     try {
-      const config = { limit: 4 }
-      const { data } = await network.post(
-        `/user/getAll/${userIdFromParam}`,
-        config,
-        {
-          headers: { Authorization: token },
-        }
-      )
-      setAllUsers(data.data)
+      // const config = { limit: 4 }
+      // const { data } = await network.post(
+      //   `/user/getAll/${userIdFromParam}`,
+      //   config,
+      //   {
+      //     headers: { Authorization: token },
+      //   }
+      // )
+      // setAllUsers(data.data)
     } catch (error) {
       console.error(error)
     }
@@ -228,7 +228,7 @@ const Following = ({
                               onClick={() =>
                                 history.push(
                                   links.getProfileById(
-                                    user._id,
+                                    user.profileUrl,
                                     user?.other?.template || 1
                                   )
                                 )

@@ -75,10 +75,13 @@ router.post('/register', async (req, res) => {
       ...otherData,
     }
     const _user = await usersCollection.insertOne(user)
+    const profileUrl =
+      `${firstName}_${lastName}_${_user.insertedId}`.toLowerCase()
 
     const token = generateToken({ ...user, id: _user.insertedId })
 
     user.access_token = token
+    user.profileUrl = profileUrl
 
     delete user.password
 

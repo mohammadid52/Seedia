@@ -58,6 +58,7 @@ const ProfileStrength = ({
 
   return (
     <Card
+      className="mb-12"
       secondary={secondary}
       content={
         <div className=" pb-2 flex flex-col items-center">
