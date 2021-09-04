@@ -97,9 +97,11 @@ const App = () => {
     if (values) {
       setUserData(values)
     }
-  }, [values])
+  }, [values, window.location.pathname])
 
-  const accountFilled: boolean | undefined = userData?.other?.accountFilled
+  const accountFilled: boolean | undefined =
+    userData?.other?.accountFilled || false
+
   const accountFinishedStep: string | undefined =
     userData?.other?.accountFinishedStep
   const isUser = !isEmpty(userData)
@@ -126,7 +128,7 @@ const App = () => {
 
             <PrivateRoute
               isPublic
-              isUser={accountFinishedStep === 'signup'}
+              isUser={accountFilled && accountFinishedStep === 'signup'}
               // @ts-ignore
               exact
               path="/signup"
@@ -161,7 +163,7 @@ const App = () => {
               // @ts-ignore
               exact
               isPublic
-              isUser={accountFinishedStep === 'chooseAccount'}
+              isUser={accountFilled && accountFinishedStep === 'chooseAccount'}
               path="/choose-account"
             >
               <ChooseAccount user={userData} />
@@ -174,7 +176,7 @@ const App = () => {
               exact
               isPublic
               path={links.PERSONAL_STEP_1}
-              isUser={accountFinishedStep === 'company'}
+              isUser={accountFilled && accountFinishedStep === 'company'}
             >
               <CompanyStep user={userData} />
             </PrivateRoute>
@@ -183,7 +185,7 @@ const App = () => {
               exact
               isPublic
               path={links.PERSONAL_STEP_2}
-              isUser={accountFinishedStep === 'location'}
+              isUser={accountFilled && accountFinishedStep === 'location'}
             >
               <LocationStep user={userData} accountType="personal" />
             </PrivateRoute>
@@ -194,7 +196,7 @@ const App = () => {
               exact
               isPublic
               path={links.STUDENT_STEP_1}
-              isUser={accountFinishedStep === 'education'}
+              isUser={accountFilled && accountFinishedStep === 'education'}
             >
               <EducationStep user={userData} />
             </PrivateRoute>
@@ -203,7 +205,7 @@ const App = () => {
               exact
               isPublic
               path={links.STUDENT_STEP_2}
-              isUser={accountFinishedStep === 'location'}
+              isUser={accountFilled && accountFinishedStep === 'location'}
             >
               <LocationStep user={userData} accountType="student" />
             </PrivateRoute>
@@ -214,7 +216,9 @@ const App = () => {
               exact
               isPublic
               path={links.BUSINESS_STEP_1}
-              isUser={accountFinishedStep === 'business-step-1'}
+              isUser={
+                accountFilled && accountFinishedStep === 'business-step-1'
+              }
             >
               {/* @ts-ignore */}
               <BusinessStepOne userData={userData} />
@@ -224,7 +228,9 @@ const App = () => {
               exact
               isPublic
               path={links.BUSINESS_STEP_2}
-              isUser={accountFinishedStep === 'business-step-2'}
+              isUser={
+                accountFilled && accountFinishedStep === 'business-step-2'
+              }
             >
               {/* @ts-ignore */}
               <BusinessStepTwo userData={userData} />
@@ -234,7 +240,7 @@ const App = () => {
               exact
               isPublic
               path={links.CHOOSE_TEMPLATE}
-              isUser={accountFinishedStep === 'chooseTemplate'}
+              isUser={false}
             >
               {/* @ts-ignore */}
               <ChooseTemplate user={userData} />

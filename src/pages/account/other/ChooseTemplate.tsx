@@ -1,5 +1,4 @@
 import Layout from 'containers/Layout'
-import { useEffect } from 'react'
 import { classNames } from 'utils/classNames'
 import { useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
@@ -11,6 +10,7 @@ import AnimatedDiv from 'components/animation/AnimatedDiv'
 import Error from 'components/alerts/Error'
 import { useUserContext } from 'context/UserContext'
 import { IParent } from 'interfaces/UniversalInterface'
+import Modal from 'components/atoms/Modal'
 
 const settings = [
   {
@@ -25,6 +25,7 @@ const settings = [
 
 const ChooseTemplate = ({ user }: { user: IParent }) => {
   const [selected, setSelected] = useState(settings[0])
+
   const history = useHistory()
 
   const [loading, setLoading] = useState(false)
@@ -71,8 +72,24 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
     }
   }
 
+  const [showModal, setShowModal] = useState({ show: false, idx: 1 })
+
   return (
     <div>
+      <Modal
+        open={showModal.show}
+        disableBackdropClose={false}
+        setOpen={() => setShowModal({ show: false, idx: 1 })}
+        header={'Preview'}
+      >
+        <div className="max-h-screen" style={{ maxWidth: '100vw' }}>
+          <img
+            alt=""
+            src={process.env.PUBLIC_URL + `/template${showModal.idx}.png`}
+            className="h-full rounded-xl w-full"
+          />
+        </div>
+      </Modal>
       <Layout title="Choose profile template" subtitle="">
         <AnimatedDiv className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white dark:border-gray-700 border border-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
@@ -111,7 +128,7 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
                           >
                             <span className="rounded-full bg-white w-1.5 h-1.5" />
                           </span>
-                          <div className="ml-3 flex flex-col items-start">
+                          <div className="ml-3 flex flex-col items-center justify-between">
                             <RadioGroup.Label
                               as="span"
                               className={classNames(
@@ -125,7 +142,23 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
                             </RadioGroup.Label>
                           </div>
                         </div>
-                        <div></div>
+                        <div
+                          onClick={(e: any) => {
+                            e.stopPropagation()
+                            setShowModal({ show: true, idx: settingIdx + 1 })
+                          }}
+                          className="p-1  h-12 w-12 flex items-center justify-center rounded-xl"
+                          title="see preview"
+                        >
+                          <img
+                            alt=""
+                            src={
+                              process.env.PUBLIC_URL +
+                              `/template${settingIdx + 1}.png`
+                            }
+                            className="h-8 w-8"
+                          />
+                        </div>
                       </>
                     )}
                   </RadioGroup.Option>

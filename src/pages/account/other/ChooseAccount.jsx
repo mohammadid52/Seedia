@@ -51,9 +51,9 @@ const ChooseAccount = ({ user }) => {
       setLoading(true)
 
       const token = getAccessToken()
-      console.log(user)
+
       const profileUrl =
-        `${user.firstName}_${user.lastName}_${user.myId}`.toLowerCase()
+        `${user?.firstName}_${user?.lastName}_${user?.myId}`.toLowerCase()
       const updatedData = {
         ...user,
         profileUrl,

@@ -74,13 +74,8 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     }
   }
 
-  const dispatch = useDispatch()
-
   useEffect(() => {
     getProfileById()
-    return () => {
-      dispatch(loadUser())
-    }
   }, [userIdFromParam])
 
   const [unsavedChanges, setUnsavedChanges] = useState(false)

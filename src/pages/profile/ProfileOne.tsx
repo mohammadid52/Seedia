@@ -40,6 +40,8 @@ const Profile = ({ userData }: { userData: IParent }) => {
   // @ts-ignore
   var decoded = jwt_decode(token)
 
+  const checkOnlyId = getUniqId(userIdFromParam) === userData.myId
+
   const getProfileById = async () => {
     if (!authUser) {
       const { data } = await network.post(
@@ -100,12 +102,8 @@ const Profile = ({ userData }: { userData: IParent }) => {
               }
               thirdCol={
                 <div className="space-y-12">
-                  {userIdFromParam === userData.myId && (
-                    <PublicProfileCard userData={userData} />
-                  )}
-                  {userIdFromParam === userData.myId && (
-                    <ProfileStrength {...commonProps} />
-                  )}
+                  {checkOnlyId && <PublicProfileCard userData={userData} />}
+                  {checkOnlyId && <ProfileStrength {...commonProps} />}
                   <PeopleAlsoViewed {...commonProps} />
                 </div>
               }
