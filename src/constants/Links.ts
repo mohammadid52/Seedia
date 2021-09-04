@@ -1,8 +1,6 @@
 const dynamicRoute = (accountType: string = 'personal', step: string = '') =>
   `/account/${accountType}/edit-profile/${step}`
 
-console.log('REACT_APP_BASE_URL', process.env.REACT_APP_BASE_URL)
-
 export const links = {
   LOGIN: '/login',
   SIGNUP: '/signup',

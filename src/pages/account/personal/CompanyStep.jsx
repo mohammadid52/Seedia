@@ -22,20 +22,7 @@ const CompanyStep = ({ user }) => {
 
   const [initialState, setInitialState] = useState(PersonalStepOne)
 
-  const company = user.company
-
-  /**
-   * Check if account is already selected
-   */
-  const checkAccount = () => {
-    if (user && user.hasOwnProperty('accountFilled') && user?.accountFilled) {
-      return history.push(links.DASHBAORD)
-    }
-  }
-
-  useEffect(() => {
-    checkAccount()
-  }, [])
+  const company = user?.company || ''
 
   useEffect(() => {
     if (!isEmpty(company) && company.jobTitle) {

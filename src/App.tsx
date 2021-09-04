@@ -1,4 +1,4 @@
-import { lazy, useEffect } from 'react'
+import { lazy, useEffect, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { IParent } from 'interfaces/UniversalInterface'
 import Dashboard from 'pages/dashboard'
@@ -89,14 +89,20 @@ const App = () => {
     )
   }
 
+  const [userData, setUserData] = useState<IParent>()
+
   const values = useSelector((state) => getUserValues(state))
 
-  const accountFilled: boolean | undefined = values?.other?.accountFilled
-  const accountFinishedStep: string | undefined =
-    values?.other?.accountFinishedStep
-  const isUser = !isEmpty(values)
+  useEffect(() => {
+    if (values) {
+      setUserData(values)
+    }
+  }, [values])
 
-  const userData: IParent = isUser ? values : undefined
+  const accountFilled: boolean | undefined = userData?.other?.accountFilled
+  const accountFinishedStep: string | undefined =
+    userData?.other?.accountFinishedStep
+  const isUser = !isEmpty(userData)
 
   const template = userData?.other?.template || 1
 
@@ -120,7 +126,7 @@ const App = () => {
 
             <PrivateRoute
               isPublic
-              isUser={isUser}
+              isUser={accountFinishedStep === 'signup'}
               // @ts-ignore
               exact
               path="/signup"
@@ -133,16 +139,20 @@ const App = () => {
               isUser={isUser}
               path="/dashboard"
             >
+              {/* @ts-ignore */}
               <Dashboard userData={userData} />
             </PrivateRoute>
             <PrivateRoute
               isUser={isUser}
               // @ts-ignore
+              exact
               path="/:userId/:template/:viewMode"
             >
               {template === 1 ? (
+                // @ts-ignore
                 <Profile userData={userData} />
               ) : (
+                // @ts-ignore
                 <ProfileTwo userData={userData} />
               )}
             </PrivateRoute>
@@ -150,7 +160,8 @@ const App = () => {
             <PrivateRoute
               // @ts-ignore
               exact
-              isUser={accountFinishedStep !== 'chooseAccount'}
+              isPublic
+              isUser={accountFinishedStep === 'chooseAccount'}
               path="/choose-account"
             >
               <ChooseAccount user={userData} />
@@ -160,15 +171,19 @@ const App = () => {
             {/* Personal Account routes */}
             <PrivateRoute
               // @ts-ignore
+              exact
+              isPublic
               path={links.PERSONAL_STEP_1}
-              isUser={isUser}
+              isUser={accountFinishedStep === 'company'}
             >
               <CompanyStep user={userData} />
             </PrivateRoute>
             <PrivateRoute
               // @ts-ignore
+              exact
+              isPublic
               path={links.PERSONAL_STEP_2}
-              isUser={isUser}
+              isUser={accountFinishedStep === 'location'}
             >
               <LocationStep user={userData} accountType="personal" />
             </PrivateRoute>
@@ -176,15 +191,19 @@ const App = () => {
             {/* Student Account routes */}
             <PrivateRoute
               // @ts-ignore
+              exact
+              isPublic
               path={links.STUDENT_STEP_1}
-              isUser={isUser}
+              isUser={accountFinishedStep === 'education'}
             >
               <EducationStep user={userData} />
             </PrivateRoute>
             <PrivateRoute
               // @ts-ignore
+              exact
+              isPublic
               path={links.STUDENT_STEP_2}
-              isUser={isUser}
+              isUser={accountFinishedStep === 'location'}
             >
               <LocationStep user={userData} accountType="student" />
             </PrivateRoute>
@@ -192,30 +211,41 @@ const App = () => {
             {/* Business Account routes */}
             <PrivateRoute
               // @ts-ignore
+              exact
+              isPublic
               path={links.BUSINESS_STEP_1}
-              isUser={isUser}
+              isUser={accountFinishedStep === 'business-step-1'}
             >
+              {/* @ts-ignore */}
               <BusinessStepOne userData={userData} />
             </PrivateRoute>
             <PrivateRoute
               // @ts-ignore
+              exact
+              isPublic
               path={links.BUSINESS_STEP_2}
-              isUser={isUser}
+              isUser={accountFinishedStep === 'business-step-2'}
             >
+              {/* @ts-ignore */}
               <BusinessStepTwo userData={userData} />
             </PrivateRoute>
             <PrivateRoute
               // @ts-ignore
+              exact
+              isPublic
               path={links.CHOOSE_TEMPLATE}
-              isUser={isUser}
+              isUser={accountFinishedStep === 'chooseTemplate'}
             >
+              {/* @ts-ignore */}
               <ChooseTemplate user={userData} />
             </PrivateRoute>
             <PrivateRoute
               // @ts-ignore
+              exact
               path={links.SETTINGS}
               isUser={isUser}
             >
+              {/* @ts-ignore */}
               <Settings userData={userData} />
             </PrivateRoute>
 

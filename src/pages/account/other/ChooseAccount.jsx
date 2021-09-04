@@ -33,20 +33,8 @@ const ChooseAccount = ({ user }) => {
 
   const [loading, setLoading] = useState(false)
 
-  /**
-   * Check if account is already selected
-   */
-
-  const checkAccount = () => {
-    if (user && user.hasOwnProperty('accountType')) {
-      return history.push(links.DASHBAORD)
-    }
-  }
   const [errors, setErrors] = useState([])
 
-  useEffect(() => {
-    checkAccount()
-  }, [])
   const { setValues } = useUserContext()
 
   const onNext = async () => {
@@ -63,9 +51,12 @@ const ChooseAccount = ({ user }) => {
       setLoading(true)
 
       const token = getAccessToken()
-
+      console.log(user)
+      const profileUrl =
+        `${user.firstName}_${user.lastName}_${user.myId}`.toLowerCase()
       const updatedData = {
         ...user,
+        profileUrl,
         other: {
           ...user?.other,
           accountFinishedStep: 'chooseAccount',

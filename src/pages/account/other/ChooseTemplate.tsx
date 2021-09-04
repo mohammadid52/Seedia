@@ -29,25 +29,8 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
 
   const [loading, setLoading] = useState(false)
 
-  /**
-   * Check if account is already selected
-   */
-
-  const checkAccount = () => {
-    if (
-      user &&
-      user.other &&
-      user?.other.hasOwnProperty('accountFilled') &&
-      user.other.accountFilled
-    ) {
-      return history.push(links.DASHBAORD)
-    }
-  }
   const [errors, setErrors] = useState<string[]>([])
 
-  useEffect(() => {
-    checkAccount()
-  }, [])
   const { setValues } = useUserContext()
 
   const onNext = async () => {
@@ -61,7 +44,7 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
         other: {
           ...user.other,
           accountFilled: true,
-          accountFinishedStep: 'ChooseTemplate',
+          accountFinishedStep: 'chooseTemplate',
           template: selected.name === 'Template One' ? 1 : 2,
         },
       }

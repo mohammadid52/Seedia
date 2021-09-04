@@ -31,7 +31,7 @@ import CountryListDropdown from 'components/CountryListDropdown'
 import { links as _links } from 'constants/Links'
 import { MenuAlt2Icon } from '@heroicons/react/solid'
 
-const DashboardHeader = ({ userData }: { userData: IParent }) => {
+const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   const { setDarkMode, showSidebar, setShowSidebar, darkMode } =
     useUserContext()
   const dispatch = useDispatch()
@@ -284,8 +284,8 @@ const DashboardHeader = ({ userData }: { userData: IParent }) => {
                                 onClick={() =>
                                   history.push(
                                     _links.getProfileById(
-                                      userData.profileUrl,
-                                      userData.other?.template || 1
+                                      userData?.profileUrl,
+                                      userData?.other?.template || 1
                                     )
                                   )
                                 }

@@ -74,7 +74,10 @@ const Profile = ({ userData }: { userData: IParent }) => {
     <div className="bg-gray-100 dark:bg-gray-800">
       <Sidebar />
       <div className="flex">
-        <div className="mx-auto min-h-screen pt-8 max-w-440">
+        <div
+          className="mx-auto min-h-screen pt-8 w-full"
+          style={{ maxWidth: '110rem' }}
+        >
           <Cover {...commonProps} />
 
           <div className="my-6">
