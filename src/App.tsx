@@ -240,7 +240,7 @@ const App = () => {
               exact
               isPublic
               path={links.CHOOSE_TEMPLATE}
-              isUser={false}
+              isUser={accountFilled && accountFinishedStep === 'chooseTemplate'}
             >
               {/* @ts-ignore */}
               <ChooseTemplate user={userData} />
