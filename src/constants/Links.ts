@@ -3,6 +3,7 @@ const dynamicRoute = (accountType: string = 'personal', step: string = '') =>
 
 export const links = {
   LOGIN: '/login',
+  FORGOT_PASSWORD: '/forgot-password',
   SIGNUP: '/signup',
   PROFILE: '/profile',
   getProfileById: (

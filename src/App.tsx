@@ -19,6 +19,7 @@ import { getUserValues } from 'helpers'
 import { useSelector } from 'react-redux'
 import { links } from 'constants/Links'
 import ChooseTemplate from 'pages/account/other/ChooseTemplate'
+import ForgotPassword from 'pages/ForgotPassword'
 
 const Welcome = lazy(() => import('pages/Welcome'))
 const Profile = lazy(() => import('pages/profile/ProfileOne'))
@@ -244,6 +245,14 @@ const App = () => {
             >
               {/* @ts-ignore */}
               <ChooseTemplate user={userData} />
+            </PrivateRoute>
+            <PrivateRoute
+              // @ts-ignore
+              exact
+              path={links.FORGOT_PASSWORD}
+            >
+              {/* @ts-ignore */}
+              <ForgotPassword />
             </PrivateRoute>
             <PrivateRoute
               // @ts-ignore

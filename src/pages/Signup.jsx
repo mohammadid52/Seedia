@@ -10,6 +10,7 @@ import Error from 'components/alerts/Error'
 import { SIGNUP } from 'initials'
 import { useUserContext } from 'context/UserContext'
 import { getAccessToken, network } from 'helpers'
+import Captcha from 'components/Captcha'
 
 const Signup = () => {
   const validationSchema = Yup.object({
@@ -34,53 +35,58 @@ const Signup = () => {
   const { setValues } = useUserContext()
 
   const onSubmit = async (_values) => {
-    try {
-      setSaving(true)
-      const updatedData = {
-        password: _values.password,
-        firstName: _values.firstName,
-        lastName: _values.lastName,
-        email: _values.email,
-        fullName: _values.firstName + ' ' + _values.lastName,
-        other: {
-          createdOn: new Date(),
-          accountFilled: false,
-          accountFinishedStep: 'signup',
-        },
-      }
-      const token = getAccessToken()
-
-      const { data } = await network.post(
-        '/auth/register',
-        {
-          ...updatedData,
-        },
-        {
-          headers: { Authorization: token },
+    if (isVerified) {
+      try {
+        setSaving(true)
+        const updatedData = {
+          password: _values.password,
+          firstName: _values.firstName,
+          lastName: _values.lastName,
+          email: _values.email,
+          fullName: _values.firstName + ' ' + _values.lastName,
+          other: {
+            createdOn: new Date(),
+            accountFilled: false,
+            accountFinishedStep: 'signup',
+          },
         }
-      )
+        const token = getAccessToken()
 
-      if (data.status === 'error') {
-        if (!errors.includes(data.message)) {
-          setErrors([...errors, data.message])
+        const { data } = await network.post(
+          '/auth/register',
+          {
+            ...updatedData,
+          },
+          {
+            headers: { Authorization: token },
+          }
+        )
+
+        if (data.status === 'error') {
+          if (!errors.includes(data.message)) {
+            setErrors([...errors, data.message])
+          }
+        } else {
+          setErrors([])
+          localStorage.setItem('access_token', data.data.access_token)
+
+          delete updatedData.password
+          setValues({ ...updatedData })
+
+          history.push(links.CHOOSE_ACCOUNT)
         }
-      } else {
-        setErrors([])
-        localStorage.setItem('access_token', data.data.access_token)
+      } catch (error) {
+        setErrors([...errors, error.message])
 
-        delete updatedData.password
-        setValues({ ...updatedData })
-
-        history.push(links.CHOOSE_ACCOUNT)
+        console.error(error)
+      } finally {
+        setSaving(false)
       }
-    } catch (error) {
-      setErrors([...errors, error.message])
-
-      console.error(error)
-    } finally {
-      setSaving(false)
+    } else {
+      setErrors([...errors, 'Please verify captcha'])
     }
   }
+  const [isVerified, setIsVerified] = useState(false)
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-800 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
@@ -148,6 +154,8 @@ const Signup = () => {
                 type="password"
                 required
               />
+
+              <Captcha setIsVerified={setIsVerified} />
 
               <p className="my-4 text-left text-xs dark:text-gray-400 text-gray-600">
                 By clicking Agree and Join, you agree to 13RMS{' '}

@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom'
 import { getAccessToken, network } from 'helpers'
 import { useUserContext } from 'context/UserContext'
 import Error from 'components/alerts/Error'
+import Captcha from 'components/Captcha'
 
 const Login = () => {
   const history = useHistory()
@@ -25,37 +26,42 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState([])
+  const [isVerified, setIsVerified] = useState(false)
 
   const onSubmit = async (values) => {
-    setLoading(true)
-    try {
-      const { data } = await network.post(
-        '/auth/login',
-        {
-          email: values.email,
-          password: values.password,
-        },
-        {
-          headers: { Authorization: token },
+    if (isVerified) {
+      setLoading(true)
+      try {
+        const { data } = await network.post(
+          '/auth/login',
+          {
+            email: values.email,
+            password: values.password,
+          },
+          {
+            headers: { Authorization: token },
+          }
+        )
+
+        if (data.status === 'error') {
+          if (!errors.includes(data.message)) {
+            setErrors([...errors, data.message])
+          }
+        } else {
+          setErrors([])
+
+          setValues({ ...data.data, ...data })
+
+          history.push(links.DASHBAORD)
+          localStorage.setItem('access_token', data.data.access_token)
         }
-      )
-
-      if (data.status === 'error') {
-        if (!errors.includes(data.message)) {
-          setErrors([...errors, data.message])
-        }
-      } else {
-        setErrors([])
-
-        setValues({ ...data.data, ...data })
-
-        history.push(links.DASHBAORD)
-        localStorage.setItem('access_token', data.data.access_token)
+      } catch (error) {
+        setErrors([...errors, error.message])
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      setErrors([...errors, error.message])
-    } finally {
-      setLoading(false)
+    } else {
+      setErrors([...errors, 'Please verify captcha'])
     }
   }
 
@@ -85,6 +91,14 @@ const Login = () => {
                 required
                 showPasswordButton
               />
+
+              <Captcha setIsVerified={setIsVerified} />
+              {/* <div
+                onClick={() => history.push(links.FORGOT_PASSWORD)}
+                className="dark:text-gray-400 py-2 text-gray-600 normal-hover cursor-pointer"
+              >
+                Forgot password?
+              </div> */}
 
               <div>
                 <Button
