@@ -19,6 +19,8 @@ app.use(cors())
 app.use(express.json())
 require('dotenv').config()
 
+console.log(process.env)
+
 client.connect(
   URI,
   { useNewUrlParser: true, useUnifiedTopology: true },
