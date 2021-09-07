@@ -1,4 +1,5 @@
 /* eslint-disable quotes */
+import AnimatedDiv from 'components/animation/AnimatedDiv'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
 import Selector from 'components/atoms/Selector'
@@ -6,16 +7,15 @@ import TextButton from 'components/atoms/TextButton'
 import Toggle from 'components/atoms/Toggle'
 import { links } from 'constants/Links'
 import Layout from 'containers/Layout'
+import { useUserContext } from 'context/UserContext'
+import { Form, Formik } from 'formik'
+import { getAccessToken, network } from 'helpers'
+import { StudentStepOne } from 'initials'
+import { nanoid } from 'nanoid'
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { nanoid } from 'nanoid'
 import { yearList, yearListWithFuture } from 'values/values'
-import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { StudentStepOne } from 'initials'
-import AnimatedDiv from 'components/animation/AnimatedDiv'
-import { getAccessToken, network } from 'helpers'
-import { useUserContext } from 'context/UserContext'
 
 const EducationStep = ({ user }) => {
   const history = useHistory()

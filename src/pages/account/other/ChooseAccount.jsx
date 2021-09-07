@@ -1,15 +1,14 @@
-import Layout from 'containers/Layout'
-import { useEffect } from 'react'
-import { classNames } from 'utils/classNames'
-import { useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
-import Button from 'components/atoms/Button'
-import { useHistory } from 'react-router-dom'
-import { links } from 'constants/Links'
-import { getAccessToken, network } from 'helpers'
-import AnimatedDiv from 'components/animation/AnimatedDiv'
 import Error from 'components/alerts/Error'
+import AnimatedDiv from 'components/animation/AnimatedDiv'
+import Button from 'components/atoms/Button'
+import { links } from 'constants/Links'
+import Layout from 'containers/Layout'
 import { useUserContext } from 'context/UserContext'
+import { getAccessToken, network } from 'helpers'
+import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { classNames } from 'utils/classNames'
 
 const settings = [
   {
