@@ -17,6 +17,7 @@ app.use(bodyParser.json())
 
 app.use(cors())
 app.use(express.json())
+require('dotenv').config()
 
 client.connect(
   URI,
