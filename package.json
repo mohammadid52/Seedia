@@ -63,7 +63,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "dev": "nodemon backend/app.js",
+    "dev": "REACT_APP_BASE_URL=http://localhost:3005 nodemon backend/app.js",
     "prod": "REACT_APP_BASE_URL=http://tradingpost13rms.com node backend/app.js",
     "deploy": "rm -rf backend/build/ && rm -rf build && npm run build && cp -r build ./backend/"
   },
