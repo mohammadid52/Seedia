@@ -6,7 +6,7 @@ const mongodb = require('mongodb')
 const authenticationRouter = require('./apis/authenticate')
 const mediaUploadRouter = require('./apis/mediaUpload')
 const userRouter = require('./apis/user')
-const mailRouter = require('./apis/mail')
+
 const app = express()
 const bodyParser = require('body-parser')
 
@@ -33,7 +33,6 @@ client.connect(
     }
 
     app.use('/user', passUserCollection, userRouter)
-    app.use('/send-mail', mailRouter)
 
     app.use('/auth', passUserCollection, authenticationRouter)
 
