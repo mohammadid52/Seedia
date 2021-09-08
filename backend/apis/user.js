@@ -68,7 +68,7 @@ router.post('/giveRecommendation/:id', auth, async (req, res) => {
     const user_r = { received: [...user_o_r, user_n_r], given: [...user_o_g] }
     if (user) {
       await usersCollection.updateOne(
-        { _id: user._id },
+        { _id: user?._id },
         { $set: { recommendation: user_r } },
         { new: true }
       )
@@ -82,7 +82,7 @@ router.post('/giveRecommendation/:id', auth, async (req, res) => {
     const me_r = { received: [...me_o_r], given: [...me_o_g, me_n_g] }
     if (me) {
       await usersCollection.updateOne(
-        { _id: me._id },
+        { _id: me?._id },
         { $set: { recommendation: me_r } },
         { new: true }
       )

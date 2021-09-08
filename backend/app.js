@@ -6,6 +6,7 @@ const mongodb = require('mongodb')
 const authenticationRouter = require('./apis/authenticate')
 const mediaUploadRouter = require('./apis/mediaUpload')
 const userRouter = require('./apis/user')
+const mailRouter = require('./apis/mail')
 const app = express()
 const bodyParser = require('body-parser')
 
@@ -18,8 +19,6 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use(express.json())
 require('dotenv').config()
-
-console.log(process.env)
 
 client.connect(
   URI,
@@ -34,6 +33,7 @@ client.connect(
     }
 
     app.use('/user', passUserCollection, userRouter)
+    app.use('/send-mail', mailRouter)
 
     app.use('/auth', passUserCollection, authenticationRouter)
 

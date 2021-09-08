@@ -29,6 +29,7 @@
     "body-parser": "^1.19.0",
     "countrycitystatejson": "^20.8.9-a",
     "dotenv": "^10.0.0",
+    "emailjs-com": "^3.2.0",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "jade": "^1.11.0",
@@ -63,7 +64,7 @@
     "test": "craco test",
     "eject": "react-scripts eject",
     "dev": "nodemon backend/app.js",
-    "prod": "node backend/app.js",
+    "prod": "REACT_APP_BASE_URL=http://tradingpost13rms.com node backend/app.js",
     "deploy": "rm -rf backend/build/ && rm -rf build && npm run build && cp -r build ./backend/"
   },
   "eslintConfig": {

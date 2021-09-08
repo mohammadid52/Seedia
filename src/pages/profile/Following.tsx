@@ -195,7 +195,7 @@ const Following = ({
                       const isPersonal = user.other?.accountType === 'personal'
                       return (
                         <div
-                          key={user._id}
+                          key={user?._id}
                           className="flex border border-gray-300 dark:border-gray-600 h-72 w-60 rounded-xl relative flex-col items-center "
                         >
                           <Badge
