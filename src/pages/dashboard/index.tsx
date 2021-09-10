@@ -1,13 +1,18 @@
-import { useState } from 'react'
+import Navigation from 'components/Navigation'
 import Post from 'components/Post'
-import SideCard from 'components/SideCard'
-import DashboardLayout from 'pages/DashboardLayout'
-import PostInput from './PostInput'
-import PersonalCard from './AboutMe'
-import { IParent } from 'interfaces/UniversalInterface'
 import Sidebar from 'components/Sidebar'
+import SideCard from 'components/SideCard'
+import { IParent, NavProps } from 'interfaces/UniversalInterface'
+import DashboardLayout from 'pages/DashboardLayout'
+import { useState } from 'react'
+import PersonalCard from './AboutMe'
+import PostInput from './PostInput'
 
-const Dashboard = ({ userData }: { userData: IParent }) => {
+interface DashboardProps extends NavProps {
+  userData: IParent
+}
+
+const Dashboard = ({ userData, template, accountFilled }: DashboardProps) => {
   const [posts, setPosts] = useState([])
   const [postLoading] = useState(false)
 
@@ -15,6 +20,11 @@ const Dashboard = ({ userData }: { userData: IParent }) => {
 
   return (
     <div className="relative  dark:bg-gray-800 bg-gray-100 min-h-screen">
+      <Navigation
+        userId={userData?.profileUrl}
+        template={template}
+        accountFilled={accountFilled}
+      />
       <Sidebar />
 
       <div

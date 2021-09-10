@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import { Transition } from '@headlessui/react'
 import { ExclamationCircleIcon } from '@heroicons/react/solid'
 import { Field } from 'formik'
+import React, { useState } from 'react'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 
 const FormInput = ({
@@ -18,6 +19,8 @@ const FormInput = ({
   optional = false,
   textarea = false,
   setUnsavedChanges = () => {},
+  withButton,
+  disabled,
   ...props
 }: {
   label?: string
@@ -34,6 +37,8 @@ const FormInput = ({
   props?: any
   showPasswordButton?: boolean
   textarea?: boolean
+  disabled?: boolean
+  withButton?: any
   setUnsavedChanges?: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const errorClass = `border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500`
@@ -101,6 +106,7 @@ const FormInput = ({
               <div>
                 <div className="mt-1 relative rounded-md shadow-sm">
                   <input
+                    disabled={disabled}
                     id={id}
                     placeholder={placeholder}
                     type={
@@ -126,6 +132,7 @@ const FormInput = ({
                         />
                       </div>
                     )}
+
                     {showPasswordButton && field.value && (
                       <div
                         className="ml-2"
@@ -146,14 +153,32 @@ const FormInput = ({
                     )}
                   </div>
                 </div>
-                {meta.touched && meta.error && (
-                  <p
-                    className="mt-2 transition-all duration-200 text-sm text-red-600 dark:text-red-500"
-                    id={`${name || id}-error`}
+                <div className="flex mt-2 items-center justify-between">
+                  <Transition
+                    show={Boolean(meta.touched && meta.error)}
+                    enter="transition duration-100 ease-out"
+                    enterFrom="transform scale-95 opacity-0"
+                    enterTo="transform scale-100 opacity-100"
+                    leave="transition duration-75 ease-out"
+                    leaveFrom="transform scale-100 opacity-100"
+                    leaveTo="transform scale-95 opacity-0"
                   >
-                    {meta.error}
-                  </p>
-                )}
+                    <p
+                      className="transition-all duration-200 text-sm text-red-600 dark:text-red-500"
+                      id={`${name || id}-error`}
+                    >
+                      {meta.error}
+                    </p>
+                  </Transition>
+                  {!Boolean(meta.touched && meta.error) && <div />}
+                  {withButton &&
+                  !Boolean(meta.touched && meta.error) &&
+                  field.value.length > 3 ? (
+                    withButton
+                  ) : (
+                    <div className="" />
+                  )}
+                </div>
               </div>
             )
           }}

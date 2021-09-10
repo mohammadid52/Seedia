@@ -16,6 +16,7 @@ const Modal = ({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   children: React.ReactNode
   header?: string
+
   disableBackdropClose?: boolean
   hideCloseBtn?: boolean
   onClose?: () => void

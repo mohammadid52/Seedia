@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 
-const HomeContent = ({ theme }) => {
+const HomeContent = () => {
   return (
     <Fragment>
       <div className="dark:bg-gray-800">

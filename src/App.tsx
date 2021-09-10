@@ -1,27 +1,24 @@
-import { lazy, useEffect, useState } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { links } from 'constants/Links'
+import AuthContainer from 'containers/AuthContainer'
+import { useUserContext } from 'context/UserContext'
+import { getUserValues } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
-import Dashboard from 'pages/dashboard'
-import NotFound from 'pages/NotFound'
+import { isEmpty } from 'lodash'
 import BusinessStepOne from 'pages/account/business/StepOne'
 import BusinessStepTwo from 'pages/account/business/StepTwo'
 import ChooseAccount from 'pages/account/other/ChooseAccount'
-import { useUserContext } from 'context/UserContext'
-import ProfileTwo from 'pages/profile/ProfileTwo'
-import DashboardHeader from 'pages/DashboardHeader'
-import { useRouter } from 'hooks/useRouter'
-import Navigation from 'components/Navigation'
-
-import { isEmpty } from 'lodash'
-import PrivateRoute from 'routes/PrivateRoute'
-import AuthContainer from 'containers/AuthContainer'
-import { getUserValues } from 'helpers'
-import { useSelector } from 'react-redux'
-import { links } from 'constants/Links'
 import ChooseTemplate from 'pages/account/other/ChooseTemplate'
+import Dashboard from 'pages/dashboard'
 import ForgotPassword from 'pages/ForgotPassword'
+import Home from 'pages/home/Home'
+import NotFound from 'pages/NotFound'
+import ProfileTwo from 'pages/profile/ProfileTwo'
+import ResetPassword from 'pages/ResetPassword'
+import { lazy, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import PrivateRoute from 'routes/PrivateRoute'
 
-const Welcome = lazy(() => import('pages/Welcome'))
 const Profile = lazy(() => import('pages/profile/ProfileOne'))
 const Signup = lazy(() => import('pages/Signup'))
 const Login = lazy(() => import('pages/Login'))
@@ -53,43 +50,6 @@ const App = () => {
     return () => loadTheme()
   }, [setDarkMode])
 
-  /**
-   * collection of pages to hide the navbar
-   */
-  const publicKeywords = [
-    '/account',
-    'edit-profile', // eg, if path contains 'edit-profile' then hide the navbar
-    '/login',
-    '/signup',
-    '/choose-account',
-  ]
-
-  const RenderNav = ({
-    isUser,
-    accountFilled,
-    template,
-  }: {
-    isUser?: any
-    accountFilled?: boolean
-    template: 1 | 2
-  }) => {
-    const router = useRouter()
-
-    const atHome = router.pathname === '/'
-    const atAuthPages = publicKeywords.indexOf(router.pathname) !== -1
-
-    return atHome ? (
-      <Navigation
-        userId={userData?.profileUrl}
-        isUser={isUser}
-        template={template}
-        accountFilled={accountFilled}
-      />
-    ) : atAuthPages ? null : (
-      <DashboardHeader userData={userData} />
-    )
-  }
-
   const [userData, setUserData] = useState<IParent>()
 
   const values = useSelector((state) => getUserValues(state))
@@ -103,33 +63,39 @@ const App = () => {
   const accountFilled: boolean | undefined =
     userData?.other?.accountFilled || false
 
-  const accountFinishedStep: string | undefined =
-    userData?.other?.accountFinishedStep
   const isUser = !isEmpty(userData)
 
   const template = userData?.other?.template || 1
+
+  const navProps = {
+    isUser,
+    profileUrl: userData?.profileUrl,
+    template,
+    accountFilled,
+  }
 
   return (
     <Router>
       <AuthContainer>
         <div className="">
-          <RenderNav
-            template={template}
-            accountFilled={accountFilled}
-            isUser={isUser}
-          />
           <Switch>
             {/* This is common page */}
-            <Route exact path="/" component={Welcome} />
+            <Route exact path="/">
+              <Home {...navProps} />
+            </Route>
 
             {/* @ts-ignore */}
-            <PrivateRoute isPublic isUser={isUser} exact path="/login">
+            <PrivateRoute isPublic exact path="/login">
               <Login />
+            </PrivateRoute>
+
+            {/* @ts-ignore */}
+            <PrivateRoute isPublic exact path="/reset-password/:token">
+              <ResetPassword />
             </PrivateRoute>
 
             <PrivateRoute
               isPublic
-              isUser={accountFilled && accountFinishedStep === 'signup'}
               // @ts-ignore
               exact
               path="/signup"
@@ -143,7 +109,7 @@ const App = () => {
               path="/dashboard"
             >
               {/* @ts-ignore */}
-              <Dashboard userData={userData} />
+              <Dashboard {...navProps} userData={userData} />
             </PrivateRoute>
             <PrivateRoute
               isUser={isUser}
@@ -164,7 +130,6 @@ const App = () => {
               // @ts-ignore
               exact
               isPublic
-              isUser={accountFilled && accountFinishedStep === 'chooseAccount'}
               path="/choose-account"
             >
               <ChooseAccount user={userData} />
@@ -176,8 +141,7 @@ const App = () => {
               // @ts-ignore
               exact
               isPublic
-              path={links.PERSONAL_STEP_1}
-              isUser={accountFilled && accountFinishedStep === 'company'}
+              path={links.COMPANY}
             >
               <CompanyStep user={userData} />
             </PrivateRoute>
@@ -185,10 +149,9 @@ const App = () => {
               // @ts-ignore
               exact
               isPublic
-              path={links.PERSONAL_STEP_2}
-              isUser={accountFilled && accountFinishedStep === 'location'}
+              path={links.LOCATION_P}
             >
-              <LocationStep user={userData} accountType="personal" />
+              <LocationStep user={userData} />
             </PrivateRoute>
 
             {/* Student Account routes */}
@@ -196,8 +159,7 @@ const App = () => {
               // @ts-ignore
               exact
               isPublic
-              path={links.STUDENT_STEP_1}
-              isUser={accountFilled && accountFinishedStep === 'education'}
+              path={links.EDUCATION}
             >
               <EducationStep user={userData} />
             </PrivateRoute>
@@ -205,10 +167,9 @@ const App = () => {
               // @ts-ignore
               exact
               isPublic
-              path={links.STUDENT_STEP_2}
-              isUser={accountFilled && accountFinishedStep === 'location'}
+              path={links.LOCATION_S}
             >
-              <LocationStep user={userData} accountType="student" />
+              <LocationStep user={userData} />
             </PrivateRoute>
 
             {/* Business Account routes */}
@@ -217,9 +178,6 @@ const App = () => {
               exact
               isPublic
               path={links.BUSINESS_STEP_1}
-              isUser={
-                accountFilled && accountFinishedStep === 'business-step-1'
-              }
             >
               {/* @ts-ignore */}
               <BusinessStepOne userData={userData} />
@@ -229,9 +187,6 @@ const App = () => {
               exact
               isPublic
               path={links.BUSINESS_STEP_2}
-              isUser={
-                accountFilled && accountFinishedStep === 'business-step-2'
-              }
             >
               {/* @ts-ignore */}
               <BusinessStepTwo userData={userData} />
@@ -241,7 +196,6 @@ const App = () => {
               exact
               isPublic
               path={links.CHOOSE_TEMPLATE}
-              isUser={accountFilled && accountFinishedStep === 'chooseTemplate'}
             >
               {/* @ts-ignore */}
               <ChooseTemplate user={userData} />
@@ -249,6 +203,7 @@ const App = () => {
             <PrivateRoute
               // @ts-ignore
               exact
+              isPublic
               path={links.FORGOT_PASSWORD}
             >
               {/* @ts-ignore */}

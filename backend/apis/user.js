@@ -3,8 +3,21 @@ const router = require('express').Router()
 const auth = require('../middleware/verifyAuth')
 const { responseMsg } = require('../utils')
 var ObjectId = require('mongodb').ObjectId
+const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
+const bcrypt = require('bcryptjs')
 
 require('dotenv').config()
+
+const generateToken = (code) => {
+  return jwt.sign(
+    {
+      code,
+    },
+    `${process.env.SECRET_KEY}_verification_code`,
+    { expiresIn: '5min' }
+  )
+}
 
 // /user
 router.post('/', auth, async (req, res) => {
@@ -22,6 +35,180 @@ router.post('/', auth, async (req, res) => {
       .json(responseMsg('success', 'Authentication successfully', user))
   } else {
     return res.status(203).json(responseMsg('error', 'Invalid user access'))
+  }
+})
+
+// /user
+router.post('/generateCode', async (req, res) => {
+  try {
+    let number = ''
+    for (let i = 0; i <= 5; i++) {
+      const num = Math.floor(Math.random() * 9) + 1
+      number = number + num.toString()
+    }
+
+    if (number) {
+      const token = generateToken(number)
+      return res.status(202).json(
+        responseMsg('success', 'Code generated successfully', {
+          token,
+          code: number,
+        })
+      )
+    }
+  } catch (error) {
+    return res.status(202).json(responseMsg('error', error.message))
+  }
+})
+// /user
+router.post('/updatePassword/:token', async (req, res) => {
+  const usersCollection = res.locals.usersCollection
+  const token = req.params.token
+  const newPassword = req.body.newPassword
+  try {
+    const user = await usersCollection.findOne({
+      resetPasswordToken: token,
+    })
+    if (user) {
+      const hashedPassword = await bcrypt.hash(newPassword, 10)
+      await usersCollection.updateOne(
+        { _id: user?._id },
+        { $set: { password: hashedPassword } },
+        { $unset: { resetPasswordToken: '', resetPasswordExpires: '' } },
+        { new: true }
+      )
+      return res.status(202).json(responseMsg('success', ''))
+    } else {
+      return res.status(202).json(responseMsg('error', 'User not found'))
+    }
+  } catch (error) {
+    return res.status(202).json(responseMsg('error', error.message))
+  }
+})
+
+router.post('/verifyEmail', async (req, res) => {
+  const usersCollection = res.locals.usersCollection
+  const userEmail = req.body.email
+
+  try {
+    const user = await usersCollection.findOne({ email: userEmail })
+
+    if (user) {
+      let resetPasswordToken = crypto.randomBytes(20).toString('hex')
+      let resetPasswordExpires = Date.now() + 3600000 //expires in an hour
+      const link =
+        process.env.REACT_APP_BASE_URL + '/reset-password/' + resetPasswordToken
+      await usersCollection.updateOne(
+        { _id: user?._id },
+        { $set: { resetPasswordToken, resetPasswordExpires } },
+        { new: true }
+      )
+      return res.status(202).json(
+        responseMsg('success', 'Email verified. Sending reset email', {
+          verified: true,
+          link,
+          expiresIn: resetPasswordExpires,
+        })
+      )
+    } else {
+      return res
+        .status(203)
+        .json(
+          responseMsg(
+            'error',
+            'Email address is not verified. Please check your email address.',
+            { verified: false }
+          )
+        )
+    }
+  } catch (error) {
+    console.error(error)
+    return res.status(202).json(
+      responseMsg(
+        'error',
+        `Something went wrong. Please try again. Error code: ${error.message}`,
+        {
+          verified: false,
+        }
+      )
+    )
+  }
+})
+
+router.post('/verifyResetToken/:token', async (req, res) => {
+  const usersCollection = res.locals.usersCollection
+  const token = req.params.token
+
+  try {
+    const user = await usersCollection.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    })
+
+    if (user) {
+      return res.status(202).json(
+        responseMsg('success', 'Token verified', {
+          success: true,
+        })
+      )
+    } else {
+      return res.status(203).json(
+        responseMsg('error', 'Invalid token url or the link is expired.', {
+          success: false,
+        })
+      )
+    }
+  } catch (error) {
+    console.error(error)
+    return res.status(202).json(
+      responseMsg(
+        'error',
+        `Something went wrong. Please try again. Error ${error.message}`,
+        {
+          success: false,
+        }
+      )
+    )
+  }
+})
+
+router.post('/verifyCode', async (req, res) => {
+  try {
+    const fromUser = req.body.code
+    const token = req.body.token
+
+    if (token) {
+      jwt.verify(
+        token,
+        `${process.env.SECRET_KEY}_verification_code`,
+        (err, decoded) => {
+          if (err) {
+            return res.status(403).json(responseMsg('error', err))
+          }
+          if (decoded && decoded.code === fromUser) {
+            return res
+              .status(202)
+              .json(responseMsg('success', 'Code verified', { verified: true }))
+          } else {
+            return res.status(202).json(
+              responseMsg('error', 'Invalid verification code', {
+                verified: false,
+              })
+            )
+          }
+        }
+      )
+    } else {
+      return res
+        .status(202)
+        .json(
+          responseMsg('error', 'Invalid verification code', { verified: false })
+        )
+    }
+  } catch (error) {
+    return res
+      .status(202)
+      .json(responseMsg('error', 'Error', { verified: false }))
   }
 })
 
@@ -45,7 +232,7 @@ router.post('/getUsers', auth, async (req, res) => {
     }
   } catch (error) {
     console.error(error)
-    return res.status(202).json(responseMsg('error', 'Error', error.message))
+    return res.status(202).json(responseMsg('error', error.message))
   }
 })
 
@@ -94,7 +281,7 @@ router.post('/giveRecommendation/:id', auth, async (req, res) => {
     }
   } catch (error) {
     console.error(error)
-    return res.status(202).json(responseMsg('error', 'Error', error.message))
+    return res.status(202).json(responseMsg('error', error.message))
   }
 })
 
@@ -118,7 +305,7 @@ router.post('/suggestedUser', auth, async (req, res) => {
     }
   } catch (error) {
     console.error(error)
-    return res.status(202).json(responseMsg('error', 'Error', error.message))
+    return res.status(202).json(responseMsg('error', error.message))
   }
 })
 // /user
@@ -149,7 +336,7 @@ router.post('/getAll/:id', auth, async (req, res) => {
     }
   } catch (error) {
     console.error(error)
-    return res.status(202).json(responseMsg('error', 'Error', error.message))
+    return res.status(202).json(responseMsg('error', error.message))
   }
 })
 

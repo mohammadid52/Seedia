@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/solid'
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
+import {
+  AiFillCheckCircle,
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+} from 'react-icons/ai'
 
 const NormalFormInput = ({
   label,
@@ -20,6 +24,8 @@ const NormalFormInput = ({
   className = '',
   rows = 4,
   cols = 100,
+  autoComplete = true,
+  success = null,
 
   ...props
 }: {
@@ -33,11 +39,13 @@ const NormalFormInput = ({
   error?: string
   className?: string
   value: string | undefined
+  success?: boolean | null
   onChange: (e: any) => void
   gridClass?: string
   props?: any
   showPasswordButton?: boolean
   fullWidth?: boolean
+  autoComplete?: boolean
   textarea?: boolean
   rows?: number
   cols?: number
@@ -87,6 +95,7 @@ const NormalFormInput = ({
             <input
               {...props}
               id={id}
+              autoComplete={autoComplete ? 'true' : 'false'}
               value={value}
               name={name}
               onChange={onChange}
@@ -103,14 +112,22 @@ const NormalFormInput = ({
           )}
 
           <div className="flex items-center absolute transition-all duration-200 inset-y-0 right-0 pr-3 ">
-            {error && (
+            {error ? (
               <div className=" pointer-events-none">
                 <ExclamationCircleIcon
                   className="h-5 w-5 text-red-500 dark:text-red-400"
                   aria-hidden="true"
                 />
               </div>
-            )}
+            ) : success !== null && success === true ? (
+              <div className=" pointer-events-none">
+                <AiFillCheckCircle
+                  className="h-5 w-5 text-green-500 dark:text-gren-400"
+                  aria-hidden="true"
+                />
+              </div>
+            ) : null}
+
             {showPasswordButton && value && (
               <div className="ml-2" onClick={() => setShowPass(!showPass)}>
                 {showPass ? (

@@ -1,8 +1,9 @@
+import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import { getAccessToken, network } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import { useEffect, useState } from 'react'
-import { useRouteMatch } from 'react-router-dom'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 import Button from './atoms/Button'
 import Card from './atoms/Card'
 import Modal from './atoms/Modal'
@@ -70,6 +71,7 @@ const PublicProfileCard = ({
 
   const { setValues } = useUserContext()
   const token = getAccessToken()
+  const history = useHistory()
 
   const onSave = async () => {
     if (initalFields.profileUrl.length > 6) {
@@ -92,6 +94,12 @@ const PublicProfileCard = ({
             headers: { Authorization: token },
           }
         )
+        history.push(
+          links.getProfileById(
+            updatedData.profileUrl,
+            userData?.other?.template
+          )
+        )
       } catch (error) {
         console.error(error.message)
       } finally {
@@ -107,45 +115,46 @@ const PublicProfileCard = ({
 
   return (
     <>
-      <Modal
-        open={showEditProfileUrlModal}
-        onClose={onCancel}
-        setOpen={() => setShowEditProfileUrlModal(false)}
-        header={'Edit url'}
-      >
-        <div className="">
-          <div className="overflow-y-auto min-w-132 pb-4 custom-scroll-mini darker my-4 px-1">
-            <>
-              <NormalFormInput
-                value={initalFields.profileUrl}
-                onChange={(e: any) =>
-                  setInitalFields((prev) => ({
-                    ...prev,
-                    profileUrl: e.target.value,
-                  }))
-                }
-                label="Enter new url"
-                name="profileUrl"
-              />
-              <div className="mt-5 sm:mt-4 flex justify-end  items-center">
-                <Button
-                  gradient
-                  loading={saving}
-                  disabled={saving}
-                  onClick={onSave}
-                  label="Save"
+      {showEditProfileUrlModal && (
+        <Modal
+          open={showEditProfileUrlModal}
+          onClose={onCancel}
+          setOpen={() => setShowEditProfileUrlModal(false)}
+          header={'Edit url'}
+        >
+          <div className="">
+            <div className="overflow-y-auto min-w-132 custom-scroll-mini darker my-4 px-1">
+              <>
+                <NormalFormInput
+                  value={initalFields.profileUrl}
+                  onChange={(e: any) =>
+                    setInitalFields((prev) => ({
+                      ...prev,
+                      profileUrl: e.target.value,
+                    }))
+                  }
+                  label="Enter new url"
+                  name="profileUrl"
                 />
-              </div>
-
-              <div>
-                <p className="text-gray-800  dark:text-gray-400">
-                  New url: {new_url}
-                </p>
-              </div>
-            </>
+                <div>
+                  <p className="mt-4 text-gray-800  dark:text-gray-400">
+                    New url: {new_url}
+                  </p>
+                </div>
+                <div className="mt-5 sm:mt-4 flex justify-end  items-center">
+                  <Button
+                    gradient
+                    loading={saving}
+                    disabled={saving}
+                    onClick={onSave}
+                    label="Save"
+                  />
+                </div>
+              </>
+            </div>
           </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
       <Card
         className="mb-12"
         secondary={secondary}

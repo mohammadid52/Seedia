@@ -13,7 +13,7 @@ import { BusinessStepTwoFields } from 'initials'
 import Layout from 'containers/Layout'
 import FormSelector from 'components/atoms/FormSelector'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
-import { getAccessToken, network } from 'helpers'
+import { getAccessToken, network, renderPathByType } from 'helpers'
 import Error from 'components/alerts/Error'
 import { IParent } from 'interfaces/UniversalInterface'
 import { useUserContext } from 'context/UserContext'
@@ -69,6 +69,47 @@ const BusinessStepTwo = ({ userData }: { userData: IParent }) => {
 
   const [errors, setErrors] = useState<string[]>([])
   const { setValues } = useUserContext()
+
+  const redirection = () => {
+    const user = userData
+    if (user) {
+      if (!user?.other?.accountFilled) {
+        if (user.other?.accountType === 'business') {
+          if (user.other?.accountFinishedStep === 'business-step-2') {
+            // redirect to choose template page
+            console.log('redirect to choose template page')
+            return history.push(links.CHOOSE_TEMPLATE)
+          } else if (user.other?.accountFinishedStep === 'business-step-1') {
+            // redirect to location page
+            console.log('redirect to location page')
+            return history.push(links.BUSINESS_STEP_2)
+          } else if (user.other?.accountFinishedStep === 'chooseAccount') {
+            console.log('get the accountType and redirect as per account type')
+            // get the accountType and redirect as per account type
+            return history.push(renderPathByType(user.other?.accountType))
+          } else if (user.other?.accountFinishedStep === 'signup') {
+            // redirect to choose Account page
+            console.log('redirect to choose Account page')
+            return history.push(links.CHOOSE_ACCOUNT)
+          }
+        } else {
+          if (user && user.other) {
+            console.log('get the accountType and redirect as per account type')
+            // get the accountType and redirect as per account type
+            return history.push(renderPathByType(user.other.accountType))
+          }
+        }
+      } else {
+        //  redirect to dashboard
+        console.log('redirect to dashboard')
+        return history.push(links.DASHBAORD)
+      }
+    }
+  }
+
+  useEffect(() => {
+    redirection()
+  }, [userData?.other?.accountFilled, userData?.other?.accountFinishedStep])
 
   const onSubmit = async (values: typeof BusinessStepTwoFields) => {
     try {

@@ -17,3 +17,19 @@ export const network = axios.create({
   timeout: 100000,
   headers: { Authorization: token },
 })
+
+export const renderPathByType = (type: string) => {
+  switch (type) {
+    case 'personal':
+      return links.COMPANY
+
+    case 'student':
+      return links.EDUCATION
+
+    case 'business':
+      return links.BUSINESS_STEP_1
+
+    default:
+      return links.COMPANY
+  }
+}

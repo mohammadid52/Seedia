@@ -14,7 +14,7 @@ export const LOGIN = {
 export const PersonalStepOne = {
   jobTitle: '',
   jobType: '',
-  latestCompany: '',
+  currentCompany: '',
 }
 export const PersonalStepTwo = {
   country: '',

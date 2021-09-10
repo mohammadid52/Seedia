@@ -55,15 +55,18 @@ export const loadUser = () => async (dispatch) => {
     const user = await getUser()
 
     if (!isEmpty(user.data)) {
-      var decoded = jwt_decode(token)
-      dispatch({
-        type: types.SET_USER_DATA,
-        data: { ...user.data, myId: decoded.id },
-      })
-      dispatch({
-        type: types.SET_VALUE,
-        data: { ...user.data, myId: decoded.id },
-      })
+      if (token) {
+        var decoded = jwt_decode(token)
+
+        dispatch({
+          type: types.SET_USER_DATA,
+          data: { ...user.data, myId: decoded.id },
+        })
+        dispatch({
+          type: types.SET_VALUE,
+          data: { ...user.data, myId: decoded.id },
+        })
+      }
     } else {
       dispatch({ type: types.SET_USER_DATA, data: {} })
       dispatch({ type: types.SET_VALUE, data: {} })

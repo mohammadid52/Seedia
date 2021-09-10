@@ -17,6 +17,7 @@ import jwt_decode from 'jwt-decode'
 import { useDispatch } from 'react-redux'
 import { loadUser } from 'state/Redux/Actions/authActions'
 import PublicProfileCard from 'components/PublicProfileCard'
+import DashboardHeader from 'pages/DashboardHeader'
 
 const getUniqId = (str?: string) => {
   if (str) {
@@ -36,6 +37,10 @@ const Profile = ({ userData }: { userData: IParent }) => {
   // #3 if it matches then current user is authUser (owner of profile)
   const authUser =
     getUniqId(userIdFromParam) === userData.myId && viewMode === 'private'
+  console.log(
+    '🚀 ~ file: ProfileOne.tsx ~ line 39 ~ Profile ~ authUser',
+    getUniqId(userIdFromParam)
+  )
   const token = getAccessToken()
   // @ts-ignore
   var decoded = jwt_decode(token)
@@ -74,6 +79,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800">
+      <DashboardHeader userData={userData} />
       <Sidebar />
       <div className="flex">
         <div

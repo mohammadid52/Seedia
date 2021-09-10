@@ -1,16 +1,16 @@
-import Layout from 'containers/Layout'
-import { classNames } from 'utils/classNames'
-import { useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
-import Button from 'components/atoms/Button'
-import { useHistory } from 'react-router-dom'
-import { links } from 'constants/Links'
-import { getAccessToken, network } from 'helpers'
-import AnimatedDiv from 'components/animation/AnimatedDiv'
 import Error from 'components/alerts/Error'
-import { useUserContext } from 'context/UserContext'
-import { IParent } from 'interfaces/UniversalInterface'
+import AnimatedDiv from 'components/animation/AnimatedDiv'
+import Button from 'components/atoms/Button'
 import Modal from 'components/atoms/Modal'
+import { links } from 'constants/Links'
+import Layout from 'containers/Layout'
+import { useUserContext } from 'context/UserContext'
+import { getAccessToken, network } from 'helpers'
+import { IParent } from 'interfaces/UniversalInterface'
+import { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { classNames } from 'utils/classNames'
 
 const settings = [
   {
@@ -25,6 +25,26 @@ const settings = [
 
 const ChooseTemplate = ({ user }: { user: IParent }) => {
   const [selected, setSelected] = useState(settings[0])
+
+  const redirection = () => {
+    if (user) {
+      if (!user?.other?.accountFilled) {
+        if (user && user.other) {
+          console.log('get the accountType and redirect as per account type')
+          // get the accountType and redirect as per account type
+          return
+        }
+      } else {
+        //  redirect to dashboard
+        console.log('redirect to dashboard')
+        return history.push(links.DASHBAORD)
+      }
+    }
+  }
+
+  useEffect(() => {
+    redirection()
+  }, [])
 
   const history = useHistory()
 
@@ -62,6 +82,7 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
       setValues({ ...updatedData })
 
       setErrors([])
+      window.location.reload()
       history.push(links.DASHBAORD)
     } catch (error) {
       setErrors(['Oops! Something went wrong'])

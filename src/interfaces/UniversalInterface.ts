@@ -69,6 +69,8 @@ export interface IParent {
   // user?: IUser
   _id?: string
   fullName: string
+  firstName?: string
+  lastName?: string
   profileViews?: number
   maritalStatus?: string
   company?: ICompany
@@ -103,6 +105,13 @@ export interface IParent {
     bussinessEntityType: string
     relationshipToBusiness: string
   }
+}
+
+export interface NavProps {
+  isUser?: boolean
+  template?: 1 | 2
+  userId?: string
+  accountFilled?: boolean
 }
 
 export interface IExperience {

@@ -66,7 +66,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
       {({ open }) => (
         <>
           <div className="flex justify-between items-center py-3 border-b-2 dark:border-gray-700 border-gray-100  sm:px-6 md:justify-start md:space-x-10">
-            <div className="flex justify-start items-center lg:w-0 lg:flex-1">
+            <div className="flex justify-start items-center lg:flex-1">
               <div
                 title="sidebar"
                 className="flex items-center h-9 w-9 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-2 justify-center"

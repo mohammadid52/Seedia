@@ -23,6 +23,7 @@ import { getAccessToken, network } from 'helpers'
 import { useRouter } from 'hooks/useRouter'
 import { IParent } from 'interfaces/UniversalInterface'
 import jwt_decode from 'jwt-decode'
+import DashboardHeader from 'pages/DashboardHeader'
 import Layout from 'pages/profile/Layout'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import { useEffect, useState } from 'react'
@@ -142,20 +143,24 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 smooth-scroll">
+      <DashboardHeader userData={userData} />
+
       <Sidebar />
       <div className="">
-        <Modal
-          open={showModal.show}
-          onClose={onCancel}
-          setOpen={() => setShowModal({ show: false, type: '' })}
-          header={renderModalHeader(showModal.type)}
-        >
-          <div className="">
-            <div className="overflow-y-auto min-w-132  custom-scroll-mini darker my-4 px-1">
-              {renderModalContentByType(showModal.type)}
+        {showModal.show && (
+          <Modal
+            open={showModal.show}
+            onClose={onCancel}
+            setOpen={() => setShowModal({ show: false, type: '' })}
+            header={renderModalHeader(showModal.type)}
+          >
+            <div className="">
+              <div className="overflow-y-auto min-w-132  custom-scroll-mini darker my-4 px-1">
+                {renderModalContentByType(showModal.type)}
+              </div>
             </div>
-          </div>
-        </Modal>
+          </Modal>
+        )}
       </div>
 
       {/* stylelint-disabled  */}
@@ -227,40 +232,42 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
       </div>
       <CustomFooter />
 
-      <Modal
-        hideCloseBtn
-        header="Discard changes"
-        open={showUnsaveModal}
-        setOpen={setShowUnsaveModal}
-      >
-        <>
-          <h1 className="text-lg dark:text-white text-gray-900 min-w-96">
-            You have unsaved changes
-          </h1>
-          <p className="text-gray-500 ">Do you want to save it?</p>
+      {showUnsaveModal && (
+        <Modal
+          hideCloseBtn
+          header="Discard changes"
+          open={showUnsaveModal}
+          setOpen={setShowUnsaveModal}
+        >
+          <>
+            <h1 className="text-lg dark:text-white text-gray-900 min-w-96">
+              You have unsaved changes
+            </h1>
+            <p className="text-gray-500 ">Do you want to save it?</p>
 
-          <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
-            <Button
-              secondary
-              bgColor="gray"
-              onClick={() => {
-                setShowUnsaveModal(false)
-                setShowModal({ ...showModal, show: true })
-              }}
-              invert
-              label="No thanks"
-            />
-            <Button
-              gradient
-              label="Discard"
-              onClick={() => {
-                setShowUnsaveModal(false)
-                // setLocalFields({ ...initialState })
-              }}
-            />
-          </div>
-        </>
-      </Modal>
+            <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
+              <Button
+                secondary
+                bgColor="gray"
+                onClick={() => {
+                  setShowUnsaveModal(false)
+                  setShowModal({ ...showModal, show: true })
+                }}
+                invert
+                label="No thanks"
+              />
+              <Button
+                gradient
+                label="Discard"
+                onClick={() => {
+                  setShowUnsaveModal(false)
+                  // setLocalFields({ ...initialState })
+                }}
+              />
+            </div>
+          </>
+        </Modal>
+      )}
     </div>
   )
 }

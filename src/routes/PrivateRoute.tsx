@@ -9,7 +9,7 @@ import { Route, Redirect } from 'react-router-dom'
 const PrivateRoute = ({
   isPublic = false,
   children,
-  isUser,
+  isUser = false,
   component: Component = null,
   ...rest
 }: {
