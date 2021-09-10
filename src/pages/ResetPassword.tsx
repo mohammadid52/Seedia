@@ -48,6 +48,7 @@ const ResetPassword = () => {
         setError(data.message)
       }
       history.push(links.LOGIN)
+      window.location.reload()
     } catch (error) {
       setError('Something went wrong')
       console.error(error)
