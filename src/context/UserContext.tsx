@@ -3,7 +3,7 @@ import { IParent } from 'interfaces/UniversalInterface'
 import { isEmpty } from 'lodash'
 import React, { useContext, createContext, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from 'state/Redux/Actions/authActions'
+import { setUser, setOtherUser } from 'state/Redux/Actions/authActions'
 
 const UserContext = createContext(null)
 
@@ -14,6 +14,9 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const _setValues = (newData: any) => {
     dispatch(setUser(newData))
+  }
+  const setOtherUserData = (newData: any) => {
+    dispatch(setOtherUser(newData))
   }
   const isUser = !isEmpty(values)
 
@@ -31,6 +34,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         setDarkMode,
         showSidebar,
         setShowSidebar,
+        setOtherUserData,
       }}
     >
       {children}

@@ -7,6 +7,7 @@ import { getAccessToken, network } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { avatarPlaceholder } from 'state/Redux/constants'
 
 const PersonalCard = ({
   className,
@@ -131,11 +132,11 @@ const PersonalCard = ({
                     <img
                       className={`${
                         !userData?.profilePicture ? '' : ''
-                      } h-16 w-16 border-gradient border-2 border-transparent rounded-full`}
+                      } h-14 w-14 border-gradient border-2 border-transparent rounded-full`}
                       src={
                         userData?.profilePicture
                           ? userData?.profilePicture
-                          : 'https://robohash.org/honey?set=set1'
+                          : avatarPlaceholder
                       }
                       alt={userData?.fullName}
                     />
@@ -143,27 +144,24 @@ const PersonalCard = ({
 
                   <div className="">
                     <div className="text-center">
-                      <div
-                        onClick={() =>
-                          history.push(
-                            links.getProfileById(
-                              userData?.profileUrl,
-                              userData?.other?.template || 1
-                            )
-                          )
-                        }
-                        className="mt-4 mb-1 text-base hover:underline cursor-pointer  font-extrabold text-center dark:text-white"
-                      >
-                        {userData?.fullName}
+                      <div className="mt-4 mb-1 text-xs hover:underline cursor-pointer  font-extrabold text-center dark:text-white">
+                        <a
+                          href={links.getProfileById(
+                            userData?.profileUrl,
+                            userData?.other?.template || 1
+                          )}
+                        >
+                          {userData?.fullName}
+                        </a>
                       </div>
 
-                      <p className="dark:text-gray-400 mb-2 text-sm text-center">
+                      <p className="dark:text-gray-400 mb-2 text-xs text-center">
                         {userData?.company?.jobTitle}
                       </p>
 
                       <p
                         onClick={showFileExplorerForProfile}
-                        className="link-hover tracking-wide cursor-pointer text-center text-blue-600"
+                        className="link-hover tracking-wide cursor-pointer text-sm text-center text-blue-600"
                       >
                         Change photo
                       </p>
@@ -171,7 +169,7 @@ const PersonalCard = ({
                   </div>
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-4 text-sm">
                   <p className="text-gray-900 dark:text-white">connections</p>
                   <h6 className="font-semibold text-gray-900 dark:text-white">
                     Expand your network
@@ -189,18 +187,16 @@ const PersonalCard = ({
                   </div>
                 </div>
 
-                <div className=" hover:bg-gray-100 dark:hover:bg-gray-600 py-2 rounded-md cursor-pointer overflow-hidden">
-                  <div className="">
-                    <h6 className="cursor-pointer text-gray-900 dark:text-white font-semibold text-center">
-                      My items
-                    </h6>
-                  </div>
+                <div className=" hover:bg-gray-100 dark:hover:bg-gray-600 py-1.5 border border-gray-200 dark:border-gray-600 rounded-md cursor-pointer overflow-hidden">
+                  <h6 className="text-sm cursor-pointer text-gray-900 dark:text-white font-semibold text-center">
+                    My items
+                  </h6>
                 </div>
               </div>
             </div>
 
             <div>
-              <div className="gap-y-2 flex flex-col mt-4 mb-8">
+              <div className="gap-y-2 flex text-sm flex-col my-4">
                 <div className="hover:underline cursor-pointer">
                   <a href="/" className="dark:text-white text-gray-900">
                     Groups
@@ -233,12 +229,10 @@ const PersonalCard = ({
                 </div>
               </div>
 
-              <div className=" hover:bg-gray-100 dark:hover:bg-gray-600 py-2 rounded-md cursor-pointer overflow-hidden">
-                <div className="">
-                  <h6 className="cursor-pointer text-gray-900 dark:text-white font-semibold text-center">
-                    Discover more
-                  </h6>
-                </div>
+              <div className=" hover:bg-gray-100 dark:hover:bg-gray-600 py-1.5 border border-gray-200 dark:border-gray-600 rounded-md cursor-pointer overflow-hidden">
+                <h6 className="cursor-pointer text-sm text-gray-900 dark:text-white font-semibold text-center">
+                  Discover more
+                </h6>
               </div>
             </div>
           </div>

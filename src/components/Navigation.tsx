@@ -29,15 +29,15 @@ const Navigation = ({
       {({ open }) => (
         <>
           <div className="">
-            <div className="flex justify-between  items-center border-b-2 dark:border-gray-700 border-gray-100 py-3 md:justify-start md:space-x-10 px-2">
-              <div className="flex justify-start lg:w-0 lg:flex-1">
+            <div className="flex justify-between  items-center border-b-2 dark:border-gray-700 border-gray-100 py-2 md:justify-start md:space-x-10 px-2">
+              <div className="flex justify-start lg:w-0 lg:flex-1 items-center">
                 <Popover.Group
                   as="nav"
-                  className="hidden ml-6 md:flex space-x-10"
+                  className="hidden ml-6 md:flex  items-center space-x-10"
                 >
                   <a
                     href="/#"
-                    className="text-base font-medium dark:text-gray-400 text-gray-500 link-hover"
+                    className="text-xs font-medium dark:text-gray-400 text-gray-500 link-hover"
                   >
                     Help & Contact
                   </a>
@@ -47,15 +47,12 @@ const Navigation = ({
                         <Popover.Button
                           className={classNames(
                             open ? 'text-gray-900' : 'text-gray-500',
-                            'group bg-white dark:bg-gray-800 rounded-md inline-flex items-center text-base font-medium link-hover focus:outline-none '
+                            'group bg-white dark:bg-gray-800 rounded-md inline-flex items-center text-xs font-medium link-hover focus:outline-none '
                           )}
                         >
-                          <a
-                            href="/#"
-                            className="text-base font-medium dark:text-gray-400 text-gray-500 link-hover"
-                          >
+                          <button className="text-xs font-medium dark:text-gray-400 text-gray-500 link-hover">
                             Adjust Colors
-                          </a>
+                          </button>
                           <ChevronDownIcon
                             className={classNames(
                               open ? 'text-gray-600' : ' text-gray-400',
@@ -77,7 +74,7 @@ const Navigation = ({
                         >
                           <Popover.Panel
                             static
-                            className="absolute z-10 -ml-4 mt-3 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+                            className="absolute z-10 -ml-4 mt-3 transform px-2 w-screen max-w-md sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/4"
                           >
                             <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                               <div className="relative grid gap-6 bg-white dark:bg-gray-700 px-5 py-6 sm:gap-8 sm:p-8">
@@ -109,7 +106,7 @@ const Navigation = ({
                                       <span className="rounded-full bg-white w-1.5 h-1.5" />
                                     </span>
                                     <div className="ml-4">
-                                      <p className="text-base text-left font-medium dark:text-white text-gray-900 mb-0">
+                                      <p className="text-xs text-left font-medium dark:text-white text-gray-900 mb-0">
                                         {item.name}
                                       </p>
                                       {/* <p className="mt-1 text-left text-sm text-gray-500">
@@ -127,7 +124,7 @@ const Navigation = ({
                   </Popover>
                   <a
                     href="/#"
-                    className="text-base text-gray-500  dark:text-gray-400 font-medium link-hover"
+                    className="text-xs text-gray-500  dark:text-gray-400 font-medium link-hover"
                   >
                     Join our forum
                   </a>
@@ -143,9 +140,7 @@ const Navigation = ({
               {accountFilled ? (
                 <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                   <Button
-                    onClick={() =>
-                      history.push(links.getProfileById(userId, template))
-                    }
+                    link={links.getProfileById(userId, template)}
                     className="mx-4 "
                     label="Profile"
                     gradient
@@ -153,7 +148,7 @@ const Navigation = ({
                   />
 
                   <Button
-                    onClick={() => history.push(links.DASHBAORD)}
+                    link={links.DASHBAORD}
                     className="mx-4 "
                     label="Dashboard"
                     gradient
@@ -163,13 +158,13 @@ const Navigation = ({
                 <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                   <a
                     href="/signup"
-                    className="whitespace-nowrap dark:text-gray-400 text-gray-500  text-base font-medium  link-hover"
+                    className="whitespace-nowrap dark:text-gray-400 text-gray-500  text-xs font-medium  link-hover"
                   >
                     Join Now
                   </a>
 
                   <Button
-                    onClick={() => history.push(links.LOGIN)}
+                    link={links.DASHBAORD}
                     className="mx-4 "
                     label="Login"
                     gradient

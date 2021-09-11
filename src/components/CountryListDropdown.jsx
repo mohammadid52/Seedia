@@ -5,7 +5,7 @@ import { ChevronDownIcon } from '@heroicons/react/outline'
 
 const CountryListDropdown = () => {
   return (
-    <div className="flex-0">
+    <div className="flex-0 transform scale-90 z-10">
       <ul className="flex items-center customDropdown p-0 m-0">
         <li className="nav-item  mb-0">
           <div

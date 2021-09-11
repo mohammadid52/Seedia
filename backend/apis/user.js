@@ -6,7 +6,8 @@ var ObjectId = require('mongodb').ObjectId
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
-
+const faker = require('faker')
+const { nanoid } = require('nanoid')
 require('dotenv').config()
 
 const generateToken = (code) => {
@@ -340,6 +341,157 @@ router.post('/getAll/:id', auth, async (req, res) => {
   }
 })
 
+router.post('/follow/:id', auth, async (req, res) => {
+  const id = req.params.id
+  const token = req.user
+
+  const usersCollection = res.locals.usersCollection
+
+  try {
+    const me = await usersCollection.findOne({ _id: ObjectId(token.id) })
+
+    const toFollowUser = await usersCollection.findOne({
+      _id: ObjectId(id),
+    })
+
+    // Add followingUser to me.followings
+    // Add me to to followingUser.followers
+
+    // ------ Following User -------
+
+    const followingUsersList = [...toFollowUser?.followers, me?._id]
+    await usersCollection.updateOne(
+      { _id: toFollowUser._id },
+      { $set: { followers: followingUsersList } },
+      { new: true }
+    )
+
+    // ------ Me -------
+
+    const meList = [...me?.following, toFollowUser?._id]
+    await usersCollection.updateOne(
+      { _id: me._id },
+      { $set: { following: meList } },
+      { new: true }
+    )
+
+    return res
+      .status(202)
+      .json(responseMsg('success', 'Following user', meList))
+  } catch (error) {
+    console.error(error.message)
+    return res.status(202).json(responseMsg('error', error.message))
+  }
+})
+router.post('/unfollow/:id', auth, async (req, res) => {
+  const id = req.params.id
+  const token = req.user
+
+  const usersCollection = res.locals.usersCollection
+
+  try {
+    const me = await usersCollection.findOne({ _id: ObjectId(token.id) })
+
+    const toUnFollowUser = await usersCollection.findOne({
+      _id: ObjectId(id),
+    })
+
+    // Remove followingUser from me.followings
+    // Remove me from followingUser.followers
+
+    // ------ Following User -------
+
+    const usersList = [...toUnFollowUser?.followers].filter(
+      (userId) => userId !== me?._id
+    )
+    await usersCollection.updateOne(
+      { _id: toUnFollowUser._id },
+      { $set: { followers: usersList } },
+      { new: true }
+    )
+
+    // ------ Me -------
+
+    const meList = [...me?.following].filter(
+      (userId) => userId !== toUnFollowUser?._id
+    )
+    await usersCollection.updateOne(
+      { _id: me._id },
+      { $set: { following: meList } },
+      { new: true }
+    )
+
+    return res
+      .status(202)
+      .json(responseMsg('success', 'UnFollowing user', meList))
+  } catch (error) {
+    console.error(error.message)
+    return res.status(202).json(responseMsg('error', error.message))
+  }
+})
+
+// ##################################################################### //
+// ############################FAKE USERS######################################### //
+// ##################################################################### //
+
+const generateFakeUser = () => {
+  let user = {
+    myId: nanoid(),
+    fullName: faker.name.findName(),
+    email: faker.internet.email(),
+    maritalStatus: 'Married',
+    coverPicture: faker.image.nature(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    profilePicture: faker.image.avatar(),
+    profileUrl: '',
+    location: {
+      livesIn: faker.address.cityName(),
+    },
+    other: {
+      accountFilled: true,
+      accountFinishedStep: 'chooseTemplate',
+      template: 1,
+      accountType: 'personal',
+      createdOn: new Date(),
+    },
+    company: {
+      companyName: faker.company.companyName(),
+      previousCompany: faker.company.companyName(),
+      currentCompany: faker.company.companyName(),
+      jobTitle: faker.name.jobTitle(),
+      companyAddress: faker.address.streetAddress(),
+    },
+  }
+  const profileUrl =
+    `${user?.firstName}_${user?.lastName}_${user?.myId}`.toLowerCase()
+
+  user.profileUrl = profileUrl
+  return user
+}
+
+router.post('/genFakeUsers', async (req, res) => {
+  const users = []
+  for (let i = 0; i <= 20; i++) {
+    const user = generateFakeUser()
+    users.push(user)
+  }
+
+  try {
+    if (users.length > 0) {
+      const usersCollection = res.locals.usersCollection
+      await usersCollection.insertMany(users)
+      return res
+        .status(202)
+        .json(responseMsg('success', 'Added users to collection'))
+    }
+  } catch (error) {
+    console.error(error.message)
+
+    return res.status(202).json(responseMsg('error', error.message))
+  }
+})
+
 router.post('/getById/:id', auth, async (req, res) => {
   const id = req.params.id
   const token = req.user
@@ -358,6 +510,7 @@ router.post('/getById/:id', auth, async (req, res) => {
         return pwvp.includes(_id)
       }
     }
+
     const me = await usersCollection.findOne({ _id: ObjectId(token.id) })
 
     if (me) {

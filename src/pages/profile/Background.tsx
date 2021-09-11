@@ -218,7 +218,7 @@ const Background = ({
   userData,
   authUser,
 }: {
-  userData: IParent
+  userData?: IParent
   authUser: boolean
 }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
@@ -410,41 +410,43 @@ const Background = ({
 
   return (
     <>
-      <Modal
-        disableBackdropClose={false}
-        open={showModal.show}
-        onClose={onCancel}
-        setOpen={() => setShowModal({ show: false, type: '' })}
-        header="Edit Background"
-      >
-        <div>
-          <div className="overflow-y-hidden min-h-64 min-w-256 p-2 custom-scroll-mini darker my-4 max-h-full">
-            <div className="space-y-12 ">
-              <ModalContentByType
-                addNewExperience={addNewExperience}
-                onChange={onChange}
-                onExperienceSelectUpdate={onExperienceSelectUpdate}
-                onExperienceFieldUpdate={onExperienceFieldUpdate}
-                onExperienceRemove={onExperienceRemove}
-                localFields={localFields}
-                onInterestAdd={onInterestAdd}
-                getValue={getValue}
-                type={showModal.type}
+      {showModal.show && (
+        <Modal
+          disableBackdropClose={false}
+          open={showModal.show}
+          onClose={onCancel}
+          setOpen={() => setShowModal({ show: false, type: '' })}
+          header="Edit Background"
+        >
+          <div>
+            <div className="overflow-y-hidden min-h-64 min-w-256 p-2 custom-scroll-mini darker my-4 max-h-full">
+              <div className="space-y-12 ">
+                <ModalContentByType
+                  addNewExperience={addNewExperience}
+                  onChange={onChange}
+                  onExperienceSelectUpdate={onExperienceSelectUpdate}
+                  onExperienceFieldUpdate={onExperienceFieldUpdate}
+                  onExperienceRemove={onExperienceRemove}
+                  localFields={localFields}
+                  onInterestAdd={onInterestAdd}
+                  getValue={getValue}
+                  type={showModal.type}
+                />
+              </div>
+            </div>
+
+            <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
+              <Button
+                gradient
+                disabled={saving}
+                label="Save"
+                onClick={onSave}
+                loading={saving}
               />
             </div>
           </div>
-
-          <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
-            <Button
-              gradient
-              disabled={saving}
-              label="Save"
-              onClick={onSave}
-              loading={saving}
-            />
-          </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
       <Card
         cardTitle="Background"
         content={

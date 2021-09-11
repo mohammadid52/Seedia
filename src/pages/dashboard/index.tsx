@@ -3,6 +3,7 @@ import Post from 'components/Post'
 import Sidebar from 'components/Sidebar'
 import SideCard from 'components/SideCard'
 import { IParent, NavProps } from 'interfaces/UniversalInterface'
+import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
 import { useState } from 'react'
 import PersonalCard from './AboutMe'
@@ -12,7 +13,7 @@ interface DashboardProps extends NavProps {
   userData: IParent
 }
 
-const Dashboard = ({ userData, template, accountFilled }: DashboardProps) => {
+const Dashboard = ({ userData }: DashboardProps) => {
   const [posts, setPosts] = useState([])
   const [postLoading] = useState(false)
 
@@ -20,11 +21,8 @@ const Dashboard = ({ userData, template, accountFilled }: DashboardProps) => {
 
   return (
     <div className="relative  dark:bg-gray-800 bg-gray-100 min-h-screen">
-      <Navigation
-        userId={userData?.profileUrl}
-        template={template}
-        accountFilled={accountFilled}
-      />
+      <DashboardHeader userData={userData} />
+
       <Sidebar />
 
       <div

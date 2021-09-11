@@ -72,7 +72,7 @@ const CustomSearchPanel = () => {
           title={
             <div>
               {tooltipData.map((item, idx) => (
-                <div key={item.heading + idx} className="p-1 text-sm">
+                <div key={item.heading + idx} className="p-1 text-xs">
                   <strong className=" mb-1">
                     {item.heading}
                     <br />{' '}
@@ -107,7 +107,7 @@ const CustomSearchPanel = () => {
             id="home_search_panel"
             name="search"
             type="text"
-            className="relative  dark:bg-gray-800 dark:text-white w-full border-none outline-none shadow-none focus:outline-none text-sm  pl-3 pr-10 py-2 text-left  dark:placeholder-gray-400 placeholder-gray-500 h-full"
+            className="relative  dark:bg-gray-800 dark:text-white w-full border-none outline-none shadow-none focus:outline-none text-xs  pl-3 pr-10 py-2 text-left  dark:placeholder-gray-400 placeholder-gray-500 h-full"
             placeholder={searchPlaceHolder + ' ' + selectedProduct.label}
           />
         </div>
@@ -129,7 +129,7 @@ const CustomSearchPanel = () => {
             }}
           />
         </div>
-        <div className="relative flex items-center justify-center col-span-1">
+        <div className="relative  flex items-center justify-center col-span-1">
           <CountryListDropdown />
         </div>
       </div>
@@ -139,7 +139,7 @@ const CustomSearchPanel = () => {
             <>
               <div
                 key={item.name + idx}
-                className="dark:text-white flex items-center justify-center  text-gray-600 link-hover cursor-pointer"
+                className="dark:text-white text-xs flex items-center justify-center  text-gray-600 link-hover cursor-pointer"
               >
                 {item.name}
               </div>

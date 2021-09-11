@@ -25,7 +25,7 @@ export interface IModalProps extends IBlockProps {
 }
 
 export interface IBlockProps {
-  userData: IParent
+  userData?: IParent
   showEditOption?: boolean
   setShowModal: React.Dispatch<
     React.SetStateAction<{ show: boolean; type: string }>
@@ -43,6 +43,7 @@ export interface IUser extends User {
 
 export interface ICompany {
   currentCompany?: string
+  previousCompany?: string
   companyAddress?: string
   companyName?: string
   jobTitle?: string
@@ -78,6 +79,7 @@ export interface IParent {
   background?: IBackground
   other?: IOther
   coverPicture?: string
+  profilePicture?: string
   email?: string
   piv?: string[]
   mobileNumber: string
@@ -88,7 +90,6 @@ export interface IParent {
   pivCount?: number
   pwvpCount?: number
   profileUrl?: string
-  profilePicture?: string
   myId?: string
   recommendation?: {
     given: IRecommendation[]

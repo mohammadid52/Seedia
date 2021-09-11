@@ -17,7 +17,7 @@ const About = ({
   userData,
   authUser,
 }: {
-  userData: IParent
+  userData?: IParent
   authUser: boolean
 }) => {
   const { setValues, values } = useUserContext()
@@ -132,15 +132,9 @@ const About = ({
       delete updatedData.password
       setValues({ ...updatedData })
 
-      await network.post(
-        '/user/update',
-        {
-          ...updatedData,
-        },
-        {
-          headers: { Authorization: token },
-        }
-      )
+      await network.post('/user/update', {
+        ...updatedData,
+      })
 
       // add data to local state
       setShowModal(false)
@@ -188,85 +182,87 @@ const About = ({
 
   return (
     <>
-      <Modal
-        onClose={onCancel}
-        open={showModal}
-        disableBackdropClose={false}
-        setOpen={() => setShowModal(false)}
-        header="Edit About"
-      >
-        <div>
-          <div className="min-w-256  overflow-y-auto p-2 custom-scroll-mini darker my-4">
-            {!isBusiness ? (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <NormalFormInput
-                  name="currentCompany"
-                  label="Current company name"
-                  value={localFields.currentCompany}
-                  onChange={updateState}
-                />
-                <NormalFormInput
-                  name="previousCompany"
-                  label="Previous company name"
-                  value={localFields.previousCompany}
-                  onChange={updateState}
-                />
-                <NormalFormInput
-                  name="livesIn"
-                  label="Lives in"
-                  value={localFields.livesIn}
-                  onChange={updateState}
-                />
-                <Selector
-                  label="Marital Status"
-                  onSelect={(status) =>
-                    setLocalFields({
-                      ...localFields,
-                      maritalStatus: status.name,
-                    })
-                  }
-                  selectedItem={localFields.maritalStatus}
-                  list={[
-                    { id: '0', name: 'Married' },
-                    { id: '1', name: 'Single' },
-                  ]}
-                />
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <NormalFormInput
-                  name="businessName"
-                  label="Business name"
-                  value={localFields.businessName}
-                  onChange={updateState}
-                />
-                <NormalFormInput
-                  name="address"
-                  label="Business address"
-                  value={localFields.address}
-                  onChange={updateState}
-                />
-                <NormalFormInput
-                  name="email"
-                  label="Business email"
-                  value={localFields.email}
-                  onChange={updateState}
-                />
-                <NormalFormInput
-                  name="email"
-                  label="Additional info"
-                  value={localFields.additionalInfo}
-                  onChange={updateState}
-                />
-              </div>
-            )}
-          </div>
+      {showModal && (
+        <Modal
+          onClose={onCancel}
+          open={showModal}
+          disableBackdropClose={false}
+          setOpen={() => setShowModal(false)}
+          header="Edit About"
+        >
+          <div>
+            <div className="min-w-256  overflow-y-auto p-2 custom-scroll-mini darker my-4">
+              {!isBusiness ? (
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <NormalFormInput
+                    name="currentCompany"
+                    label="Current company name"
+                    value={localFields.currentCompany}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="previousCompany"
+                    label="Previous company name"
+                    value={localFields.previousCompany}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="livesIn"
+                    label="Lives in"
+                    value={localFields.livesIn}
+                    onChange={updateState}
+                  />
+                  <Selector
+                    label="Marital Status"
+                    onSelect={(status) =>
+                      setLocalFields({
+                        ...localFields,
+                        maritalStatus: status.name,
+                      })
+                    }
+                    selectedItem={localFields.maritalStatus}
+                    list={[
+                      { id: '0', name: 'Married' },
+                      { id: '1', name: 'Single' },
+                    ]}
+                  />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <NormalFormInput
+                    name="businessName"
+                    label="Business name"
+                    value={localFields.businessName}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="address"
+                    label="Business address"
+                    value={localFields.address}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="email"
+                    label="Business email"
+                    value={localFields.email}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="email"
+                    label="Additional info"
+                    value={localFields.additionalInfo}
+                    onChange={updateState}
+                  />
+                </div>
+              )}
+            </div>
 
-          <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
-            <Button gradient onClick={onSave} label="Save" />
+            <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
+              <Button gradient onClick={onSave} label="Save" />
+            </div>
           </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
       <Card
         cardTitle="About"
         withCardHeadings={
@@ -287,13 +283,16 @@ const About = ({
         content={
           !isBusiness ? (
             <div className="space-y-4">
-              <KeyValue label="Current company" text={company.currentCompany} />
+              <KeyValue
+                label="Current company"
+                text={company?.currentCompany}
+              />
               <KeyValue
                 label="Previous company"
                 text={company.previousCompany}
               />
-              <KeyValue label="Lives In" text={location.livesIn} />
-              <KeyValue label="Marital Status" text={userData.maritalStatus} />
+              <KeyValue label="Lives In" text={location?.livesIn} />
+              <KeyValue label="Marital Status" text={userData?.maritalStatus} />
             </div>
           ) : (
             <div className="space-y-4">

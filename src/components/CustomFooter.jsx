@@ -26,7 +26,7 @@ const WorldListPopover = () => {
                 <Popover className="relative">
                   {({ open }) => (
                     <>
-                      <p className="mb-3  text-sm font-medium dark:text-gray-400 text-gray-400">
+                      <p className="mb-3  text-xs font-medium dark:text-gray-400 text-gray-400">
                         13RMS Trading post worldwide
                       </p>
                       <Popover.Button
@@ -36,7 +36,7 @@ const WorldListPopover = () => {
                         )}
                       >
                         <img alt="usa" className={'h-4 mr-1 w-4 '} src={usa} />
-                        <span className="dark:text-gray-400">
+                        <span className="dark:text-gray-400 text-xs">
                           United States
                         </span>
                         <ChevronDownIcon
@@ -74,9 +74,9 @@ const WorldListPopover = () => {
                                     <img
                                       alt={country.label}
                                       src={country.flag}
-                                      className="w-6 h-6 mr-3"
+                                      className="w-5 h-5 mr-3"
                                     />
-                                    <p className="mb-0 dark:text-white">
+                                    <p className="mb-0 text-xs dark:text-white">
                                       {country.label}
                                     </p>
                                   </div>
@@ -147,18 +147,18 @@ const Footer = () => {
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
+      <div className="max-w-smallScreen mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="mt-12 grid grid-cols-3 gap-8 xl:mt-0 xl:col-span-3">
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-sm font-semibold  text-gray-600 tracking-wider uppercase">
+                <h3 className="text-xs font-semibold  text-gray-600 tracking-wider uppercase">
                   13RMS Trading post
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.first.map((item) => (
                     <li
-                      className="text-sm font-medium text-gray-400 link-hover text-left"
+                      className="text-xs font-medium text-gray-400 link-hover text-left"
                       key={item.name}
                     >
                       {item.name}
@@ -167,13 +167,13 @@ const Footer = () => {
                 </ul>
               </div>
               <div className="mt-12 md:mt-0">
-                <h3 className="text-sm font-semibold text-gray-600 tracking-wider uppercase">
+                <h3 className="text-xs font-semibold text-gray-600 tracking-wider uppercase">
                   Help & Contact
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.second.map((item) => (
                     <li
-                      className="text-sm font-medium text-gray-400 link-hover text-left"
+                      className="text-xs font-medium text-gray-400 link-hover text-left"
                       key={item.name}
                     >
                       {item.name}
@@ -184,13 +184,13 @@ const Footer = () => {
             </div>
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-sm font-semibold text-gray-600 tracking-wider uppercase">
+                <h3 className="text-xs font-semibold text-gray-600 tracking-wider uppercase">
                   Buy
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.third.map((item) => (
                     <li
-                      className="text-sm font-medium text-left text-gray-400 link-hover"
+                      className="text-xs font-medium text-left text-gray-400 link-hover"
                       key={item.name}
                     >
                       {item.name}
@@ -202,13 +202,13 @@ const Footer = () => {
                 </ul>
               </div>
               <div className="mt-12 md:mt-0">
-                <h3 className="text-sm font-semibold text-gray-600 tracking-wider uppercase">
+                <h3 className="text-xs font-semibold text-gray-600 tracking-wider uppercase">
                   Sell
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.fourth.map((item) => (
                     <li
-                      className="text-sm font-medium text-gray-400 link-hover text-left"
+                      className="text-xs font-medium text-gray-400 link-hover text-left"
                       key={item.name}
                     >
                       {item.name}
@@ -219,14 +219,14 @@ const Footer = () => {
             </div>
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-sm font-semibold text-gray-600 tracking-wider uppercase">
+                <h3 className="text-xs font-semibold text-gray-600 tracking-wider uppercase">
                   Community
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.fifth.map((item) => (
                     <li
                       key={item.name}
-                      className="text-sm font-medium text-gray-400 link-hover text-left"
+                      className="text-xs font-medium text-gray-400 link-hover text-left"
                     >
                       {item.name}
                     </li>
@@ -234,13 +234,13 @@ const Footer = () => {
                 </ul>
               </div>
               <div className="mt-12 md:mt-0">
-                <h3 className="text-sm font-semibold text-gray-600 tracking-wider uppercase">
+                <h3 className="text-xs font-semibold text-gray-600 tracking-wider uppercase">
                   Tool & Apps
                 </h3>
                 <ul className="mt-4 space-y-4 pl-0">
                   {navigation.sixth.map((item) => (
                     <li
-                      className="text-sm font-medium text-gray-400 link-hover text-left"
+                      className="text-xs font-medium text-gray-400 link-hover text-left"
                       key={item.name}
                     >
                       {item.name}
@@ -252,7 +252,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-12 border-t  dark:border-gray-700 border-gray-200 pt-8">
-          <p className="text-sm text-gray-600 xl:text-center">
+          <p className="text-xs text-gray-600 xl:text-center">
             &copy; {year} 13RMS, Inc. All rights reserved.
           </p>
         </div>

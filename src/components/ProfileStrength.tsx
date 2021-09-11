@@ -9,24 +9,24 @@ const ProfileStrength = ({
   authUser,
   secondary,
 }: {
-  userData: IParent
+  userData?: IParent
   authUser: boolean
   secondary?: boolean
 }) => {
   const [nextStepText, setNextStepText] = useState('')
 
-  const accountType = userData.other?.accountType
+  const accountType = userData?.other?.accountType
 
   const [progress, setProgress] = useState(20)
 
   const generateFinishStep = () => {
     const mainKeys = {
-      profilePicture: userData.profilePicture,
-      coverPicture: userData.coverPicture,
+      profilePicture: userData?.profilePicture,
+      coverPicture: userData?.coverPicture,
       [accountType === 'business' ? 'business' : 'personal']:
-        accountType === 'business' ? userData.business : userData.company,
-      background: userData.background,
-      location: userData.location,
+        accountType === 'business' ? userData?.business : userData?.company,
+      background: userData?.background,
+      location: userData?.location,
     }
 
     const vals = values(mainKeys)

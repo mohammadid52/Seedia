@@ -44,7 +44,7 @@ const Languages = ({ userData, setShowModal, showEditOption }: IBlockProps) => {
                     className="text-gray-900 dark:text-white  cursor-pointer text-left"
                     key={awardIdx}
                   >
-                    <span className="block text-gray-900 dark:text-white text-lg font-medium">
+                    <span className="block text-gray-900 dark:text-white text-base font-medium">
                       {lang.langName}
                     </span>
                     <span className="block text-gray-600 dark:text-gray-500 text-sm font-medium">

@@ -6,6 +6,7 @@ import { getAccessToken, network } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import { noop } from 'lodash'
 import React, { useState } from 'react'
+import { avatarPlaceholder } from 'state/Redux/constants'
 
 const Cover = ({
   userData,
@@ -114,15 +115,15 @@ const Cover = ({
       <Card
         content={
           <div className="flex items-center justify-start">
-            <div className="">
+            <div className="flex-grow">
               <span className="sr-only">13RMS</span>
               <img
                 onClick={() => (authUser ? showFileExplorerForProfile() : noop)}
-                className="border-gradient border-transparent border-4 h-36 w-36 sm:h-44 sm:w-44 cursor-pointer rounded-full shadow-xl"
+                className="border-gradient border-transparent border-4 h-36 w-36 sm:h-40 sm:w-40 cursor-pointer rounded-full shadow-xl"
                 src={
                   userData?.profilePicture
                     ? userData?.profilePicture
-                    : 'https://robohash.org/honey?set=set1'
+                    : avatarPlaceholder
                 }
                 alt=""
               />
@@ -136,20 +137,20 @@ const Cover = ({
               onChange={(e) => (authUser ? onImageSelect(e) : noop)}
               accept="image/x-png,image/jpeg"
             />
-            <div className="ml-4 max-w-256">
+            <div className="ml-4 max-w-256 border-l border-gray-200 dark:border-gray-600">
               <div className="overflow-hidden">
                 <div className=" px-4 pb-5 sm:px-6">
                   {isBusiness ? (
-                    <div className="dark:text-white text-gray-900 text-xl font-medium border-b border-gray-200 dark:border-gray-600 pb-4 ">
+                    <div className="dark:text-white text-gray-900 text-base font-medium border-b border-gray-200 dark:border-gray-600 pb-4 ">
                       {userData?.business?.name}{' '}
-                      <span className="ml-2 dark:text-gray-400 text-gray-500 text-sm">
+                      <span className="ml-2 dark:text-gray-400 text-gray-500 text-xs">
                         - {userData?.location?.address}
                       </span>
                     </div>
                   ) : (
-                    <div className="dark:text-white text-gray-900 text-xl font-medium border-b border-gray-200 dark:border-gray-600 pb-4 ">
+                    <div className="dark:text-white text-gray-900 text-base font-medium border-b border-gray-200 dark:border-gray-600 pb-4 ">
                       {userData?.company?.jobTitle}{' '}
-                      <span className="ml-2 dark:text-gray-400 text-gray-500 text-sm">
+                      <span className="ml-2 dark:text-gray-400 text-gray-500 text-xs">
                         -{' '}
                         {userData?.company?.companyName ||
                           userData?.company?.currentCompany}
@@ -157,7 +158,7 @@ const Cover = ({
                     </div>
                   )}
 
-                  <dl className="pt-4 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                  <dl className="pt-4 grid grid-cols-1 gap-x-2 gap-y-8 sm:grid-cols-2">
                     <div className="sm:col-span-1">
                       <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         Full name

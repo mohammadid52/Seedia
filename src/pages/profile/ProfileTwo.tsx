@@ -19,10 +19,9 @@ import Skills from 'components/profileTwo/Skills'
 import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
 import { useUserContext } from 'context/UserContext'
-import { getAccessToken, network } from 'helpers'
+import { network } from 'helpers'
 import { useRouter } from 'hooks/useRouter'
 import { IParent } from 'interfaces/UniversalInterface'
-import jwt_decode from 'jwt-decode'
 import DashboardHeader from 'pages/DashboardHeader'
 import Layout from 'pages/profile/Layout'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
@@ -47,34 +46,31 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     }
   }
 
-  const authUser =
-    getUniqId(userIdFromParam) === userData.myId && viewMode === 'private'
+  const iAmOwnerOfThisProfile = getUniqId(userIdFromParam) === userData._id
+  const showAllButtons = iAmOwnerOfThisProfile && viewMode === 'private'
 
-  const token = getAccessToken()
-  // @ts-ignore
-  var decoded = jwt_decode(token)
-
-  const getProfileById = async () => {
-    if (!authUser) {
-      const { data } = await network.post(
-        '/user/getById/' + userIdFromParam,
-        {},
-        {
-          headers: { Authorization: token },
-        }
-      )
-
-      // @ts-ignore
-      setValues({ ...data.data, myId: decoded.id })
-    } else {
-      // @ts-ignore
-      setValues({ ...userData, myId: decoded.id })
-    }
-  }
+  const [otherUserData, setOtherUserData] = useState<IParent>()
 
   useEffect(() => {
-    getProfileById()
-  }, [userIdFromParam])
+    if (!iAmOwnerOfThisProfile) {
+      // I am not owner of this profile so fetch other user data
+      fetchOtherUser()
+    }
+    return () => {
+      // @ts-ignore
+      setOtherUserData({})
+    }
+  }, [iAmOwnerOfThisProfile])
+
+  const fetchOtherUser = async () => {
+    try {
+      const { data } = await network.post('/user/getById/' + userIdFromParam)
+      setOtherUserData({ ...data.data })
+    } catch (error) {
+      // @ts-ignore
+      console.error(error.message)
+    }
+  }
 
   const [unsavedChanges, setUnsavedChanges] = useState(false)
 
@@ -91,7 +87,12 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     }
     setShowModal({ ...showModal, show: false })
   }
-  const commonBlockProps = { setShowModal, userData, showEditOption: authUser }
+  const commonBlockProps = {
+    setShowModal,
+    userData: iAmOwnerOfThisProfile ? userData : otherUserData,
+
+    showEditOption: iAmOwnerOfThisProfile,
+  }
 
   const commonModalProps = {
     ...commonBlockProps,
@@ -139,7 +140,10 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
 
   const isBusiness = userData?.other?.accountType === 'business'
 
-  const commonBlockProps2 = { authUser, userData }
+  const commonBlockProps2 = {
+    authUser: iAmOwnerOfThisProfile,
+    userData: iAmOwnerOfThisProfile ? userData : otherUserData,
+  }
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800 smooth-scroll">
@@ -182,32 +186,33 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
             </div>
           }
           secondCol={
-            <div className="space-y-12">
+            <div className="flex flex-col">
               <Cover {...commonBlockProps2} />
 
               {!isBusiness && <Experiences {...commonBlockProps} />}
               {!isBusiness && (
-                <div className="grid-cols-1 grid  sm:grid-cols-2 lg:grid-cols-2">
+                <div className="grid-cols-1 grid  sm:grid-cols-2 px-6 ">
                   <Skills {...commonBlockProps} />
                   <Awards {...commonBlockProps} />
                 </div>
               )}
               {!isBusiness && <Education {...commonBlockProps} />}
+              {isBusiness && <ProductsDetails />}
               {!isBusiness && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
+                <div className="grid-cols-1 grid  sm:grid-cols-2 px-6">
                   <Languages {...commonBlockProps} />
                 </div>
               )}
-
-              {isBusiness && <ProductsDetails />}
             </div>
           }
           thirdCol={
             <div className="">
-              {userIdFromParam === userData.profileUrl && (
+              {showAllButtons && (
                 <PublicProfileCard secondary userData={userData} />
               )}
-              {authUser && <ProfileStrength secondary {...commonBlockProps2} />}
+              {showAllButtons && (
+                <ProfileStrength secondary {...commonBlockProps2} />
+              )}
               <div className="xl:hidden block">
                 <Card
                   className={`transition-transform duration-200`}
@@ -261,7 +266,6 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                 label="Discard"
                 onClick={() => {
                   setShowUnsaveModal(false)
-                  // setLocalFields({ ...initialState })
                 }}
               />
             </div>

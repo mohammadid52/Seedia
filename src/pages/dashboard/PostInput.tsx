@@ -6,6 +6,7 @@ import { BiCalendarEvent } from 'react-icons/bi'
 import { BsCameraVideo } from 'react-icons/bs'
 import { HiOutlinePhotograph } from 'react-icons/hi'
 import { RiArticleLine } from 'react-icons/ri'
+import { avatarPlaceholder } from 'state/Redux/constants'
 
 const PostInput = ({
   setPosts,
@@ -47,11 +48,7 @@ const PostInput = ({
             <div className=" flex items-center justify-between">
               <div className="flex w-full">
                 <img
-                  src={
-                    profilePicture
-                      ? profilePicture
-                      : 'https://robohash.org/honey?set=set1'
-                  }
+                  src={profilePicture ? profilePicture : avatarPlaceholder}
                   alt="13RMS"
                   className="h-14 w-14 border-gradient border-transparent border-2 rounded-full"
                 />

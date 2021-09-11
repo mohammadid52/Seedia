@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   loaded: false,
   user: {},
+  otherUser: {},
 }
 
 const authReducer = (
@@ -25,6 +26,11 @@ const authReducer = (
       return {
         ...state,
         user: action.data,
+      }
+    case types.SET_OTHER_USER_DATA:
+      return {
+        ...state,
+        otherUser: action.data,
       }
 
     case types.START_LOADING:

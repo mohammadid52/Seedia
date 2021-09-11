@@ -21,7 +21,7 @@ const Selector = ({
       {({ open }) => (
         <div>
           {label && (
-            <Listbox.Label className="block dark:text-white text-sm font-medium text-gray-700">
+            <Listbox.Label className="block dark:text-white text-xs font-medium text-gray-700">
               {label}{' '}
               {required && (
                 <span className="text-red-500 font-medium text-base">*</span>
@@ -36,7 +36,7 @@ const Selector = ({
                 disableFocus
                   ? ''
                   : 'focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500'
-              }  sm:text-sm`}
+              }  sm:text-xs`}
             >
               <span
                 className={`block truncate  dark:text-white ${
@@ -71,6 +71,7 @@ const Selector = ({
               >
                 {list.map((item, idx) => (
                   <Listbox.Option
+                    title={item[keyName]}
                     style={{ zIndex: 9999 }}
                     disabled={item.hasOwnProperty('disabled')}
                     key={item.name + idx}

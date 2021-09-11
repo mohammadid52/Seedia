@@ -23,6 +23,7 @@ interface IButton {
   hidden?: boolean
 
   loadingText?: string
+  link?: string
   type?: 'button' | 'submit' | 'reset'
   size?: 'sm' | 'md' | 'lg' | 'xl'
   style?: any
@@ -53,13 +54,14 @@ const Button = ({
   customClass = false,
   disabled = false,
   hidden = false,
+  link = '',
   style,
 }: IButton) => {
   const primaryClass = `${
     invert
       ? `text-${bgColor}-600 border border-transparent hover:border-${bgColor}-200 `
       : `text-white bg-${bgColor}-600 border-transparent hover:bg-${bgColor}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${bgColor}-500`
-  }  flex items-center border  shadow-sm text-base font-medium rounded-md `
+  }  flex items-center border  shadow-sm font-medium rounded-md `
   const secondaryClass = `flex items-center border border-transparent font-medium rounded dark:text-${bgColor}-400 dark:border-${bgColor}-400 text-${bgColor}-700 ${
     invert
       ? `hover:border-${bgColor}-300 dark:border-gray-600 dark:hover:border-gray-500  border-${bgColor}-200 border focus:ring-${bgColor}-500`
@@ -92,10 +94,10 @@ const Button = ({
   const generatePaddingAndTextSize = () => {
     switch (size) {
       case 'sm':
-        return 'px-3 py-2 text-sm'
+        return 'px-3 py-2 text-xs'
       case 'md':
       case 'lg':
-        return 'px-4 py-2 text-base'
+        return 'px-3 py-2 text-xs'
       case 'xl':
         return 'px-8 py-3 text-lg'
       default:
@@ -117,7 +119,7 @@ const Button = ({
       className={`${
         customClass
           ? className
-          : `${generateClass()} ${generatePaddingAndTextSize()} ${rounded} font-${weight} ${className} ${
+          : `text-xs ${generateClass()} ${generatePaddingAndTextSize()} ${rounded} font-${weight} ${className} ${
               fullWidth ? 'w-full' : ''
             } transition-all flex items-center justify-center duration-200 ${
               disabled ? 'opacity-50' : ''
@@ -149,7 +151,7 @@ const Button = ({
       {Icon && (
         <Icon className={`${label ? 'mr-2' : ''} dark:text-white h-5 w-5"`} />
       )}
-      {label && (loading ? loadingText : label)}
+      {link ? <a href={link}>{label}</a> : loading ? loadingText : label}
     </button>
   )
 }

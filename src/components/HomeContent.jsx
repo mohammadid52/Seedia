@@ -8,9 +8,9 @@ const HomeContent = () => {
           <img
             alt="13RMS"
             src={process.env.PUBLIC_URL + '/logo.png'}
-            className="m-0 h-48"
+            className="m-0 h-36"
           />
-          <p className="dark:text-gray-300 max-w-xl mt-5 mx-auto text-xl text-gray-500">
+          <p className="dark:text-gray-300 max-w-xl mt-5 mx-auto text-base text-gray-500">
             The place to sell your products, services and build business
             relationships
           </p>

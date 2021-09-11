@@ -7,6 +7,7 @@ import React from 'react'
 import { getAccessToken, network } from 'helpers'
 import { useUserContext } from 'context/UserContext'
 import Badge from 'components/atoms/Badge'
+import { avatarPlaceholder } from 'state/Redux/constants'
 
 const Cover = ({
   company,
@@ -14,7 +15,7 @@ const Cover = ({
   authUser,
 }: {
   company?: ICompany
-  userData: IParent
+  userData?: IParent
   authUser: boolean
 }) => {
   const [showImageModal, setShowImageModal] = useState({
@@ -76,6 +77,7 @@ const Cover = ({
         setShowImageModal({ show: false, type: '' })
       }
     } catch (error) {
+      // @ts-ignore
       console.error(error.message)
     }
     setSaving(false)
@@ -162,7 +164,7 @@ const Cover = ({
       <main className="">
         <div className="relative">
           <div className="absolute inset-x-0 bottom-0 h-1/2 " />
-          <div className="sm:px-6 lg:px-8 px-4">
+          <div className="sm:px-0 px-8">
             <div className="relative shadow-xl rounded-md sm:overflow-hidden">
               <div className="absolute inset-0">
                 <img
@@ -182,7 +184,7 @@ const Cover = ({
                     src={
                       userData?.profilePicture
                         ? userData?.profilePicture
-                        : 'https://robohash.org/honey?set=set1'
+                        : avatarPlaceholder
                     }
                     className="md:h-32 md:w-32 sm:h-12 border-gradient border-transparent border-4 shadow-xl sm:w-12 rounded-full"
                     alt="user"
@@ -192,30 +194,29 @@ const Cover = ({
                   <span className="block text-white">
                     {userData?.fullName}{' '}
                     <Badge
-                      className="absolute -right-20 top-0"
+                      className={`${
+                        accountType === 'business'
+                          ? 'bg-pink-100 text-pink-800'
+                          : accountType === 'personal'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-blue-100 text-blue-800'
+                      } absolute -right-20 top-0 `}
                       label={accountType}
                       textSize="xs"
                       rounded=""
-                      color={
-                        accountType === 'business'
-                          ? 'pink'
-                          : accountType === 'personal'
-                          ? 'yellow'
-                          : 'blue'
-                      }
                     />
                   </span>
                   <span className="block text-white text-base tracking-wide font-medium">
                     {accountType === 'personal'
                       ? company?.jobTitle
-                      : userData.business?.name}
+                      : userData?.business?.name}
                   </span>
                 </h1>
 
                 <div className="flex items-center w-auto text-xl sm:border-t  border-white flex-col sm:flex-row border-t-none">
                   <div className="sm:border-r border-r-none border-white px-8 py-4 sm:border-b-none border-b">
                     <div className="text-center  text-white tracking-wide font-bold">
-                      {userData.pwvpCount || 0}
+                      {userData?.pwvpCount || 0}
                     </div>
                     <div className="text-gray-300 font-medium uppercase text-base mt-1 tracking-tight ">
                       profile views
@@ -223,7 +224,7 @@ const Cover = ({
                   </div>
                   <div className="sm:border-r  border-r-none border-white px-8 py-4 sm:border-b-none border-b">
                     <div className="text-center text-white tracking-wide font-bold">
-                      {userData.projects ? userData.projects.length : 0}
+                      {userData?.projects ? userData?.projects.length : 0}
                     </div>
                     <div className="text-gray-300 font-medium uppercase text-base mt-1 tracking-tight ">
                       projects

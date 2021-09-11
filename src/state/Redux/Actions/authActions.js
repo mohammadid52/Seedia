@@ -62,14 +62,9 @@ export const loadUser = () => async (dispatch) => {
           type: types.SET_USER_DATA,
           data: { ...user.data, myId: decoded.id },
         })
-        dispatch({
-          type: types.SET_VALUE,
-          data: { ...user.data, myId: decoded.id },
-        })
       }
     } else {
       dispatch({ type: types.SET_USER_DATA, data: {} })
-      dispatch({ type: types.SET_VALUE, data: {} })
     }
   } catch (error) {
   } finally {
@@ -83,6 +78,18 @@ export const setUser = (user) => async (dispatch) => {
       dispatch({
         type: types.SET_USER_DATA,
         data: { ...user, myId: decoded.id },
+      })
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+export const setOtherUser = (user) => async (dispatch) => {
+  try {
+    if (!isEmpty(user)) {
+      dispatch({
+        type: types.SET_OTHER_USER_DATA,
+        data: { ...user },
       })
     }
   } catch (error) {

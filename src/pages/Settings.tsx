@@ -80,7 +80,7 @@ export default function Settings({ userData }: { userData: IParent }) {
             <h1 className="text-lg dark:text-white text-gray-900 min-w-96">
               Are you sure you want to delete your account?
             </h1>
-            <p className="text-gray-500 ">You won't able to reccover it</p>
+            <p className="text-gray-500 ">You won't able to recover it</p>
           </div>
 
           <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
@@ -106,10 +106,10 @@ export default function Settings({ userData }: { userData: IParent }) {
         <form>
           <div className="space-y-6">
             <div>
-              <h1 className="text-lg leading-6 font-medium dark:text-white text-gray-900">
+              <h1 className="text-base leading-6 font-medium dark:text-white text-gray-900">
                 Profile Settings
               </h1>
-              <p className="mt-1 text-sm text-gray-500 ">
+              <p className="mt-1 text-xs text-gray-500 ">
                 You can change your profile settings here.
               </p>
             </div>
@@ -123,7 +123,8 @@ export default function Settings({ userData }: { userData: IParent }) {
                   currentTemplate === 1 ? 'Two' : 'One'
                 }`}
                 secondary
-                bgColor="blue"
+                bgColor="gray"
+                style={{ color: 'teal' }}
                 label={`Change template to ${
                   currentTemplate === 1 ? 'Two' : 'One'
                 }`}
@@ -132,10 +133,10 @@ export default function Settings({ userData }: { userData: IParent }) {
 
             <Divider />
             <div>
-              <h1 className="text-lg leading-6 font-medium dark:text-white text-gray-900">
+              <h1 className="text-base leading-6 font-medium dark:text-white text-gray-900">
                 Account Settings
               </h1>
-              <p className="mt-1 text-sm text-gray-500 ">
+              <p className="mt-1 text-xs text-gray-500 ">
                 You can change your account settings here.
               </p>
             </div>
@@ -144,21 +145,22 @@ export default function Settings({ userData }: { userData: IParent }) {
                 invert
                 onClick={() => setShowDeleteModal(true)}
                 secondary
-                bgColor="red"
+                style={{ color: '#F87171' }}
+                bgColor="gray"
                 label="Delete this account"
               />
             </div>
 
             <p className="text-sm text-gray-500">
               This account was created on{' '}
-              <time dateTime="2017-01-05T20:35:40">
+              <time dateTime="2017-01-05T20:35:40" className="font-semibold">
                 {userData.other?.createdOn
-                  ? moment(userData.other?.createdOn).format('LT')
+                  ? moment(userData.other?.createdOn).format('LL')
                   : 'January 5, 2017, 8:35:40 PM'}
               </time>
               .
             </p>
-            <Divider />
+            <Divider withButton text="End" />
           </div>
         </form>
       </main>

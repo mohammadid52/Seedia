@@ -11,6 +11,7 @@ import FormInput from 'components/atoms/FormInput'
 import * as Yup from 'yup'
 import { useRouter } from 'hooks/useRouter'
 import { useUserContext } from 'context/UserContext'
+import { avatarPlaceholder } from 'state/Redux/constants'
 
 const Recommendations = ({
   recommendation,
@@ -20,13 +21,16 @@ const Recommendations = ({
 }: {
   authUser: boolean
   secondary?: boolean
-  userData: IParent
+  userData?: IParent
   recommendation?: { received: IRecommendation[]; given: IRecommendation[] }
 }) => {
   const [fetchReceived, setFetchReceived] = useState<any[]>([])
 
+  const [fetching, setFetching] = useState(false)
+
   const [fetchGiven, setFetchGiven] = useState<any[]>([])
   const fetchReceivedList = async () => {
+    setFetching(true)
     try {
       const config = {
         users: map(recommendation?.received, (g) => g.userId),
@@ -44,10 +48,13 @@ const Recommendations = ({
       // setFetchGiven(_g)
     } catch (error) {
       console.error(error)
+      setFetching(false)
     }
   }
 
   const fetchGivenList = async () => {
+    setFetching(true)
+
     try {
       const config = {
         users: map(recommendation?.given, (g) => g.userId),
@@ -64,21 +71,34 @@ const Recommendations = ({
       setFetchGiven(_g)
     } catch (error) {
       console.error(error)
+      setFetching(false)
     }
   }
+  const [currentTab, setCurrentTab] = useState('Received')
 
   useEffect(() => {
     // @ts-ignore
-    if (recommendation && recommendation?.received.length > 0) {
+    if (
+      recommendation &&
+      recommendation?.received.length > 0 &&
+      fetchReceived.length === 0 &&
+      currentTab === 'Received'
+    ) {
       fetchReceivedList()
     }
-  }, [recommendation?.received])
+  }, [recommendation?.received, fetchReceived, currentTab])
+
   useEffect(() => {
     // @ts-ignore
-    if (recommendation && recommendation?.given.length > 0) {
+    if (
+      recommendation &&
+      recommendation?.given.length > 0 &&
+      fetchGiven.length === 0 &&
+      currentTab === 'Given'
+    ) {
       fetchGivenList()
     }
-  }, [recommendation?.given])
+  }, [recommendation?.given, fetchReceived, currentTab])
 
   const tabs = [
     {
@@ -90,7 +110,6 @@ const Recommendations = ({
       count: recommendation?.given ? recommendation.given.length : 0,
     },
   ]
-  const [currentTab, setCurrentTab] = useState('Received')
 
   const [showModal, setShowModal] = useState(false)
   const onCancel = () => setShowModal(false)
@@ -195,7 +214,31 @@ const Recommendations = ({
         content={
           <div className="grid mt-6  sm:grid-cols-1 md:grid-cols-1 space-y-12">
             {currentTab === 'Received' &&
-              (fetchReceived && fetchReceived.length > 0 ? (
+              (fetching ? (
+                <div className="text-center flex items-center justify-center text-gray-400">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Fetching
+                </div>
+              ) : fetchReceived && fetchReceived.length > 0 ? (
                 map(fetchReceived, (recom, idx) => {
                   return (
                     <div
@@ -213,7 +256,7 @@ const Recommendations = ({
                             src={
                               recom?.user?.profilePicture
                                 ? recom?.user?.profilePicture
-                                : 'https://robohash.org/honey?set=set1'
+                                : avatarPlaceholder
                             }
                             alt="by-name"
                             className="h-6 w-6 rounded-full ml-2"
@@ -240,7 +283,31 @@ const Recommendations = ({
                 </div>
               ))}
             {currentTab === 'Given' &&
-              (fetchGiven && fetchGiven.length > 0 ? (
+              (fetching ? (
+                <div className="text-center flex items-center justify-center text-gray-400">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Fetching
+                </div>
+              ) : fetchGiven && fetchGiven.length > 0 ? (
                 map(fetchGiven, (recom, idx) => {
                   return (
                     <div
@@ -258,7 +325,7 @@ const Recommendations = ({
                             src={
                               recom?.user?.profilePicture
                                 ? recom?.user?.profilePicture
-                                : 'https://robohash.org/honey?set=set1'
+                                : avatarPlaceholder
                             }
                             alt="by-name"
                             className="h-6 w-6 rounded-full ml-2"

@@ -1,11 +1,10 @@
-import React from 'react'
 import { CloudUploadIcon } from '@heroicons/react/outline'
 import { AiOutlineDropbox, AiOutlineFileProtect } from 'react-icons/ai'
+import { BsPeople } from 'react-icons/bs'
 import { HiOutlineGlobe } from 'react-icons/hi'
+import { ImMobile2 } from 'react-icons/im'
 import { MdVerifiedUser } from 'react-icons/md'
 import { RiSecurePaymentLine } from 'react-icons/ri'
-import { ImMobile2 } from 'react-icons/im'
-import { BsPeople } from 'react-icons/bs'
 
 const Features = () => {
   const features = [
@@ -57,31 +56,31 @@ const Features = () => {
   return (
     <div className="relative bg-white dark:bg-gray-800 py-16 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
-        <p className="mt-2 text-3xl font-extrabold dark:text-white text-gray-900 tracking-tight sm:text-4xl">
+        <p className="mt-2 text-xl font-extrabold dark:text-white text-gray-900 tracking-tight sm:text-3xl">
           Everything you need to get started with{' '}
           <span className="border-b-2 border-pink-600 mt-2 dark:text-white text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
             13RMS
           </span>
         </p>
 
-        <div className="mt-12">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-16">
+          <div className="grid grid-cols-1 gap-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {features.map((feature) => (
-              <div key={feature.name} className="pt-6 ">
-                <div className="flow-root feature cursor-pointer bg-gray-50 dark:bg-gray-700 rounded-lg px-6 pb-8">
+              <div key={feature.name} className="max-h-60 max-w-60 ">
+                <div className="flow-root feature cursor-pointer bg-gray-50 dark:bg-gray-700 rounded-lg px-4 pb-8">
                   <div className="-mt-6">
                     <div>
-                      <span className="feature-icon transform  inline-flex items-center justify-center p-3 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md shadow-lg">
+                      <span className="feature-icon transform  inline-flex items-center justify-center p-2.5 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md shadow-lg">
                         <feature.icon
-                          className="h-6 w-6 text-white"
+                          className="h-5 w-5 text-white"
                           aria-hidden="true"
                         />
                       </span>
                     </div>
-                    <h3 className="mt-8 text-lg font-medium dark:text-gray-100 text-gray-900 tracking-tight">
+                    <h3 className="mt-8 text-base font-medium dark:text-gray-100 text-gray-900 tracking-tight">
                       {feature.name}
                     </h3>
-                    <p className="mt-5 text-base dark:text-gray-400 text-gray-500">
+                    <p className="mt-5 text-sm whitespace-wrap dark:text-gray-400 text-gray-500">
                       {feature.description}
                     </p>
                   </div>

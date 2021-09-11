@@ -117,7 +117,9 @@ module.exports = {
         196: '49rem',
         200: '50rem',
         256: '64rem',
+        360: '90rem',
         440: '110rem',
+        smallScreen: '70rem',
       },
       maxHeight: {
         48: '12rem',

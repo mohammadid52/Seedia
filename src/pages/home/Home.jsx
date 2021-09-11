@@ -7,19 +7,20 @@ import Navigation from 'components/Navigation'
 
 const Home = ({ isUser, profileUrl, template, accountFilled }) => {
   return (
-    <div {...{ className: 'w-full' }}>
+    <div className="">
       <Navigation
         userId={profileUrl}
         isUser={isUser}
         template={template}
         accountFilled={accountFilled}
       />
-      <HomeContent />
-      <div className="flex flex-col dark:bg-gray-800 bg-white">
-        <CustomSearchPanel />
-        <Features />
+      <div className="mx-auto max-w-smallScreen">
+        <HomeContent />
+        <div className="flex flex-col dark:bg-gray-800 bg-white">
+          <CustomSearchPanel />
+          <Features />
+        </div>
       </div>
-
       <Footer />
     </div>
   )

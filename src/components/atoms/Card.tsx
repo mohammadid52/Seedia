@@ -11,6 +11,7 @@ const Card = ({
   privateCard = false,
   secondary = false,
   style,
+  transparent = false,
 }: {
   cardTitle?: string
   privateCard?: boolean
@@ -21,15 +22,20 @@ const Card = ({
   cardTitleStyles?: string
   id?: string
   secondary?: boolean
+  transparent?: boolean
   style?: any
 }) => {
+  const transparentClass = transparent
+    ? 'bg-transparent'
+    : `${
+        disablePadding ? 'py-6' : 'p-6'
+      }  bg-white  dark:bg-gray-700 h-full rounded-md ${className}`
+
   return (
     <div
       style={{ ...style }}
       id={id}
-      className={`${
-        disablePadding ? 'py-6' : 'p-6'
-      }  bg-white dark:bg-gray-700 h-full rounded-md ${className}`}
+      className={`${transparentClass} transform scale-90`}
     >
       {cardTitle && (
         <>
@@ -38,7 +44,7 @@ const Card = ({
               className={`${disablePadding ? 'px-6' : ''}  leading-6 ${
                 secondary
                   ? 'uppercase tracking-wider text-xs text-gray-400 font-medium'
-                  : 'text-lg font-medium text-gray-900 dark:text-white'
+                  : 'text-sm font-medium text-gray-900 dark:text-white'
               }   ${cardTitleStyles}`}
             >
               {cardTitle}{' '}
@@ -57,7 +63,7 @@ const Card = ({
           <hr
             className={`${
               disablePadding ? 'mx-6' : ''
-            } gradient-border bottom text-gray-500 my-4`}
+            } gradient-border bottom text-gray-500 mb-4 mt-2`}
           />
         </>
       )}

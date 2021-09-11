@@ -42,16 +42,16 @@ const Education = ({ userData, showEditOption, setShowModal }: IBlockProps) => {
                 {map(education, (ed, idx) => (
                   <li key={idx} className="flex items-start space-x-4">
                     <div className="flex items-center mt-2 w-36">
-                      <span className="block text-gray-500 mr-4 dark:text-gray-400">
+                      <span className="block text-gray-500 text-sm mr-4 dark:text-gray-400">
                         2017 - 2021
                       </span>
                       <span className="block rounded-full ml-4  h-3 w-3 border-2 border-gray-300 " />
                     </div>
                     <div>
-                      <h4 className="text-2xl text-gray-900 dark:text-white font-medium">
+                      <h4 className="text-xl text-gray-900 dark:text-white font-medium">
                         {ed.name}
                       </h4>
-                      <h6 className="text-base text-gray-400 dark:text-gray-400">
+                      <h6 className="text-sm text-gray-400 dark:text-gray-400">
                         {ed.degree}
                       </h6>
                     </div>

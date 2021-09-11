@@ -100,6 +100,7 @@ const PublicProfileCard = ({
             userData?.other?.template
           )
         )
+        window.location.reload()
       } catch (error) {
         console.error(error.message)
       } finally {
@@ -156,7 +157,7 @@ const PublicProfileCard = ({
         </Modal>
       )}
       <Card
-        className="mb-12"
+        className="mb-0"
         secondary={secondary}
         cardTitle="Others"
         content={
@@ -178,40 +179,42 @@ const PublicProfileCard = ({
           </ul>
         }
       />
-      <Modal
-        hideCloseBtn
-        header="Discard changes"
-        open={showUnsaveModal}
-        setOpen={setShowUnsaveModal}
-      >
-        <>
-          <h1 className="text-lg dark:text-white text-gray-900 min-w-96">
-            You have unsaved changes
-          </h1>
-          <p className="text-gray-500 ">Do you want to save it?</p>
+      {showUnsaveModal && (
+        <Modal
+          hideCloseBtn
+          header="Discard changes"
+          open={showUnsaveModal}
+          setOpen={setShowUnsaveModal}
+        >
+          <>
+            <h1 className="text-lg dark:text-white text-gray-900 min-w-96">
+              You have unsaved changes
+            </h1>
+            <p className="text-gray-500 ">Do you want to save it?</p>
 
-          <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
-            <Button
-              secondary
-              bgColor="gray"
-              onClick={() => {
-                setShowUnsaveModal(false)
-                setShowEditProfileUrlModal(true)
-              }}
-              invert
-              label="No thanks"
-            />
-            <Button
-              gradient
-              label="Discard"
-              onClick={() => {
-                setShowUnsaveModal(false)
-                // setLocalFields({ ...initialState })
-              }}
-            />
-          </div>
-        </>
-      </Modal>
+            <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
+              <Button
+                secondary
+                bgColor="gray"
+                onClick={() => {
+                  setShowUnsaveModal(false)
+                  setShowEditProfileUrlModal(true)
+                }}
+                invert
+                label="No thanks"
+              />
+              <Button
+                gradient
+                label="Discard"
+                onClick={() => {
+                  setShowUnsaveModal(false)
+                  // setLocalFields({ ...initialState })
+                }}
+              />
+            </div>
+          </>
+        </Modal>
+      )}
     </>
   )
 }

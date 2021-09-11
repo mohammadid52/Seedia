@@ -19,7 +19,7 @@ const DashboardLayout = ({
           className={`${firstColClass} border-b dark:border-gray-700 border-gray-200 dark:bg-gray-800 xl:border-b-0 xl:flex-shrink-0 xl:w-64 bg-gray-100`}
         >
           <div
-            className="h-full py-6
+            className="h-full
           "
           >
             {/* Start left column area */}

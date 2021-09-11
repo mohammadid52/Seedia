@@ -1,12 +1,16 @@
-// value can be 0/false and 1-100 for true
+import 'styles/animatedLoading.scss'
 const Loading = () => {
   return (
-    <div className="h-screen w-screen bg-white dark:bg-gray-800 flex items-center justify-center">
+    <div className="  flex-col h-screen w-screen bg-white dark:bg-gray-800 flex items-center justify-center">
       <img
-        style={{ width: '60%' }}
-        src={`${process.env.PUBLIC_URL}/loading.gif`}
+        className="h-36 w-36"
+        src={`${process.env.PUBLIC_URL}/logo.png`}
         alt="Loading..."
       />
+      <div className="loader mt-8">
+        <div className="loading_1"></div>
+        {/* <div className="loading_2">Loading GfG...</div> */}
+      </div>
     </div>
   )
 }

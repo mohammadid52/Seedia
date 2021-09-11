@@ -1,23 +1,20 @@
 import CustomFooter from 'components/CustomFooter'
-import Cover from 'pages/profile/Cover'
+import ProfileStrength from 'components/ProfileStrength'
+import PublicProfileCard from 'components/PublicProfileCard'
+import Sidebar from 'components/Sidebar'
+import { network } from 'helpers'
+import { useRouter } from 'hooks/useRouter'
+import { IParent } from 'interfaces/UniversalInterface'
+import DashboardHeader from 'pages/DashboardHeader'
 import About from 'pages/profile/About'
 import Background from 'pages/profile/Background'
-import Recommendations from 'pages/profile/Recommendations'
+import Cover from 'pages/profile/Cover'
 import Following from 'pages/profile/Following'
-import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Layout from 'pages/profile/Layout'
-import { IParent } from 'interfaces/UniversalInterface'
-import { useRouter } from 'hooks/useRouter'
-import { getAccessToken, network } from 'helpers'
-import { useEffect } from 'react'
-import { useUserContext } from 'context/UserContext'
-import ProfileStrength from 'components/ProfileStrength'
-import Sidebar from 'components/Sidebar'
-import jwt_decode from 'jwt-decode'
-import { useDispatch } from 'react-redux'
-import { loadUser } from 'state/Redux/Actions/authActions'
-import PublicProfileCard from 'components/PublicProfileCard'
-import DashboardHeader from 'pages/DashboardHeader'
+import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
+import Recommendations from 'pages/profile/Recommendations'
+import { useEffect, useState } from 'react'
+import RandomUsers from './RandomUsers'
 
 const getUniqId = (str?: string) => {
   if (str) {
@@ -30,52 +27,36 @@ const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
   const { viewMode, userId: userIdFromParam } = route?.match?.params
 
-  const { setValues } = useUserContext()
+  const iAmOwnerOfThisProfile = getUniqId(userIdFromParam) === userData._id
+  const showAllButtons = iAmOwnerOfThisProfile && viewMode === 'private'
 
-  // #1 first get userId from params
-  // #2 check user id from token decoded object
-  // #3 if it matches then current user is authUser (owner of profile)
-  const authUser =
-    getUniqId(userIdFromParam) === userData.myId && viewMode === 'private'
-  console.log(
-    '🚀 ~ file: ProfileOne.tsx ~ line 39 ~ Profile ~ authUser',
-    getUniqId(userIdFromParam)
-  )
-  const token = getAccessToken()
-  // @ts-ignore
-  var decoded = jwt_decode(token)
+  const [otherUserData, setOtherUserData] = useState<IParent>()
 
-  const checkOnlyId = getUniqId(userIdFromParam) === userData.myId
-
-  const getProfileById = async () => {
-    if (!authUser) {
-      const { data } = await network.post(
-        '/user/getById/' + userIdFromParam,
-        {},
-        {
-          headers: { Authorization: token },
-        }
-      )
-
+  useEffect(() => {
+    if (!iAmOwnerOfThisProfile) {
+      // I am not owner of this profile so fetch other user data
+      fetchOtherUser()
+    }
+    return () => {
       // @ts-ignore
+      setOtherUserData({})
+    }
+  }, [iAmOwnerOfThisProfile])
+
+  const fetchOtherUser = async () => {
+    try {
+      const { data } = await network.post('/user/getById/' + userIdFromParam)
+      setOtherUserData({ ...data.data })
+    } catch (error) {
       // @ts-ignore
-      setValues({ ...data.data, myId: decoded.id })
-    } else {
-      // @ts-ignore
-      setValues({ ...userData, myId: decoded.id })
+      console.error(error.message)
     }
   }
 
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    getProfileById()
-    return () => {
-      dispatch(loadUser())
-    }
-  }, [userIdFromParam])
-
-  const commonProps = { authUser, userData }
+  const commonProps = {
+    authUser: iAmOwnerOfThisProfile,
+    userData: iAmOwnerOfThisProfile ? userData : otherUserData,
+  }
 
   return (
     <div className="bg-gray-100 dark:bg-gray-800">
@@ -84,32 +65,33 @@ const Profile = ({ userData }: { userData: IParent }) => {
       <div className="flex">
         <div
           className="mx-auto min-h-screen pt-8 w-full"
-          style={{ maxWidth: '110rem' }}
+          style={{ maxWidth: '90rem' }}
         >
           <Cover {...commonProps} />
 
           <div className="my-6">
             <Layout
               firstCol={
-                <div className="space-y-12">{<About {...commonProps} />}</div>
+                <div className="space-y-8">{<About {...commonProps} />}</div>
               }
               secondCol={
-                <div className="space-y-12">
+                <div className="space-y-8 py-0">
                   <Background {...commonProps} />
                   <Recommendations
                     {...commonProps}
-                    recommendation={userData.recommendation}
+                    recommendation={commonProps?.userData?.recommendation}
                   />
                   <Following
-                    list={userData.following}
-                    interests={userData?.background?.interests}
+                    list={commonProps?.userData?.following}
+                    interests={commonProps?.userData?.background?.interests}
                   />
+                  <RandomUsers list={userData.following} />
                 </div>
               }
               thirdCol={
-                <div className="space-y-12">
-                  {checkOnlyId && <PublicProfileCard userData={userData} />}
-                  {checkOnlyId && <ProfileStrength {...commonProps} />}
+                <div className="space-y-8">
+                  {showAllButtons && <PublicProfileCard userData={userData} />}
+                  {showAllButtons && <ProfileStrength {...commonProps} />}
                   <PeopleAlsoViewed {...commonProps} />
                 </div>
               }

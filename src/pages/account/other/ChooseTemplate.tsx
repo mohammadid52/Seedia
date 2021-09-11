@@ -55,41 +55,45 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
   const { setValues } = useUserContext()
 
   const onNext = async () => {
-    try {
-      setLoading(true)
+    if (selected) {
+      try {
+        setLoading(true)
 
-      const token = getAccessToken()
+        const token = getAccessToken()
 
-      const updatedData = {
-        ...user,
-        other: {
-          ...user.other,
-          accountFilled: true,
-          accountFinishedStep: 'chooseTemplate',
-          template: selected.name === 'Template One' ? 1 : 2,
-        },
-      }
-
-      await network.post(
-        '/user/update',
-        {
-          ...updatedData,
-        },
-        {
-          headers: { Authorization: token },
+        const updatedData = {
+          ...user,
+          other: {
+            ...user.other,
+            accountFilled: true,
+            accountFinishedStep: 'chooseTemplate',
+            template: selected?.name === 'Template One' ? 1 : 2,
+          },
         }
-      )
-      setValues({ ...updatedData })
 
-      setErrors([])
-      window.location.reload()
-      history.push(links.DASHBAORD)
-    } catch (error) {
-      setErrors(['Oops! Something went wrong'])
-      console.error(error)
-      setErrors([])
-    } finally {
-      setLoading(false)
+        await network.post(
+          '/user/update',
+          {
+            ...updatedData,
+          },
+          {
+            headers: { Authorization: token },
+          }
+        )
+        setValues({ ...updatedData })
+
+        setErrors([])
+        window.location.reload()
+        history.push(links.DASHBAORD)
+      } catch (error) {
+        setErrors(['Oops! Something went wrong'])
+        console.error(error)
+        setErrors([])
+      } finally {
+        setLoading(false)
+      }
+    } else {
+      setErrors(['Please select a template'])
     }
   }
 
@@ -168,17 +172,17 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
                             e.stopPropagation()
                             setShowModal({ show: true, idx: settingIdx + 1 })
                           }}
-                          className="p-1  h-12 w-12 flex items-center justify-center rounded-xl"
-                          title="see preview"
+                          className="dark:text-gray-400 text-xs"
                         >
-                          <img
+                          See Preview
+                          {/* <img
                             alt=""
                             src={
                               process.env.PUBLIC_URL +
                               `/template${settingIdx + 1}.png`
                             }
                             className="h-8 w-8"
-                          />
+                          /> */}
                         </div>
                       </>
                     )}
@@ -194,7 +198,9 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
               gradient
               onClick={onNext}
             />
-            {errors.length > 0 && <Error errors={errors} />}
+            <div className="mt-4">
+              {errors.length > 0 && <Error errors={errors} />}
+            </div>
           </div>
         </AnimatedDiv>
       </Layout>

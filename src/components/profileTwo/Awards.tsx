@@ -33,7 +33,7 @@ const Awards = ({ userData, setShowModal, showEditOption }: IBlockProps) => {
             </>
           )
         }
-        className="sm:ml-6 mt-6 sm:mt-0 ml-0"
+        className="mt-6 sm:mt-0 ml-0"
         cardTitle="Awards"
         content={
           <div className="min-h-64 overflow-y-auto  custom-scroll-mini">

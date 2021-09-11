@@ -31,6 +31,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
     "emailjs-com": "^3.2.0",
+    "faker": "^5.5.3",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "jade": "^1.11.0",
@@ -88,6 +89,7 @@
     ]
   },
   "devDependencies": {
+    "@types/faker": "^5.5.8",
     "@types/react-datepicker": "^4.1.4",
     "@types/react-dom": "^17.0.9",
     "@types/react-lottie": "^1.2.6",

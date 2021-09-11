@@ -52,8 +52,9 @@ const ChooseAccount = ({ user }: { user?: IParent }) => {
 
       const token = getAccessToken()
 
-      const profileUrl =
-        `${user?.firstName}_${user?.lastName}_${user?.myId}`.toLowerCase()
+      const profileUrl = `${user?.firstName}_${user?.lastName}_${
+        user?.myId || user?._id
+      }`.toLowerCase()
 
       const updatedData = {
         ...user,

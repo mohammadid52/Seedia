@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Badge = ({
   style,
   className,
@@ -18,9 +16,9 @@ const Badge = ({
   return (
     <span
       style={{ ...style }}
-      className={`${className} absolute capitalize bg-opacity-90 inline-flex items-center px-2.5 py-0.5  rounded${
+      className={` ${className} absolute capitalize bg-opacity-90 inline-flex items-center px-2.5 py-0.5  rounded${
         rounded ? `-${rounded}` : ''
-      } text-${textSize} font-medium bg-${color}-100 text-${color}-800`}
+      } text-${textSize} font-medium `}
     >
       {label}
     </span>

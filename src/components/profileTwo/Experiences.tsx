@@ -76,11 +76,11 @@ const Experiences = ({
                                   stepIdx === 0
                                     ? 'border-pink-600 '
                                     : 'border-gray-200 dark:border-gray-600'
-                                }  z-10 w-8 h-8 flex bg-white dark:bg-gray-700 items-center justify-center border-4  rounded-full `}
+                                }  z-10 w-6 h-6 flex bg-white dark:bg-gray-700 items-center justify-center border-4  rounded-full `}
                               ></span>
                             </span>
                             <span className="ml-4 min-w-0 flex flex-col">
-                              <span className=" font-semibold dark:text-white text-lg tracking-wide uppercase">
+                              <span className=" font-semibold dark:text-white text-base tracking-wide uppercase">
                                 {step.jobTitle}{' '}
                                 <span className="dark:text-gray-400 text-gray-500 text-xs normal-case font-light">
                                   - {step.companyName}
