@@ -42,3 +42,9 @@ export const renderPathByType = (type: string) => {
       return links.COMPANY
   }
 }
+
+export const updateDocumentTitle = (title: string) => {
+  if (window.document) {
+    document.title = title
+  }
+}

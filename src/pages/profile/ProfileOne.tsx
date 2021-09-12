@@ -3,7 +3,7 @@ import Loading from 'components/Loading'
 import ProfileStrength from 'components/ProfileStrength'
 import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
-import { getUniqId, network } from 'helpers'
+import { getUniqId, network, updateDocumentTitle } from 'helpers'
 import { useRouter } from 'hooks/useRouter'
 import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
@@ -31,6 +31,8 @@ const Profile = ({ userData }: { userData: IParent }) => {
     if (!iAmOwnerOfThisProfile) {
       // I am not owner of this profile so fetch other user data
       fetchOtherUser()
+    } else {
+      updateDocumentTitle(userData.fullName)
     }
   }, [iAmOwnerOfThisProfile])
 
@@ -41,6 +43,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
       setFetchingData(true)
       const { data } = await network.post('/user/getById/' + userIdFromParam)
       setOtherUserData({ ...data.data })
+      updateDocumentTitle(data.data.fullName)
     } catch (error) {
       // @ts-ignore
       console.error(error.message)

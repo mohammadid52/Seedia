@@ -2,10 +2,11 @@ import Navigation from 'components/Navigation'
 import Post from 'components/Post'
 import Sidebar from 'components/Sidebar'
 import SideCard from 'components/SideCard'
+import { updateDocumentTitle } from 'helpers'
 import { IParent, NavProps } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import PersonalCard from './AboutMe'
 import PostInput from './PostInput'
 
@@ -16,6 +17,10 @@ interface DashboardProps extends NavProps {
 const Dashboard = ({ userData }: DashboardProps) => {
   const [posts, setPosts] = useState([])
   const [postLoading] = useState(false)
+
+  useEffect(() => {
+    updateDocumentTitle('13RMS - Dashboard')
+  }, [])
 
   const [collapsed] = useState(true)
 
