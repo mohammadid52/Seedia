@@ -25,6 +25,7 @@ interface IButton {
 
   loadingText?: string
   link?: string
+  target?: string
   type?: 'button' | 'submit' | 'reset'
   size?: 'sm' | 'md' | 'lg' | 'xl'
   style?: any
@@ -33,6 +34,7 @@ interface IButton {
 
 const Button = ({
   label,
+  target = '_blank',
   title,
   onClick,
   Icon,
@@ -155,7 +157,7 @@ const Button = ({
         <Icon className={`${label ? 'mr-2' : ''} dark:text-white h-5 w-5"`} />
       )}
       {link ? (
-        <a target="_blank" rel="noreferrer" href={link}>
+        <a target={target} rel="noreferrer" href={link}>
           {label}
         </a>
       ) : loading ? (

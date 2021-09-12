@@ -2,6 +2,7 @@ import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
 import CustomFooter from 'components/CustomFooter'
+import Loading from 'components/Loading'
 import AwardsModal from 'components/modals/AwardsModal'
 import EducationModal from 'components/modals/EducationModal'
 import ExperienceTwoModal from 'components/modals/ExperienceTwoModal'
@@ -37,6 +38,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
 
   const iAmOwnerOfThisProfile = getUniqId(userIdFromParam) === userData._id
   const showAllButtons = iAmOwnerOfThisProfile && viewMode === 'private'
+  const [fetchingData, setFetchingData] = useState(false)
 
   const [otherUserData, setOtherUserData] = useState<IParent>()
 
@@ -45,19 +47,18 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
       // I am not owner of this profile so fetch other user data
       fetchOtherUser()
     }
-    return () => {
-      // @ts-ignore
-      setOtherUserData({})
-    }
   }, [iAmOwnerOfThisProfile])
 
   const fetchOtherUser = async () => {
     try {
+      setFetchingData(true)
       const { data } = await network.post('/user/getById/' + userIdFromParam)
       setOtherUserData({ ...data.data })
     } catch (error) {
       // @ts-ignore
       console.error(error.message)
+    } finally {
+      setFetchingData(false)
     }
   }
 
@@ -134,7 +135,9 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     userData: iAmOwnerOfThisProfile ? userData : otherUserData,
   }
 
-  return (
+  return fetchingData ? (
+    <Loading />
+  ) : (
     <div className="bg-gray-100 dark:bg-gray-800 smooth-scroll">
       <DashboardHeader userData={userData} />
 

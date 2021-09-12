@@ -1,4 +1,5 @@
 import CustomFooter from 'components/CustomFooter'
+import Loading from 'components/Loading'
 import ProfileStrength from 'components/ProfileStrength'
 import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
@@ -21,28 +22,30 @@ const Profile = ({ userData }: { userData: IParent }) => {
   const { viewMode, userId: userIdFromParam } = route?.match?.params
 
   const iAmOwnerOfThisProfile = getUniqId(userIdFromParam) === userData._id
+
   const showAllButtons = iAmOwnerOfThisProfile && viewMode === 'private'
 
-  const [otherUserData, setOtherUserData] = useState<IParent>()
+  const [otherUserData, setOtherUserData] = useState<IParent>(userData)
 
   useEffect(() => {
     if (!iAmOwnerOfThisProfile) {
       // I am not owner of this profile so fetch other user data
       fetchOtherUser()
     }
-    return () => {
-      // @ts-ignore
-      setOtherUserData({})
-    }
   }, [iAmOwnerOfThisProfile])
+
+  const [fetchingData, setFetchingData] = useState(false)
 
   const fetchOtherUser = async () => {
     try {
+      setFetchingData(true)
       const { data } = await network.post('/user/getById/' + userIdFromParam)
       setOtherUserData({ ...data.data })
     } catch (error) {
       // @ts-ignore
       console.error(error.message)
+    } finally {
+      setFetchingData(false)
     }
   }
 
@@ -51,7 +54,9 @@ const Profile = ({ userData }: { userData: IParent }) => {
     userData: iAmOwnerOfThisProfile ? userData : otherUserData,
   }
 
-  return (
+  return fetchingData ? (
+    <Loading />
+  ) : (
     <div className="bg-gray-100 dark:bg-gray-800">
       <DashboardHeader userData={userData} />
       <Sidebar />

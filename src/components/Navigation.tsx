@@ -9,7 +9,6 @@ import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import { NavProps } from 'interfaces/UniversalInterface'
 import { Fragment, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { classNames } from 'utils/classNames'
 import { adjustColors } from 'values/values'
 
@@ -21,8 +20,6 @@ const Navigation = ({
   const { setDarkMode, darkMode } = useUserContext()
 
   const [selected, setSelected] = useState(adjustColors[0])
-
-  const history = useHistory()
 
   return (
     <Popover className="relative dark:bg-gray-800  bg-white">
@@ -143,6 +140,7 @@ const Navigation = ({
                     link={links.getProfileById(userId, template)}
                     className="mx-4 "
                     label="Profile"
+                    target=""
                     gradient
                     invert
                   />
