@@ -2,7 +2,7 @@ import CustomFooter from 'components/CustomFooter'
 import ProfileStrength from 'components/ProfileStrength'
 import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
-import { network } from 'helpers'
+import { getUniqId, network } from 'helpers'
 import { useRouter } from 'hooks/useRouter'
 import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
@@ -15,13 +15,6 @@ import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Recommendations from 'pages/profile/Recommendations'
 import { useEffect, useState } from 'react'
 import RandomUsers from './RandomUsers'
-
-const getUniqId = (str?: string) => {
-  if (str) {
-    const arr = str.split('_')
-    return arr[arr.length - 1]
-  }
-}
 
 const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
@@ -54,7 +47,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
   }
 
   const commonProps = {
-    authUser: iAmOwnerOfThisProfile,
+    authUser: showAllButtons,
     userData: iAmOwnerOfThisProfile ? userData : otherUserData,
   }
 
@@ -78,6 +71,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
                 <div className="space-y-8 py-0">
                   <Background {...commonProps} />
                   <Recommendations
+                    iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
                     {...commonProps}
                     recommendation={commonProps?.userData?.recommendation}
                   />
@@ -85,7 +79,11 @@ const Profile = ({ userData }: { userData: IParent }) => {
                     list={commonProps?.userData?.following}
                     interests={commonProps?.userData?.background?.interests}
                   />
-                  <RandomUsers list={userData.following} />
+                  <RandomUsers
+                    skipList={commonProps?.userData?.following}
+                    userData={userData}
+                    list={userData.following}
+                  />
                 </div>
               }
               thirdCol={

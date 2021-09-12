@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 const router = require('express').Router()
 const auth = require('../middleware/verifyAuth')
-const { responseMsg } = require('../utils')
+const { responseMsg, unique } = require('../utils')
 var ObjectId = require('mongodb').ObjectId
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
@@ -216,20 +216,22 @@ router.post('/verifyCode', async (req, res) => {
 // /user
 router.post('/getUsers', auth, async (req, res) => {
   const arrayOfId = req.body.users
+  const uniqUsers = unique(arrayOfId)
 
   const usersCollection = res.locals.usersCollection
 
-  const wrapid = arrayOfId.map((id) => ObjectId(id))
+  const wrapid = uniqUsers.map((id) => ObjectId(id))
 
   try {
-    const user = await usersCollection.find({ _id: { $in: wrapid } }).toArray()
+    const users = await usersCollection.find({ _id: { $in: wrapid } }).toArray()
+    console.log('🚀 ~ file: user.js ~ line 227 ~ router.post ~ users', users)
 
-    if (user) {
+    if (users && users.length > 0) {
       return res
         .status(202)
-        .json(responseMsg('success', 'Fetch successfully', user))
+        .json(responseMsg('success', 'Fetch successfully', users))
     } else {
-      return res.status(203).json(responseMsg('error', "Can't find user"))
+      return res.status(203).json(responseMsg('error', "Can't find users"))
     }
   } catch (error) {
     console.error(error)
@@ -247,28 +249,32 @@ router.post('/giveRecommendation/:id', auth, async (req, res) => {
   const usersCollection = res.locals.usersCollection
 
   try {
-    const user = await usersCollection.findOne({ profileUrl: userId })
+    //  I am giving recommendations to this user
+    const user = await usersCollection.findOne({ _id: ObjectId(userId) })
+
+    // Thats me!
     const me = await usersCollection.findOne({ _id: ObjectId(token.id) })
 
     const user_o_r = user?.recommendation?.received || []
     const user_o_g = user?.recommendation?.given || []
-    const user_n_r = { text: text, userId: token.id }
+    const user_n_r = { text: text, userId: ObjectId(token.id) }
     const user_r = { received: [...user_o_r, user_n_r], given: [...user_o_g] }
-    if (user) {
+
+    // My Old Recieved Recommendations
+    const me_o_r = me?.recommendation?.received || []
+    // My Old Given Recommendations
+    const me_o_g = me?.recommendation?.given || []
+    // My New Given Recommendations
+    const me_n_g = { text: text, userId: ObjectId(userId) }
+    // My New Recieved Recommendations
+    const me_r = { received: [...me_o_r], given: [...me_o_g, me_n_g] }
+    if (me && user) {
       await usersCollection.updateOne(
         { _id: user?._id },
         { $set: { recommendation: user_r } },
         { new: true }
       )
-    } else {
-      return res.status(203).json(responseMsg('error', "Can't find user"))
-    }
 
-    const me_o_r = me?.recommendation?.received || []
-    const me_o_g = me?.recommendation?.given || []
-    const me_n_g = { text: text, userId: userId }
-    const me_r = { received: [...me_o_r], given: [...me_o_g, me_n_g] }
-    if (me) {
       await usersCollection.updateOne(
         { _id: me?._id },
         { $set: { recommendation: me_r } },
@@ -276,7 +282,7 @@ router.post('/giveRecommendation/:id', auth, async (req, res) => {
       )
       return res
         .status(202)
-        .json(responseMsg('success', 'Fetch successfully', user))
+        .json(responseMsg('success', 'Recommendation added successfully', user))
     } else {
       return res.status(201).json(responseMsg('error', "Can't find me"))
     }
@@ -311,20 +317,24 @@ router.post('/suggestedUser', auth, async (req, res) => {
 })
 // /user
 router.post('/getAll/:id', auth, async (req, res) => {
-  const limit = req.body.limit
+  const { skip = 0, limit = 6, users = [] } = req.body
   const id = req.params.id
-
+  const uniqUsers = unique(users)
   const usersCollection = res.locals.usersCollection
   const token = req.user
 
   try {
+    const wrapid = uniqUsers.map((_id) => ObjectId(_id))
+
     const list = await usersCollection
       .find({
         $and: [
           { _id: { $not: { $eq: ObjectId(token.id) } } },
           { profileUrl: { $not: { $eq: id } } },
         ],
+        _id: { $not: { $eq: { $in: wrapid } } },
       })
+      .skip(skip)
       .limit(limit)
       .toArray()
 
@@ -359,7 +369,11 @@ router.post('/follow/:id', auth, async (req, res) => {
 
     // ------ Following User -------
 
-    const followingUsersList = [...toFollowUser?.followers, me?._id]
+    const existingList =
+      toFollowUser?.followers && toFollowUser?.followers.length > 0
+        ? toFollowUser?.followers
+        : []
+    const followingUsersList = [...existingList, me?._id]
     await usersCollection.updateOne(
       { _id: toFollowUser._id },
       { $set: { followers: followingUsersList } },
@@ -367,8 +381,9 @@ router.post('/follow/:id', auth, async (req, res) => {
     )
 
     // ------ Me -------
-
-    const meList = [...me?.following, toFollowUser?._id]
+    const existingMeList =
+      me?.following && me?.following.length > 0 ? me?.following : []
+    const meList = [...existingMeList, toFollowUser?._id]
     await usersCollection.updateOne(
       { _id: me._id },
       { $set: { following: meList } },
@@ -401,9 +416,11 @@ router.post('/unfollow/:id', auth, async (req, res) => {
 
     // ------ Following User -------
 
-    const usersList = [...toUnFollowUser?.followers].filter(
-      (userId) => userId !== me?._id
-    )
+    const existingList =
+      toUnFollowUser?.followers && toUnFollowUser?.followers.length > 0
+        ? toUnFollowUser?.followers
+        : []
+    const usersList = existingList.filter((userId) => userId !== me?._id)
     await usersCollection.updateOne(
       { _id: toUnFollowUser._id },
       { $set: { followers: usersList } },
@@ -412,7 +429,9 @@ router.post('/unfollow/:id', auth, async (req, res) => {
 
     // ------ Me -------
 
-    const meList = [...me?.following].filter(
+    const existingMeList =
+      me?.following && me?.following.length > 0 ? me?.following : []
+    const meList = existingMeList.filter(
       (userId) => userId !== toUnFollowUser?._id
     )
     await usersCollection.updateOne(
@@ -521,12 +540,14 @@ router.post('/getById/:id', auth, async (req, res) => {
             ? [...me.piv]
             : [...me.piv, user._id]
           : [user._id]
-      const pivCount = piv.length
+
+      const uniqPiv = unique(piv)
+      const pivCount = uniqPiv.length
       delete user.password
 
       await usersCollection.updateOne(
         { _id: me._id },
-        { $set: { piv, pivCount } },
+        { $set: { piv: uniqPiv, pivCount } },
         { new: true }
       )
     }
@@ -538,12 +559,14 @@ router.post('/getById/:id', auth, async (req, res) => {
             ? [...user.pwvp]
             : [...user.pwvp, token.id]
           : [token.id]
-      const pwvpCount = pwvp.length
+      const uniqPwvp = unique(pwvp)
+
+      const pwvpCount = uniqPwvp.length
       delete user.password
 
       await usersCollection.updateOne(
         { _id: user._id },
-        { $set: { pwvp, pwvpCount } },
+        { $set: { pwvp: uniqPwvp, pwvpCount } },
         { new: true }
       )
       return res

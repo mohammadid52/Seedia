@@ -50,7 +50,7 @@ const PostInput = ({
                 <img
                   src={profilePicture ? profilePicture : avatarPlaceholder}
                   alt="13RMS"
-                  className="h-14 w-14 border-gradient border-transparent border-2 rounded-full"
+                  className="h-16 w-16 border-gradient border-transparent border-2 rounded-full"
                 />
                 <NormalFormInput
                   value=""

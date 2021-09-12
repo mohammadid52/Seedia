@@ -170,6 +170,8 @@ const PublicProfileCard = ({
             </li>
             <li>
               <a
+                target="_blank"
+                rel="noreferrer"
                 href={`${match.url.replace('/private', '/public')}`}
                 className="dark:text-gray-400 hover:underline link-hover"
               >

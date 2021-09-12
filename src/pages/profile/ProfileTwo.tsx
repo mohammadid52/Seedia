@@ -19,7 +19,7 @@ import Skills from 'components/profileTwo/Skills'
 import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
 import { useUserContext } from 'context/UserContext'
-import { network } from 'helpers'
+import { getUniqId, network } from 'helpers'
 import { useRouter } from 'hooks/useRouter'
 import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
@@ -34,17 +34,6 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
 
   const { viewMode, userId: userIdFromParam } = route?.match?.params
-
-  // #1 first get userId from params
-  // #2 check user id from token decoded object
-  // #3 if it matches then current user is authUser (owner of profile)
-
-  const getUniqId = (str?: string) => {
-    if (str) {
-      const arr = str.split('_')
-      return arr[arr.length - 1]
-    }
-  }
 
   const iAmOwnerOfThisProfile = getUniqId(userIdFromParam) === userData._id
   const showAllButtons = iAmOwnerOfThisProfile && viewMode === 'private'
@@ -91,7 +80,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     setShowModal,
     userData: iAmOwnerOfThisProfile ? userData : otherUserData,
 
-    showEditOption: iAmOwnerOfThisProfile,
+    showEditOption: showAllButtons,
   }
 
   const commonModalProps = {
@@ -141,7 +130,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const isBusiness = userData?.other?.accountType === 'business'
 
   const commonBlockProps2 = {
-    authUser: iAmOwnerOfThisProfile,
+    authUser: showAllButtons,
     userData: iAmOwnerOfThisProfile ? userData : otherUserData,
   }
 

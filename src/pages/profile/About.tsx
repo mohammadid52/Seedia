@@ -20,14 +20,14 @@ const About = ({
   userData?: IParent
   authUser: boolean
 }) => {
-  const { setValues, values } = useUserContext()
+  const { setValues } = useUserContext()
   const [showModal, setShowModal] = useState(false)
 
   const {
     company = {},
     location = {},
     business = {},
-  } = isEmpty(values) ? {} : values
+  } = isEmpty(userData) ? {} : userData
 
   const businessInitState = {
     businessName: '',
@@ -182,7 +182,7 @@ const About = ({
 
   return (
     <>
-      {showModal && (
+      {authUser && showModal && (
         <Modal
           onClose={onCancel}
           open={showModal}

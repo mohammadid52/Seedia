@@ -4,6 +4,7 @@ interface IButton {
   Icon?: any
   bgColor?: string
   rounded?: string
+  title?: string
   className?: string
   gradient?: boolean
   onlyText?: boolean
@@ -32,6 +33,7 @@ interface IButton {
 
 const Button = ({
   label,
+  title,
   onClick,
   Icon,
   type = 'button',
@@ -112,6 +114,7 @@ const Button = ({
       disabled={disabled}
       hidden={hidden}
       type={type}
+      title={title}
       style={{
         ...style,
         filter: shadow ? 'drop-shadow(2px 4px 6px pink)' : undefined,
@@ -151,7 +154,15 @@ const Button = ({
       {Icon && (
         <Icon className={`${label ? 'mr-2' : ''} dark:text-white h-5 w-5"`} />
       )}
-      {link ? <a href={link}>{label}</a> : loading ? loadingText : label}
+      {link ? (
+        <a target="_blank" rel="noreferrer" href={link}>
+          {label}
+        </a>
+      ) : loading ? (
+        loadingText
+      ) : (
+        label
+      )}
     </button>
   )
 }

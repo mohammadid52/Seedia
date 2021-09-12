@@ -1,25 +1,27 @@
-import Card from 'components/atoms/Card'
-import { useEffect, useState } from 'react'
-import { map } from 'lodash'
-import { IParent, IRecommendation } from 'interfaces/UniversalInterface'
-import { getAccessToken, network } from 'helpers'
-import Tabs from 'components/atoms/Tabs'
 import Button from 'components/atoms/Button'
-import Modal from 'components/atoms/Modal'
-import { Form, Formik } from 'formik'
+import Card from 'components/atoms/Card'
 import FormInput from 'components/atoms/FormInput'
-import * as Yup from 'yup'
-import { useRouter } from 'hooks/useRouter'
+import Modal from 'components/atoms/Modal'
+import Tabs from 'components/atoms/Tabs'
+import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
+import { Form, Formik } from 'formik'
+import { getAccessToken, network } from 'helpers'
+import { IParent, IRecommendation } from 'interfaces/UniversalInterface'
+import { map } from 'lodash'
+import { useEffect, useState } from 'react'
 import { avatarPlaceholder } from 'state/Redux/constants'
+import * as Yup from 'yup'
 
 const Recommendations = ({
   recommendation,
   authUser,
   userData,
   secondary = false,
+  iAmOwnerOfThisProfile = false,
 }: {
   authUser: boolean
+  iAmOwnerOfThisProfile: boolean
   secondary?: boolean
   userData?: IParent
   recommendation?: { received: IRecommendation[]; given: IRecommendation[] }
@@ -48,6 +50,7 @@ const Recommendations = ({
       // setFetchGiven(_g)
     } catch (error) {
       console.error(error)
+    } finally {
       setFetching(false)
     }
   }
@@ -71,6 +74,7 @@ const Recommendations = ({
       setFetchGiven(_g)
     } catch (error) {
       console.error(error)
+    } finally {
       setFetching(false)
     }
   }
@@ -80,6 +84,7 @@ const Recommendations = ({
     // @ts-ignore
     if (
       recommendation &&
+      recommendation?.received &&
       recommendation?.received.length > 0 &&
       fetchReceived.length === 0 &&
       currentTab === 'Received'
@@ -89,14 +94,17 @@ const Recommendations = ({
   }, [recommendation?.received, fetchReceived, currentTab])
 
   useEffect(() => {
-    // @ts-ignore
-    if (
-      recommendation &&
-      recommendation?.given.length > 0 &&
-      fetchGiven.length === 0 &&
-      currentTab === 'Given'
-    ) {
-      fetchGivenList()
+    if (currentTab === 'Given') {
+      // @ts-ignore
+      if (
+        recommendation &&
+        recommendation?.given &&
+        recommendation?.given.length > 0 &&
+        fetchGiven.length === 0 &&
+        currentTab === 'Given'
+      ) {
+        fetchGivenList()
+      }
     }
   }, [recommendation?.given, fetchReceived, currentTab])
 
@@ -116,12 +124,11 @@ const Recommendations = ({
 
   const initialState = { recommendation: '' }
   const validationSchema = Yup.object({
-    recommendation: Yup.string().min(50).max(250),
+    recommendation: Yup.string().min(10).max(250),
   })
-  const route: any = useRouter()
-  const userIdFromParam = route?.match?.params?.userId
 
   const { setValues } = useUserContext()
+
   const token = getAccessToken()
 
   const onSave = async (values: any) => {
@@ -130,7 +137,7 @@ const Recommendations = ({
       if (values.recommendation) {
         const config = { text: values.recommendation }
         await network.post(
-          `/user/giveRecommendation/${userIdFromParam}`,
+          `/user/giveRecommendation/${userData?._id}`,
           config,
           {
             headers: { Authorization: token },
@@ -138,7 +145,7 @@ const Recommendations = ({
         )
         onCancel()
 
-        if (!authUser) {
+        if (!iAmOwnerOfThisProfile) {
           setValues({
             ...userData,
             recommendation: {
@@ -251,7 +258,17 @@ const Recommendations = ({
                       <div className="py-1 mt-1 dark:text-gray-400 flex items-center text-right italic">
                         By,
                         <span className="mx-2 cursor-pointer flex items-center hover:underline">
-                          {recom?.user?.fullName}
+                          <a
+                            href={links.getProfileById(
+                              recom.user._id,
+                              recom.user.other.template,
+                              'public'
+                            )}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {recom?.user?.fullName}
+                          </a>
                           <img
                             src={
                               recom?.user?.profilePicture
@@ -268,7 +285,7 @@ const Recommendations = ({
                 })
               ) : (
                 <div>
-                  {authUser ? (
+                  {iAmOwnerOfThisProfile ? (
                     <p className="text-center text-gray-400">
                       No recommendation given yet.
                     </p>

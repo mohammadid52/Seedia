@@ -50,6 +50,8 @@ const Signup = () => {
           firstName: _values.firstName,
           lastName: _values.lastName,
           email: _values.email,
+          followers: [],
+          followings: [],
           fullName: _values.firstName + ' ' + _values.lastName,
           other: {
             createdOn: new Date(),

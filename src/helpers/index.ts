@@ -12,6 +12,13 @@ export const getAccessToken = () => {
   return token
 }
 
+export const getUniqId = (str?: string) => {
+  if (str) {
+    const arr = str.split('_')
+    return arr[arr.length - 1]
+  }
+}
+
 const token = getAccessToken()
 
 export const network = axios.create({

@@ -164,7 +164,7 @@ const Navigation = ({
                   </a>
 
                   <Button
-                    link={links.DASHBAORD}
+                    link={links.LOGIN}
                     className="mx-4 "
                     label="Login"
                     gradient

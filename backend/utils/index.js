@@ -2,4 +2,6 @@ const responseMsg = (status = 'none', message = '', data = {}) => {
   return { status, message, data }
 }
 
-module.exports = { responseMsg }
+const unique = (list) => [...new Set(list)]
+
+module.exports = { responseMsg, unique }

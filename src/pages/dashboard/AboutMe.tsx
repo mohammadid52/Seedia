@@ -132,7 +132,7 @@ const PersonalCard = ({
                     <img
                       className={`${
                         !userData?.profilePicture ? '' : ''
-                      } h-14 w-14 border-gradient border-2 border-transparent rounded-full`}
+                      } h-24 w-24 border-gradient border-2 border-transparent rounded-full`}
                       src={
                         userData?.profilePicture
                           ? userData?.profilePicture

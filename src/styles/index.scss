@@ -65,6 +65,10 @@ body {
   border-image-source: linear-gradient(to right, var(--tw-gradient-stops));
 }
 
+div {
+  // border: 1px solid red;
+}
+
 // // Without changing default text color to blue
 .normal-hover:hover {
   @include gradient();
