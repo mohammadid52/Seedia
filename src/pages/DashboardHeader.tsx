@@ -85,7 +85,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                   alt="13RMS"
                 />
               </div>
-              <div className="hidden transform scale-95 z-10 rounded-xl h-12 ml-8 lg:flex dark:border-gray-700 border">
+              <div className="hidden transform  scale-95 z-10 rounded-xl h-12 ml-24 lg:flex dark:border-gray-700 border">
                 <div className="ml-2">
                   <Selector
                     disableFocus
