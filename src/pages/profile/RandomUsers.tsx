@@ -31,7 +31,7 @@ const RandomUsers = ({
         limit: 6,
         skip,
         // @ts-ignore
-        users: [...userData?.piv, ...skipList],
+        users: userData.piv,
       }
       const { data } = await network.post(
         `/user/getAll/${userIdFromParam}`,
