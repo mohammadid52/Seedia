@@ -224,7 +224,6 @@ router.post('/getUsers', auth, async (req, res) => {
 
   try {
     const users = await usersCollection.find({ _id: { $in: wrapid } }).toArray()
-    console.log('🚀 ~ file: user.js ~ line 227 ~ router.post ~ users', users)
 
     if (users && users.length > 0) {
       return res

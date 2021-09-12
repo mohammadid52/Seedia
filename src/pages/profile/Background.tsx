@@ -234,7 +234,7 @@ const Background = ({
   }
 
   // @ts-ignore
-  const { background = {} } = userData
+  const { background = {} } = !isEmpty(userData) ? {} : userData
   const {
     summary = '',
     interests = [],
