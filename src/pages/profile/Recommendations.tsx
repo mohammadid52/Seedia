@@ -335,7 +335,7 @@ const Recommendations = ({
                         “ {recom.text} ”
                       </p>
                       <div className="py-1 mt-1 flex items-center dark:text-gray-400 text-right italic">
-                        By,
+                        To,
                         <span className="mx-2 cursor-pointer flex items-center hover:underline">
                           {recom?.user?.fullName}
                           <img

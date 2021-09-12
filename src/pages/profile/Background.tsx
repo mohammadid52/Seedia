@@ -223,7 +223,7 @@ const Background = ({
 }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
 
-  const { setValues, values } = useUserContext()
+  const { setValues } = useUserContext()
 
   const [saving, setSaving] = useState(false)
 
@@ -233,7 +233,8 @@ const Background = ({
     setLocalFields({ ...localFields, [id]: value })
   }
 
-  const { background = {} } = isEmpty(values) ? {} : values
+  // @ts-ignore
+  const { background = {} } = userData
   const {
     summary = '',
     interests = [],
