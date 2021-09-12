@@ -6,7 +6,6 @@ import { useUserContext } from 'context/UserContext'
 import { getAccessToken, network } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { avatarPlaceholder } from 'state/Redux/constants'
 
 const PersonalCard = ({
@@ -30,8 +29,6 @@ const PersonalCard = ({
   }
 
   const { setValues } = useUserContext()
-
-  const history = useHistory()
 
   const onSave = async () => {
     setSaving(true)
@@ -85,33 +82,37 @@ const PersonalCard = ({
 
   return (
     <>
-      <Modal
-        header={`Profile Photo`}
-        disableBackdropClose
-        open={showModal}
-        setOpen={setShowModal}
-      >
-        <div className={`sm:min-w-64 sm:min-h-64`}>
-          <div className={`relative min-h-48 flex items-center justify-center`}>
-            {_image && (
-              <img
-                className={`shadow-xl md:h-32 md:w-32 sm:h-12 sm:w-12 rounded-full`}
-                src={URL.createObjectURL(_image)}
-                alt="People working on laptops"
+      {showModal && (
+        <Modal
+          header={`Profile Photo`}
+          disableBackdropClose
+          open={showModal}
+          setOpen={setShowModal}
+        >
+          <div className={`sm:min-w-64 sm:min-h-64`}>
+            <div
+              className={`relative min-h-48 flex items-center justify-center`}
+            >
+              {_image && (
+                <img
+                  className={`shadow-xl md:h-32 md:w-32 sm:h-12 sm:w-12 rounded-full`}
+                  src={URL.createObjectURL(_image)}
+                  alt="People working on laptops"
+                />
+              )}
+            </div>
+            <div className="mt-5 sm:mt-4 flex justify-end  items-center">
+              <Button
+                gradient
+                loading={saving}
+                disabled={saving}
+                onClick={onSave}
+                label="Save"
               />
-            )}
+            </div>
           </div>
-          <div className="mt-5 sm:mt-4 flex justify-end  items-center">
-            <Button
-              gradient
-              loading={saving}
-              disabled={saving}
-              onClick={onSave}
-              label="Save"
-            />
-          </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
       {/* HIDDEN IMAGE INPUT */}
       <input
         // @ts-ignore
@@ -123,6 +124,7 @@ const PersonalCard = ({
       />
       <Card
         cardTitle="About"
+        secondary
         content={
           <div className={`${className}`}>
             <div>

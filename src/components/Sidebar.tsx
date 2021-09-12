@@ -23,7 +23,7 @@ export default function Sidebar() {
       style={{ zIndex: 99999 }}
       className={`flex h-screen  fixed transition-all  duration-200 ${
         showSidebar ? 'max-w-64 w-full border-r' : 'max-w-0'
-      } flex-col flex-grow  dark:border-gray-600 border-gray-200 pt-5 pb-4 bg-whiet dark:bg-gray-700 overflow-y-auto`}
+      } flex-col flex-grow  dark:border-gray-600 border-gray-200 pt-5 pb-4 bg-white dark:bg-gray-700 overflow-y-auto`}
     >
       <div className="mt-5 px-4 flex-grow flex flex-col">
         <nav

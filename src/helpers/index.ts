@@ -45,6 +45,6 @@ export const renderPathByType = (type: string) => {
 
 export const updateDocumentTitle = (title: string) => {
   if (window.document) {
-    document.title = title
+    document.title = `${title} | 13RMS`
   }
 }

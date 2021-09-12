@@ -14,6 +14,7 @@ export const links = {
   DASHBAORD: '/dashboard',
   SETTINGS: '/settings',
   CHOOSE_ACCOUNT: '/choose-account',
+  HOME: '/',
   CHOOSE_TEMPLATE: '/choose-template',
   COMPANY: dynamicRoute('personal', 'company'),
   LOCATION_P: dynamicRoute('personal', 'location'),

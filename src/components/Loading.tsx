@@ -1,5 +1,10 @@
+import { updateDocumentTitle } from 'helpers'
+import { useEffect } from 'react'
 import 'styles/animatedLoading.scss'
 const Loading = () => {
+  useEffect(() => {
+    updateDocumentTitle('Loading...')
+  }, [])
   return (
     <div className="  flex-col h-screen w-screen bg-white dark:bg-gray-800 flex items-center justify-center">
       <img

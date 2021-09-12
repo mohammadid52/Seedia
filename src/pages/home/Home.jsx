@@ -4,8 +4,13 @@ import Features from 'components/Features'
 import Footer from 'components/CustomFooter'
 import CustomSearchPanel from 'components/CustomSearch'
 import Navigation from 'components/Navigation'
+import { useEffect } from 'react'
+import { updateDocumentTitle } from 'helpers'
 
 const Home = ({ isUser, profileUrl, template, accountFilled }) => {
+  useEffect(() => {
+    updateDocumentTitle('Home')
+  }, [])
   return (
     <div className="">
       <Navigation

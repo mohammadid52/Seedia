@@ -8,6 +8,7 @@ import { getAccessToken, network } from 'helpers'
 import { useUserContext } from 'context/UserContext'
 import Badge from 'components/atoms/Badge'
 import { avatarPlaceholder } from 'state/Redux/constants'
+import { BiUserCircle } from 'react-icons/bi'
 
 const Cover = ({
   company,
@@ -244,20 +245,16 @@ const Cover = ({
               {authUser && (
                 <div className="absolute flex items-center gap-x-4 bottom-0 right-0 p-4">
                   <Button
-                    secondary
-                    invert
+                    gradient
                     onClick={showFileExplorerForProfile}
-                    bgColor="gray"
-                    Icon={AiOutlineEdit}
+                    Icon={BiUserCircle}
                     size="sm"
                     label={'Change profile photo'}
                   />
                   <Button
-                    secondary
-                    invert
+                    gradient
                     onClick={showFileExplorerForCover}
-                    bgColor="gray"
-                    Icon={AiOutlineEdit}
+                    Icon={BiUserCircle}
                     size="sm"
                     label={'Change cover photo'}
                   />

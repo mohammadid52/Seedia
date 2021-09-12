@@ -106,9 +106,6 @@ const Navigation = ({
                                       <p className="text-xs text-left font-medium dark:text-white text-gray-900 mb-0">
                                         {item.name}
                                       </p>
-                                      {/* <p className="mt-1 text-left text-sm text-gray-500">
-                                        {item.description}
-                                      </p> */}
                                     </div>
                                   </div>
                                 ))}
@@ -147,6 +144,7 @@ const Navigation = ({
 
                   <Button
                     link={links.DASHBAORD}
+                    target=""
                     className="mx-4 "
                     label="Dashboard"
                     gradient
@@ -164,6 +162,7 @@ const Navigation = ({
                   <Button
                     link={links.LOGIN}
                     className="mx-4 "
+                    target=""
                     label="Login"
                     gradient
                   />

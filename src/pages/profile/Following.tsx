@@ -1,3 +1,4 @@
+import Loader from 'components/atoms/animation/Loader'
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import User from 'components/User'
@@ -21,9 +22,11 @@ const Following = ({
   const userIdFromParam = route?.match?.params?.userId
   const [following, setFollowing] = useState([])
 
+  const [fetching, setFetching] = useState(false)
   const token = getAccessToken()
 
   const fetchFollowingUsers = async () => {
+    setFetching(true)
     try {
       const config = { users: list }
       const { data } = await network.post('/user/getUsers', config, {
@@ -32,11 +35,13 @@ const Following = ({
       setFollowing(data.data)
     } catch (error) {
       console.error(error)
+    } finally {
+      setFetching(false)
     }
   }
 
   useEffect(() => {
-    if (list && list.length > 0) {
+    if (list && list.length > 0 && following.length === 0) {
       fetchFollowingUsers()
     }
   }, [userIdFromParam])
@@ -70,13 +75,17 @@ const Following = ({
       }
       content={
         <div>
-          {following.length > 0 ? (
+          {fetching ? (
+            <div className="h-56 flex items-center justify-center">
+              <Loader />
+            </div>
+          ) : following.length > 0 ? (
             <div
               className={`${
                 showSingleCard
-                  ? 'grid-cols-1 gap-y-4'
-                  : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4'
-              } grid mt-6 `}
+                  ? 'flex flex-col items-center gap-4'
+                  : 'grid-cols-1 grid mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4'
+              }  `}
             >
               {map(following, (user: IParent, idx) => {
                 // @ts-ignore
