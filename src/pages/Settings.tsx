@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { IParent } from 'interfaces/UniversalInterface'
 import Button from 'components/atoms/Button'
 import Divider from 'components/atoms/Divider'
 import moment from 'moment'
-import { getAccessToken, network } from 'helpers'
+import { getAccessToken, network, updateDocumentTitle } from 'helpers'
 import { useUserContext } from 'context/UserContext'
 import { wait } from 'utils/wait'
 import Modal from 'components/atoms/Modal'
@@ -14,11 +14,17 @@ import { useHistory } from 'react-router-dom'
 export default function Settings({ userData }: { userData: IParent }) {
   const currentTemplate = userData.other?.template || 1
 
+  useEffect(() => {
+    updateDocumentTitle('Settings', true)
+  }, [])
+
   const [changingTemplate, setChangingTemplate] = useState(false)
 
   const { setValues } = useUserContext()
 
   const token = getAccessToken()
+
+  const history = useHistory()
 
   const changeTemplate = () => {
     setChangingTemplate(true)
@@ -55,7 +61,6 @@ export default function Settings({ userData }: { userData: IParent }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const dispatch = useDispatch()
-  const history = useHistory()
 
   const deleteAccount = async () => {
     try {
@@ -161,6 +166,8 @@ export default function Settings({ userData }: { userData: IParent }) {
               .
             </p>
             <Divider withButton text="End" />
+
+            <Button onClick={history.goBack} gradient label={'GO BACK'} />
           </div>
         </form>
       </main>

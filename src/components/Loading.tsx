@@ -3,7 +3,10 @@ import { useEffect } from 'react'
 import 'styles/animatedLoading.scss'
 const Loading = () => {
   useEffect(() => {
-    updateDocumentTitle('Loading...')
+    updateDocumentTitle('Loading...', true)
+    return () => {
+      updateDocumentTitle('13RMS', true)
+    }
   }, [])
   return (
     <div className="  flex-col h-screen w-screen bg-white dark:bg-gray-800 flex items-center justify-center">

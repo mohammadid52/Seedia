@@ -70,11 +70,11 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
             <div className="flex justify-center items-center lg:flex-1">
               <div
                 title="sidebar"
-                className="flex absolute left-0 ml-6 items-center h-9 w-9 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-2 justify-center"
+                className="flex absolute left-0 ml-6 items-center  h-9 w-9 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-2 justify-center"
                 tabIndex={0}
                 onClick={() => setShowSidebar(!showSidebar)}
               >
-                <MenuAlt2Icon className="h-6 w-6 dark:text-white text-gray-900" />
+                <MenuAlt2Icon className="h-6 xl:h-4 xl:w-4 w-6 dark:text-white text-gray-900" />
               </div>
               <div className="flex   items-center max-w-440 mx-auto">
                 <div className="flex items-center">

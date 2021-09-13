@@ -43,8 +43,8 @@ export const renderPathByType = (type: string) => {
   }
 }
 
-export const updateDocumentTitle = (title: string) => {
+export const updateDocumentTitle = (title: string, clr?: boolean) => {
   if (window.document) {
-    document.title = `${title} | 13RMS`
+    document.title = !clr ? `${title} | 13RMS` : title
   }
 }
