@@ -3,6 +3,7 @@ import Loading from 'components/Loading'
 import ProfileStrength from 'components/ProfileStrength'
 import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
+import { links } from 'constants/Links'
 import { getUniqId, network, updateDocumentTitle } from 'helpers'
 import { useRouter } from 'hooks/useRouter'
 import { IParent } from 'interfaces/UniversalInterface'
@@ -15,17 +16,20 @@ import Layout from 'pages/profile/Layout'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Recommendations from 'pages/profile/Recommendations'
 import { useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
 import RandomUsers from './RandomUsers'
 
 const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
-  const { viewMode, userId: userIdFromParam } = route?.match?.params
+  const { viewMode, userId: userIdFromParam, template } = route?.match?.params
 
   const iAmOwnerOfThisProfile = getUniqId(userIdFromParam) === userData._id
 
   const showAllButtons = iAmOwnerOfThisProfile && viewMode === 'private'
 
   const [otherUserData, setOtherUserData] = useState<IParent>(userData)
+
+  const history = useHistory()
 
   useEffect(() => {
     if (!iAmOwnerOfThisProfile) {
@@ -35,6 +39,20 @@ const Profile = ({ userData }: { userData: IParent }) => {
       updateDocumentTitle(userData.fullName)
     }
   }, [iAmOwnerOfThisProfile])
+  // @ts-ignore
+  useEffect(() => {
+    const templateFromUser = commonProps?.userData?.other?.template
+    if (template !== templateFromUser) {
+      const changeTemplate = templateFromUser
+      history.push(
+        links.getProfileById(
+          commonProps?.userData.profileUrl,
+          changeTemplate,
+          'private'
+        )
+      )
+    }
+  }, [userIdFromParam, template])
 
   const [fetchingData, setFetchingData] = useState(false)
 

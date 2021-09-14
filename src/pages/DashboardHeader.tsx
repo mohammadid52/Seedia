@@ -52,8 +52,8 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   const links = [
     { href: '/dashboard', title: 'Home', Icon: AiOutlineHome },
     { href: '/#', title: 'My Network', Icon: BsPeople },
-    { href: '/#', title: 'Jobs', Icon: CgWorkAlt },
-    { href: '/#', title: 'Messaging', Icon: BiMessageDetail },
+    // { href: '/#', title: 'Jobs', Icon: CgWorkAlt },
+    // { href: '/#', title: 'Messaging', Icon: BiMessageDetail },
     { href: '/#', title: 'Notifications', Icon: IoMdNotificationsOutline },
   ]
 

@@ -163,7 +163,10 @@ const Cover = ({
                       <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         Full name
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                      <dd
+                        title={userData?.fullName}
+                        className="mt-1 text-sm text-gray-900 dark:text-white"
+                      >
                         {userData?.fullName}
                       </dd>
                     </div>
@@ -172,7 +175,10 @@ const Cover = ({
                       <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
                         Email address
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                      <dd
+                        title={userData?.email}
+                        className="mt-1 text-sm max-w-56 break-words  text-gray-900 dark:text-white"
+                      >
                         {userData?.email}
                       </dd>
                     </div>
@@ -181,7 +187,10 @@ const Cover = ({
                         <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Business type
                         </dt>
-                        <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                        <dd
+                          title={userData?.business?.typeOfBusiness}
+                          className="mt-1 text-sm text-gray-900 dark:text-white"
+                        >
                           {userData?.business?.typeOfBusiness}
                         </dd>
                       </div>
@@ -190,7 +199,13 @@ const Cover = ({
                         <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Company
                         </dt>
-                        <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                        <dd
+                          title={
+                            userData?.company?.companyName ||
+                            userData?.company?.currentCompany
+                          }
+                          className="mt-1 text-sm text-gray-900 dark:text-white"
+                        >
                           {userData?.company?.companyName ||
                             userData?.company?.currentCompany}
                         </dd>
@@ -201,7 +216,10 @@ const Cover = ({
                         <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Relationship to business
                         </dt>
-                        <div className="mt-1 text-sm text-gray-900 dark:text-white">
+                        <div
+                          title={userData?.business?.relationshipToBusiness}
+                          className="mt-1 text-sm text-gray-900 dark:text-white"
+                        >
                           {userData?.business?.relationshipToBusiness}
                         </div>
                       </div>
@@ -210,7 +228,13 @@ const Cover = ({
                         <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           Company address
                         </dt>
-                        <dd className="mt-1 text-sm text-gray-900 dark:text-white">
+                        <dd
+                          title={
+                            userData?.location?.address ||
+                            userData?.location?.livesIn
+                          }
+                          className="mt-1 text-sm text-gray-900 dark:text-white"
+                        >
                           {userData?.location?.address ||
                             userData?.location?.livesIn}
                         </dd>

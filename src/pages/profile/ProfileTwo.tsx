@@ -19,6 +19,7 @@ import Shortcuts from 'components/profileTwo/Shortcuts'
 import Skills from 'components/profileTwo/Skills'
 import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
+import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import { getUniqId, network, updateDocumentTitle } from 'helpers'
 import { useRouter } from 'hooks/useRouter'
@@ -26,7 +27,9 @@ import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
 import Layout from 'pages/profile/Layout'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
+import Recommendations from 'pages/profile/Recommendations'
 import { useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
 import * as constants from 'state/Redux/constants'
 import Following from './Following'
 
@@ -34,7 +37,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
   const route: any = useRouter()
 
-  const { viewMode, userId: userIdFromParam } = route?.match?.params
+  const { viewMode, userId: userIdFromParam, template } = route?.match?.params
 
   const iAmOwnerOfThisProfile = getUniqId(userIdFromParam) === userData._id
   const showAllButtons = iAmOwnerOfThisProfile && viewMode === 'private'
@@ -87,6 +90,11 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     showEditOption: showAllButtons,
   }
 
+  const commonProps = {
+    authUser: showAllButtons,
+    userData: iAmOwnerOfThisProfile ? userData : otherUserData,
+  }
+
   const commonModalProps = {
     ...commonBlockProps,
     onCancel,
@@ -137,6 +145,22 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     authUser: showAllButtons,
     userData: iAmOwnerOfThisProfile ? userData : otherUserData,
   }
+  const history = useHistory()
+
+  // @ts-ignore
+  useEffect(() => {
+    const templateFromUser = commonProps?.userData?.other?.template
+    if (template !== templateFromUser) {
+      const changeTemplate = templateFromUser
+      history.push(
+        links.getProfileById(
+          commonProps?.userData?.profileUrl,
+          changeTemplate,
+          'private'
+        )
+      )
+    }
+  }, [userIdFromParam, template])
 
   return fetchingData ? (
     <Loading />
@@ -181,20 +205,26 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
             </div>
           }
           secondCol={
-            <div className="flex flex-col">
+            <div className="flex flex-col space-y-12">
               <Cover {...commonBlockProps2} />
 
               {!isBusiness && <Experiences {...commonBlockProps} />}
               {!isBusiness && (
-                <div className="grid-cols-1 grid  sm:grid-cols-2 px-6 ">
+                <div className="grid-cols-1 grid space-x-6 sm:grid-cols-2 px-0 ">
                   <Skills {...commonBlockProps} />
                   <Awards {...commonBlockProps} />
                 </div>
               )}
               {!isBusiness && <Education {...commonBlockProps} />}
+              <Recommendations
+                secondary
+                iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                {...commonProps}
+                recommendation={commonProps?.userData?.recommendation}
+              />
               {isBusiness && <ProductsDetails />}
               {!isBusiness && (
-                <div className="grid-cols-1 grid  sm:grid-cols-2 px-6">
+                <div className="grid-cols-1 grid  sm:grid-cols-2 ">
                   <Languages {...commonBlockProps} />
                 </div>
               )}
@@ -203,7 +233,9 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
           thirdCol={
             <div className="">
               {showAllButtons && (
-                <PublicProfileCard secondary userData={userData} />
+                <div className="mb-12">
+                  <PublicProfileCard secondary userData={userData} />
+                </div>
               )}
               {showAllButtons && (
                 <ProfileStrength secondary {...commonBlockProps2} />
