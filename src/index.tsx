@@ -30,6 +30,7 @@ const MainApp = () => (
       <UserContextProvider>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <App />
+          {/* <Loading /> */}
         </ErrorBoundary>
       </UserContextProvider>
     </Provider>
