@@ -9,7 +9,7 @@ import * as Yup from 'yup'
 import { PersonalStepTwo } from 'initials'
 import { links } from 'constants/Links'
 import Layout from 'containers/Layout'
-import { map } from 'lodash'
+import { map, orderBy } from 'lodash'
 import { getAccessToken, network, renderPathByType } from 'helpers'
 import FormSelector from 'components/atoms/FormSelector'
 import AnimatedDiv from 'components/animation/AnimatedDiv'
@@ -186,7 +186,7 @@ const LastStep = ({ user }: { user?: IParent }) => {
               <div>
                 <FormSelector
                   label={'Country / region'}
-                  list={countries}
+                  list={orderBy(countries, ['name', 'asc'])}
                   name="country"
                   required
                   placeholder={'Select country'}

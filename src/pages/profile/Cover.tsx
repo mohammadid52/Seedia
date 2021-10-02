@@ -1,14 +1,12 @@
+import Badge from 'components/atoms/Badge'
 import Button from 'components/atoms/Button'
 import Modal from 'components/atoms/Modal'
-import { ICompany, IParent } from 'interfaces/UniversalInterface'
-import { useState } from 'react'
-import { AiOutlineEdit } from 'react-icons/ai'
-import React from 'react'
-import { getAccessToken, network } from 'helpers'
 import { useUserContext } from 'context/UserContext'
-import Badge from 'components/atoms/Badge'
-import { avatarPlaceholder } from 'state/Redux/constants'
+import { getAccessToken, network } from 'helpers'
+import { ICompany, IParent } from 'interfaces/UniversalInterface'
+import React, { useState } from 'react'
 import { BiUserCircle } from 'react-icons/bi'
+import { avatarPlaceholder } from 'state/Redux/constants'
 
 const Cover = ({
   company,

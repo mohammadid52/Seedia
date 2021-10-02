@@ -27,20 +27,14 @@ body {
   box-shadow: rgba(0, 0, 0, 0.15) 0 4px 12px;
 }
 
-// .view-all ul li::marker {
-//   content: '•';
-//   display: inline-block;
-//   width: 1em;
-//   color: rgb(2, 117, 177) !important;
-// }
-// ::marker {
-//   unicode-bidi: isolate;
-//   font-variant-numeric: tabular-nums;
-//   text-transform: none;
-//   text-indent: 0 !important;
-//   text-align: start !important;
-//   text-align-last: start !important;
-// }
+.main-loader {
+  & .hide {
+    display: none;
+  }
+  & .show {
+    display: block;
+  }
+}
 
 @mixin gradient {
   --tw-gradient-from: #ec4899;

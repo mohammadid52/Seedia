@@ -14,7 +14,7 @@ import Cover from 'components/profileTwo/Cover'
 import Education from 'components/profileTwo/Education'
 import Experiences from 'components/profileTwo/Experiences'
 import Languages from 'components/profileTwo/Languages'
-import ProductsDetails from 'components/profileTwo/ProductsDetails'
+import ProductsDetails from 'pages/products/ProductsDetails'
 import Shortcuts from 'components/profileTwo/Shortcuts'
 import Skills from 'components/profileTwo/Skills'
 import PublicProfileCard from 'components/PublicProfileCard'
@@ -156,7 +156,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
         links.getProfileById(
           commonProps?.userData?.profileUrl,
           changeTemplate,
-          'private'
+          viewMode
         )
       )
     }
@@ -222,7 +222,11 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                 {...commonProps}
                 recommendation={commonProps?.userData?.recommendation}
               />
-              {isBusiness && <ProductsDetails />}
+              {isBusiness && (
+                <ProductsDetails
+                  iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                />
+              )}
               {!isBusiness && (
                 <div className="grid-cols-1 grid  sm:grid-cols-2 ">
                   <Languages {...commonBlockProps} />

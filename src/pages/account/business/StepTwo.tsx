@@ -17,6 +17,7 @@ import { getAccessToken, network, renderPathByType } from 'helpers'
 import Error from 'components/alerts/Error'
 import { IParent } from 'interfaces/UniversalInterface'
 import { useUserContext } from 'context/UserContext'
+import { orderBy } from 'lodash'
 const yourhandle = require('countrycitystatejson')
 
 const BusinessStepTwo = ({ userData }: { userData: IParent }) => {
@@ -154,6 +155,7 @@ const BusinessStepTwo = ({ userData }: { userData: IParent }) => {
       )
       history.push(links.CHOOSE_TEMPLATE)
     } catch (error) {
+      // @ts-ignore
       setErrors([error.message])
       console.error(error)
     } finally {
@@ -181,7 +183,7 @@ const BusinessStepTwo = ({ userData }: { userData: IParent }) => {
             <Form className="space-y-6">
               <FormSelector
                 label="Legal business country"
-                list={countries}
+                list={orderBy(countries, ['name', 'asc'])}
                 name="businessCountry"
                 required
                 placeholder="Select country"

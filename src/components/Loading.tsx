@@ -10,7 +10,7 @@ const Loading = () => {
   }, [])
 
   return (
-    <div className="  flex-col h-screen w-screen bg-white dark:bg-gray-800 flex items-center justify-center">
+    <div className="main-loader  flex-col h-screen w-screen bg-white dark:bg-gray-800 flex items-center justify-center">
       <img
         className="h-36  animate-pulse duration-75 w-36"
         src={`${process.env.PUBLIC_URL}/logo.png`}

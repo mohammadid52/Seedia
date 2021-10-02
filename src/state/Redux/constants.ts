@@ -19,3 +19,5 @@ export const SKILLS = 'SKILLS'
 export const AWARDS = 'AWARDS'
 export const EDUCATION = 'EDUCATION'
 export const LANGUAGES = 'LANGUAGES'
+
+export const SIDEBAR_HEIGHT = 90

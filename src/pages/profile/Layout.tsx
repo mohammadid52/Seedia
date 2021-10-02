@@ -1,4 +1,5 @@
 import React from 'react'
+import { SIDEBAR_HEIGHT } from 'state/Redux/constants'
 
 // min-width: 1280px; // 1280px or greater than that, then to do the action.
 // max-width: 1280px; // 1280px or less than that, then to do the action.
@@ -16,7 +17,10 @@ const Layout = ({
   hideBorders?: boolean
 }) => {
   return (
-    <div className="flex-grow w-full  mx-auto xl:px-8 justify-start max-w-360 items-start lg:flex">
+    <div
+      style={{ marginTop: SIDEBAR_HEIGHT }}
+      className="flex-grow w-full  mx-auto xl:px-8 justify-start max-w-360 items-start lg:flex"
+    >
       {/* Left sidebar & main wrapper */}
       <div className="flex-1 min-w-0 xl:flex items-start">
         <div

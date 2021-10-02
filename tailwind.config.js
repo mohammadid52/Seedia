@@ -5,6 +5,10 @@ module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: 'class',
   theme: {
+    fontSize: {
+      ...defaultTheme.fontSize,
+      '2xs': ['10px'],
+    },
     screens: {
       xs: '680px',
       ...defaultTheme.screens,

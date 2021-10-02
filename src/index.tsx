@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import 'styles/index.scss'
 import 'styles/index.css'
@@ -24,17 +24,30 @@ function ErrorFallback({ error, resetErrorBoundary }) {
   )
 }
 
-const MainApp = () => (
-  <Suspense fallback={<Loading />}>
-    <Provider store={store}>
-      <UserContextProvider>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <App />
-          {/* <Loading /> */}
-        </ErrorBoundary>
-      </UserContextProvider>
-    </Provider>
-  </Suspense>
-)
+const loader = document.querySelector('.main-loader')
 
-ReactDOM.render(<MainApp />, document.getElementById('root'))
+const hideLoader = () => loader?.classList.add('hide')
+
+const MainApp = ({ hideLoader }: any) => {
+  useEffect(() => {
+    hideLoader()
+  }, [])
+
+  return (
+    <Suspense fallback={<Loading />}>
+      <Provider store={store}>
+        <UserContextProvider>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <App />
+            {/* <Loading /> */}
+          </ErrorBoundary>
+        </UserContextProvider>
+      </Provider>
+    </Suspense>
+  )
+}
+
+ReactDOM.render(
+  <MainApp hideLoader={hideLoader} />,
+  document.getElementById('root')
+)

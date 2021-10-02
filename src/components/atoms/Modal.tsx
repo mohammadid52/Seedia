@@ -26,7 +26,8 @@ const Modal = ({
       <Dialog
         as="div"
         static
-        className="fixed z-10 inset-0 overflow-y-auto"
+        style={{ zIndex: 9999 }}
+        className="fixed inset-0 overflow-y-auto"
         open={open}
         onClose={!disableBackdropClose ? (onClose ? onClose : setOpen) : noop}
       >

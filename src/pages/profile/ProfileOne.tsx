@@ -39,16 +39,17 @@ const Profile = ({ userData }: { userData: IParent }) => {
       updateDocumentTitle(userData.fullName)
     }
   }, [iAmOwnerOfThisProfile])
+
   // @ts-ignore
   useEffect(() => {
     const templateFromUser = commonProps?.userData?.other?.template
     if (template !== templateFromUser) {
       const changeTemplate = templateFromUser
-      history.push(
+      history.replace(
         links.getProfileById(
           commonProps?.userData.profileUrl,
           changeTemplate,
-          'private'
+          viewMode
         )
       )
     }

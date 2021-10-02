@@ -46,7 +46,7 @@ const Card = ({
               >
                 {cardTitle}{' '}
                 {privateCard && (
-                  <span className="ml-2 text-xs italic text-gray-400">
+                  <span className="ml-2 text-2xs italic text-gray-400">
                     {'Private to you'}
                   </span>
                 )}

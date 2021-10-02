@@ -1,22 +1,27 @@
 /* eslint-disable quotes */
 
-import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
-import { ChevronDownIcon, MenuIcon } from '@heroicons/react/outline'
-import { BiMessageDetail, BiUserCircle } from 'react-icons/bi'
-import { IoMdNotificationsOutline } from 'react-icons/io'
-import { GiReceiveMoney } from 'react-icons/gi'
-import { AiOutlineHome } from 'react-icons/ai'
+import { ChevronDownIcon } from '@heroicons/react/outline'
+import { MenuAlt2Icon } from '@heroicons/react/solid'
+import Button from 'components/atoms/Button'
+import Selector from 'components/atoms/Selector'
+import CountryListDropdown from 'components/CountryListDropdown'
 import Toggle from 'components/ThemeToggle'
-import { BsPeople } from 'react-icons/bs'
-import { CgWorkAlt } from 'react-icons/cg'
+import { links as _links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import { IParent } from 'interfaces/UniversalInterface'
-import { classNames } from 'utils/classNames'
-import { NavLink, useHistory } from 'react-router-dom'
+import { find, map } from 'lodash'
+import { Fragment, useState } from 'react'
+import { AiOutlineHome } from 'react-icons/ai'
+import { BiUserCircle } from 'react-icons/bi'
+import { BsBagFill, BsPeople } from 'react-icons/bs'
+import { GiReceiveMoney } from 'react-icons/gi'
+import { IoMdNotificationsOutline } from 'react-icons/io'
 import { useDispatch } from 'react-redux'
+import { NavLink, useHistory } from 'react-router-dom'
 import { logOut } from 'state/Redux/Actions/authActions'
-
+import { avatarPlaceholder } from 'state/Redux/constants'
+import { classNames } from 'utils/classNames'
 import {
   businessApps,
   callsToAction,
@@ -25,12 +30,6 @@ import {
   sellList,
   settings,
 } from 'values/values'
-import Selector from 'components/atoms/Selector'
-import { find, map } from 'lodash'
-import CountryListDropdown from 'components/CountryListDropdown'
-import { links as _links } from 'constants/Links'
-import { MenuAlt2Icon } from '@heroicons/react/solid'
-import { avatarPlaceholder } from 'state/Redux/constants'
 
 const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   const { setDarkMode, showSidebar, setShowSidebar, darkMode } =
@@ -63,10 +62,16 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   const isBusiness = userData?.other?.accountType === 'business'
 
   return (
-    <Popover className="relative dark:bg-gray-800 bg-white">
+    <Popover
+      style={{ zIndex: 999 }}
+      className="fixed top-0 inset-x-0 dark:bg-gray-800 bg-white"
+    >
       {({ open }) => (
         <>
-          <div className="flex  justify-between items-center py-3 border-b-2 dark:border-gray-700 border-gray-100  sm:px-6 md:justify-start md:space-x-10">
+          <div
+            style={{ zIndex: 999 }}
+            className="flex  justify-between items-center py-3 border-b-2 dark:border-gray-700 border-gray-100  sm:px-6 md:justify-start md:space-x-10"
+          >
             <div className="flex justify-center items-center lg:flex-1">
               <div
                 title="sidebar"
@@ -448,6 +453,15 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                   </Popover>
                 </Popover.Group>
               </div>
+
+              <Button
+                link={_links.BROWSE_PRODUCTS(userData?.profileUrl, 'private')}
+                className="mx-4 "
+                target=""
+                Icon={BsBagFill}
+                label="Browse products"
+                gradient
+              />
             </div>
           </div>
         </>
