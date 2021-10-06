@@ -14,8 +14,9 @@ const Home = ({ isUser, profileUrl, template, accountFilled }) => {
   return (
     <div className="">
       <Navigation
-        userId={profileUrl}
         isUser={isUser}
+        profileUrl={profileUrl}
+        _
         template={template}
         accountFilled={accountFilled}
       />

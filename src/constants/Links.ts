@@ -26,4 +26,5 @@ export const links = {
   BUSINESS_STEP_2: dynamicRoute('business', 'stepTwo'),
   // BASE_API_URL: process.env.REACT_APP_BASE_URL,
   BASE_API_URL: 'http://localhost:3005',
+  getProductUrl: (productId: string) => `/product/${productId}`,
 }

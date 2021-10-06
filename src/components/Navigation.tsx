@@ -9,13 +9,15 @@ import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import { NavProps } from 'interfaces/UniversalInterface'
 import { Fragment, useState } from 'react'
+import { BsBagFill } from 'react-icons/bs'
 import { classNames } from 'utils/classNames'
 import { adjustColors } from 'values/values'
 
 const Navigation = ({
   template = 1,
   accountFilled = false,
-  userId,
+
+  profileUrl,
 }: NavProps) => {
   const { setDarkMode, darkMode } = useUserContext()
 
@@ -134,12 +136,21 @@ const Navigation = ({
               {accountFilled ? (
                 <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                   <Button
-                    link={links.getProfileById(userId, template)}
+                    link={links.getProfileById(profileUrl, template)}
                     className="mx-4 "
                     label="Profile"
                     target=""
                     gradient
                     invert
+                  />
+
+                  <Button
+                    link={links.BROWSE_PRODUCTS(profileUrl, 'private')}
+                    className="mx-4 "
+                    target=""
+                    Icon={BsBagFill}
+                    label="Browse products"
+                    gradient
                   />
 
                   <Button

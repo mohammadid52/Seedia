@@ -2,7 +2,7 @@ import { useUserContext } from 'context/UserContext'
 import { getUserValues } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import { isEmpty } from 'lodash'
-import { lazy, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Router from 'Router'
 

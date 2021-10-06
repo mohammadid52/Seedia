@@ -2,6 +2,7 @@ import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import { useState } from 'react'
 import AddNewProduct from 'pages/products/modals/AddNewProduct'
+import Modal from 'components/atoms/Modal'
 const ProductsDetails = ({
   iAmOwnerOfThisProfile,
 }: {
@@ -69,8 +70,47 @@ const ProductsDetails = ({
     },
   }
 
+  const [showUnsaveModal, setShowUnsaveModal] = useState(false)
+
   return (
     <>
+      {/* Unsaved Modal */}
+      {/* {showUnsaveModal && (
+        <Modal
+          hideCloseBtn
+          header="Discard changes"
+          open={showUnsaveModal}
+          setOpen={setShowUnsaveModal}
+        >
+          <>
+            <h1 className="text-lg dark:text-white text-gray-900 min-w-96">
+              You have unsaved changes
+            </h1>
+            <p className="text-gray-500 ">Do you want to save it?</p>
+
+            <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
+              <Button
+                secondary
+                bgColor="gray"
+                onClick={() => {
+                  setShowUnsaveModal(false)
+                  setShowAddNewProductModal(true)
+                }}
+                invert
+                label="No thanks"
+              />
+              <Button
+                gradient
+                label="Discard"
+                onClick={() => {
+                  setShowUnsaveModal(false)
+                }}
+              />
+            </div>
+          </>
+        </Modal>
+      )} */}
+
       {/*  <<============================ADD NEW PRODUCT MODAL STARTS HERE==========================>>  */}
 
       <AddNewProduct
@@ -83,10 +123,10 @@ const ProductsDetails = ({
 
       <Card
         secondary
-        cardTitle="Product details"
+        cardTitle="Business features"
         content={
           <div className="bg-transparent">
-            <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+            {/* <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
               {products.map((product) => (
                 <a key={product.id} href={product.href} className="group">
                   <div className="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
@@ -104,18 +144,16 @@ const ProductsDetails = ({
                   </p>
                 </a>
               ))}
-            </div>
+            </div> */}
 
-            <div className="flex justify-end border-t border-gray-200 dark:border-gray-600 pt-4 mt-4">
-              {iAmOwnerOfThisProfile && (
-                <Button
-                  label="+ Add new product"
-                  className="flex"
-                  gradient
-                  onClick={modalActions.addNewProduct.show}
-                />
-              )}
-            </div>
+            {iAmOwnerOfThisProfile && (
+              <Button
+                label="+ Add new product"
+                className="flex"
+                gradient
+                onClick={modalActions.addNewProduct.show}
+              />
+            )}
           </div>
         }
       />

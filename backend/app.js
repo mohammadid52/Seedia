@@ -6,6 +6,7 @@ const mongodb = require('mongodb')
 const authenticationRouter = require('./apis/authenticate')
 const mediaUploadRouter = require('./apis/mediaUpload')
 const userRouter = require('./apis/user')
+const productsRouter = require('./apis/products')
 
 const app = express()
 const bodyParser = require('body-parser')
@@ -26,13 +27,24 @@ client.connect(
   (err, client) => {
     const db = client.db('13rms')
     const usersCollection = db.collection('users')
+    const productsCollection = db.collection('products')
 
     const passUserCollection = async (req, res, next) => {
       res.locals.usersCollection = usersCollection
       next()
     }
+    const passProductsCollection = (req, res, next) => {
+      res.locals.productsCollection = productsCollection
+      next()
+    }
 
     app.use('/user', passUserCollection, userRouter)
+    app.use(
+      '/products',
+      passUserCollection,
+      passProductsCollection,
+      productsRouter
+    )
 
     app.use('/auth', passUserCollection, authenticationRouter)
 

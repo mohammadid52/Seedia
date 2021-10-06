@@ -1,3 +1,4 @@
+import { Moment } from 'moment'
 import { User } from './UserInterface'
 
 export interface IAbout {
@@ -112,6 +113,7 @@ export interface NavProps {
   isUser?: boolean
   template?: 1 | 2
   userId?: string
+  profileUrl?: string
   accountFilled?: boolean
 }
 
@@ -199,4 +201,26 @@ export interface IProfile {
   peopleAlsoViewed: IPeopleAlsoViewed[]
   experiences: IExperience[]
   education: IEducation[]
+}
+
+// ====================================================== //
+// ===================NEW~PHASE~INTERFACES=============== //
+// ====================================================== //
+
+export interface IProduct {
+  _id: string // productID
+  images: { id: string; isCover: boolean; url: string; alt: string }[]
+  productName: string
+  productDescription: string
+  availableColors: { code: string; name: string }[]
+  availableSizes: string[]
+  tags: string[]
+  estimatedDelivery: Moment
+  price: number
+  features?: { name: string; id: string }[]
+  highlights?: { name: string; id: string }[]
+  details: string
+  createdOn: Moment | null
+  updatedOn: Moment | null
+  priceUpdatedOn: Moment | null
 }

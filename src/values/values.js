@@ -60,6 +60,7 @@ import { MdFindReplace, MdAttachMoney } from 'react-icons/md'
 import { SiGoogleanalytics } from 'react-icons/si'
 import { BsFilePost } from 'react-icons/bs'
 import { FiSettings } from 'react-icons/fi'
+import { nanoid } from 'nanoid'
 
 export const adjustColors = [
   { name: 'Deuteranomaly', value: 1 },
@@ -390,4 +391,20 @@ export const countries = [
   { countryCode: 'UY', label: 'Uruguay', flag: uruguay },
   { countryCode: 'VE', label: 'Venezuela', flag: venezuela },
   { countryCode: 'US', label: 'United States', flag: usa },
+]
+
+export const colorsList = [
+  { name: 'gray', id: nanoid(4), code: '#E5E7EB' },
+  { name: 'black', id: nanoid(4), code: '#111827' },
+  { name: 'white', id: nanoid(4), code: '#fff' },
+]
+export const sizeList = [
+  { name: 'XXS', id: 1 },
+  { name: 'XS', id: 2 },
+  { name: 'S', id: 3 },
+  { name: 'M', id: 4 },
+  { name: 'L', id: 5 },
+  { name: 'XL', id: 6 },
+  { name: '2XL', id: 7 },
+  { name: '3XL', id: 8 },
 ]

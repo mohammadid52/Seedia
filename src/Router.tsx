@@ -9,6 +9,8 @@ import ForgotPassword from 'pages/ForgotPassword'
 import Home from 'pages/home/Home'
 import NotFound from 'pages/NotFound'
 import BrowseProducts from 'pages/products/BrowseProducts'
+import ProductDetails from 'pages/products/ProductDetails'
+import ProductsDetails from 'pages/products/ProductsDetails'
 import ProfileTwo from 'pages/profile/ProfileTwo'
 import ResetPassword from 'pages/ResetPassword'
 import { lazy } from 'react'
@@ -41,7 +43,10 @@ const Router = ({
           <div className="">
             <Switch>
               <Route path="/browse-products">
-                <BrowseProducts />
+                <BrowseProducts userData={userData} />
+              </Route>
+              <Route path="/product/:productId">
+                <ProductDetails userData={userData} />
               </Route>
 
               {/* This is common page */}

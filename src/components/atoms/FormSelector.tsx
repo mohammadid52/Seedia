@@ -14,6 +14,8 @@ interface SelecterProps {
   onSelect?: (event: any) => void
   border?: boolean
   name: string
+  setUnsavedChanges?: React.Dispatch<React.SetStateAction<boolean>>
+  className?: string
 }
 
 const FormSelector = ({
@@ -21,10 +23,12 @@ const FormSelector = ({
   placeholder = '',
   label = '',
   required = false,
-
+  selectedItem,
   onSelect = () => {},
   border = true,
   name,
+  className = '',
+  setUnsavedChanges,
 }: SelecterProps) => {
   const [field, meta, helpers] = useField(name)
 
@@ -35,12 +39,15 @@ const FormSelector = ({
     onSelect(selectedOption)
     setTouched(true)
     setError(undefined)
+    if (typeof setUnsavedChanges === 'function') {
+      setUnsavedChanges(true)
+    }
   }
 
   return (
     <Listbox {...field} onChange={onOptionSelect}>
       {({ open }) => (
-        <div>
+        <div className={className}>
           {label && (
             <Listbox.Label className="block dark:text-white text-sm font-medium text-gray-700">
               {label}{' '}
@@ -65,7 +72,9 @@ const FormSelector = ({
                     : 'dark:text-white text-gray-900'
                 }`}
               >
-                {field.value || placeholder}
+                {field.value.length > 0
+                  ? field.value
+                  : selectedItem || placeholder}
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon
