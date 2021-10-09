@@ -49,8 +49,8 @@ const Button = ({
   size = 'md',
   invert = false,
   rounded = 'rounded-md',
-  weight = 'medium',
-  gradientHover = true,
+
+  gradientHover = false,
   className = '',
   shadow = false,
   loading = false,
@@ -74,11 +74,7 @@ const Button = ({
 
   const gradientClass = `${
     invert
-      ? `gradient-text border border-gray-200 dark:border-gray-600 overflow-hidden  ${
-          gradientHover ? 'hover:gradient-border' : 'hover:border-gray-300'
-        }  rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${
-          gradientColor.x
-        }-500`
+      ? `gradient-text border border-gray-200 dark:border-gray-600 overflow-hidden  rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${gradientColor.x}-500`
       : `text-white via-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${gradientColor.x}-500 bg-gradient-to-br from-${gradientColor.x}-500 to-${gradientColor.y}-500`
   } `
 
@@ -126,7 +122,7 @@ const Button = ({
         className={`${
           customClass
             ? className
-            : `text-xs ${generateClass()} ${generatePaddingAndTextSize()} ${rounded} font-${weight} ${className} ${
+            : `text-xs ${generateClass()} ${generatePaddingAndTextSize()} ${rounded} font-medium ${className} ${
                 fullWidth ? 'w-full' : ''
               } transition-all flex items-center justify-center duration-200 ${
                 disabled ? 'opacity-50' : ''
@@ -176,7 +172,7 @@ const Button = ({
       className={`${
         customClass
           ? className
-          : `text-xs ${generateClass()} ${generatePaddingAndTextSize()} ${rounded} font-${weight} ${className} ${
+          : `text-xs ${generateClass()} ${generatePaddingAndTextSize()} ${rounded} font-medium ${className} ${
               fullWidth ? 'w-full' : ''
             } transition-all flex items-center justify-center duration-200 ${
               disabled ? 'opacity-50' : ''

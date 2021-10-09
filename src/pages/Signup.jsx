@@ -44,7 +44,7 @@ const Signup = () => {
   const [emailVerified, setEmailVerified] = useState(false)
 
   const onSubmit = async (_values) => {
-    if (emailVerified) {
+    if (true) {
       try {
         setSaving(true)
         const updatedData = {

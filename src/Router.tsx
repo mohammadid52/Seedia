@@ -8,9 +8,10 @@ import Dashboard from 'pages/dashboard'
 import ForgotPassword from 'pages/ForgotPassword'
 import Home from 'pages/home/Home'
 import NotFound from 'pages/NotFound'
+import AddProduct from 'pages/products/AddProduct'
 import BrowseProducts from 'pages/products/BrowseProducts'
 import ProductDetails from 'pages/products/ProductDetails'
-import ProductsDetails from 'pages/products/ProductsDetails'
+import CreateReview from 'pages/products/Review/CreateReview'
 import ProfileTwo from 'pages/profile/ProfileTwo'
 import ResetPassword from 'pages/ResetPassword'
 import { lazy } from 'react'
@@ -42,7 +43,7 @@ const Router = ({
         <div className="dark:bg-gray-800 bg-white">
           <div className="">
             <Switch>
-              <Route path="/browse-products">
+              <Route path="/browse-products/:profileUrl">
                 <BrowseProducts userData={userData} />
               </Route>
               <Route path="/product/:productId">
@@ -54,8 +55,25 @@ const Router = ({
                 <Home {...navProps} />
               </Route>
 
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/create-review/:productId"
+              >
+                <CreateReview />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/add-product"
+              >
+                <AddProduct profileUrl={userData?.profileUrl} />
+              </PrivateRoute>
+
               {/* @ts-ignore */}
-              <PrivateRoute isPublic exact path="/login">
+              <PrivateRoute isPublic isUser={userData} exact path="/login">
                 <Login />
               </PrivateRoute>
 
@@ -68,6 +86,7 @@ const Router = ({
                 isPublic
                 // @ts-ignore
                 exact
+                isUser={userData}
                 path="/signup"
               >
                 <Signup />

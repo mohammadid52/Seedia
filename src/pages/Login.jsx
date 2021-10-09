@@ -52,7 +52,7 @@ const Login = () => {
           setErrors([])
 
           setValues({ ...data.data, ...data })
-
+          window.location.reload()
           history.push(links.DASHBAORD)
           localStorage.setItem('access_token', data.data.access_token)
         }

@@ -145,7 +145,7 @@ const Navigation = ({
                   />
 
                   <Button
-                    link={links.BROWSE_PRODUCTS(profileUrl, 'private')}
+                    link={links.BROWSE_PRODUCTS(profileUrl)}
                     className="mx-4 "
                     target=""
                     Icon={BsBagFill}

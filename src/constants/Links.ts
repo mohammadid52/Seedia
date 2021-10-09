@@ -6,8 +6,7 @@ export const links = {
   FORGOT_PASSWORD: '/forgot-password',
   SIGNUP: '/signup',
   PROFILE: '/profile',
-  BROWSE_PRODUCTS: (id?: string, viewMode: string = 'private') =>
-    `/browse-products/${id}/${viewMode}`,
+  BROWSE_PRODUCTS: (id?: string) => `/browse-products/${id}`,
   getProfileById: (
     id?: string,
     template?: 1 | 2,
@@ -27,4 +26,6 @@ export const links = {
   // BASE_API_URL: process.env.REACT_APP_BASE_URL,
   BASE_API_URL: 'http://localhost:3005',
   getProductUrl: (productId: string) => `/product/${productId}`,
+  createReview: (productId: string) => `/create-review/${productId}`,
+  addProduct: () => `/add-product`,
 }

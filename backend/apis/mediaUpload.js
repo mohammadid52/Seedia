@@ -28,4 +28,8 @@ router.post('/', upload.single('image'), function (req, res) {
   res.json(responseMsg('success', 'Uploaded Successfully', req.file))
 })
 
+router.post('/multiple', upload.array('images', 20), function (req, res) {
+  res.json(responseMsg('success', 'Uploaded Successfully', req.files))
+})
+
 module.exports = router

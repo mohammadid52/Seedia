@@ -12,7 +12,7 @@ const DashboardLayout = ({
   thirdCol?: React.ReactNode
 }) => {
   return (
-    <div className="flex-grow w-full px-4 md:max-w-6xl lg:max-w-7xl sm:max-w-5xl mx-auto xl:px-8 lg:flex">
+    <div className="flex-grow pt-24 w-full px-4 md:max-w-6xl lg:max-w-7xl sm:max-w-5xl mx-auto xl:px-8 lg:flex">
       {/* Left sidebar & main wrapper */}
       <div className="flex-1  min-w-0 bg-gray-100 dark:bg-gray-800 xl:flex">
         <div

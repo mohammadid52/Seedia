@@ -88,6 +88,8 @@ export interface IParent {
   following?: string[]
   followers?: string[]
   projects: string[]
+  reviews: string[] // collection of reviewId
+  purchases: string[] // collection of productId
   pivCount?: number
   pwvpCount?: number
   profileUrl?: string
@@ -209,18 +211,45 @@ export interface IProfile {
 
 export interface IProduct {
   _id: string // productID
-  images: { id: string; isCover: boolean; url: string; alt: string }[]
+  images: IProductImage[]
   productName: string
   productDescription: string
   availableColors: { code: string; name: string }[]
   availableSizes: string[]
   tags: string[]
-  estimatedDelivery: Moment
-  price: number
+  estimatedDelivery: Moment | string | null
+  price: number | string
   features?: { name: string; id: string }[]
-  highlights?: { name: string; id: string }[]
+  highlights?: IHighlight[]
   details: string
   createdOn: Moment | null
   updatedOn: Moment | null
   priceUpdatedOn: Moment | null
+  reviews: {
+    userId: string
+    reviewId: string
+  }[]
+}
+
+export interface IProductImage {
+  id: string
+  isCover: boolean
+  url: string
+  alt: string
+}
+
+export interface IHighlight {
+  name: string
+  id: string
+}
+
+export interface IReview {
+  _id: string
+  reviewText: string
+  userId: string
+  rating: number
+  likes: number
+  user?: IParent
+  dislikes: number
+  createdOn: Date | null
 }

@@ -455,7 +455,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
               </div>
 
               <Button
-                link={_links.BROWSE_PRODUCTS(userData?.profileUrl, 'private')}
+                link={_links.BROWSE_PRODUCTS(userData?.profileUrl)}
                 className="mx-4 "
                 target=""
                 Icon={BsBagFill}

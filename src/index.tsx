@@ -1,22 +1,26 @@
-import { Suspense, useEffect } from 'react'
-import ReactDOM from 'react-dom'
-import 'styles/index.scss'
-import 'styles/index.css'
-// import styles
-import 'lightgallery/css/lightgallery.css'
-import 'lightgallery/css/lg-zoom.css'
-import 'lightgallery/css/lg-thumbnail.css'
-import 'react-datepicker/dist/react-datepicker.css'
 import App from 'App'
 import Loading from 'components/Loading'
 import UserContextProvider from 'context/UserContext'
+import 'lightgallery/css/lg-thumbnail.css'
+import 'lightgallery/css/lg-zoom.css'
+// import styles
+import 'lightgallery/css/lightgallery.css'
+import NotFound from 'pages/NotFound'
+import { Suspense } from 'react'
+import 'react-datepicker/dist/react-datepicker.css'
+import ReactDOM from 'react-dom'
 import { ErrorBoundary } from 'react-error-boundary'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
 import { store } from 'state'
-import NotFound from 'pages/NotFound'
+import 'styles/index.css'
+import 'styles/index.scss'
+import { ReactQueryDevtools } from 'react-query/devtools'
+
+const queryClient = new QueryClient()
 
 // @ts-ignore
-function ErrorFallback({ error, resetErrorBoundary }) {
+export const ErrorFallback = ({ error, resetErrorBoundary }) => {
   return (
     <NotFound
       tryAgain={resetErrorBoundary}
@@ -33,20 +37,24 @@ const loader = document.querySelector('.main-loader')
 const hideLoader = () => loader?.classList.add('hide')
 
 const MainApp = ({ hideLoader }: any) => {
-  useEffect(() => {
-    hideLoader()
-  }, [])
+  // useEffect(() => {
+  //   hideLoader()
+  // }, [])
 
   return (
     <Suspense fallback={<Loading />}>
-      <Provider store={store}>
-        <UserContextProvider>
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <App />
-            {/* <Loading /> */}
-          </ErrorBoundary>
-        </UserContextProvider>
-      </Provider>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <QueryClientProvider client={queryClient}>
+          <Provider store={store}>
+            <UserContextProvider>
+              <div className="min-h-screen w-screen">
+                <App />
+              </div>
+            </UserContextProvider>
+          </Provider>
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      </ErrorBoundary>
     </Suspense>
   )
 }

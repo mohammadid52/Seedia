@@ -236,15 +236,20 @@ const Background = ({
   // @ts-ignore
   const { background = {} } = !isEmpty(userData) ? {} : userData
   const {
+    // @ts-ignore
     summary = '',
+    // @ts-ignore
     interests = [],
+    // @ts-ignore
     experiences = [],
-  }: IBackground = background
+  } = background
 
   const initialState = {
     interest: '',
+    // @ts-ignore
     interests: [],
     summary: '',
+    // @ts-ignore
     experiences: [],
   }
   const [localFields, setLocalFields] = useState<ILocalFields>(initialState)
@@ -302,6 +307,8 @@ const Background = ({
       if (showModal.type === 'summary') {
         updatedData = {
           ...userData,
+          // @ts-ignore
+
           background: {
             ...background,
             summary,
@@ -310,6 +317,8 @@ const Background = ({
       } else if (showModal.type === 'interests') {
         updatedData = {
           ...userData,
+          // @ts-ignore
+
           background: {
             ...background,
             interests,
@@ -318,7 +327,7 @@ const Background = ({
       } else if (showModal.type === 'experiences') {
         updatedData = {
           ...userData,
-
+          // @ts-ignore
           background: {
             ...background,
             experiences:

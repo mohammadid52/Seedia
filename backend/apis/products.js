@@ -183,35 +183,6 @@ router.post('/add', auth, async (req, res) => {
 
     try {
       const data = {
-        images: [
-          {
-            id: nanoid(6),
-            isCover: true,
-            url: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
-            alt: 'Two each of gray, white, and black shirts laying flat.',
-          },
-          {
-            id: nanoid(6),
-
-            isCover: false,
-            url: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
-            alt: 'Model wearing plain black basic tee.',
-          },
-          {
-            id: nanoid(6),
-
-            isCover: false,
-            url: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
-            alt: 'Model wearing plain gray basic tee.',
-          },
-          {
-            id: nanoid(6),
-
-            isCover: false,
-            url: 'https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-            alt: 'Model wearing plain white basic tee.',
-          },
-        ],
         postedBy: ObjectId(token.id),
         ...newProductData,
       }
@@ -225,7 +196,7 @@ router.post('/add', auth, async (req, res) => {
                 ...user.business,
                 products:
                   user?.products?.length > 0
-                    ? [...user.products]
+                    ? [...user.products, product.insertedId]
                     : [product.insertedId],
               },
             },

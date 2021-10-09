@@ -3,8 +3,9 @@ import { getUserValues } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import Router from 'Router'
+import { loadUser } from 'state/Redux/Actions/authActions'
 
 const App = () => {
   const { setDarkMode } = useUserContext()
@@ -32,10 +33,12 @@ const App = () => {
   const [userData, setUserData] = useState<IParent>()
 
   const values = useSelector((state) => getUserValues(state))
-
+  const dispatch = useDispatch()
   useEffect(() => {
-    if (values) {
+    if (!isEmpty(values)) {
       setUserData(values)
+    } else {
+      dispatch(loadUser())
     }
   }, [values, window.location.pathname])
 

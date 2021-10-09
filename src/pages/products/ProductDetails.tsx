@@ -1,10 +1,14 @@
 import { RadioGroup } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/solid'
+import { fetchProductDetails } from 'apis/queries'
 import Button from 'components/atoms/Button'
 import Meta from 'components/atoms/Meta/Meta'
-import { network } from 'helpers'
-import { IParent, IProduct } from 'interfaces/UniversalInterface'
-import { useEffect, useState } from 'react'
+import Loading from 'components/Loading'
+import { ErrorFallback } from 'index'
+import { IHighlight, IParent, IProduct } from 'interfaces/UniversalInterface'
+import ReviewSection from 'pages/products/Review/ReviewSection'
+import { useState } from 'react'
+import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { classNames } from 'utils/classNames'
 
@@ -56,44 +60,34 @@ const reviews = { href: '#', average: 4, totalCount: 117 }
 
 const ProductDetails = ({ userData }: { userData: IParent }) => {
   // @ts-ignore
-  const [product, setProduct] = useState<IProduct>(INIT)
-  const [fetched, setFetched] = useState(false)
+
+  const params: any = useParams()
+  const productId = params.productId
+
+  const { isLoading, error, data, isFetched, isError, refetch } = useQuery(
+    'product',
+    () => fetchProductDetails(productId)
+  )
+
+  const product: IProduct = isFetched && !isLoading ? data.data.data : INIT
 
   const [selectedColor, setSelectedColor] = useState(
-    fetched && product
+    product
       ? product.availableColors[0]
       : { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' }
   )
   const [selectedSize, setSelectedSize] = useState(
-    fetched && product
-      ? product.availableSizes[1]
-      : { name: 'XXS', inStock: false }
+    product ? product.availableSizes[1] : { name: 'XXS', inStock: false }
   )
 
-  const params: any = useParams()
-
-  const productId = params.productId
-
-  const fetchProductDetails = async () => {
-    try {
-      const {
-        data: { status, message, data: product },
-      } = await network.get(`/products/${productId}`)
-
-      if (status === 'success') {
-        setProduct({ ...product })
-      }
-    } catch (error) {
-    } finally {
-      setFetched(true)
-    }
+  if (isLoading) {
+    return <Loading />
   }
-
-  useEffect(() => {
-    if (!fetched) {
-      fetchProductDetails()
-    }
-  }, [fetched])
+  if (isError) {
+    return (
+      <ErrorFallback resetErrorBoundary={refetch} error={{ message: error }} />
+    )
+  }
 
   return (
     <>
@@ -117,32 +111,37 @@ const ProductDetails = ({ userData }: { userData: IParent }) => {
                 className="w-full h-full object-center object-cover"
               />
             </div>
-            <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-              <div className="aspect-w-3 aspect-h-2 rounded-lg overflow-hidden">
-                <img
-                  id={product.images[1].id}
-                  src={product.images[1].url}
-                  alt={product.images[1].alt}
-                  className="w-full h-full object-center object-cover"
-                />
-              </div>
-              <div className="aspect-w-3 aspect-h-2 rounded-lg overflow-hidden">
-                <img
-                  id={product.images[2].id}
-                  src={product.images[2].url}
-                  alt={product.images[2].alt}
-                  className="w-full h-full object-center object-cover"
-                />
-              </div>
-            </div>
-            <div className="aspect-w-4 aspect-h-5 sm:rounded-lg sm:overflow-hidden lg:aspect-w-3 lg:aspect-h-4">
-              <img
-                id={product.images[3].id}
-                src={product.images[3].url}
-                alt={product.images[3].alt}
-                className="w-full h-full object-center object-cover"
-              />
-            </div>
+            {product.images.length === 4 && (
+              <>
+                {' '}
+                <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
+                  <div className="aspect-w-3 aspect-h-2 rounded-lg overflow-hidden">
+                    <img
+                      id={product.images[1].id}
+                      src={product.images[1].url}
+                      alt={product.images[1].alt}
+                      className="w-full h-full object-center object-cover"
+                    />
+                  </div>
+                  <div className="aspect-w-3 aspect-h-2 rounded-lg overflow-hidden">
+                    <img
+                      id={product.images[2].id}
+                      src={product.images[2].url}
+                      alt={product.images[2].alt}
+                      className="w-full h-full object-center object-cover"
+                    />
+                  </div>
+                </div>
+                <div className="aspect-w-4 aspect-h-5 sm:rounded-lg sm:overflow-hidden lg:aspect-w-3 lg:aspect-h-4">
+                  <img
+                    id={product.images[3].id}
+                    src={product.images[3].url}
+                    alt={product.images[3].alt}
+                    className="w-full h-full object-center object-cover"
+                  />
+                </div>{' '}
+              </>
+            )}
           </div>
 
           {/* Product info */}
@@ -178,13 +177,9 @@ const ProductDetails = ({ userData }: { userData: IParent }) => {
                       />
                     ))}
                   </div>
-                  <p className="sr-only">{reviews.average} out of 5 stars</p>
-                  <a
-                    href={reviews.href}
-                    className="ml-3 text-sm font-medium gradient-text"
-                  >
-                    {reviews.totalCount} reviews
-                  </a>
+                  <p className="ml-2 text-gray-800 dark:text-gray-400">
+                    {reviews.average} out of 5 stars
+                  </p>
                 </div>
               </div>
 
@@ -343,15 +338,15 @@ const ProductDetails = ({ userData }: { userData: IParent }) => {
                 </div>
               </div>
 
-              <div className="mt-10">
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                  Highlights
-                </h3>
+              {product.highlights && product.highlights.length > 0 && (
+                <div className="mt-10">
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+                    Highlights
+                  </h3>
 
-                {product.highlights && product.highlights.length > 0 && (
                   <div className="mt-4">
                     <ul className="pl-4 list-disc text-sm space-y-2">
-                      {product.highlights.map((highlight) => (
+                      {product.highlights.map((highlight: IHighlight) => (
                         <li key={highlight.name} className="text-gray-400">
                           <span className="text-gray-600 dark:text-gray-500">
                             {highlight.name}
@@ -360,20 +355,31 @@ const ProductDetails = ({ userData }: { userData: IParent }) => {
                       ))}
                     </ul>
                   </div>
-                )}
-              </div>
-
-              <div className="mt-10">
-                <h2 className="text-sm font-medium text-gray-900 dark:text-white">
-                  Details
-                </h2>
-
-                <div className="mt-4 space-y-6">
-                  <p className="text-sm text-gray-600 dark:text-gray-500">
-                    {product.details}
-                  </p>
                 </div>
-              </div>
+              )}
+
+              {product.details && product.details.length > 0 && (
+                <div className="mt-10">
+                  <h2 className="text-sm font-medium text-gray-900 dark:text-white">
+                    Details
+                  </h2>
+
+                  <div className="mt-4 space-y-6">
+                    <p className="text-sm text-gray-600 dark:text-gray-500">
+                      {product.details}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {/* {product.reviews && product.reviews.length > 0 && ( */}
+              {product && product._id && (
+                <ReviewSection
+                  userId={userData?._id}
+                  reviewsIds={product?.reviews}
+                  productId={product._id}
+                />
+              )}
+              {/* )} */}
             </div>
           </div>
         </div>

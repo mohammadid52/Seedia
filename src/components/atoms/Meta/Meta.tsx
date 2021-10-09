@@ -2,10 +2,10 @@ import { Helmet } from 'react-helmet'
 
 interface MetaProps {
   pageTitle: string
-  title: string
-  description: string
-  keywords: string
-  userName: string
+  title?: string
+  description?: string
+  keywords?: string
+  userName?: string
   pageType?: string
 }
 
@@ -22,14 +22,14 @@ const Meta = (props: MetaProps) => {
     <div>
       <Helmet>
         <title>{pageTitle}</title>
-        <meta name="description" content={description} />
-        <meta name="title" content={title} />
-        <meta name="keywords" content={keywords} />
+        {description && <meta name="description" content={description} />}
+        <meta name="title" content={title || pageTitle} />
+        {keywords && <meta name="keywords" content={keywords} />}
         <meta name="audience" content={'Everyone'} />
-        <meta name="page-type" content={pageType}></meta>
-        <meta name="page-topic" content={title}></meta>
+        {<meta name="page-type" content={pageType}></meta>}
+        {title && <meta name="page-topic" content={title}></meta>}
         <meta name="copyright" content={'13RMS'}></meta>
-        <meta name="publisher" content={userName}></meta>
+        {userName && <meta name="publisher" content={userName}></meta>}
       </Helmet>
     </div>
   )

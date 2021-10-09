@@ -1,8 +1,9 @@
 import { Transition } from '@headlessui/react'
 import { ExclamationCircleIcon } from '@heroicons/react/solid'
-import { Field, useField } from 'formik'
+import { useField } from 'formik'
 import React, { useState } from 'react'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
+import FormError from 'components/atoms/form/FormError'
 
 const FormInput = ({
   label,
@@ -104,7 +105,11 @@ const FormInput = ({
               )}
             </div>
           </div>
-          <Transition
+          <FormError
+            show={Boolean(meta.touched && meta.error)}
+            error={meta.error}
+          />
+          {/* <Transition
             show={Boolean(meta.touched && meta.error)}
             enter="transition duration-100 ease-out"
             enterFrom="transform scale-95 opacity-0"
@@ -120,7 +125,7 @@ const FormInput = ({
             >
               {meta.error}
             </p>
-          </Transition>
+          </Transition> */}
         </div>
       ) : (
         <div>

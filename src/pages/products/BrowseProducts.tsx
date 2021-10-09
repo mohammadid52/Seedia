@@ -1,122 +1,173 @@
-import { network, updateDocumentTitle } from 'helpers'
-import { IParent, IProduct } from 'interfaces/UniversalInterface'
-import { useEffect, useState } from 'react'
+import { fetchAllProducts } from 'apis/queries'
+import Button from 'components/atoms/Button'
+import Card from 'components/atoms/Card'
+import Section from 'components/atoms/products/Section'
+import Loading from 'components/Loading'
 import { links } from 'constants/Links'
-import Dropdown from 'components/Dropdown/Dropdown'
-import QuickOverview from 'pages/products/QuckOverview'
+import useFollow from 'hooks/useFollow'
+import { useRouter } from 'hooks/useRouter'
+import useUser from 'hooks/useUser'
+import { ErrorFallback } from 'index'
+import { IParent, IProduct } from 'interfaces/UniversalInterface'
+import Product from 'pages/products/Product'
+import { useQuery } from 'react-query'
+import { avatarPlaceholder } from 'state/Redux/constants'
 
-const Product = ({ product }: { product: IProduct }) => {
-  const [quickOverviewModal, setQuickOverviewModal] = useState(false)
+const ProfileCard = ({
+  userData,
+  iAmOwnerOfThisProfile,
+  targetId,
+}: {
+  userData: IParent
+  iAmOwnerOfThisProfile: boolean
+  targetId: string
+}) => {
+  const { following, addFollow, removeFollow } = useFollow(
+    userData.following,
+    targetId
+  )
 
-  const dropdownList = [
-    {
-      id: '1',
-      name: 'Add to bag',
-      onClick: () => {
-        setQuickOverviewModal(true)
-      },
-    },
-    {
-      id: '2',
-      name: 'Add to favorites',
-      onClick: () => {
-        setQuickOverviewModal(true)
-      },
-    },
-    {
-      id: '3',
-      name: 'Quick Overview',
-      onClick: () => {
-        setQuickOverviewModal(true)
-      },
-    },
-  ]
   return (
-    <>
-      <QuickOverview
-        product={product}
-        show={quickOverviewModal}
-        setShow={setQuickOverviewModal}
+    <div className="">
+      <Card
+        className="p-6"
+        content={
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-12">
+              <div className="">
+                <span className="sr-only">13RMS</span>
+                <img
+                  className="border-gradient border-transparent border-4 h-36 w-36 sm:h-40 sm:w-40 cursor-pointer rounded-full shadow-xl"
+                  src={
+                    userData?.profilePicture
+                      ? userData?.profilePicture
+                      : avatarPlaceholder
+                  }
+                  alt=""
+                />
+              </div>
+              <div className="space-y-4">
+                <h1 className="text-2xl leading-6 font-semibold dark:text-white text-gray-900">
+                  {userData?.fullName}
+                </h1>
+                <h5 className="text-base leading-6 font-light mt-2 max-w-132 dark:text-gray-400 text-gray-900">
+                  {userData?.background?.summary ||
+                    'In  placeholder text commonly used to demonstrate the visual form of a document'}
+                </h5>
+                {!iAmOwnerOfThisProfile && (
+                  <Button
+                    onClick={() =>
+                      following
+                        ? addFollow.mutate(targetId)
+                        : removeFollow.mutate(targetId)
+                    }
+                    label="Follow"
+                    gradient
+                    size="lg"
+                  />
+                )}
+              </div>
+            </div>
+            <div className="border-l h-full border-gray-200 dark:border-gray-600">
+              <div className="flex py-4 flex-col pl-16 items-center justify-around space-y-6">
+                <div className="flex w-56 flex-col border-b border-gray-200 dark:border-gray-600 pb-4">
+                  <span className="text-base font-semibold text-gray-900 dark:text-white">
+                    {userData?.followers?.length || 0}
+                  </span>
+                  <span className="text-base font-medium text-gray-500 dark:text-gray-500">
+                    Followers
+                  </span>
+                </div>
+                <div className="flex flex-col  w-56  border-b border-gray-200 dark:border-gray-600 pb-4">
+                  <span className="text-base font-semibold text-gray-900 dark:text-white">
+                    {userData?.purchases?.length || 0}
+                  </span>
+                  <span className="text-base font-medium text-gray-500 dark:text-gray-500">
+                    Purchases
+                  </span>
+                </div>
+                <div className="flex flex-col w-56  border-b border-gray-200 dark:border-gray-600 pb-4">
+                  <span className="text-base font-semibold text-gray-900 dark:text-white">
+                    {userData?.reviews?.length || 0}
+                  </span>
+                  <span className="text-base font-medium text-gray-500 dark:text-gray-500">
+                    Reviews
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
       />
-      <div className="group">
-        <a
-          key={product._id}
-          href={`${links.getProductUrl(product._id)}`}
-          className="group"
-        >
-          <div className="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-            <img
-              src={product.images[0].url}
-              alt={product.images[0].alt}
-              className="w-full h-full object-center object-cover group-hover:opacity-75 transition-all"
-            />
-          </div>
-        </a>
-        <div className="flex mt-4 items-start justify-between">
-          <div>
-            <h3 className=" text-sm text-gray-700 dark:text-gray-400">
-              {product.productName}
-            </h3>
-            <p className="mt-1 text-lg font-medium dark:text-white text-gray-900">
-              ${product.price}
-            </p>
-          </div>
-          <div>
-            <Dropdown list={dropdownList} />
-          </div>
-        </div>
-      </div>
-    </>
+    </div>
   )
 }
 
+// @ts-nocheck
+
 const BrowseProducts = ({ userData }: { userData: IParent }) => {
-  const [products, setProducts] = useState<IProduct[]>([])
-  const fetchAllProducts = async () => {
-    try {
-      const {
-        data: { status, message, data: products },
-      } = await network.get(`/products/postedBy/${userData._id}`)
-      if (status === 'success') {
-        setProducts(products)
-      } else {
-        console.error(message)
-      }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setFetched(true)
-    }
+  const route: any = useRouter()
+
+  const { profileUrl } = route?.match?.params
+
+  const { otherUserData, iAmOwnerOfThisProfile } = useUser(profileUrl, userData)
+
+  const { isLoading, error, data, isFetched, isError, refetch } = useQuery(
+    'all-products',
+    () =>
+      fetchAllProducts(
+        iAmOwnerOfThisProfile ? userData._id : otherUserData?._id
+      )
+  )
+
+  const products: IProduct[] = isFetched && !isLoading && data.data.data
+
+  if (isLoading) {
+    return <Loading />
+  }
+  if (isError) {
+    return (
+      <ErrorFallback resetErrorBoundary={refetch} error={{ message: error }} />
+    )
   }
 
-  const [fetched, setFetched] = useState(false)
-
-  useEffect(() => {
-    if (!fetched) {
-      fetchAllProducts()
-    }
-  }, [fetched])
-
-  useEffect(() => {
-    updateDocumentTitle('Browse products')
-    return () => {
-      updateDocumentTitle('13RMS', true)
-    }
-  }, [])
-
   return (
-    <div className="bg-white dark:bg-gray-800 h-screen w-screen">
-      <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h2 className="sr-only">Products</h2>
-        <h2 className="text-2xl font-extrabold tracking-tight dark:text-white text-gray-900">
-          Your Products
-        </h2>
-
-        <div className="mt-6 grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8 overflow-hidden bg-gray-200 dark:bg-gray-800 py-12">
+      <div className="pt-24">
+        <ProfileCard
+          userData={userData}
+          targetId={otherUserData?._id}
+          iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+        />
+        <Section
+          showChildren={products && products.length > 0}
+          title={
+            iAmOwnerOfThisProfile
+              ? 'Your Products'
+              : `${otherUserData?.firstName}'s Products`
+          }
+        >
           {products.map((product) => (
             <Product product={product} />
           ))}
-        </div>
+        </Section>
+
+        {iAmOwnerOfThisProfile && (
+          <Button
+            label="+ Add new product"
+            className="flex"
+            gradient
+            link={links.addProduct()}
+          />
+        )}
+        <Section
+          showChildren={products && products.length > 0}
+          title={'Recommended Products'}
+        >
+          {products.map((product) => (
+            <Product product={product} />
+          ))}
+        </Section>
       </div>
     </div>
   )
