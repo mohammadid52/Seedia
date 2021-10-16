@@ -23,7 +23,7 @@ const Dashboard = ({ userData }: DashboardProps) => {
   }, [])
 
   return (
-    <div className="relative  dark:bg-gray-800 bg-gray-100 min-h-screen">
+    <div className="relative  dark:bg-gray-900 bg-gray-100 min-h-screen">
       <DashboardHeader userData={userData} />
 
       <Sidebar />

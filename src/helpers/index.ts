@@ -3,6 +3,8 @@ import { links } from 'constants/Links'
 import get from 'lodash/get'
 
 export const getAuth = (state: any) => get(state, 'auth', {})
+export const getBasket = (state: any) =>
+  get(state, 'user.basket', { count: 0, product: [''] })
 export const getUserValues = (state: any) => get(state, 'auth.user', {})
 export const getOtherUserValues = (state: any) =>
   get(state, 'auth.otherUser', {})

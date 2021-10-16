@@ -10,7 +10,7 @@ const StarsField = () => {
 
   const ratingConfig = {
     size: 30,
-    value: 3,
+    value: field.value,
     isHalf: true,
     onChange: (v: any) => setValue(v.toString()),
   }

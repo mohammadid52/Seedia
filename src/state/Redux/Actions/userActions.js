@@ -10,3 +10,10 @@ export const setUser = (user) => async (dispatch) => {
     console.error(error)
   }
 }
+
+export const addToBasket = (product) => async (dispatch) => {
+  dispatch({ type: types.ADD_TO_BASKET, data: product })
+}
+export const removeFromBasket = (product) => async (dispatch) => {
+  dispatch({ type: types.REMOVE_FROM_BASKET, data: product })
+}

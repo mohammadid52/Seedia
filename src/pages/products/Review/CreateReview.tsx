@@ -8,16 +8,26 @@ import { Form, Formik } from 'formik'
 import { useRouter } from 'hooks/useRouter'
 import Error from 'components/alerts/Error'
 import StarsField from 'pages/products/Review/StarsField'
-import { useMutation } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import { Redirect } from 'react-router'
 import * as Yup from 'yup'
+import Meta from 'components/atoms/Meta/Meta'
+import { IProduct } from 'interfaces/UniversalInterface'
+import { fetchProductDetails } from 'apis/queries'
+import Loading from 'components/Loading'
 
 const CreateReview = () => {
-  const initialValues = { reviewText: '' }
+  const initialValues = { reviewText: '', rating: 3 }
 
   const route: any = useRouter()
 
   const { productId } = route?.match?.params
+
+  const { isLoading, data, isFetched } = useQuery('product', () =>
+    fetchProductDetails(productId)
+  )
+
+  const product: IProduct = isFetched && !isLoading ? data.data.data : {}
 
   const validationSchema = Yup.object({
     reviewText: Yup.string()
@@ -28,13 +38,17 @@ const CreateReview = () => {
 
   const {
     mutate: onSubmit,
-    isLoading,
-    isError,
-    error,
+    isLoading: savingReview,
+    isError: mutateIsError,
+    error: mutateError,
     isSuccess,
   } = useMutation((values: { reviewText: string; rating: string }) =>
     createReview(productId, values)
   )
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   if (isSuccess) {
     return <Redirect to={links.getProductUrl(productId)} />
@@ -42,7 +56,16 @@ const CreateReview = () => {
 
   return (
     <NarrowLayout>
+      <Meta pageTitle={`Create Review - ${product.productName}`} />
+
       <Title fontWeight="font-bold mb-8">Write you review</Title>
+      <Title
+        size="font-sm"
+        textColor="dark:text-gray-500 text-gray-600"
+        className=" mb-8"
+      >
+        {product.productName}
+      </Title>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -67,13 +90,13 @@ const CreateReview = () => {
             <Button
               type="submit"
               rounded="rounded-lg"
-              loading={isLoading}
+              loading={savingReview}
               gradient
               size="lg"
               label="Submit"
             />
           </div>
-          {isError && <Error errors={[error.toString()]} />}
+          {mutateIsError && <Error errors={[mutateError.toString()]} />}
         </Form>
       </Formik>
     </NarrowLayout>

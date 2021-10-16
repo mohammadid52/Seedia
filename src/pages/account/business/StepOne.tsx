@@ -137,7 +137,7 @@ const BusinessStepOne = ({ userData }: { userData: IParent }) => {
         <div className="mb-4">
           <Info text="Qualify for business seller limits, promotions and professional tools to expand your business" />
         </div>
-        <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+        <div className="bg-white dark:bg-gray-900 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
             initialValues={BusinessStepOneFields}
             validationSchema={validationSchema}

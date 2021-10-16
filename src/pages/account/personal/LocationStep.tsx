@@ -176,7 +176,7 @@ const LastStep = ({ user }: { user?: IParent }) => {
       }
     >
       <AnimatedDiv className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white  border border-transparent dark:border-gray-700  dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+        <div className="bg-white  border border-transparent dark:border-gray-700  dark:bg-gray-900 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
             initialValues={PersonalStepTwo}
             validationSchema={validationSchema}

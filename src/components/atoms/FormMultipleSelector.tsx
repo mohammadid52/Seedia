@@ -26,6 +26,7 @@ interface SelecterProps {
   name: string
   sortBy?: string
   disableFieldOption?: boolean
+  defaultItem?: string
 }
 
 const FormMultipleSelector = ({
@@ -38,6 +39,7 @@ const FormMultipleSelector = ({
   border = true,
   name,
   sortBy = 'name',
+  defaultItem,
   disableFieldOption = false,
 }: SelecterProps) => {
   const [field, meta, helpers] = useField(name)
@@ -94,7 +96,7 @@ const FormMultipleSelector = ({
               onBlur={() => {
                 setError('This field is required')
               }}
-              className={`bg-white  dark:bg-gray-800 relative w-full ${
+              className={`bg-white  dark:bg-gray-900 relative w-full ${
                 border ? 'border' : ''
               } dark:border-gray-700 border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
             >
@@ -106,8 +108,8 @@ const FormMultipleSelector = ({
                 }`}
               >
                 {values.length > 0
-                  ? map(orderBy(values, [sortBy, 'asc']), (d) => (
-                      <div className="flex items-center space-x-2">
+                  ? map(orderBy(values, [sortBy, 'asc']), (d, idx) => (
+                      <div className="flex items-center">
                         {d.code && (
                           <div
                             className={`rounded-full border border-gray-600 h-4 w-4`}
@@ -115,6 +117,7 @@ const FormMultipleSelector = ({
                           />
                         )}
                         <span>{d.name}</span>
+                        {idx !== values.length - 1 && ','}
                       </div>
                     ))
                   : placeholder}
@@ -143,6 +146,7 @@ const FormMultipleSelector = ({
               leaveTo="opacity-0"
             >
               <Listbox.Options
+                defaultValue={defaultItem ? defaultItem : null}
                 static
                 className="pl-0 z-10 absolute scroll-dark-md  mt-1 w-full bg-white dark:bg-gray-700 shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5  overflow-auto focus:outline-none sm:text-sm"
               >

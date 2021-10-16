@@ -27,7 +27,6 @@ import {
   callsToAction,
   departmentsArray,
   productsArray,
-  sellList,
   settings,
 } from 'values/values'
 
@@ -36,6 +35,55 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
     useUserContext()
   const dispatch = useDispatch()
   const history = useHistory()
+
+  const sellList1 = [
+    {
+      name: "Your Friend's Purchases",
+      href: _links.friendsPurchases(),
+    },
+    {
+      name: "Today's Deal",
+      href: '/#',
+    },
+    {
+      name: 'Gift Cards',
+      href: '/#',
+    },
+  ]
+  const sellList2 = [
+    {
+      name: 'Products of your Interest',
+      href: '/#',
+    },
+    {
+      name: 'Business of your Interest',
+      href: '/#',
+    },
+    {
+      name: 'Purchase history',
+      href: '/#',
+    },
+    {
+      name: 'Recent activity',
+      href: '/#',
+    },
+    {
+      name: 'Buy again',
+      href: '/#',
+    },
+    {
+      name: 'Saved searches',
+      href: '/#',
+    },
+    {
+      name: 'Saved sellers',
+      href: '/#',
+    },
+    {
+      name: 'Saved Inbox',
+      href: '/#',
+    },
+  ]
 
   const [selectedProduct, setSelectedProduct] = useState<any>(productsArray[0])
 
@@ -64,13 +112,13 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   return (
     <Popover
       style={{ zIndex: 999 }}
-      className="fixed top-0 inset-x-0 dark:bg-gray-800 bg-white"
+      className="fixed top-0 inset-x-0 dark:bg-gray-900 bg-white"
     >
       {({ open }) => (
         <>
           <div
             style={{ zIndex: 999 }}
-            className="flex  justify-between items-center py-3 border-b-2 dark:border-gray-700 border-gray-100  sm:px-6 md:justify-start md:space-x-10"
+            className="flex  justify-between items-center py-3 border-b dark:border-gray-700 border-gray-100  sm:px-6 md:justify-start md:space-x-10"
           >
             <div className="flex justify-center items-center lg:flex-1">
               <div
@@ -119,7 +167,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                         id="home_search_panel"
                         name="search"
                         type="text"
-                        className="relative  dark:bg-gray-800 dark:text-white w-full border-none outline-none shadow-none focus:outline-none text-xs  pl-3 pr-10 py-2 text-left  dark:placeholder-gray-400 placeholder-gray-500 h-full"
+                        className="relative  dark:bg-gray-900 dark:text-white w-full border-none outline-none shadow-none focus:outline-none text-xs  pl-3 pr-10 py-2 text-left  dark:placeholder-gray-400 placeholder-gray-500 h-full"
                         placeholder={
                           searchPlaceHolder + ' ' + selectedProduct.label
                         }
@@ -202,8 +250,8 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                             className="absolute z-10 -ml-4 mt-4 transform px-12 max-w-md w-screen lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                           >
                             <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                              <div className="relative grid gap-6 dark:bg-gray-700 bg-white px-5 py-6 sm:gap-8 sm:p-8">
-                                {sellList.map((item) => (
+                              <div className="relative border-b border-gray-200 dark:border-gray-700 grid gap-6 dark:bg-gray-800 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                                {sellList1.map((item) => (
                                   <a
                                     key={item.name}
                                     href={item.href}
@@ -217,7 +265,22 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                   </a>
                                 ))}
                               </div>
-                              <div className="px-5 border-t border-gray-200 justify-between w-full py-5 bg-white dark:bg-gray-700 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
+                              <div className="relative grid gap-6 dark:bg-gray-800 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                                {sellList2.map((item) => (
+                                  <a
+                                    key={item.name}
+                                    href={item.href}
+                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-600 transition-all  rounded-lg hover:bg-gray-50 justify-start cursor-pointer"
+                                  >
+                                    <div className="ml-4">
+                                      <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-900">
+                                        {item.name}
+                                      </p>
+                                    </div>
+                                  </a>
+                                ))}
+                              </div>
+                              <div className="px-5 border-t border-gray-200 dark:border-gray-700 justify-between w-full py-5 bg-white dark:bg-gray-800 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
                                 {callsToAction.map((item) => (
                                   <div
                                     key={item.name}
@@ -225,7 +288,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                   >
                                     <a
                                       href={item.href}
-                                      className="-m-3 p-3 border border-gray-200 dark:border-gray-600 flex items-center rounded-md text-base font-medium dark:text-white text-gray-900 hover:bg-gray-100 transition-all dark:hover:bg-gray-600 w-full justify-center"
+                                      className="-m-3 p-3 border border-gray-200 dark:border-gray-700 flex items-center rounded-md text-base font-medium dark:text-white text-gray-900 hover:bg-gray-100 transition-all dark:hover:bg-gray-600 w-full justify-center"
                                     >
                                       <item.icon
                                         className="flex-shrink-0 h-4 w-4 text-gray-400"
@@ -284,9 +347,9 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                             className="absolute z-10 -ml-4 mt-4 transform px-2 w-screen max-w-md sm:px-6 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                           >
                             <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                              <div className="relative grid gap-6 bg-white dark:bg-gray-700 px-5 py-6 sm:gap-8 sm:p-8">
+                              <div className="relative grid gap-6 bg-white dark:bg-gray-800 px-5 py-6 sm:gap-8 sm:p-8">
                                 <div className="flex w-full space-x-4 items-center space-between">
-                                  <div className="w-1/2 flex text-xs items-center justify-center dark:border-gray-600 darK:hover:border-gray-500 dark:hover:bg-gray-600 dark:text-white transition-all border-gray-200 py-2 rounded-md font-light hover:bg-gray-50 cursor-pointer hover:border-gray-300 border">
+                                  <div className="w-1/2 flex text-xs items-center justify-center dark:border-gray-700 darK:hover:border-gray-500 dark:hover:bg-gray-600 dark:text-white transition-all border-gray-200 py-2 rounded-md font-light hover:bg-gray-50 cursor-pointer hover:border-gray-300 border">
                                     <a
                                       href={_links.getProfileById(
                                         userData?.profileUrl,
@@ -296,7 +359,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                       View profile
                                     </a>
                                   </div>
-                                  <div className="w-1/2 flex text-xs items-center justify-center dark:border-gray-600 darK:hover:border-gray-500 dark:hover:bg-gray-600 dark:text-white transition-all border-gray-200 py-2 rounded-md font-light hover:bg-gray-50 cursor-pointer hover:border-gray-300 border">
+                                  <div className="w-1/2 flex text-xs items-center justify-center dark:border-gray-700 darK:hover:border-gray-500 dark:hover:bg-gray-600 dark:text-white transition-all border-gray-200 py-2 rounded-md font-light hover:bg-gray-50 cursor-pointer hover:border-gray-300 border">
                                     View store
                                   </div>
                                 </div>
@@ -337,7 +400,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                 </div>
                               </div>
 
-                              <div className="flex px-5 py-5 bg-white border-t dark:border-gray-600 border-gray-200 dark:bg-gray-700 space-y-6 sm:flex sm:space-y-0 sm:px-8">
+                              <div className="flex px-5 py-5 bg-white border-t dark:border-gray-700 border-gray-200 dark:bg-gray-800 space-y-6 sm:flex sm:space-y-0 sm:px-8">
                                 <div className=" flex-shrink-0">
                                   <img
                                     className="h-10 mr-6 rounded-full w-10 drop-shadow-lg"
@@ -415,7 +478,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                             className="absolute z-10  mt-4 transform w-screen max-w-md lg:max-w-2xl sm:px-6 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                           >
                             <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                              <div className="relative dark:bg-gray-700 bg-white px-5 py-6 sm:gap-8 sm:p-8 ">
+                              <div className="relative dark:bg-gray-800 bg-white px-5 py-6 sm:gap-8 sm:p-8 ">
                                 <p className="inline-block text-lg sm:text-xl tracking-wide mb-4 border-b-2 border-pink-600 mt-2 font-bold text-gray-900 dark:text-white">
                                   13RMS
                                 </p>
@@ -459,7 +522,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                 className="mx-4 "
                 target=""
                 Icon={BsBagFill}
-                label="Browse products"
+                label="Browse Products"
                 gradient
               />
             </div>

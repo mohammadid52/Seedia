@@ -28,4 +28,8 @@ export const links = {
   getProductUrl: (productId: string) => `/product/${productId}`,
   createReview: (productId: string) => `/create-review/${productId}`,
   addProduct: () => `/add-product`,
+  cart: `/cart`,
+  friendsPurchases: () => `/friends-purchases`,
+  addProject: () => `/add-project`,
+  viewProject: (projectId: string) => `/project/${projectId}`,
 }

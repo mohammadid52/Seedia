@@ -61,7 +61,7 @@ const Toggle = ({
         className={classNames(
           enabled
             ? 'bg-gradient-to-r from-pink-500 to-yellow-500'
-            : 'bg-gray-800',
+            : 'bg-gray-900',
           'relative inline-flex flex-shrink-0 h-4 w-9 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
         )}
       >

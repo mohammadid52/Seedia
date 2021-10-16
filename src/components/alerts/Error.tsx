@@ -3,7 +3,7 @@ import { map } from 'lodash'
 
 const Error = ({ errors }: { errors: string[] }) => {
   return (
-    <div className="rounded-md bg-red-50 dark:bg-gray-800 border dark:border-gray-700 border-transparent p-4">
+    <div className="rounded-md bg-red-50 dark:bg-gray-900 border dark:border-gray-700 border-transparent p-4">
       <div className="flex">
         <div className="flex-shrink-0">
           <XCircleIcon

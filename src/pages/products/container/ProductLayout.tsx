@@ -35,7 +35,7 @@ const ProductLayout = ({
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 min-h-screen min-w-screen">
+    <div className="bg-white dark:bg-gray-900 min-h-screen min-w-screen">
       <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         {renderContent()}
       </div>

@@ -63,13 +63,13 @@ const Modal = ({
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div
-              className={`inline-block align-bottom  bg-white dark:bg-gray-800 rounded-lg px-4 pt-5  text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle  sm:p-6 pb-4`}
+              className={`inline-block align-bottom  bg-white dark:bg-gray-900 rounded-lg px-4 pt-5  text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle  sm:p-6 pb-4`}
             >
               {!hideCloseBtn && (
                 <div className="hidden sm:block absolute top-0 right-0 pt-6 pr-6">
                   <button
                     type="button"
-                    className="bg-white dark:bg-gray-800 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                    className="bg-white dark:bg-gray-900 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                     onClick={() => (onClose ? onClose() : setOpen(false))}
                   >
                     <span className="sr-only">Close</span>

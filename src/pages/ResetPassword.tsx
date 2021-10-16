@@ -87,7 +87,7 @@ const ResetPassword = () => {
   return (
     <Layout title="Set new password">
       <div className="mt-8 mb-36 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white dark:bg-gray-800 border border-transparent dark:border-gray-700 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+        <div className="bg-white dark:bg-gray-900 border border-transparent dark:border-gray-700 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           {error && (
             <div className="flex flex-col items-center justify-center">
               <h3 className="text-center font-medium text-xl dark:text-gray-400">

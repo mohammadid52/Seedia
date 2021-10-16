@@ -1,7 +1,24 @@
+var ObjectId = require('mongodb').ObjectId
+
 const responseMsg = (status = 'none', message = '', data = {}) => {
   return { status, message, data }
 }
 
 const unique = (list) => [...new Set(list)]
 
-module.exports = { responseMsg, unique }
+const addObjectId = (id) => ObjectId(id)
+
+const getItem = async (collection, targetId) => {
+  return await collection.findOne({
+    _id: ObjectId(targetId),
+  })
+}
+const getManyItems = async (collection, condition) => {
+  return await collection
+    .find({
+      ...condition,
+    })
+    .toArray()
+}
+
+module.exports = { responseMsg, unique, addObjectId, getItem, getManyItems }

@@ -120,7 +120,7 @@ const ForgotPassword = () => {
       )}
       <Layout title="Reset password">
         <div className="mt-8 mb-36 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white dark:bg-gray-800 border border-transparent dark:border-gray-700 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+          <div className="bg-white dark:bg-gray-900 border border-transparent dark:border-gray-700 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
             {emailSendingStatus !== 'sent' && (
               <form onSubmit={formik.handleSubmit}>
                 <NormalFormInput

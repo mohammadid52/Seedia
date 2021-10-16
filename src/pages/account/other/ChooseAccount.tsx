@@ -91,12 +91,12 @@ const ChooseAccount = ({ user }: { user?: IParent }) => {
     <div>
       <Layout title="Choose account type" subtitle="">
         <AnimatedDiv className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white dark:border-gray-700 border border-white dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+          <div className="bg-white dark:border-gray-700 border border-white dark:bg-gray-900 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
             <RadioGroup value={selected} onChange={setSelected}>
               <RadioGroup.Label className="sr-only">
                 Privacy setting
               </RadioGroup.Label>
-              <div className="bg-white dark:bg-gray-800 rounded-md space-y-4">
+              <div className="bg-white dark:bg-gray-900 rounded-md space-y-4">
                 {settings.map((setting, settingIdx) => (
                   <RadioGroup.Option
                     key={setting.name}
@@ -104,7 +104,7 @@ const ChooseAccount = ({ user }: { user?: IParent }) => {
                     className={({ checked }) =>
                       classNames(
                         checked
-                          ? 'bg-pink-50 dark:bg-gray-800 rounded-md dark:border-pink-700 border-pink-200 z-10'
+                          ? 'bg-pink-50 dark:bg-gray-900 rounded-md dark:border-pink-700 border-pink-200 z-10'
                           : 'border-gray-200 dark:border-gray-700 rounded-md',
                         'relative border p-4 transition-all duration-200 flex overflow-hidden cursor-pointer focus:outline-none'
                       )

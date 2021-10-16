@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 const HomeContent = () => {
   return (
     <Fragment>
-      <div className="dark:bg-gray-800">
+      <div className="dark:bg-gray-900">
         <div className="text-center pt-12 pb-4 flex items-center flex-col">
           <img
             alt="13RMS"

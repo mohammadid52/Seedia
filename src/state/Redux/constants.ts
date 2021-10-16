@@ -11,6 +11,10 @@ export const LOADER = 'LOADER'
 export const SET_USER_DATA = 'SET_USER_DATA'
 export const SET_OTHER_USER_DATA = 'SET_USER_DATA'
 
+// basket
+export const ADD_TO_BASKET = 'ADD_TO_BASKET'
+export const REMOVE_FROM_BASKET = 'REMOVE_FROM_BASKET'
+
 export const avatarPlaceholder = avatar
 
 // general constants

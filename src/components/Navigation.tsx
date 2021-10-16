@@ -24,7 +24,7 @@ const Navigation = ({
   const [selected, setSelected] = useState(adjustColors[0])
 
   return (
-    <Popover className="relative dark:bg-gray-800  bg-white">
+    <Popover className="relative dark:bg-gray-900  bg-white">
       {({ open }) => (
         <>
           <div className="">
@@ -46,7 +46,7 @@ const Navigation = ({
                         <Popover.Button
                           className={classNames(
                             open ? 'text-gray-900' : 'text-gray-500',
-                            'group bg-white dark:bg-gray-800 rounded-md inline-flex items-center text-xs font-medium link-hover focus:outline-none '
+                            'group bg-white dark:bg-gray-900 rounded-md inline-flex items-center text-xs font-medium link-hover focus:outline-none '
                           )}
                         >
                           <button className="text-xs font-medium dark:text-gray-400 text-gray-500 link-hover">
@@ -127,7 +127,7 @@ const Navigation = ({
                 </Popover.Group>
               </div>
               <div className="-mr-2 -my-2 md:hidden">
-                <Popover.Button className="bg-white dark:bg-gray-800 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none ">
+                <Popover.Button className="bg-white dark:bg-gray-900 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none ">
                   <span className="sr-only">Open menu</span>
                   <MenuIcon className="h-6 w-6" aria-hidden="true" />
                 </Popover.Button>

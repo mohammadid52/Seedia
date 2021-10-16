@@ -9,7 +9,7 @@ const NotFound = ({
 }) => {
   const history = useHistory()
   return (
-    <div className="bg-white dark:bg-gray-800 min-h-screen px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+    <div className="bg-white dark:bg-gray-900 min-h-screen px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
       <div className="max-w-max mx-auto">
         <main className="sm:flex">
           <p className="text-4xl gradient-text font-extrabold text-indigo-600 sm:text-5xl">

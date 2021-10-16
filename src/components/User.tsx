@@ -9,9 +9,11 @@ import { avatarPlaceholder } from 'state/Redux/constants'
 const User = ({
   user,
   following = false,
+  disableFollow = false,
 }: {
   user?: IParent
   following?: boolean
+  disableFollow?: boolean
 }) => {
   const isBusiness = user?.other?.accountType === 'business'
   const isPersonal = user?.other?.accountType === 'personal'
@@ -104,6 +106,7 @@ const User = ({
         <Button
           title={$following ? 'Unfollow' : 'Follow'}
           gradient
+          disabled={disableFollow}
           gradientHover={false}
           className="mt-6"
           invert

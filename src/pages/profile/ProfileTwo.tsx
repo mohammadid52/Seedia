@@ -20,8 +20,9 @@ import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
 import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
-import { getUniqId, network, updateDocumentTitle } from 'helpers'
+import { updateDocumentTitle } from 'helpers'
 import { useRouter } from 'hooks/useRouter'
+import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
 import Layout from 'pages/profile/Layout'
@@ -38,34 +39,18 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
 
   const { viewMode, userId: userIdFromParam, template } = route?.match?.params
 
-  const iAmOwnerOfThisProfile = getUniqId(userIdFromParam) === userData._id
+  const { otherUserData, iAmOwnerOfThisProfile, isFetched, isLoading } =
+    useUser(userIdFromParam, userData)
   const showAllButtons = iAmOwnerOfThisProfile && viewMode === 'private'
-  const [fetchingData, setFetchingData] = useState(false)
-
-  const [otherUserData, setOtherUserData] = useState<IParent>()
 
   useEffect(() => {
     if (!iAmOwnerOfThisProfile) {
       // I am not owner of this profile so fetch other user data
-      fetchOtherUser()
+      updateDocumentTitle(otherUserData?.fullName)
     } else {
       updateDocumentTitle(userData.fullName)
     }
   }, [iAmOwnerOfThisProfile])
-
-  const fetchOtherUser = async () => {
-    try {
-      setFetchingData(true)
-      const { data } = await network.post('/user/getById/' + userIdFromParam)
-      setOtherUserData({ ...data.data })
-      updateDocumentTitle(data.data.fullName)
-    } catch (error) {
-      // @ts-ignore
-      console.error(error.message)
-    } finally {
-      setFetchingData(false)
-    }
-  }
 
   const [unsavedChanges, setUnsavedChanges] = useState(false)
 
@@ -161,10 +146,10 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     }
   }, [userIdFromParam, template])
 
-  return fetchingData ? (
+  return isLoading && !isFetched ? (
     <Loading />
   ) : (
-    <div className="bg-gray-100 dark:bg-gray-800 smooth-scroll">
+    <div className="bg-gray-100 dark:bg-gray-900 smooth-scroll pt-24">
       <DashboardHeader userData={userData} />
 
       <Sidebar />
@@ -189,6 +174,8 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
       <div className="mx-auto min-h-screen pt-8 max-w-440">
         <Layout
           hideBorders
+          userData={userData}
+          business={isBusiness}
           firstCol={
             <div className="">
               <Card

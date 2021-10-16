@@ -4,8 +4,9 @@ import ProfileStrength from 'components/ProfileStrength'
 import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
 import { links } from 'constants/Links'
-import { getUniqId, network, updateDocumentTitle } from 'helpers'
+import { updateDocumentTitle } from 'helpers'
 import { useRouter } from 'hooks/useRouter'
+import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
 import About from 'pages/profile/About'
@@ -15,7 +16,7 @@ import Following from 'pages/profile/Following'
 import Layout from 'pages/profile/Layout'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Recommendations from 'pages/profile/Recommendations'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useHistory } from 'react-router'
 import RandomUsers from './RandomUsers'
 
@@ -23,20 +24,18 @@ const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
   const { viewMode, userId: userIdFromParam, template } = route?.match?.params
 
-  const iAmOwnerOfThisProfile = getUniqId(userIdFromParam) === userData._id
-
+  const { otherUserData, iAmOwnerOfThisProfile, isFetched, isLoading } =
+    useUser(userIdFromParam, userData)
   const showAllButtons = iAmOwnerOfThisProfile && viewMode === 'private'
-
-  const [otherUserData, setOtherUserData] = useState<IParent>(userData)
 
   const history = useHistory()
 
   useEffect(() => {
     if (!iAmOwnerOfThisProfile) {
       // I am not owner of this profile so fetch other user data
-      fetchOtherUser()
+      updateDocumentTitle(otherUserData?.fullName)
     } else {
-      updateDocumentTitle(userData.fullName)
+      updateDocumentTitle(userData?.fullName)
     }
   }, [iAmOwnerOfThisProfile])
 
@@ -55,31 +54,16 @@ const Profile = ({ userData }: { userData: IParent }) => {
     }
   }, [userIdFromParam, template])
 
-  const [fetchingData, setFetchingData] = useState(false)
-
-  const fetchOtherUser = async () => {
-    try {
-      setFetchingData(true)
-      const { data } = await network.post('/user/getById/' + userIdFromParam)
-      setOtherUserData({ ...data.data })
-      updateDocumentTitle(data.data.fullName)
-    } catch (error) {
-      // @ts-ignore
-      console.error(error.message)
-    } finally {
-      setFetchingData(false)
-    }
-  }
-
   const commonProps = {
     authUser: showAllButtons,
     userData: iAmOwnerOfThisProfile ? userData : otherUserData,
   }
+  const isBusiness = userData?.other?.accountType === 'business'
 
-  return fetchingData ? (
+  return isLoading && !isFetched ? (
     <Loading />
   ) : (
-    <div className="bg-gray-100 dark:bg-gray-800">
+    <div className="bg-gray-100 dark:bg-gray-900 smooth-scroll pt-24">
       <DashboardHeader userData={userData} />
       <Sidebar />
       <div className="flex">
@@ -87,10 +71,12 @@ const Profile = ({ userData }: { userData: IParent }) => {
           className="mx-auto min-h-screen pt-8 w-full"
           style={{ maxWidth: '90rem' }}
         >
-          <Cover {...commonProps} />
+          <Cover isBusiness={isBusiness} {...commonProps} />
 
           <div className="my-6">
             <Layout
+              userData={userData}
+              business={isBusiness}
               firstCol={
                 <div className="space-y-8">{<About {...commonProps} />}</div>
               }

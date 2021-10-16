@@ -48,7 +48,7 @@ const DatePicker = ({
         showPopperArrow={false}
         placeholderText={placeholder}
         calendarClassName="rasta-stripes"
-        className="dark:bg-gray-800 rounded-md border dark:border-gray-700 dark:placeholder-gray-700 dark:text-white"
+        className="dark:bg-gray-900 rounded-md border dark:border-gray-700 dark:placeholder-gray-700 dark:text-white"
         popperModifiers={{
           // @ts-ignore
           offset: {

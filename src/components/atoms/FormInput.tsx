@@ -92,7 +92,7 @@ const FormInput = ({
                 error
                   ? errorClass
                   : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
-              } sm:text-sm p-2 rounded-md dark:bg-gray-800 dark:border-gray-700 dark:text-white`}
+              } sm:text-sm p-2 rounded-md dark:bg-gray-900 dark:border-gray-700 dark:text-white`}
             />
             <div className="flex items-center absolute transition-all duration-200 top-0 right-0 p-3 ">
               {meta.touched && meta.error && (
@@ -142,7 +142,7 @@ const FormInput = ({
                 error
                   ? errorClass
                   : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
-              } sm:text-sm p-2 rounded-md dark:bg-gray-800 dark:border-gray-700 dark:text-white`}
+              } sm:text-sm p-2 rounded-md dark:bg-gray-900 dark:border-gray-700 dark:text-white`}
             />
             <div className="flex items-center absolute transition-all duration-200 inset-y-0 right-0 pr-3 ">
               {meta.touched && meta.error && (

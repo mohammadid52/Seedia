@@ -88,7 +88,7 @@ export default function Sidebar() {
                           key={subItem.name}
                           // @ts-ignore
                           href={subItem.href}
-                          className="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium dark:text-gray-300 text-gray-600 rounded-md hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-400 hover:bg-gray-50"
+                          className="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium dark:text-gray-300 text-gray-600 rounded-md hover:text-gray-900 dark:hover:bg-gray-900 dark:hover:text-gray-400 hover:bg-gray-50"
                         >
                           {subItem.name}
                         </a>

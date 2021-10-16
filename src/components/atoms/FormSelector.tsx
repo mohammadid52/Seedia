@@ -61,7 +61,7 @@ const FormSelector = ({
               onBlur={() => {
                 setError('This field is required')
               }}
-              className={`bg-white dark:bg-gray-800 relative w-full ${
+              className={`bg-white dark:bg-gray-900 relative w-full ${
                 border ? 'border' : ''
               } dark:border-gray-700 border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm`}
             >

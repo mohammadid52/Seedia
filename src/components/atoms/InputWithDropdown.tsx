@@ -49,7 +49,7 @@ const InputWithDropdown = ({
                 {...field}
                 id={id}
                 placeholder={placeholder}
-                className={`focus:ring-yellow-500 dark:text-white dark:bg-gray-800 dark:border-gray-700 py-2 focus:border-yellow-500 block w-full pl-16 sm:text-sm border border-gray-300 rounded-md ${className}`}
+                className={`focus:ring-yellow-500 dark:text-white dark:bg-gray-900 dark:border-gray-700 py-2 focus:border-yellow-500 block w-full pl-16 sm:text-sm border border-gray-300 rounded-md ${className}`}
               />
               {meta.touched && meta.error && (
                 <p

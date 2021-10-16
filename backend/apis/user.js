@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 const router = require('express').Router()
 const auth = require('../middleware/verifyAuth')
-const { responseMsg, unique } = require('../utils')
+const { responseMsg, unique, addObjectId, getManyItems } = require('../utils')
 var ObjectId = require('mongodb').ObjectId
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
@@ -220,10 +220,10 @@ router.post('/getUsers', auth, async (req, res) => {
 
   const usersCollection = res.locals.usersCollection
 
-  const wrapid = uniqUsers.map((id) => ObjectId(id))
+  const wrapid = uniqUsers.map(addObjectId)
 
   try {
-    const users = await usersCollection.find({ _id: { $in: wrapid } }).toArray()
+    const users = await getManyItems(usersCollection, { _id: { $in: wrapid } })
 
     if (users && users.length > 0) {
       return res

@@ -11,20 +11,26 @@ import NotFound from 'pages/NotFound'
 import AddProduct from 'pages/products/AddProduct'
 import BrowseProducts from 'pages/products/BrowseProducts'
 import ProductDetails from 'pages/products/ProductDetails'
-import CreateReview from 'pages/products/Review/CreateReview'
 import ProfileTwo from 'pages/profile/ProfileTwo'
+import AddProject from 'pages/project/AddProject'
+import ProjectView from 'pages/project/ProjectView'
 import ResetPassword from 'pages/ResetPassword'
 import { lazy } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import PrivateRoute from 'routes/PrivateRoute'
 
+const CreateReview = lazy(() => import('pages/products/Review/CreateReview'))
 const Profile = lazy(() => import('pages/profile/ProfileOne'))
 const Signup = lazy(() => import('pages/Signup'))
+const Cart = lazy(() => import('pages/cart/Cart'))
 const Login = lazy(() => import('pages/Login'))
 const CompanyStep = lazy(() => import('pages/account/personal/CompanyStep'))
 const LocationStep = lazy(() => import('pages/account/personal/LocationStep'))
 const EducationStep = lazy(() => import('pages/account/student/EducationStep'))
 const Settings = lazy(() => import('pages/Settings'))
+const FriendsPurchases = lazy(
+  () => import('pages/products/FriendsPurchases/FriendsPurchases')
+)
 
 const Router = ({
   navProps,
@@ -40,12 +46,18 @@ const Router = ({
   return (
     <BrowserRouter>
       <AuthContainer>
-        <div className="dark:bg-gray-800 bg-white">
+        <div className="dark:bg-gray-900 bg-white">
           <div className="">
             <Switch>
-              <Route path="/browse-products/:profileUrl">
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/browse-products/:profileUrl"
+              >
                 <BrowseProducts userData={userData} />
-              </Route>
+              </PrivateRoute>
+
               <Route path="/product/:productId">
                 <ProductDetails userData={userData} />
               </Route>
@@ -62,6 +74,38 @@ const Router = ({
                 path="/create-review/:productId"
               >
                 <CreateReview />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/cart"
+              >
+                <Cart userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/friends-purchases"
+              >
+                <FriendsPurchases userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/add-project"
+              >
+                <AddProject userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/project/:projectId"
+              >
+                <ProjectView userData={userData} />
               </PrivateRoute>
               <PrivateRoute
                 // @ts-ignore

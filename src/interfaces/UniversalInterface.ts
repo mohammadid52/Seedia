@@ -1,6 +1,6 @@
 import { Moment } from 'moment'
 import { User } from './UserInterface'
-
+// ~~~~~~~~~~~~~User Interfaces~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 export interface IAbout {
   currentCompany?: string
   companyAddress?: string
@@ -66,7 +66,7 @@ export interface IOther {
   template: 1 | 2
   createdOn: string | Date
 }
-
+// key-user
 export interface IParent {
   // user?: IUser
   _id?: string
@@ -87,9 +87,8 @@ export interface IParent {
   pwvp?: string[]
   following?: string[]
   followers?: string[]
-  projects: string[]
   reviews: string[] // collection of reviewId
-  purchases: string[] // collection of productId
+  purchases: { productId: string; purchasedOn: Date }[] // collection of productId
   pivCount?: number
   pwvpCount?: number
   profileUrl?: string
@@ -108,6 +107,8 @@ export interface IParent {
     typeOfBusiness: string
     bussinessEntityType: string
     relationshipToBusiness: string
+    projects?: string[]
+    products?: string[]
   }
 }
 
@@ -205,10 +206,8 @@ export interface IProfile {
   education: IEducation[]
 }
 
-// ====================================================== //
-// ===================NEW~PHASE~INTERFACES=============== //
-// ====================================================== //
-
+// ~~~~~~~~~~~~~~~~~~~Product Interfaces~~~~~~~~~~~~~~~~~~~~ //
+// key-product
 export interface IProduct {
   _id: string // productID
   images: IProductImage[]
@@ -224,6 +223,7 @@ export interface IProduct {
   details: string
   createdOn: Moment | null
   updatedOn: Moment | null
+  purchasedBy: string[]
   priceUpdatedOn: Moment | null
   reviews: {
     userId: string
@@ -252,4 +252,28 @@ export interface IReview {
   user?: IParent
   dislikes: number
   createdOn: Date | null
+}
+
+// ~~~~~~~~~~~~~~~~~~~Project Interfaces~~~~~~~~~~~~~~~~~~~~ //
+// key-project
+export interface ListItem {
+  name: string
+}
+
+export interface ItemWithHeader {
+  header: string
+  points: ListItem[] | null
+}
+
+export interface IProject {
+  functionType: { name: string; id: string }[]
+  salary: { min: string; max: string; duration: string }
+  briefDescription: string
+  jobDescription: ItemWithHeader
+  jobRequirements: ItemWithHeader
+  workingConditions: ItemWithHeader
+  closure: string
+  postedOn?: Date
+  postedBy?: string // userId
+  company?: IParent
 }

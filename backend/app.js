@@ -8,6 +8,7 @@ const mediaUploadRouter = require('./apis/mediaUpload')
 const userRouter = require('./apis/user')
 const productsRouter = require('./apis/products')
 const reviewsRouter = require('./apis/reviews')
+const projectRouter = require('./apis/project')
 
 const app = express()
 const bodyParser = require('body-parser')
@@ -30,6 +31,7 @@ client.connect(
     const usersCollection = db.collection('users')
     const productsCollection = db.collection('products')
     const reviewsCollection = db.collection('reviews')
+    const projectsCollection = db.collection('projects')
 
     const passUserCollection = async (req, res, next) => {
       res.locals.usersCollection = usersCollection
@@ -41,7 +43,18 @@ client.connect(
       next()
     }
 
+    const passProjectsCollection = (req, res, next) => {
+      res.locals.projectsCollection = projectsCollection
+      next()
+    }
+
     app.use('/user', passUserCollection, userRouter)
+    app.use(
+      '/project',
+      passUserCollection,
+      passProjectsCollection,
+      projectRouter
+    )
     app.use(
       '/products',
       passUserCollection,
@@ -74,6 +87,8 @@ app.use(express.static(path.join(__dirname, 'build', 'static')))
 
 // ~~~~~~~~~~~~~~~~~~IGNORE THIS~~~~~~~~~~~~~~~~~~~~~ //
 
-app.listen(3005, () => {
-  console.log('API Server running on 3005')
+const PORT = 3005
+
+app.listen(PORT, () => {
+  console.log(`API Server running on ${PORT}`)
 })

@@ -62,11 +62,6 @@ body {
   border-image-source: linear-gradient(to right, var(--tw-gradient-stops));
 }
 
-div {
-  // border: 1px solid red;
-}
-
-// // Without changing default text color to blue
 .normal-hover:hover {
   @include gradient();
 }
@@ -198,12 +193,12 @@ $pink: #ec4899;
 }
 
 .dark .scroll-dark-md::-webkit-scrollbar-thumb {
-  background-color: $gray-600;
+  background-color: $gray-700;
   border-radius: 0;
 }
 
 .dark .scroll-dark-md::-webkit-scrollbar-track-piece {
-  background-color: $gray-700;
+  background-color: $gray-800;
 }
 
 // Divider

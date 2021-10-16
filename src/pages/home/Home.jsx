@@ -22,7 +22,7 @@ const Home = ({ isUser, profileUrl, template, accountFilled }) => {
       />
       <div className="mx-auto max-w-smallScreen">
         <HomeContent />
-        <div className="flex flex-col dark:bg-gray-800 bg-white">
+        <div className="flex flex-col dark:bg-gray-900 bg-white">
           <CustomSearchPanel />
           <Features />
         </div>

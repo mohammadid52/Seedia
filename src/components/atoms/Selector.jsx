@@ -30,7 +30,7 @@ const Selector = ({
           )}
           <div className="mt-1 relative">
             <Listbox.Button
-              className={`bg-white dark:bg-gray-800 relative w-full ${
+              className={`bg-white dark:bg-gray-900 relative w-full ${
                 border ? 'border' : ''
               } dark:border-gray-700 border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none ${
                 disableFocus

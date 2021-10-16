@@ -1,10 +1,15 @@
 /* eslint-disable quotes */
 const router = require('express').Router()
 const auth = require('../middleware/verifyAuth')
-const { responseMsg } = require('../utils')
+const {
+  responseMsg,
+  unique,
+  addObjectId,
+  getItem,
+  getManyItems,
+} = require('../utils')
 var ObjectId = require('mongodb').ObjectId
 require('dotenv').config()
-const { nanoid } = require('nanoid')
 
 // ====================================================== //
 // ======================QUERIES======================= //
@@ -13,9 +18,9 @@ const { nanoid } = require('nanoid')
 router.get('/postedBy/:userId', auth, async (req, res) => {
   const userId = req.params.userId
   const productsCollection = res.locals.productsCollection
-  const products = await productsCollection
-    .find({ postedBy: ObjectId(userId) })
-    .toArray()
+  const products = await getManyItems(productsCollection, {
+    postedBy: ObjectId(userId),
+  })
 
   try {
     if (products && products.length) {
@@ -37,7 +42,7 @@ router.get('/postedBy/:userId', auth, async (req, res) => {
   }
 })
 
-router.get('/:productId', auth, async (req, res) => {
+router.get('/p/:productId', auth, async (req, res) => {
   const token = req.user
   const { productId } = req.params
   const usersCollection = res.locals.usersCollection
@@ -49,13 +54,9 @@ router.get('/:productId', auth, async (req, res) => {
 
   // add token id to products collection to track views and interests
 
-  const product = await productsCollection.findOne({
-    _id: ObjectId(productId),
-  })
+  const product = await getItem(productsCollection, productId)
 
-  const user = await usersCollection.findOne({
-    _id: ObjectId(token.id),
-  })
+  const user = await getItem(usersCollection, token.id)
 
   const getUniqProductsViewedList = () => {
     const productId = ObjectId(product._id)
@@ -147,6 +148,170 @@ router.get('/:productId', auth, async (req, res) => {
       .json(
         responseMsg('error', 'Oops! Something went wrong. Please try again', {})
       )
+  }
+})
+
+// ====================================================== //
+// ==================FRIEND'S PURCHASING================= //
+// ====================================================== //
+
+router.get('/friends-purchases', auth, async (req, res) => {
+  const token = req.user
+
+  const usersCollection = res.locals.usersCollection
+
+  const productsCollection = res.locals.productsCollection
+  // get my friends list
+  try {
+    const user = await getItem(usersCollection, token.id)
+
+    if (user?.following?.length > 0) {
+      const idArray = user?.following.map(addObjectId)
+      const friends = await getManyItems(usersCollection, {
+        _id: { $in: idArray },
+      })
+      let result = []
+      friends.map((friend) => {
+        if (friend?.purchases && friend?.purchases.length > 0) {
+          let temp = friend?.purchases?.map((p) => p.productId)
+          result.push(...temp)
+        }
+      })
+
+      const uniqId = unique(result)
+      const products = await getManyItems(productsCollection, {
+        _id: { $in: uniqId.map(addObjectId) },
+      })
+
+      if (products.length > 0) {
+        return res
+          .status(202)
+          .json(responseMsg('success', 'friends found', products))
+      } else {
+        return res
+          .status(202)
+          .json(responseMsg('error', 'No results found...', {}))
+      }
+    } else {
+      return res.status(204).json(responseMsg('error', 'No friends found', {}))
+    }
+  } catch (error) {
+    return res
+      .status(204)
+      .json(responseMsg('error', 'Something went wrong..', {}))
+  }
+})
+// ====================================================== //
+// ====================PURCHASE PRODUCT================== //
+// ====================================================== //
+
+router.post('/purchase/add', auth, async (req, res) => {
+  const token = req.user
+  const { productId } = req.body
+
+  const usersCollection = res.locals.usersCollection
+
+  const productsCollection = res.locals.productsCollection
+
+  if (productId) {
+    try {
+      //?  1. Add obj to user.purchases. obj = {productId, purchasedOn}
+      //?  2. Add userId to product.purchasedBy
+
+      const user = await getItem(usersCollection, token.id) //! current user
+      const product = await getItem(productsCollection, productId) //! current product
+      if (user && product) {
+        const purchases = user?.purchases || []
+        const purchasedBy = user?.purchasedBy || []
+        await usersCollection.updateOne(
+          { _id: ObjectId(user._id) },
+          {
+            $set: {
+              purchases: [...purchases, { productId, purchasedOn: new Date() }],
+            },
+          },
+          { new: true }
+        )
+        await productsCollection.updateOne(
+          { _id: ObjectId(productId) },
+          {
+            $set: {
+              purchasedBy: [...purchasedBy, token.id],
+            },
+          },
+          { new: true }
+        )
+        return res
+          .status(202)
+          .json(responseMsg('success', 'Product purchase success', product))
+      } else {
+        return res
+          .status(403)
+          .json(responseMsg('error', 'Cannot find either product or user', {}))
+      }
+    } catch (error) {
+      return res
+        .status(204)
+        .json(responseMsg('error', 'Something went wrong..', {}))
+    }
+  } else {
+    return res
+      .status(204)
+      .json(responseMsg('error', 'Product Id not found', {}))
+  }
+})
+router.post('/purchase/add-fake', auth, async (req, res) => {
+  const { productId, userId } = req.body
+
+  const usersCollection = res.locals.usersCollection
+
+  const productsCollection = res.locals.productsCollection
+
+  if (productId) {
+    try {
+      //?  1. Add obj to user.purchases. obj = {productId, purchasedOn}
+      //?  2. Add userId to product.purchasedBy
+
+      const user = await getItem(usersCollection, userId) //! current user
+      const product = await getItem(productsCollection, productId) //! current product
+      if (user && product) {
+        const purchases = user?.purchases || []
+        const purchasedBy = user?.purchasedBy || []
+        await usersCollection.updateOne(
+          { _id: ObjectId(user._id) },
+          {
+            $set: {
+              purchases: [...purchases, { productId, purchasedOn: new Date() }],
+            },
+          },
+          { new: true }
+        )
+        await productsCollection.updateOne(
+          { _id: ObjectId(productId) },
+          {
+            $set: {
+              purchasedBy: [...purchasedBy, userId],
+            },
+          },
+          { new: true }
+        )
+        return res
+          .status(202)
+          .json(responseMsg('success', 'Product purchase success', product))
+      } else {
+        return res
+          .status(403)
+          .json(responseMsg('error', 'Cannot find either product or user', {}))
+      }
+    } catch (error) {
+      return res
+        .status(204)
+        .json(responseMsg('error', 'Something went wrong..', {}))
+    }
+  } else {
+    return res
+      .status(204)
+      .json(responseMsg('error', 'Product Id not found', {}))
   }
 })
 

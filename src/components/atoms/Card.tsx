@@ -29,7 +29,7 @@ const Card = ({
     ? 'bg-transparent'
     : `${
         disablePadding ? 'py-4' : 'p-4'
-      }  bg-white  dark:bg-gray-700 h-full rounded-md ${className}`
+      } border dark:border-gray-700 border-gray-200  dark:bg-gray-800 h-full rounded-md ${className}`
 
   return (
     <div style={{ ...style }} id={id} className={`${transparentClass} `}>

@@ -160,41 +160,6 @@ export const settings = [
   },
 ]
 
-export const sellList = [
-  {
-    name: 'Products of your Interest',
-    href: '/#',
-  },
-  {
-    name: 'Business of your Interest',
-    href: '/#',
-  },
-  {
-    name: 'Purchase history',
-    href: '/#',
-  },
-  {
-    name: 'Recent activity',
-    href: '/#',
-  },
-  {
-    name: 'Buy again',
-    href: '/#',
-  },
-  {
-    name: 'Saved searches',
-    href: '/#',
-  },
-  {
-    name: 'Saved sellers',
-    href: '/#',
-  },
-  {
-    name: 'Saved Inbox',
-    href: '/#',
-  },
-]
-
 export const callsToAction = [
   { name: 'Open Store', href: '/#', icon: BiStore },
   { name: 'Sell', href: '/#', icon: GiReceiveMoney },

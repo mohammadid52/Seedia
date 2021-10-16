@@ -6,6 +6,7 @@
         "root": ["./src"],
         "alias": {
           "components": "./src/components",
+          "atoms": "./src/components/atoms",
           "lib": "./src/lib",
           "assets": "./src/assets",
           "pages": "./src/pages",

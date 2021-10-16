@@ -14,7 +14,7 @@ const Layout = ({
   withButton?: React.ReactNode
 }) => {
   return (
-    <div className="min-h-screen dark:bg-gray-800 bg-gray-50 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen dark:bg-gray-900 bg-gray-50 flex flex-col justify-start py-12 sm:px-6 lg:px-8">
       <AnimatedDiv
         // @ts-ignore
         className="sm:mx-auto sm:w-full sm:max-w-md flex items-center flex-col"

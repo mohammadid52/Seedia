@@ -138,7 +138,7 @@ const EducationStep = ({ user }) => {
       }
     >
       <AnimatedDiv className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white dark:bg-gray-800 border border-white dark:border-gray-700 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+        <div className="bg-white dark:bg-gray-900 border border-white dark:border-gray-700 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
             initialValues={StudentStepOne}
             validationSchema={validationSchema}

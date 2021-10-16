@@ -74,7 +74,7 @@ export default function Settings({ userData }: { userData: IParent }) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 h-screen">
+    <div className="bg-white dark:bg-gray-900 h-screen">
       <Modal
         header="Delete Account"
         open={showDeleteModal}
@@ -107,7 +107,7 @@ export default function Settings({ userData }: { userData: IParent }) {
           </div>
         </div>
       </Modal>
-      <main className="bg-white dark:bg-gray-800 max-w-lg mx-auto pt-10 pb-12 px-4 lg:pb-16">
+      <main className="bg-white dark:bg-gray-900 max-w-lg mx-auto pt-10 pb-12 px-4 lg:pb-16">
         <form>
           <div className="space-y-6">
             <div>

@@ -13,9 +13,11 @@ const Cover = ({
   company,
   userData,
   authUser,
+  isBusiness,
 }: {
   company?: ICompany
   userData?: IParent
+  isBusiness: boolean
   authUser: boolean
 }) => {
   const [showImageModal, setShowImageModal] = useState({
@@ -222,14 +224,16 @@ const Cover = ({
                       profile views
                     </div>
                   </div>
-                  <div className="sm:border-r  border-r-none border-white px-8 py-4 sm:border-b-none border-b">
-                    <div className="text-center text-white tracking-wide font-bold">
-                      {userData?.projects ? userData?.projects.length : 0}
+                  {isBusiness && (
+                    <div className="sm:border-r  border-r-none border-white px-8 py-4 sm:border-b-none border-b">
+                      <div className="text-center text-white tracking-wide font-bold">
+                        {userData?.business?.projects?.length || 0}
+                      </div>
+                      <div className="text-gray-300 font-medium uppercase text-base mt-1 tracking-tight ">
+                        projects
+                      </div>
                     </div>
-                    <div className="text-gray-300 font-medium uppercase text-base mt-1 tracking-tight ">
-                      projects
-                    </div>
-                  </div>
+                  )}
                   <div className="px-8 py-4 sm:border-b-none border-b">
                     <div className="text-center text-white tracking-wide font-bold ">
                       {userData?.following?.length || 0}

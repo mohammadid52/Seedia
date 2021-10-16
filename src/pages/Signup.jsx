@@ -53,7 +53,7 @@ const Signup = () => {
           lastName: _values.lastName,
           email: _values.email,
           followers: [],
-          followings: [],
+          following: [],
           fullName: _values.firstName + ' ' + _values.lastName,
           other: {
             createdOn: new Date(),
@@ -188,7 +188,7 @@ const Signup = () => {
         }
       >
         <AnimatedDiv className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white dark:border-gray-700 border border-transparent dark:bg-gray-800 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+          <div className="bg-white dark:border-gray-700 border border-transparent dark:bg-gray-900 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
             <Formik
               innerRef={formRef}
               initialValues={SIGNUP}

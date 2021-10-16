@@ -20,10 +20,16 @@ const uploadMultipleImages = (data: any) =>
     headers: { 'Content-Type': 'multipart/form-data' },
   })
 
+// add project
+
+const addProject = (values: any) =>
+  network.post('/project/add', { projectData: values })
+
 export {
   followUser,
   unFollowUser,
   createReview,
   addProduct,
   uploadMultipleImages,
+  addProject,
 }

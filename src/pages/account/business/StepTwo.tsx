@@ -174,7 +174,7 @@ const BusinessStepTwo = ({ userData }: { userData: IParent }) => {
         <div className="mb-4">
           <Info text="Please provide your legally registered business address and telephone number" />
         </div>
-        <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
+        <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 py-8 px-4 shadow-md sm:rounded-lg sm:px-6">
           <Formik
             initialValues={BusinessStepTwoFields}
             validationSchema={validationSchema}

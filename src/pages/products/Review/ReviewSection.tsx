@@ -1,13 +1,14 @@
 import { fetchReviewsByProduct } from 'apis/queries'
 import Button from 'components/atoms/Button'
 import Title from 'components/atoms/Title'
-import Loading from 'components/Loading'
 import { links } from 'constants/Links'
 import { ErrorFallback } from 'index'
 import { IProduct, IReview } from 'interfaces/UniversalInterface'
 import { find } from 'lodash'
 import ReviewList from 'pages/products/Review/ReviewList'
 import { useQuery } from 'react-query'
+
+const MiniLoading = () => <h4>Loading...</h4>
 
 const ReviewSection = ({
   reviewsIds,
@@ -19,10 +20,10 @@ const ReviewSection = ({
   userId?: string
 }) => {
   const config = { idArray: reviewsIds }
-  const { isError, isLoading, error, data, isFetched, refetch } = useQuery(
-    'reviews',
-    () => fetchReviewsByProduct(productId, config)
-  )
+  const { isError, isIdle, isLoading, error, data, isFetched, refetch } =
+    useQuery('reviews', () => fetchReviewsByProduct(productId, config), {
+      enabled: Boolean(reviewsIds && reviewsIds.length > 0),
+    })
 
   const WriteReviewButton = () => {
     return (
@@ -42,8 +43,8 @@ const ReviewSection = ({
 
   const reviews: IReview[] = isFetched && !isLoading && data.data.data
 
-  if (isLoading) {
-    return <Loading />
+  if (isLoading && !isIdle) {
+    return <MiniLoading />
   }
   if (isError) {
     return (
@@ -58,7 +59,7 @@ const ReviewSection = ({
       </h2>
 
       <div className="mt-4 space-y-6">
-        {reviews?.length > 0 ? (
+        {reviewsIds?.length > 0 ? (
           <div>
             {!alreadyReviewGiven && (
               <div className="my-4 flex items-center justify-end">

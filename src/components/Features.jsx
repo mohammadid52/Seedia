@@ -54,7 +54,7 @@ const Features = () => {
     },
   ]
   return (
-    <div className="relative bg-white dark:bg-gray-800 py-16 sm:py-24 lg:py-32">
+    <div className="relative bg-white dark:bg-gray-900 py-16 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
         <p className="mt-2 text-xl font-extrabold dark:text-white text-gray-900 tracking-tight sm:text-3xl">
           Everything you need to get started with{' '}

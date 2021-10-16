@@ -19,7 +19,7 @@ const Divider = ({
       <div className="relative flex justify-center">
         <span
           onClick={onBtnClick}
-          className={`${className} bg-white text-xs dark:bg-gray-800 px-2 text-gray-600`}
+          className={`${className} bg-white text-xs dark:bg-gray-900 px-2 text-gray-600`}
         >
           {text}
           {Icon && <Icon />}

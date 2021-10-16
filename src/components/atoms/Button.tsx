@@ -107,7 +107,7 @@ const Button = ({
   }
 
   return link ? (
-    <a target={target} rel="noreferrer" href={link}>
+    <a target={target} className="inline-grid" rel="noreferrer" href={link}>
       <button
         aria-hidden="true"
         onClick={onClick}
@@ -201,7 +201,7 @@ const Button = ({
           ></path>
         </svg>
       )}
-      {Icon && (
+      {Icon && !loading && (
         <Icon className={`${label ? 'mr-2' : ''} dark:text-white h-5 w-5"`} />
       )}
       {loading ? loadingText : label}

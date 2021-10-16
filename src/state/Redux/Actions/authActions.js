@@ -9,7 +9,9 @@ export const logOut = (history) => async (dispatch) => {
     dispatch({ type: types.START_LOADING })
 
     localStorage.removeItem('access_token')
-    history.push('/')
+    if (typeof history === 'function') {
+      history.push('/')
+    }
     dispatch({ type: types.SET_USER_DATA, data: {} })
     dispatch({ type: types.LOGOUT, msg: 'Logged out successfully' })
   } catch (error) {

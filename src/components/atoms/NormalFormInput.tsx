@@ -90,7 +90,7 @@ const NormalFormInput = ({
                 error
                   ? errorClass
                   : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
-              } sm:text-sm p-2 rounded-md dark:placeholder-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white ${className}`}
+              } sm:text-sm p-2 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:border-gray-700 dark:text-white ${className}`}
             />
           ) : (
             <input
@@ -108,7 +108,7 @@ const NormalFormInput = ({
                 error
                   ? errorClass
                   : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
-              } sm:text-sm p-2 rounded-md dark:placeholder-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white ${className}`}
+              } sm:text-sm p-2 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:border-gray-700 dark:text-white ${className}`}
             />
           )}
 

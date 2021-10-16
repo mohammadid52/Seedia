@@ -64,3 +64,12 @@ export default async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
     }, 'image/jpeg')
   })
 }
+
+export const eclipse = (str = '', len = 50) => {
+  if (str.length > len) {
+    return str.substring(0, len) + '...'
+  } else return str
+}
+
+export const join = (arr, key, joinPattern = ',') =>
+  arr.map((d) => d[key]).join(joinPattern)

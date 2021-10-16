@@ -10,7 +10,7 @@ import { countries } from 'values/values'
 
 const WorldListPopover = () => {
   return (
-    <Popover className="relative z-100 dark:bg-gray-800 bg-white">
+    <Popover className="relative z-100 dark:bg-gray-900 bg-white">
       {({ open }) => (
         <>
           <div className="max-w-7xl">
@@ -141,7 +141,7 @@ const Footer = () => {
   const year = new Date().getFullYear()
   return (
     <footer
-      className="bg-white dark:bg-gray-800 dark:border-gray-700 border-t border-gray-200"
+      className="bg-white dark:bg-gray-900 dark:border-gray-700 border-t border-gray-200"
       aria-labelledby="footer-heading"
     >
       <h2 id="footer-heading" className="sr-only">

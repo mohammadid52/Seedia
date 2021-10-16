@@ -37,7 +37,7 @@ const Review = ({ review }: { review: IReview }) => {
           <ReactStars {...ratingConfig} />
         </div>
         <div>
-          <p className="mt-1 font-light dark:text-gray-300 text-gray-300">
+          <p className="mt-1 font-light dark:text-gray-300 text-gray-700">
             {review.reviewText}
           </p>
         </div>
