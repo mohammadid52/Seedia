@@ -8,11 +8,9 @@ import useAccountType from 'hooks/useAccountType'
 import { IParent, IProject } from 'interfaces/UniversalInterface'
 import map from 'lodash/map'
 import ProjectCard from 'pages/project/ProjectCard'
-import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { Redirect } from 'react-router'
 import { getTags } from 'utils/functions'
-
 const ProjectsListView = ({ userData }: { userData: IParent }) => {
   const skills = userData?.background
     ? map(userData?.background.skills, (d) => d.name)
@@ -22,18 +20,19 @@ const ProjectsListView = ({ userData }: { userData: IParent }) => {
   const jobTitleTags = getTags(company?.jobTitle)
   const jobTypeTags = getTags(company?.jobType)
 
+  const { isBusiness } = useAccountType(userData)
   const {
     isLoading,
     data: relatedJobsData,
     isFetched,
-  } = useQuery('related-jobs', () =>
-    fetchRelatedJobs([...skills, ...jobTitleTags, ...jobTypeTags])
+  } = useQuery(
+    'related-jobs',
+    () => fetchRelatedJobs([...skills, ...jobTitleTags, ...jobTypeTags]),
+    { enabled: !isBusiness }
   )
 
   const relatedJobs: IProject[] =
     isFetched && !isLoading ? relatedJobsData.data.data : {}
-
-  const { isBusiness } = useAccountType(userData)
 
   if (isBusiness) {
     return <Redirect to={links.viewMyProjects()} />

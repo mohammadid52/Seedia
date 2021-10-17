@@ -9,6 +9,8 @@ const fetchFriendsPurchase = () => network.get(`/products/friends-purchases`)
 
 // USER
 const fetchUsers = (config: any) => network.post(`/user/getUsers`, config)
+const fetchShortUsers = (config: any) =>
+  network.post(`/user/getShortUsers`, config)
 const fetchUserById = (id: string) => network.post(`/user/getById/${id}`)
 
 // Reviews
@@ -27,6 +29,11 @@ const fetchSearchedJobs = (searchQuery: string) =>
 const fetchRelatedJobs = (relatedTags: string[]) =>
   network.get(`/project/list?related=${relatedTags}`)
 
+// Request
+const fetchMyRequests = () => network.get(`/requests/my/list`)
+const fetchSearchedEmployees = (searchQuery: string) =>
+  network.get(`/request/list?search=${searchQuery}`)
+
 export {
   fetchProductDetails,
   fetchAllProducts,
@@ -38,4 +45,7 @@ export {
   fetchMyProjects,
   fetchSearchedJobs,
   fetchRelatedJobs,
+  fetchShortUsers,
+  fetchMyRequests,
+  fetchSearchedEmployees,
 }

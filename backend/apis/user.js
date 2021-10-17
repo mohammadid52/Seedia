@@ -1,7 +1,13 @@
 /* eslint-disable quotes */
 const router = require('express').Router()
 const auth = require('../middleware/verifyAuth')
-const { responseMsg, unique, addObjectId, getManyItems } = require('../utils')
+const {
+  responseMsg,
+  shortUser,
+  unique,
+  addObjectId,
+  getManyItems,
+} = require('../utils')
 var ObjectId = require('mongodb').ObjectId
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
@@ -224,6 +230,34 @@ router.post('/getUsers', auth, async (req, res) => {
 
   try {
     const users = await getManyItems(usersCollection, { _id: { $in: wrapid } })
+
+    if (users && users.length > 0) {
+      return res
+        .status(202)
+        .json(responseMsg('success', 'Fetch successfully', users))
+    } else {
+      return res.status(203).json(responseMsg('error', "Can't find users"))
+    }
+  } catch (error) {
+    console.error(error)
+    return res.status(202).json(responseMsg('error', error.message))
+  }
+})
+// /user
+router.post('/getShortUsers', auth, async (req, res) => {
+  const arrayOfId = req.body.users
+  const uniqUsers = unique(arrayOfId)
+
+  const usersCollection = res.locals.usersCollection
+
+  const wrapid = uniqUsers.map(addObjectId)
+
+  try {
+    const users = await getManyItems(
+      usersCollection,
+      { _id: { $in: wrapid } },
+      shortUser
+    )
 
     if (users && users.length > 0) {
       return res

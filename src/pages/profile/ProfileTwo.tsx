@@ -21,10 +21,12 @@ import Sidebar from 'components/Sidebar'
 import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import { updateDocumentTitle } from 'helpers'
+import useAccountType from 'hooks/useAccountType'
 import { useRouter } from 'hooks/useRouter'
 import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
+import AdditionalFeatures from 'pages/profile/AdditionalFeatures'
 import Layout from 'pages/profile/Layout'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Recommendations from 'pages/profile/Recommendations'
@@ -123,7 +125,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     }
   }
 
-  const isBusiness = userData?.other?.accountType === 'business'
+  const { isBusiness } = useAccountType(userData)
 
   const commonBlockProps2 = {
     authUser: showAllButtons,
@@ -177,7 +179,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
           userData={userData}
           business={isBusiness}
           firstCol={
-            <div className="">
+            <div className="space-y-12">
               <Card
                 className={` transition-transform duration-200`}
                 secondary
@@ -188,6 +190,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                   </div>
                 }
               />
+              {!isBusiness && <AdditionalFeatures />}
             </div>
           }
           secondCol={

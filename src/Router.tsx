@@ -15,12 +15,14 @@ import ProfileTwo from 'pages/profile/ProfileTwo'
 import AddProject from 'pages/project/AddProject'
 import SearchedJobs from 'pages/project/ListView/SearchedJobs'
 import ProjectView from 'pages/project/ProjectView'
+import RequestsList from 'pages/request/RequestsList'
 import ResetPassword from 'pages/ResetPassword'
 import { lazy } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import PrivateRoute from 'routes/PrivateRoute'
 
 const CreateReview = lazy(() => import('pages/products/Review/CreateReview'))
+const PlaceRequest = lazy(() => import('pages/request/PlaceRequest'))
 const Profile = lazy(() => import('pages/profile/ProfileOne'))
 const Signup = lazy(() => import('pages/Signup'))
 const Cart = lazy(() => import('pages/cart/Cart'))
@@ -38,6 +40,7 @@ const MyProjectsListView = lazy(
 const ProjectsListView = lazy(
   () => import('pages/project/ListView/ProjectListView')
 )
+const SearchedEmployees = lazy(() => import('pages/request/SearchedEmployees'))
 
 const Router = ({
   navProps,
@@ -109,13 +112,23 @@ const Router = ({
               <Route exact path="/project/p/:projectId">
                 <ProjectView userData={userData} />
               </Route>
+              <Route exact path="/request/r/:requestId">
+                <ProjectView userData={userData} />
+              </Route>
+              <Route path="/request">
+                <SearchedEmployees userData={userData} />
+              </Route>
+
               <PrivateRoute
                 // @ts-ignore
                 exact
                 isUser={userData}
                 path="/add-product"
               >
-                <AddProduct profileUrl={userData?.profileUrl} />
+                <AddProduct
+                  userData={userData}
+                  profileUrl={userData?.profileUrl}
+                />
               </PrivateRoute>
               <PrivateRoute
                 // @ts-ignore
@@ -124,6 +137,22 @@ const Router = ({
                 path="/project/myProjects"
               >
                 <MyProjectsListView userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/jobs/place-request"
+              >
+                <PlaceRequest userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/jobs/myRequests"
+              >
+                <RequestsList userData={userData} />
               </PrivateRoute>
 
               <Route path="/jobs/explore">

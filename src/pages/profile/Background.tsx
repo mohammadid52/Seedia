@@ -236,14 +236,6 @@ const Background = ({
 
   // @ts-ignore
   const { background } = userData
-  const {
-    // @ts-ignore
-    summary = '',
-    // @ts-ignore
-    interests = [],
-    // @ts-ignore
-    experiences = [],
-  } = background
 
   const initialState = {
     interest: '',
@@ -272,13 +264,16 @@ const Background = ({
 
   const addOnTrigger = (type: string) => {
     if (type === 'summary') {
-      setLocalFields({ ...localFields, summary: summary || '' })
+      setLocalFields({ ...localFields, summary: background?.summary || '' })
     } else if (type === 'interests') {
-      setLocalFields({ ...localFields, interests: [...interests] || [] })
+      setLocalFields({
+        ...localFields,
+        interests: [...background?.interests] || [],
+      })
     } else if (type === 'experiences') {
       setLocalFields({
         ...localFields,
-        experiences: [...experiences] || [],
+        experiences: [...background?.experiences] || [],
       })
     }
   }
@@ -334,7 +329,7 @@ const Background = ({
             experiences:
               localFields.experiences && localFields.experiences.length > 0
                 ? [...localFields.experiences]
-                : experiences,
+                : background?.experiences,
           },
         }
       }
@@ -469,7 +464,7 @@ const Background = ({
               Icon={CgDetailsMore}
               withSectionHeadings={
                 authUser &&
-                summary && (
+                background?.summary && (
                   <div>
                     <Button
                       secondary
@@ -489,7 +484,7 @@ const Background = ({
               content={
                 <div>
                   {isAvailable('summary', background) ? (
-                    <p>{summary}</p>
+                    <p>{background?.summary}</p>
                   ) : (
                     <EmptyState
                       title="No summary found"
@@ -511,8 +506,8 @@ const Background = ({
                 sectionTitle="Interests"
                 Icon={CgDetailsMore}
                 withSectionHeadings={
-                  interests &&
-                  interests.length > 0 &&
+                  background?.interests &&
+                  background?.interests.length > 0 &&
                   authUser && (
                     <div>
                       <Button
@@ -532,18 +527,22 @@ const Background = ({
                 }
                 content={
                   <div>
-                    {interests && interests.length > 0 ? (
+                    {background?.interests &&
+                    background?.interests.length > 0 ? (
                       <div className="flex items-center flex-wrap justify-start gap-x-4">
-                        {map(interests, (interest: any, idx: number) => (
-                          <Button
-                            key={interest.id}
-                            className="pointer-events-none"
-                            gradient
-                            invert
-                            bgColor="pink"
-                            label={interest.name}
-                          />
-                        ))}
+                        {map(
+                          background?.interests,
+                          (interest: any, idx: number) => (
+                            <Button
+                              key={interest.id}
+                              className="pointer-events-none"
+                              gradient
+                              invert
+                              bgColor="pink"
+                              label={interest.name}
+                            />
+                          )
+                        )}
                       </div>
                     ) : (
                       <EmptyState
@@ -567,8 +566,8 @@ const Background = ({
               Icon={CgDetailsMore}
               withSectionHeadings={
                 authUser &&
-                experiences &&
-                experiences.length > 0 && (
+                background?.experiences &&
+                background?.experiences.length > 0 && (
                   <div>
                     <Button
                       secondary
@@ -587,8 +586,9 @@ const Background = ({
               }
               content={
                 <div className="space-y-8">
-                  {experiences && experiences.length > 0 ? (
-                    map(experiences, (exp, idx: number) => {
+                  {background?.experiences &&
+                  background?.experiences.length > 0 ? (
+                    map(background?.experiences, (exp, idx: number) => {
                       return (
                         <div
                           key={idx}
@@ -621,7 +621,10 @@ const Background = ({
                       BtnIcon={PlusIcon}
                       showEditOption={authUser}
                       onBtnClick={() => {
-                        if (experiences && experiences.length === 0) {
+                        if (
+                          background?.experiences &&
+                          background?.experiences.length === 0
+                        ) {
                           addNewExperience()
                         }
                         setShowModal({ show: true, type: 'experiences' })

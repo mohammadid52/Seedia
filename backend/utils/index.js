@@ -13,11 +13,12 @@ const getItem = async (collection, targetId) => {
     _id: ObjectId(targetId),
   })
 }
-const getManyItems = async (collection, condition) => {
+const getManyItems = async (collection, condition, projection = {}) => {
   return await collection
     .find({
       ...condition,
     })
+    .project({ ...projection })
     .toArray()
 }
 const updateData = async (collection, id, newData) => {
@@ -32,6 +33,17 @@ const updateData = async (collection, id, newData) => {
   )
 }
 
+const shortUser = {
+  _id: 1,
+  fullName: 1,
+  firstName: 1,
+  lastName: 1,
+  coverPicture: 1,
+  profileUrl: 1,
+  profilePicture: 1,
+  other: 1,
+}
+
 module.exports = {
   responseMsg,
   unique,
@@ -39,4 +51,5 @@ module.exports = {
   getItem,
   getManyItems,
   updateData,
+  shortUser,
 }

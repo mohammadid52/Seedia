@@ -9,8 +9,8 @@ export const links = {
   getProfileById: (
     id?: string,
     template?: 1 | 2,
-    viewMode: string = 'private'
-  ) => `/${id}/${template}/${viewMode}`,
+    viewMode: string = 'public'
+  ) => `/${id}/${template || 1}/${viewMode || 'public'}`,
   DASHBAORD: '/home',
   SETTINGS: '/settings',
   CHOOSE_ACCOUNT: '/choose-account',
@@ -44,4 +44,10 @@ export const links = {
   searchJobs: (searchQuery: string) => `/jobs?q=${searchQuery}`,
   // Add all project/job link terms here
   projectTerms: ['project', 'jobs'],
+
+  // Work Requests
+  placeRequest: () => `/jobs/place-request`,
+  viewMyRequests: () => `/jobs/myRequests`,
+  viewRequestById: (requestId: string) => `/request/r/${requestId}`,
+  searchEmployees: (searchQuery: string) => `/request?q=${searchQuery}`,
 }

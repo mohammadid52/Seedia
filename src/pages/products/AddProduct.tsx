@@ -6,23 +6,27 @@ import FormMultipleSelector from 'components/atoms/FormMultipleSelector'
 import FormSelector from 'components/atoms/FormSelector'
 import FormTagsInput from 'components/atoms/FormTagsInput'
 import Meta from 'components/atoms/Meta/Meta'
-
 import Title from 'components/atoms/Title'
 import List from 'components/List'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
-import { Form, Formik, useField } from 'formik'
-import { IProduct } from 'interfaces/UniversalInterface'
+import { Form, Formik } from 'formik'
+import { IParent, IProduct } from 'interfaces/UniversalInterface'
 import { map, times } from 'lodash'
-
 import UploadImages from 'pages/products/UploadImages'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMutation } from 'react-query'
-import { Redirect } from 'react-router'
+import { useHistory } from 'react-router'
 import { colorsList, sizeList } from 'values/values'
 import * as Yup from 'yup'
 
-const AddProduct = ({ profileUrl }: { profileUrl: string }) => {
+const AddProduct = ({
+  profileUrl,
+  userData,
+}: {
+  profileUrl: string
+  userData: IParent
+}) => {
   const minMsg = (field: string, number: number) =>
     `${field} must be atleast ${number} characters`
   const maxMsg = (field: string, number: number) =>
@@ -65,9 +69,17 @@ const AddProduct = ({ profileUrl }: { profileUrl: string }) => {
     useMutation(addProduct)
   const [imagesUploaded, setImagesUploaded] = useState(false)
 
-  if (isSuccess) {
-    return <Redirect to={links.BROWSE_PRODUCTS(profileUrl)} />
-  }
+  const history = useHistory()
+  useEffect(() => {
+    if (isSuccess) {
+      history.push(
+        links.getProfileById(
+          userData.profileUrl,
+          userData?.other?.template || 1
+        )
+      )
+    }
+  }, [isSuccess])
 
   const onSubmit = async (values: any) => {
     if (imagesUploaded) {

@@ -5,6 +5,7 @@ import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
 import { links } from 'constants/Links'
 import { updateDocumentTitle } from 'helpers'
+import useAccountType from 'hooks/useAccountType'
 import { useRouter } from 'hooks/useRouter'
 import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
@@ -59,7 +60,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
     authUser: showAllButtons,
     userData: iAmOwnerOfThisProfile ? userData : otherUserData,
   }
-  const isBusiness = userData?.other?.accountType === 'business'
+  const { isBusiness } = useAccountType(userData)
 
   return isLoading && !isFetched ? (
     <Loading />
@@ -81,6 +82,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
               firstCol={
                 <div className="space-y-8">
                   <About {...commonProps} />
+                  {!isBusiness && <AdditionalFeatures />}
                 </div>
               }
               secondCol={

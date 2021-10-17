@@ -113,6 +113,18 @@ export interface IParent {
   }
 }
 
+export interface IShortProfile {
+  _id?: string
+  fullName: string
+  firstName?: string
+  lastName?: string
+  coverPicture?: string
+  profileUrl?: string
+  profilePicture?: string
+  other?: IOther
+  email?: string
+}
+
 export interface NavProps {
   isUser?: boolean
   template?: 1 | 2
@@ -286,4 +298,16 @@ export interface IProject {
   company?: IParent
   location?: ILocation
   views?: number
+}
+
+// ~~~~~~~~~~~~~~~~~~~Job Request Interfaces~~~~~~~~~~~~~~~~~~~~ //
+
+export interface IRequest {
+  _id?: string
+  title: string
+  description?: string
+  skills: ISkill[]
+  postedBy?: string
+  postedOn?: Date
+  user?: IParent
 }

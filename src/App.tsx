@@ -1,3 +1,5 @@
+import Button from 'components/atoms/Button'
+import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import { getUserValues } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
@@ -5,10 +7,6 @@ import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Router from 'Router'
-import Button from 'components/atoms/Button'
-import { links } from 'constants/Links'
-import { useParams } from 'react-router'
-import { useRouter } from 'hooks/useRouter'
 
 const App = () => {
   const { setDarkMode } = useUserContext()
@@ -59,7 +57,7 @@ const App = () => {
   }
 
   const pathname = window.location.pathname
-  const atJobsExplore = pathname.includes(links.exploreJobs())
+  const atJobsExplore = pathname.includes('jobs')
 
   return (
     <>

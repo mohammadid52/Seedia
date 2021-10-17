@@ -1,22 +1,20 @@
-import { links } from 'constants/Links'
-import { IParent, IProduct } from 'interfaces/UniversalInterface'
-import { useState } from 'react'
-import QuickOverview from 'pages/products/QuickOverview'
 import Dropdown from 'components/Dropdown/Dropdown'
+import { links } from 'constants/Links'
+import { IProduct, IShortProfile } from 'interfaces/UniversalInterface'
+import QuickOverview from 'pages/products/QuickOverview'
+import { useState } from 'react'
 import { eclipse } from 'utils/functions'
-import Modal from 'components/atoms/Modal'
-import { useQuery } from 'react-query'
-import { fetchUsers } from 'apis/queries'
-import User from 'components/User'
 
 const Product = ({
   product,
   showWhoPurchased = false,
-  following,
+  purchasedBy,
+  loadingFriends,
 }: {
+  loadingFriends?: boolean
   product: IProduct
   showWhoPurchased?: boolean
-  following?: string[]
+  purchasedBy?: IShortProfile[]
 }) => {
   const [quickOverviewModal, setQuickOverviewModal] = useState(false)
 
@@ -44,54 +42,35 @@ const Product = ({
     },
   ]
 
-  const [userModal, setUserModal] = useState(false)
-
-  const config = {
-    users: following
-      ? product.purchasedBy.filter((p) => following.includes(p))
-      : [],
-  }
-
-  const { isLoading, isFetched, data } = useQuery(
-    'users-purchased',
-    () => fetchUsers(config),
-    { enabled: userModal && showWhoPurchased }
-  )
-
-  const users: IProduct[] = isFetched && !isLoading && data.data.data
-
   return (
     <>
-      {showWhoPurchased && (
-        <Modal open={userModal} setOpen={setUserModal}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {users && users.length > 0 ? (
-              users.map((people: any) => (
-                <User
-                  disableFollow
-                  key={people?._id}
-                  user={people}
-                  following={true}
-                />
-              ))
-            ) : (
-              <p className="text-gray-400 text-center">no users found</p>
-            )}
-          </div>
-        </Modal>
-      )}
       <QuickOverview
         product={product}
         show={quickOverviewModal}
         setShow={setQuickOverviewModal}
       />
       <div className="group">
-        {showWhoPurchased && (
-          <div
-            onClick={() => setUserModal(true)}
-            className="mb-2 text-gray-400 underline cursor-pointer dark:text-gray-400"
-          >
-            See who purchased this
+        {showWhoPurchased && !loadingFriends && (
+          <div className="mb-2 cursor-pointer ">
+            <div className="flex overflow-hidden -space-x-1">
+              {purchasedBy.map((friend) => (
+                <a
+                  href={links.getProfileById(
+                    friend.profileUrl,
+                    friend?.other?.template,
+                    'private'
+                  )}
+                >
+                  <img
+                    title={friend.fullName}
+                    key={friend._id}
+                    className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-gray-800"
+                    src={friend.coverPicture}
+                    alt={''}
+                  />
+                </a>
+              ))}
+            </div>
           </div>
         )}
         <a

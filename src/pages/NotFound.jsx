@@ -1,4 +1,5 @@
 import Button from 'components/atoms/Button'
+import { links } from 'constants/Links'
 import { useHistory } from 'react-router-dom'
 const NotFound = ({
   errorCode = '404',
@@ -26,14 +27,14 @@ const NotFound = ({
               <Button
                 label={tryAgainText}
                 onClick={
-                  tryAgain ? () => tryAgain() : history.push('/dashboard')
+                  tryAgain ? () => tryAgain() : history.push(links.DASHBAORD)
                 }
                 gradient
                 shadow
               />
               <Button
                 label="Contact support"
-                onClick={() => history.push('/dashboard')}
+                onClick={() => history.push(links.DASHBAORD)}
                 customClass
                 className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-600 bg-pink-100 text-pink-500 px-4 py-2 rounded font-medium "
               />

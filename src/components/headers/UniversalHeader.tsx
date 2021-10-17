@@ -20,6 +20,7 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
   const dispatch = useDispatch()
 
   const { setPageState, setIsSearched, pageState } = useHeaderContext()
+  const { isBusiness } = useAccountType(userData)
 
   const pathname = window.location.pathname
 
@@ -79,12 +80,14 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
     if (e.key === 'Enter' && searchText.length >= 3) {
       setTimeout(() => {
         setIsSearched(true)
-        history.push(links.searchJobs(searchText))
+        if (isBusiness) {
+          history.push(links.searchEmployees(searchText))
+        } else {
+          history.push(links.searchJobs(searchText))
+        }
       }, 30)
     }
   }
-
-  const { isBusiness } = useAccountType(userData)
 
   const navigation = [
     { name: 'Home', href: links.DASHBAORD, current: false },
@@ -107,7 +110,9 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
   ].filter(Boolean)
 
   const dynamicPlaceholder =
-    pageState === 'jobs' ? 'Search Jobs' : 'Search Products'
+    pageState === 'jobs'
+      ? `Search ${isBusiness ? 'Employees for your work' : 'Jobs'}`
+      : 'Search Products'
 
   return (
     <Disclosure as="header" className="bg-gray-800">

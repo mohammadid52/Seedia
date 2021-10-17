@@ -1,10 +1,10 @@
-import { fetchFriendsPurchase } from 'apis/queries'
+import { fetchFriendsPurchase, fetchShortUsers } from 'apis/queries'
 import Meta from 'components/atoms/Meta/Meta'
 import Section from 'components/atoms/products/Section'
 import Loading from 'components/Loading'
 import useUser from 'hooks/useUser'
 import { ErrorFallback } from 'index'
-import { IParent, IProduct } from 'interfaces/UniversalInterface'
+import { IParent, IProduct, IShortProfile } from 'interfaces/UniversalInterface'
 import Product from 'pages/products/Product'
 import ProductLayout from 'pages/products/ProductLayout'
 import ProfileCard from 'pages/products/ProfileCard/ProfileCard'
@@ -21,7 +21,17 @@ const FriendsPurchases = ({ userData }: { userData: IParent }) => {
     () => fetchFriendsPurchase()
   )
 
+  const config = {
+    users: userData.following,
+  }
+  const {
+    data: data2,
+    isLoading: isLoading2,
+    isFetched: isFetched2,
+  } = useQuery('friends-profiles', () => fetchShortUsers(config))
+
   const products: IProduct[] = isFetched && !isLoading && data.data.data
+  const friends: IShortProfile[] = isFetched2 && !isLoading2 && data2.data.data
 
   if (isLoading) {
     return <Loading />
@@ -31,6 +41,11 @@ const FriendsPurchases = ({ userData }: { userData: IParent }) => {
       <ErrorFallback resetErrorBoundary={refetch} error={{ message: error }} />
     )
   }
+
+  const getFriendsList = (purchasedBy: IProduct['purchasedBy']) =>
+    friends.length > 0
+      ? friends.filter((friend) => purchasedBy.includes(friend._id.toString()))
+      : []
 
   return (
     <ProductLayout userData={userData}>
@@ -57,7 +72,8 @@ const FriendsPurchases = ({ userData }: { userData: IParent }) => {
           products.length > 0 &&
           products.map((product) => (
             <Product
-              following={userData.following}
+              loadingFriends={isLoading2 && !isFetched2}
+              purchasedBy={getFriendsList(product.purchasedBy)}
               showWhoPurchased
               product={product}
             />

@@ -25,6 +25,11 @@ const uploadMultipleImages = (data: any) =>
 const addProject = (values: any) =>
   network.post('/project/add', { projectData: values })
 
+// add request
+
+const addRequest = (values: any) =>
+  network.post('/requests/add', { requestData: values })
+
 export {
   followUser,
   unFollowUser,
@@ -32,4 +37,5 @@ export {
   addProduct,
   uploadMultipleImages,
   addProject,
+  addRequest,
 }

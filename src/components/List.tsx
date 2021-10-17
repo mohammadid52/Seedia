@@ -4,20 +4,32 @@ import { useField } from 'formik'
 import { map } from 'lodash'
 import remove from 'lodash/remove'
 import { nanoid } from 'nanoid'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BiTrashAlt } from 'react-icons/bi'
 const List = ({
   name,
   label,
   placeholder,
+  min = 10,
+  max = 150,
+  initialValues,
 }: {
   placeholder?: string
   name: string
   label?: string
+  min?: number
+  initialValues?: { name: string; id: string }[]
+  max?: number
 }) => {
   const [field, meta, helpers] = useField(name)
 
   const [features, setFeatures] = useState<{ name: string; id: string }[]>([])
+
+  useEffect(() => {
+    if (initialValues) {
+      setFeatures([...initialValues])
+    }
+  }, [initialValues])
 
   const { setTouched, setError: $setError, setValue } = helpers
   const [error, setError] = useState('')
@@ -30,15 +42,21 @@ const List = ({
   }
 
   const onFeatureAdd = () => {
-    if (featureField.length >= 10) {
+    if (featureField.length >= min && featureField.length < max) {
       setError('')
-      setFeatures((prev) => [...prev, { name: featureField, id: nanoid(4) }])
-      setValue(features)
+      features.push({ name: featureField, id: nanoid(4) })
+      setFeatures((prev) => [...prev])
+
+      setValue([...features])
       setTouched(true)
       $setError(undefined)
       setFeatureField('')
     } else {
-      setError(`${name} text must be at least 10 characters`)
+      if (featureField.length >= min) {
+        setError(`${name} text must be at least ${min} characters`)
+      } else if (featureField.length < max) {
+        setError(`${name} text cannot be longer than ${max} characters`)
+      }
     }
   }
 
