@@ -2,14 +2,18 @@ import { fetchUserById } from 'apis/queries'
 import { getUniqId } from 'helpers'
 import { IParent } from 'interfaces/UniversalInterface'
 import { useQuery } from 'react-query'
-
-const useUser = (profileUrl: string, userData?: IParent) => {
-  const iAmOwnerOfThisProfile = getUniqId(profileUrl) === userData?._id
+const useUser = (
+  profileUrl: string,
+  userData?: IParent,
+  fetchProfile: boolean = true
+) => {
+  const iAmOwnerOfThisProfile =
+    userData && getUniqId(profileUrl) === userData?._id
 
   const { isFetched, isLoading, data } = useQuery(
     'user',
     () => fetchUserById(profileUrl),
-    { enabled: !iAmOwnerOfThisProfile }
+    { enabled: !iAmOwnerOfThisProfile && fetchProfile }
   )
 
   const otherUserData = isFetched && !isLoading && data.data.data

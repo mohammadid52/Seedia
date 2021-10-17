@@ -90,7 +90,13 @@ const Following = ({
               {map(following, (user: IParent, idx) => {
                 // @ts-ignore
                 const following = list && list.includes(user?._id)
-                return <User user={user} following={following} />
+                return (
+                  <User
+                    user={user}
+                    key={user._id.toString()}
+                    following={following}
+                  />
+                )
               })}
             </div>
           ) : null}

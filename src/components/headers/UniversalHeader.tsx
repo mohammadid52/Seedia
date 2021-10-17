@@ -1,31 +1,39 @@
-import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { SearchIcon } from '@heroicons/react/solid'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
-import { classNames } from 'utils/classNames'
-import { avatarPlaceholder } from 'state/Redux/constants'
-import { IParent } from 'interfaces/UniversalInterface'
-import { logOut } from 'state/Redux/Actions/authActions'
-import { useHistory } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { SearchIcon } from '@heroicons/react/solid'
 import { links } from 'constants/Links'
+import { useHeaderContext } from 'context/HeaderContext'
+import { IParent } from 'interfaces/UniversalInterface'
+import filter from 'lodash/filter'
+import queryString from 'query-string'
+import { Fragment, useEffect, useState } from 'react'
 import { BsBag } from 'react-icons/bs'
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-]
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { logOut } from 'state/Redux/Actions/authActions'
+import { avatarPlaceholder } from 'state/Redux/constants'
+import { classNames } from 'utils/classNames'
+import useAccountType from 'hooks/useAccountType'
 
-const ProductsHeader = ({ userData }: { userData: IParent }) => {
+const UniversalHeader = ({ userData }: { userData: IParent }) => {
   const history = useHistory()
   const dispatch = useDispatch()
+
+  const { setPageState, setIsSearched, pageState } = useHeaderContext()
+
+  const pathname = window.location.pathname
+
+  const checkIfIncludes = (term: string) => pathname.includes(term)
+  const atJobs = filter(links.projectTerms, checkIfIncludes).length > 0
+  const atProducts = filter(links.productTerms, checkIfIncludes).length > 0
+
+  useEffect(() => {
+    if (atJobs) {
+      setPageState('jobs')
+    } else if (atProducts) {
+      setPageState('products')
+    }
+  }, [pathname, atJobs, atProducts])
 
   const userNavigation = [
     {
@@ -60,6 +68,47 @@ const ProductsHeader = ({ userData }: { userData: IParent }) => {
       onClick: () => dispatch(logOut(history)),
     },
   ]
+
+  const parsed = queryString.parse(window.location.search)
+
+  const searchedQuery = parsed?.q?.toString()
+
+  const [searchText, setSearchText] = useState(searchedQuery)
+
+  const onKeyDown = (e: { key: string }) => {
+    if (e.key === 'Enter' && searchText.length >= 3) {
+      setTimeout(() => {
+        setIsSearched(true)
+        history.push(links.searchJobs(searchText))
+      }, 30)
+    }
+  }
+
+  const { isBusiness } = useAccountType(userData)
+
+  const navigation = [
+    { name: 'Home', href: links.DASHBAORD, current: false },
+    { name: 'My Network', href: '#', current: false },
+    { name: 'Notifications', href: '#', current: false },
+    { name: 'Sell', href: '#', current: false },
+    { name: 'My 13RMS', href: '#', current: false },
+    isBusiness && { name: 'Business Apps', href: '#', current: false },
+    isBusiness && {
+      name: 'Products',
+      href: links.BROWSE_PRODUCTS(userData.profileUrl),
+      current: atProducts,
+    },
+    isBusiness && {
+      name: 'Projects',
+      href: links.viewMyProjects(),
+      current: atJobs,
+    },
+    !isBusiness && { name: 'Jobs', href: links.exploreJobs(), current: atJobs },
+  ].filter(Boolean)
+
+  const dynamicPlaceholder =
+    pageState === 'jobs' ? 'Search Jobs' : 'Search Products'
+
   return (
     <Disclosure as="header" className="bg-gray-800">
       {({ open }) => (
@@ -90,9 +139,12 @@ const ProductsHeader = ({ userData }: { userData: IParent }) => {
                     <input
                       id="search"
                       name="search"
-                      className="block w-full bg-gray-700 border border-transparent rounded-md py-2 pl-10 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:bg-white focus:border-white focus:ring-white focus:text-gray-900 focus:placeholder-gray-500 sm:text-sm"
-                      placeholder="Search"
+                      className="block w-full bg-gray-700 border border-transparent rounded-md py-2 pl-10 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:bg-white focus:border-white focus:ring-white focus:text-gray-900 text-white focus:placeholder-gray-500 sm:text-sm"
+                      placeholder={dynamicPlaceholder}
+                      value={searchText}
                       type="search"
+                      onKeyDown={onKeyDown}
+                      onChange={(e) => setSearchText(e.target.value)}
                     />
                   </div>
                 </div>
@@ -185,7 +237,7 @@ const ProductsHeader = ({ userData }: { userData: IParent }) => {
                   href={item.href}
                   className={classNames(
                     item.current
-                      ? 'bg-gray-900 text-white'
+                      ? 'text-white via-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 bg-gradient-to-br from-yellow-500 to-pink-500'
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                     'rounded-md py-2 px-3 inline-flex items-center text-sm font-medium'
                   )}
@@ -230,10 +282,10 @@ const ProductsHeader = ({ userData }: { userData: IParent }) => {
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium text-white">
-                    {user.name}
+                    {userData.fullName}
                   </div>
                   <div className="text-sm font-medium text-gray-400">
-                    {user.email}
+                    {userData.email}
                   </div>
                 </div>
                 <button
@@ -262,4 +314,4 @@ const ProductsHeader = ({ userData }: { userData: IParent }) => {
   )
 }
 
-export default ProductsHeader
+export default UniversalHeader

@@ -1,4 +1,5 @@
 import { fetchFriendsPurchase } from 'apis/queries'
+import Meta from 'components/atoms/Meta/Meta'
 import Section from 'components/atoms/products/Section'
 import Loading from 'components/Loading'
 import useUser from 'hooks/useUser'
@@ -33,6 +34,12 @@ const FriendsPurchases = ({ userData }: { userData: IParent }) => {
 
   return (
     <ProductLayout userData={userData}>
+      <Meta
+        keywords="friends purchases,products, 13rms"
+        pageUrl={window.location.href}
+        pageTitle={`Friends Purchases | ${userData.fullName} | 13RMS`}
+      />
+
       <ProfileCard
         userData={userData}
         targetId={otherUserData?._id}
@@ -48,7 +55,13 @@ const FriendsPurchases = ({ userData }: { userData: IParent }) => {
       >
         {products &&
           products.length > 0 &&
-          products.map((product) => <Product product={product} />)}
+          products.map((product) => (
+            <Product
+              following={userData.following}
+              showWhoPurchased
+              product={product}
+            />
+          ))}
       </Section>
     </ProductLayout>
   )

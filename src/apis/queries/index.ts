@@ -21,6 +21,12 @@ const fetchReviewsByProduct = (
 const fetchProjectById = (projectId: string) =>
   network.get(`/project/p/${projectId}`)
 
+const fetchMyProjects = () => network.get(`/project/my/list`)
+const fetchSearchedJobs = (searchQuery: string) =>
+  network.get(`/project/list?search=${searchQuery}`)
+const fetchRelatedJobs = (relatedTags: string[]) =>
+  network.get(`/project/list?related=${relatedTags}`)
+
 export {
   fetchProductDetails,
   fetchAllProducts,
@@ -29,4 +35,7 @@ export {
   fetchProjectById,
   fetchUsers,
   fetchUserById,
+  fetchMyProjects,
+  fetchSearchedJobs,
+  fetchRelatedJobs,
 }

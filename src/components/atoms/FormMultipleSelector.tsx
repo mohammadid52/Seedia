@@ -109,7 +109,7 @@ const FormMultipleSelector = ({
               >
                 {values.length > 0
                   ? map(orderBy(values, [sortBy, 'asc']), (d, idx) => (
-                      <div className="flex items-center">
+                      <div key={idx} className="flex items-center">
                         {d.code && (
                           <div
                             className={`rounded-full border border-gray-600 h-4 w-4`}
@@ -153,7 +153,7 @@ const FormMultipleSelector = ({
                 {list.map((item, idx) => (
                   <Listbox.Option
                     disabled={item.hasOwnProperty('disabled')}
-                    key={item.id}
+                    key={idx}
                     className={({ active }) =>
                       classNames(
                         active

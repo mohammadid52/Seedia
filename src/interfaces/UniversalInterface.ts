@@ -48,6 +48,7 @@ export interface ICompany {
   companyAddress?: string
   companyName?: string
   jobTitle?: string
+  jobType?: string
 }
 
 export interface ILocation {
@@ -255,7 +256,6 @@ export interface IReview {
 }
 
 // ~~~~~~~~~~~~~~~~~~~Project Interfaces~~~~~~~~~~~~~~~~~~~~ //
-// key-project
 export interface ListItem {
   name: string
 }
@@ -264,16 +264,26 @@ export interface ItemWithHeader {
   header: string
   points: ListItem[] | null
 }
+// key-project
+
+export interface ISection {
+  title: string
+  content: string
+  id?: string
+}
 
 export interface IProject {
+  title: string
+  _id?: string
   functionType: { name: string; id: string }[]
   salary: { min: string; max: string; duration: string }
   briefDescription: string
-  jobDescription: ItemWithHeader
-  jobRequirements: ItemWithHeader
-  workingConditions: ItemWithHeader
+  sections: ISection[]
   closure: string
+  website: string
   postedOn?: Date
   postedBy?: string // userId
   company?: IParent
+  location?: ILocation
+  views?: number
 }

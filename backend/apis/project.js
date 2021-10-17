@@ -1,7 +1,13 @@
 /* eslint-disable quotes */
 const app = require('express').Router()
 const auth = require('../middleware/verifyAuth')
-const { responseMsg, getItem } = require('../utils')
+const {
+  responseMsg,
+  getItem,
+  getManyItems,
+  addObjectId,
+  updateData,
+} = require('../utils')
 var ObjectId = require('mongodb').ObjectId
 require('dotenv').config()
 
@@ -21,6 +27,8 @@ app.post('/add', auth, async (req, res) => {
           ...projectData,
           postedOn: new Date(),
           postedBy: token.id,
+          views: 0,
+          location: user.location,
         }
         const project = await projectsCollection.insertOne(newProject)
 
@@ -32,7 +40,7 @@ app.post('/add', auth, async (req, res) => {
                 ...user.business,
                 projects:
                   user?.projects?.length > 0
-                    ? [...user.products, project.insertedId]
+                    ? [...user.projects, project.insertedId]
                     : [project.insertedId],
               },
             },
@@ -64,6 +72,7 @@ app.post('/add', auth, async (req, res) => {
 // ~~~~~~~~~~~~~~Get single project by id~~~~~~~~~~~~~~ //
 app.get('/p/:projectId', auth, async (req, res) => {
   const { projectId } = req.params
+  const token = req.user
 
   const projectsCollection = res.locals.projectsCollection
   const usersCollection = res.locals.usersCollection
@@ -72,7 +81,19 @@ app.get('/p/:projectId', auth, async (req, res) => {
     const project = await getItem(projectsCollection, projectId)
     const company = await getItem(usersCollection, project.postedBy)
     if (project && company) {
-      const updated = { ...project, company }
+      const itsMyProject = company._id.toString() === token?.id
+
+      let currentViews = project?.views || 0
+      let updatedViews = itsMyProject ? currentViews : currentViews + 1
+      const updated = {
+        ...project,
+        company,
+        location: company.location,
+      }
+      if (currentViews !== updatedViews) {
+        await updateData(projectsCollection, projectId, { views: updatedViews })
+      }
+
       return res
         .status(202)
         .json(responseMsg('error', 'Project fetched successfully ', updated))
@@ -85,6 +106,103 @@ app.get('/p/:projectId', auth, async (req, res) => {
 })
 
 // ~~~~~~~~~~~~~~List all projects~~~~~~~~~~~~~~ //
-app.get('/list', auth, async (req, res) => {})
+app.get('/my/list', auth, async (req, res) => {
+  const token = req.user
+
+  const projectsCollection = res.locals.projectsCollection
+  const usersCollection = res.locals.usersCollection
+  try {
+    const company = await getItem(usersCollection, token.id)
+    if (company) {
+      const wrapId = company?.business?.projects.map(addObjectId)
+      let projects = await getManyItems(projectsCollection, {
+        _id: { $in: wrapId },
+      })
+
+      projects = projects.map((pr) => ({
+        ...pr,
+        company,
+        location: company.location,
+      }))
+      return res
+        .status(202)
+        .json(responseMsg('success', 'Project fetched successfully ', projects))
+    } else {
+      return res
+        .status(204)
+        .json(responseMsg('error', 'Cannot find company ', {}))
+    }
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(204)
+      .json(responseMsg('error', 'Something went wrong. Please try again', {}))
+  }
+})
+
+app.get('/list', async (req, res) => {
+  const { search = '', related = [''] } = req.query
+
+  if (search.length >= 3 || related.length > 0) {
+    const usersCollection = res.locals.usersCollection
+    const projectsCollection = res.locals.projectsCollection
+    //
+    try {
+      let searchedProjects = await projectsCollection
+        .find({
+          $text: {
+            $search: search || related,
+            $caseSensitive: false,
+            $diacriticSensitive: true,
+          },
+        })
+        .project({ score: { $meta: 'textScore' } })
+        .sort({ score: { $meta: 'textScore' } })
+        .toArray()
+
+      if (searchedProjects.length > 0) {
+        const companies = await getManyItems(usersCollection, {
+          _id: { $in: searchedProjects.map((pr) => addObjectId(pr.postedBy)) },
+        })
+        searchedProjects = searchedProjects.map((pr) => {
+          const company = companies.find(
+            (c) => c._id.toString() === pr.postedBy.toString()
+          )
+          return {
+            ...pr,
+            company,
+            location: company.location,
+          }
+        })
+
+        return res
+          .status(202)
+          .json(
+            responseMsg(
+              'success',
+              'Projects fetched successfully',
+              searchedProjects
+            )
+          )
+      } else {
+        return res
+          .status(204)
+          .json(
+            responseMsg('error', 'Cannot find projects with searched term', {})
+          )
+      }
+    } catch (error) {
+      console.error(error)
+      return res
+        .status(204)
+        .json(
+          responseMsg('error', 'Something went wrong. Please try again', {})
+        )
+    }
+  }
+  return res
+    .status(204)
+    .json(responseMsg('error', 'Something went wrong. Please try again', {}))
+})
 
 module.exports = app

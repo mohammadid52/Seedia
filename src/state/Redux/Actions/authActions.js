@@ -7,13 +7,13 @@ import jwt_decode from 'jwt-decode'
 export const logOut = (history) => async (dispatch) => {
   try {
     dispatch({ type: types.START_LOADING })
-
     localStorage.removeItem('access_token')
     if (typeof history === 'function') {
       history.push('/')
     }
     dispatch({ type: types.SET_USER_DATA, data: {} })
     dispatch({ type: types.LOGOUT, msg: 'Logged out successfully' })
+    window.location.reload()
   } catch (error) {
     console.log(error)
   } finally {

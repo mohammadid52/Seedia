@@ -6,6 +6,7 @@ import {
   AiOutlineEyeInvisible,
 } from 'react-icons/ai'
 import { Transition } from '@headlessui/react'
+import { doResize } from 'utils/functions'
 
 const NormalFormInput = ({
   label,
@@ -81,6 +82,9 @@ const NormalFormInput = ({
               {...props}
               id={id}
               value={value}
+              onKeyDown={doResize}
+              onKeyPress={doResize}
+              onKeyUp={doResize}
               name={name}
               onChange={onChange}
               placeholder={placeholder}

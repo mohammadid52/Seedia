@@ -12,6 +12,8 @@ const Card = ({
   secondary = false,
   style,
   transparent = false,
+  transform = true,
+  isLoading = false,
 }: {
   cardTitle?: string
   privateCard?: boolean
@@ -24,19 +26,21 @@ const Card = ({
   secondary?: boolean
   transparent?: boolean
   style?: any
+  isLoading?: boolean
+  transform?: boolean
 }) => {
   const transparentClass = transparent
     ? 'bg-transparent'
-    : `${
-        disablePadding ? 'py-4' : 'p-4'
-      } border dark:border-gray-700 border-gray-200  dark:bg-gray-800 h-full rounded-md ${className}`
+    : `${disablePadding ? 'py-4' : 'p-4'} border dark:border-gray-700 ${
+        isLoading ? 'animate-pulse' : ''
+      } border-gray-200  dark:bg-gray-800 h-full rounded-md ${className}`
 
   return (
     <div style={{ ...style }} id={id} className={`${transparentClass} `}>
-      <div className="transform scale-95">
+      <div className={transform ? 'transform scale-95' : 'p-4'}>
         {cardTitle && (
           <>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center  justify-between">
               <h4
                 className={`${disablePadding ? 'px-6' : ''}  leading-6 ${
                   secondary

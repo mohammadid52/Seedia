@@ -21,13 +21,14 @@ import { useDispatch } from 'react-redux'
 import { NavLink, useHistory } from 'react-router-dom'
 import { logOut } from 'state/Redux/Actions/authActions'
 import { avatarPlaceholder } from 'state/Redux/constants'
+import { AiOutlineLogout } from 'react-icons/ai'
+import { FiSettings } from 'react-icons/fi'
 import { classNames } from 'utils/classNames'
 import {
   businessApps,
   callsToAction,
   departmentsArray,
   productsArray,
-  settings,
 } from 'values/values'
 
 const DashboardHeader = ({ userData }: { userData?: IParent }) => {
@@ -106,6 +107,20 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
 
   const navClass =
     'flex flex-col items-center font-medium text-base dark:text-gray-400 text-gray-500 link-hover'
+
+  const settings = [
+    {
+      name: 'Settings',
+      icon: FiSettings,
+      onClick: () => history.push(_links.SETTINGS),
+    },
+    {
+      name: 'Sign Out',
+      onClick: () => dispatch(logOut(history)),
+
+      icon: AiOutlineLogout,
+    },
+  ]
 
   const isBusiness = userData?.other?.accountType === 'business'
 
@@ -367,13 +382,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                 {settings.map((item) => (
                                   <div
                                     key={item.name}
-                                    onClick={() => {
-                                      if (item.name === 'Sign Out') {
-                                        dispatch(logOut(history))
-                                      } else {
-                                        history.push(_links.SETTINGS)
-                                      }
-                                    }}
+                                    onClick={() => item.onClick()}
                                     className="-m-3 gradient-item p-3 mt-1 flex items-center text-left rounded-lg dark:hover:bg-gray-600 transition-all hover:bg-gray-50 justify-start cursor-pointer"
                                   >
                                     <div className="flex-shrink-0 flex items-center justify-center h-6 w-6 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md  text-white sm:h-6 sm:w-6">

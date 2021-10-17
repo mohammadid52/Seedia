@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 const createImage = (url) =>
   new Promise((resolve, reject) => {
     const image = new Image()
@@ -73,3 +75,41 @@ export const eclipse = (str = '', len = 50) => {
 
 export const join = (arr, key, joinPattern = ',') =>
   arr.map((d) => d[key]).join(joinPattern)
+
+export const doResize = (e) => {
+  const textbox = e.target
+  var maxrows = 50
+  var txt = textbox.value
+  var cols = textbox.cols
+
+  var arraytxt = txt?.split('\n')
+  var rows = arraytxt.length
+
+  for (let i = 0; i < arraytxt.length; i++)
+    // @ts-ignore
+    rows += parseInt(arraytxt[i].length / cols)
+
+  if (rows > maxrows) textbox.rows = maxrows
+  else textbox.rows = rows
+}
+
+export const getTags = (str) => {
+  if (str && str.length > 0) {
+    return str
+      .split(' ')
+      .filter(
+        (tags) =>
+          tags !== 'in' ||
+          tags !== 'or' ||
+          tags !== 'of' ||
+          tags !== 'the' ||
+          tags !== 'is' ||
+          tags !== 'can' ||
+          tags !== 'so' ||
+          tags !== '.' ||
+          tags !== 'to'
+      )
+  }
+}
+
+export const getFromNowTime = (time) => moment(time).fromNow()

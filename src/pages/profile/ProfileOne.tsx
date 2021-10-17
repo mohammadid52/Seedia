@@ -10,6 +10,7 @@ import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
 import About from 'pages/profile/About'
+import AdditionalFeatures from 'pages/profile/AdditionalFeatures'
 import Background from 'pages/profile/Background'
 import Cover from 'pages/profile/Cover'
 import Following from 'pages/profile/Following'
@@ -78,7 +79,9 @@ const Profile = ({ userData }: { userData: IParent }) => {
               userData={userData}
               business={isBusiness}
               firstCol={
-                <div className="space-y-8">{<About {...commonProps} />}</div>
+                <div className="space-y-8">
+                  <About {...commonProps} />
+                </div>
               }
               secondCol={
                 <div className="space-y-8 py-0">

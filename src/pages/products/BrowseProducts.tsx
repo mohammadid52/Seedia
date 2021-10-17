@@ -1,9 +1,7 @@
 import { fetchAllProducts } from 'apis/queries'
-import Button from 'components/atoms/Button'
 import Meta from 'components/atoms/Meta/Meta'
 import Section from 'components/atoms/products/Section'
 import Loading from 'components/Loading'
-import { links } from 'constants/Links'
 import { useRouter } from 'hooks/useRouter'
 import useUser from 'hooks/useUser'
 import { ErrorFallback } from 'index'
@@ -38,6 +36,8 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
     )
   }
   if (isSuccess) {
+    const isBusiness = userData?.other?.accountType === 'business'
+
     return (
       <>
         <Meta
@@ -51,27 +51,21 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
               targetId={otherUserData?._id}
               iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
             />
-            <Section
-              showChildren={products && products.length > 0}
-              title={
-                iAmOwnerOfThisProfile
-                  ? 'Your Products'
-                  : `${otherUserData?.firstName}'s Products`
-              }
-            >
-              {products &&
-                products.length > 0 &&
-                products.map((product) => <Product product={product} />)}
-            </Section>
-
-            {iAmOwnerOfThisProfile && (
-              <Button
-                label="+ Add new product"
-                className="flex"
-                gradient
-                link={links.addProduct()}
-              />
+            {isBusiness && (
+              <Section
+                showChildren={products && products.length > 0}
+                title={
+                  iAmOwnerOfThisProfile
+                    ? 'Your Products'
+                    : `${otherUserData?.firstName}'s Products`
+                }
+              >
+                {products &&
+                  products.length > 0 &&
+                  products.map((product) => <Product product={product} />)}
+              </Section>
             )}
+
             <Section
               showChildren={products && products.length > 0}
               title={'Recommended Products'}

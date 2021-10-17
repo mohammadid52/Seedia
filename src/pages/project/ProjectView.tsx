@@ -3,42 +3,60 @@ import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Meta from 'components/atoms/Meta/Meta'
 import Loading from 'components/Loading'
+import useFollow from 'hooks/useFollow'
+import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
-import {
-  IParent,
-  IProject,
-  ItemWithHeader,
-} from 'interfaces/UniversalInterface'
-import moment from 'moment'
+import useUser from 'hooks/useUser'
+import { IParent, IProject, ISection } from 'interfaces/UniversalInterface'
+import map from 'lodash/map'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { avatarPlaceholder } from 'state/Redux/constants'
-import { join } from 'utils/functions'
+import { classNames } from 'utils/classNames'
+import { getFromNowTime, getTags, join } from 'utils/functions'
 
-const Section = ({ header, points }: ItemWithHeader) => {
+const Section = ({ title, content }: ISection) => {
   return (
     <div className="my-8">
-      <h4 className="mb-4 font-semibold tracking-tight text-lg text-gray-900 dark:text-white">
-        {header}
-      </h4>
-      <ul className="flex flex-col gap-y-2">
-        {points.map((point) => (
-          <li className="font-medium list-disc tracking-tight text-base text-gray-600 dark:text-gray-400">
-            {point.name}
-          </li>
-        ))}
-      </ul>
+      {title && (
+        <h4 className="mb-4 font-semibold tracking-tight text-lg text-gray-900 dark:text-white">
+          {title}
+        </h4>
+      )}
+      <p className="font-medium whitespace-pre-line tracking-tight text-base text-gray-600 dark:text-gray-400">
+        {content}
+      </p>
     </div>
   )
 }
 
-const DescriptionItem = ({ name, value }: { name: string; value: string }) => {
+const DescriptionItem = ({
+  name,
+  value,
+  valueClassName,
+  nameClassName,
+}: {
+  name: string
+  value: string
+  valueClassName?: string
+  nameClassName?: string
+}) => {
   return (
     <div className="py-4 border-b border-gray-200 dark:border-gray-700 sm:py-5 sm:grid sm:grid-cols-2 sm:gap-4 ">
-      <dt className="text-sm uppercase font-medium gradient-text text-left">
+      <dt
+        className={classNames(
+          nameClassName,
+          'text-sm uppercase font-medium gradient-text text-left'
+        )}
+      >
         {name}
       </dt>
-      <dd className="mt-1 text-sm dark:text-white text-right text-gray-900 sm:mt-0 sm:col-span-1">
+      <dd
+        className={classNames(
+          valueClassName,
+          'mt-1 text-sm dark:text-white text-right text-gray-900 sm:mt-0 sm:col-span-1'
+        )}
+      >
         {value}
       </dd>
     </div>
@@ -48,17 +66,34 @@ const DescriptionItem = ({ name, value }: { name: string; value: string }) => {
 const TopCard = ({
   userData,
   iAmOwnerOfThisProfile,
+  websiteUrl,
+  views = 0,
+  followingList,
 }: {
-  userData: IParent
+  userData?: IParent
   iAmOwnerOfThisProfile: boolean
+
+  websiteUrl?: string
+  views?: number
+  followingList?: string[]
 }) => {
+  const { following, addFollow, removeFollow } = useFollow(
+    followingList,
+    userData._id
+  )
+
   return (
-    <div className="">
+    <div>
       <Card
-        className="p-6  "
+        className="p-6 "
         content={
           <>
             <div className="flex relative items-center justify-between">
+              {iAmOwnerOfThisProfile && (
+                <span className="dark:text-gray-400 text-gray-400 italic text-sm absolute top-0 right-0 ">
+                  View count: {views}
+                </span>
+              )}
               <div className="flex items-center space-x-12">
                 <div className="">
                   <span className="sr-only">13RMS</span>
@@ -86,7 +121,32 @@ const TopCard = ({
                 </div>
               </div>
               <div className="absolute bottom-0 right-0">
-                {<Button label="Apply" gradient size="xl" />}
+                {!iAmOwnerOfThisProfile ? (
+                  <div className="grid grid-cols-2 gap-x-4">
+                    <Button
+                      onClick={() =>
+                        following
+                          ? addFollow.mutate(userData._id)
+                          : removeFollow.mutate(userData._id)
+                      }
+                      label="Follow"
+                      gradient
+                      size="lg"
+                      className="px-6"
+                    />
+                    <Button
+                      label="Apply"
+                      link={websiteUrl}
+                      gradient
+                      className="px-6"
+                      size="lg"
+                    />
+                  </div>
+                ) : (
+                  <span className="text-base leading-6 font-light  dark:text-gray-400 text-gray-600">
+                    Others will see buttons here
+                  </span>
+                )}
               </div>
             </div>
           </>
@@ -96,38 +156,52 @@ const TopCard = ({
   )
 }
 
-const ProjectView = ({ userData }: { userData: IParent }) => {
+const ProjectView = ({ userData }: { userData?: IParent }) => {
   const params: any = useParams()
   const projectId = params.projectId
 
   const { isLoading, data, isFetched } = useQuery('project', () =>
     fetchProjectById(projectId)
   )
+  const project: IProject = isFetched && !isLoading ? data.data.data : {}
+
+  const { iAmOwnerOfThisProfile } = useUser(
+    project?.company?.profileUrl,
+    userData,
+    false
+  )
 
   if (isLoading) {
     return <Loading />
   }
 
-  const project: IProject = isFetched && !isLoading ? data.data.data : {}
-
-  const getPostedOnFormatted = (time: Date) => moment(time).fromNow()
-
   const company = project.company
-  const { location, business, background } = company
+  const { salary, location } = project
+  const { business, background } = company
 
   return (
-    <NarrowLayout customParentMaxWidth="max-w-360" customMaxWidth="max-w-360">
+    <NarrowLayout
+      userData={userData}
+      customParentMaxWidth="max-w-360 relative"
+      customMaxWidth="max-w-360"
+    >
       <Meta
         pageUrl={window.location.href}
         imageUrl={company && company.profilePicture}
         pageTitle={`${business.name} | ${business.typeOfBusiness} | Jobs | 13RMS `}
-        // title={product.productName}
+        title={business.name}
         description={project.briefDescription}
-        // keywords={product?.tags?.join(', ')}
+        keywords={getTags(project.briefDescription)}
         // userName={''}
       />
       <div className="flex flex-col gap-y-12">
-        <TopCard iAmOwnerOfThisProfile userData={userData} />
+        <TopCard
+          followingList={userData.following}
+          views={project.views}
+          websiteUrl={project.website}
+          iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+          userData={company}
+        />
         <Card
           content={
             <div className="dark:text-gray-400 grid grid-cols-1 gap-x-12 sm:grid-cols-3 text-gray-900">
@@ -135,21 +209,15 @@ const ProjectView = ({ userData }: { userData: IParent }) => {
                 <h1 className="dark:text-white text-gray-900 text-2xl  mb-4 font-semibold">
                   Description
                 </h1>
-                <div>{project.briefDescription}</div>
+                <div className="whitespace-pre-line">
+                  {project.briefDescription}
+                </div>
                 <br />
                 <div className="flex flex-col gap-y-4">
-                  <Section
-                    header={project.jobDescription.header}
-                    points={project.jobDescription.points}
-                  />
-                  <Section
-                    header={project.jobRequirements.header}
-                    points={project.jobRequirements.points}
-                  />
-                  <Section
-                    header={project.workingConditions.header}
-                    points={project.workingConditions.points}
-                  />
+                  {map(project.sections, (section) => (
+                    <Section title={section.title} content={section.content} />
+                  ))}
+                  <Section title={''} content={project.closure} />
                 </div>
               </div>
               <div>
@@ -162,6 +230,10 @@ const ProjectView = ({ userData }: { userData: IParent }) => {
                     value={join(project.functionType, 'name')}
                   />
                   <DescriptionItem
+                    name={'Salary'}
+                    value={`${salary.min} - ${salary.max} / ${salary.duration}`}
+                  />
+                  <DescriptionItem
                     name={'Location'}
                     value={`${location?.city || '--'}, ${
                       location?.country || '--'
@@ -169,7 +241,7 @@ const ProjectView = ({ userData }: { userData: IParent }) => {
                   />
                   <DescriptionItem
                     name={'Posted'}
-                    value={getPostedOnFormatted(project.postedOn)}
+                    value={getFromNowTime(project.postedOn)}
                   />
                 </dl>
               </div>
@@ -189,8 +261,8 @@ const ProjectView = ({ userData }: { userData: IParent }) => {
                       <img
                         className="h-12 w-12  cursor-pointer  shadow-xl"
                         src={
-                          userData?.profilePicture
-                            ? userData?.profilePicture
+                          company?.profilePicture
+                            ? company?.profilePicture
                             : avatarPlaceholder
                         }
                         alt=""
@@ -220,8 +292,9 @@ const ProjectView = ({ userData }: { userData: IParent }) => {
                 />
                 <DescriptionItem name={'Year of foundation'} value={'2007'} />
                 <DescriptionItem
+                  valueClassName="underline cursor-pointer tracking-wider"
                   name={'Website'}
-                  value={'https://www.randstad.ni'}
+                  value={project.website}
                 />
               </div>
             </div>

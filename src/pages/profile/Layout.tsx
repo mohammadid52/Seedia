@@ -1,10 +1,9 @@
-import React from 'react'
-import { SIDEBAR_HEIGHT } from 'state/Redux/constants'
-import Card from 'components/atoms/Card'
 import Button from 'components/atoms/Button'
+import Card from 'components/atoms/Card'
 import { links } from 'constants/Links'
 import { IParent } from 'interfaces/UniversalInterface'
-import { BsBagFill } from 'react-icons/bs'
+import React from 'react'
+import { SIDEBAR_HEIGHT } from 'state/Redux/constants'
 
 // min-width: 1280px; // 1280px or greater than that, then to do the action.
 // max-width: 1280px; // 1280px or less than that, then to do the action.
@@ -35,6 +34,11 @@ const Layout = ({
         cardTitle="Business Features"
         content={
           <div className="gap-4 grid grid-cols-2 sm:grid-cols-8">
+            <Button
+              link={links.viewMyProjects()}
+              label="View My Projects"
+              gradient
+            />
             <Button label="Add Project" link={links.addProject()} gradient />
             <Button
               link={links.BROWSE_PRODUCTS(userData?.profileUrl)}
@@ -42,11 +46,6 @@ const Layout = ({
               gradient
             />
             <Button link={links.addProduct()} label="Add Product" gradient />
-            <Button
-              link={links.viewProject('61699b6c601f04336bd85fe5')}
-              label="View Project"
-              gradient
-            />
           </div>
         }
       />

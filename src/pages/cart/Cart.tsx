@@ -2,7 +2,7 @@ import Meta from 'components/atoms/Meta/Meta'
 import PageTitle from 'components/atoms/PageTitle'
 import Section from 'components/atoms/products/Section'
 import Title from 'components/atoms/Title'
-import ProductsHeader from 'components/headers/ProductsHeader'
+import UniversalHeader from 'components/headers/UniversalHeader'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { getBasket } from 'helpers'
@@ -78,7 +78,7 @@ const Cart = ({ userData }: { userData: IParent }) => {
   return (
     <>
       <Meta pageTitle={`My Cart - 13RMS`} />
-      <ProductsHeader userData={userData} />
+      <UniversalHeader userData={userData} />
 
       <NarrowLayout customMaxWidth="max-w-7xl">
         <PageTitle title="Your Cart" />

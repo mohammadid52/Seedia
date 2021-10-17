@@ -19,10 +19,10 @@ body {
     Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
 }
 
-*::selection {
-  background-color: #ec4899;
-  color: white;
-}
+// *::selection {
+//   background-color: #ec4899;
+//   color: white;
+// }
 
 // Other Styles
 
@@ -272,4 +272,25 @@ button {
 
 .customDropdown:hover .dropdown-content {
   display: block;
+}
+
+.box {
+  position: relative;
+  &:hover {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 6px;
+      padding: 1px;
+      background: linear-gradient(45deg, $pink, $yellow);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+    }
+  }
 }

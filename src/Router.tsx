@@ -13,6 +13,7 @@ import BrowseProducts from 'pages/products/BrowseProducts'
 import ProductDetails from 'pages/products/ProductDetails'
 import ProfileTwo from 'pages/profile/ProfileTwo'
 import AddProject from 'pages/project/AddProject'
+import SearchedJobs from 'pages/project/ListView/SearchedJobs'
 import ProjectView from 'pages/project/ProjectView'
 import ResetPassword from 'pages/ResetPassword'
 import { lazy } from 'react'
@@ -31,6 +32,12 @@ const Settings = lazy(() => import('pages/Settings'))
 const FriendsPurchases = lazy(
   () => import('pages/products/FriendsPurchases/FriendsPurchases')
 )
+const MyProjectsListView = lazy(
+  () => import('pages/project/ListView/MyProjectsListView')
+)
+const ProjectsListView = lazy(
+  () => import('pages/project/ListView/ProjectListView')
+)
 
 const Router = ({
   navProps,
@@ -47,7 +54,7 @@ const Router = ({
     <BrowserRouter>
       <AuthContainer>
         <div className="dark:bg-gray-900 bg-white">
-          <div className="">
+          <div className="relative">
             <Switch>
               <PrivateRoute
                 // @ts-ignore
@@ -95,18 +102,13 @@ const Router = ({
                 // @ts-ignore
                 exact
                 isUser={userData}
-                path="/add-project"
+                path="/project/add-project"
               >
                 <AddProject userData={userData} />
               </PrivateRoute>
-              <PrivateRoute
-                // @ts-ignore
-                exact
-                isUser={userData}
-                path="/project/:projectId"
-              >
+              <Route exact path="/project/p/:projectId">
                 <ProjectView userData={userData} />
-              </PrivateRoute>
+              </Route>
               <PrivateRoute
                 // @ts-ignore
                 exact
@@ -115,6 +117,21 @@ const Router = ({
               >
                 <AddProduct profileUrl={userData?.profileUrl} />
               </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/project/myProjects"
+              >
+                <MyProjectsListView userData={userData} />
+              </PrivateRoute>
+
+              <Route path="/jobs/explore">
+                <ProjectsListView userData={userData} />
+              </Route>
+              <Route path="/jobs">
+                <SearchedJobs userData={userData} />
+              </Route>
 
               {/* @ts-ignore */}
               <PrivateRoute isPublic isUser={userData} exact path="/login">
@@ -139,7 +156,7 @@ const Router = ({
                 // @ts-ignore
                 exact
                 isUser={isUser}
-                path="/dashboard"
+                path="/home"
               >
                 {/* @ts-ignore */}
                 <Dashboard {...navProps} userData={userData} />

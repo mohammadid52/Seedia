@@ -20,5 +20,23 @@ const getManyItems = async (collection, condition) => {
     })
     .toArray()
 }
+const updateData = async (collection, id, newData) => {
+  await collection.updateOne(
+    { _id: ObjectId(id) },
+    {
+      $set: {
+        ...newData,
+      },
+    },
+    { new: true }
+  )
+}
 
-module.exports = { responseMsg, unique, addObjectId, getItem, getManyItems }
+module.exports = {
+  responseMsg,
+  unique,
+  addObjectId,
+  getItem,
+  getManyItems,
+  updateData,
+}

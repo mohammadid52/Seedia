@@ -12,9 +12,11 @@ import User from 'components/User'
 const Product = ({
   product,
   showWhoPurchased = false,
+  following,
 }: {
   product: IProduct
   showWhoPurchased?: boolean
+  following?: string[]
 }) => {
   const [quickOverviewModal, setQuickOverviewModal] = useState(false)
 
@@ -44,7 +46,11 @@ const Product = ({
 
   const [userModal, setUserModal] = useState(false)
 
-  const config = { users: product.purchasedBy }
+  const config = {
+    users: following
+      ? product.purchasedBy.filter((p) => following.includes(p))
+      : [],
+  }
 
   const { isLoading, isFetched, data } = useQuery(
     'users-purchased',

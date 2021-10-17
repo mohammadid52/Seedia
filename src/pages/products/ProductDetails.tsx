@@ -22,7 +22,7 @@ import LightGallery from 'lightgallery/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToBasket, removeFromBasket } from 'state/Redux/Actions/userActions'
 import { getBasket } from 'helpers'
-import ProductsHeader from 'components/headers/ProductsHeader'
+import UniversalHeader from 'components/headers/UniversalHeader'
 // @ts-nocheck
 const INIT = {
   productName: 'Basic Tee 6-Pack',
@@ -125,7 +125,7 @@ const ProductDetails = ({ userData }: { userData: IParent }) => {
         keywords={product?.tags?.join(', ')}
         userName={''}
       />
-      <ProductsHeader userData={userData} />
+      <UniversalHeader userData={userData} />
 
       <div className="bg-white dark:bg-gray-900">
         <div className="pt-6 ">

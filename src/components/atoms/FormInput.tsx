@@ -4,6 +4,7 @@ import { useField } from 'formik'
 import React, { useState } from 'react'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import FormError from 'components/atoms/form/FormError'
+import { doResize } from 'utils/functions'
 
 const FormInput = ({
   label,
@@ -85,6 +86,7 @@ const FormInput = ({
             <textarea
               rows={rows}
               cols={cols}
+              onKeyDown={doResize}
               id={id}
               placeholder={placeholder}
               onChange={onChange}

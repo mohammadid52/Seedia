@@ -59,7 +59,6 @@ import { FaAdversal, FaMoneyBillAlt, FaConnectdevelop } from 'react-icons/fa'
 import { MdFindReplace, MdAttachMoney } from 'react-icons/md'
 import { SiGoogleanalytics } from 'react-icons/si'
 import { BsFilePost } from 'react-icons/bs'
-import { FiSettings } from 'react-icons/fi'
 import { nanoid } from 'nanoid'
 
 export const adjustColors = [
@@ -142,21 +141,6 @@ export const my13Rms = [
     divider: false,
     classNames: '',
     img: 'icon-com-email2',
-  },
-]
-
-export const settings = [
-  {
-    name: 'Settings',
-    icon: FiSettings,
-    current: false,
-  },
-  {
-    name: 'Sign Out',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-
-    icon: AiOutlineLogout,
   },
 ]
 

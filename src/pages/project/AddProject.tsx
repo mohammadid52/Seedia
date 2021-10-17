@@ -1,24 +1,26 @@
 import { addProject } from 'apis/mutations'
 import Error from 'components/alerts/Error'
+import Info from 'components/alerts/Info'
 import Button from 'components/atoms/Button'
-import Divider from 'components/atoms/Divider'
 import FormInput from 'components/atoms/FormInput'
 import FormMultipleSelector from 'components/atoms/FormMultipleSelector'
 import Meta from 'components/atoms/Meta/Meta'
+import NormalFormInput from 'components/atoms/NormalFormInput'
 import Title from 'components/atoms/Title'
-import List from 'components/List'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { Form, Formik } from 'formik'
-import { IParent, IProject } from 'interfaces/UniversalInterface'
+import { IParent, IProject, ISection } from 'interfaces/UniversalInterface'
+import { map, remove, update } from 'lodash'
+import { nanoid } from 'nanoid'
+import { useEffect, useState } from 'react'
 import { useMutation } from 'react-query'
-import { Redirect } from 'react-router'
-import { useEffect } from 'react'
-import * as Yup from 'yup'
 import { useHistory } from 'react-router-dom'
+import * as Yup from 'yup'
 
 const AddProject = ({ userData }: { userData: IParent }) => {
   const validationSchema = Yup.object({
+    title: Yup.string().required('Title is required').min(10).max(150),
     salary: Yup.object({
       min: Yup.string()
         .required('Minimum Salary is required')
@@ -29,34 +31,20 @@ const AddProject = ({ userData }: { userData: IParent }) => {
         .matches(/^[0-9]+$/, 'Must be only digits'),
     }),
     briefDescription: Yup.string().required('Brief Description is required'),
-    jobDescription: Yup.object({
-      header: Yup.string().required('Header is required'),
-    }),
-    jobRequirements: Yup.object({
-      header: Yup.string().required('Header is required'),
-    }),
-    workingConditions: Yup.object({
-      header: Yup.string().required('Header is required'),
-    }),
+    website: Yup.string()
+      .required('Website Url is required')
+      .url('Invalid Url format'),
+
     closure: Yup.string().required('Closure is required'),
   })
 
+  // @ts-ignore
   const initialValues: IProject = {
+    title: '',
     functionType: [{ name: 'Part-time', id: '1' }],
     salary: { min: '', max: '', duration: '' },
     briefDescription: '',
-    jobDescription: {
-      header: '',
-      points: null,
-    },
-    jobRequirements: {
-      header: '',
-      points: null,
-    },
-    workingConditions: {
-      header: '',
-      points: null,
-    },
+    website: '',
     closure: '',
   }
 
@@ -75,27 +63,6 @@ const AddProject = ({ userData }: { userData: IParent }) => {
     }
   }, [isSuccess])
 
-  const onSubmit = async (values: any) => {
-    // const updatedProject = {
-    //   ...values,
-    //   functionType: values.functionType.map((d: any) => d.name).join(', '),
-    //   salary: { ...values.salary, duration: values.salary.duration[0].name },
-    //   jobDescription: {
-    //     ...values.jobDescription,
-    //     points: values.jobDescription.map((v: any) => v.name),
-    //   },
-    //   jobRequirements: {
-    //     ...values.jobRequirements,
-    //     points: values.jobRequirements.map((v: any) => v.name),
-    //   },
-    //   workingConditions: {
-    //     ...values.workingConditions,
-    //     points: values.workingConditions.map((v: any) => v.name),
-    //   },
-    // }
-    mutate(values)
-  }
-
   const functionTypeList = [
     { name: 'Full-time', id: '1' },
     { name: 'Part-time', id: '2' },
@@ -107,6 +74,61 @@ const AddProject = ({ userData }: { userData: IParent }) => {
     { name: 'Per month', id: '4' },
   ]
 
+  const initSections: ISection[] = [
+    {
+      title: 'Responsibilities',
+      content: '• Developing new user-facing features using React.js',
+      id: nanoid(9),
+    },
+    {
+      title: 'Skills',
+      content:
+        '• Strong proficiency in JavaScript, including DOM manipulation and the JavaScript object model',
+      id: nanoid(9),
+    },
+  ]
+  const [sections, setSections] = useState<ISection[]>(initSections)
+
+  const [sectionError, setSectionError] = useState('')
+
+  const addNewSection = () => {
+    if (sections.length <= 10) {
+      sections.push({ title: '', content: '', id: nanoid(9) })
+      setSections((prev) => [...prev])
+      setSectionError('')
+    } else {
+      setSectionError('You cannot add more than 10 sections')
+    }
+  }
+
+  const removeSection = (id: string) => {
+    remove(sections, (sec) => sec.id === id)
+    setSections((prev) => [...prev])
+  }
+
+  const onChangeField = (fieldName: string, value: string, idx: number) => {
+    update(sections[idx], fieldName, () => value)
+    setSections((prev) => [...prev])
+  }
+
+  const onSubmit = async (values: any) => {
+    if (sections.length < 2) {
+      setSectionError('Atleast sections are required')
+    } else {
+      setSectionError('')
+      const updatedValues = {
+        ...values,
+        salary: {
+          ...values.salary,
+          duration: values.salary.duration[0].name,
+        },
+        sections,
+      }
+
+      mutate(updatedValues)
+    }
+  }
+
   return (
     <NarrowLayout>
       <Meta pageTitle="Add Project" />
@@ -117,6 +139,31 @@ const AddProject = ({ userData }: { userData: IParent }) => {
         onSubmit={onSubmit}
       >
         <Form className="space-y-8">
+          {/* // ~~~~~~~~~~~~~~~~~~~BASIC INFO~~~~~~~~~~~~~~~~~~ // */}
+          <Title size="gradient-border border-b pb-2 text-lg">
+            Basic information
+          </Title>
+          <Info text="Project Title and Brief Description is very important for more views and recruitments. Try to add more keywords related to the project in it. Like Javascript Developer, etc." />
+
+          <FormInput
+            label="Project Title"
+            id="title"
+            name="title"
+            required
+            placeholder="Add project title"
+          />
+
+          <FormInput
+            label="Brief Description"
+            id="briefDescription"
+            name="briefDescription"
+            placeholder="Give a little information about the job"
+            required
+            textarea
+            rows={5}
+            cols={255}
+          />
+
           <FormMultipleSelector
             label="Function Type"
             required
@@ -154,64 +201,74 @@ const AddProject = ({ userData }: { userData: IParent }) => {
             list={salaryDurationList}
           />
 
+          {/* // ~~~~~~~~~~~~~~~~~~~Detail INFO~~~~~~~~~~~~~~~~~~ // */}
+
+          <Title size="gradient-border border-b pb-2 text-lg">
+            Detail information about the job
+          </Title>
+          <div className="flex flex-col gap-y-16">
+            {map(sections, (section, sectionIdx) => (
+              <div key={section.id} className="flex relative flex-col gap-y-4">
+                <NormalFormInput
+                  onChange={(e) =>
+                    onChangeField('title', e.target.value, sectionIdx)
+                  }
+                  value={section.title}
+                  label="Title"
+                  id={section.id + '-title'}
+                  name="title"
+                  required
+                  placeholder="Perks"
+                />
+
+                <NormalFormInput
+                  label="Content"
+                  onChange={(e) =>
+                    onChangeField('content', e.target.value, sectionIdx)
+                  }
+                  value={section.content}
+                  id={section.id + '-briefDescription'}
+                  name="briefDescription"
+                  placeholder="• 5 Days Working"
+                  required
+                  textarea
+                  rows={5}
+                  cols={255}
+                />
+                {sectionIdx !== 0 && sectionIdx !== 1 && (
+                  <span
+                    onClick={() => removeSection(section.id)}
+                    className="xl:absolute xl:bottom-0 static on-hover-item  xl:-right-10  hover:bg-gray-800 transition-all cursor-pointer p-2 rounded-md text-red-500 xl:translate-x-full transform "
+                  >
+                    Delete section
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+          {sectionError && <Error errors={[sectionError]} />}
+
+          <div className="flex items-center justify-end">
+            <Button
+              rounded="rounded-lg"
+              fullWidth
+              gradient
+              size="lg"
+              onClick={addNewSection}
+              label="Add new section"
+            />
+          </div>
+
           <FormInput
-            label="Brief Description"
-            id="briefDescription"
-            name="briefDescription"
-            placeholder="Give a little information about the job"
+            label="Website"
+            id="website"
+            name="website"
             required
-            textarea
-            rows={5}
-            cols={255}
+            placeholder="Your company website url"
           />
 
-          <Divider />
-          <Title size="text-lg">Job Description</Title>
-          <FormInput
-            label="Job Description Header"
-            id="jobDescription[header]"
-            name="jobDescription[header]"
-            required
-            placeholder="Add title"
-          />
-          <List
-            label="Points"
-            placeholder="Make improvement plans"
-            name="jobDescription[points]"
-          />
-
-          <Divider />
-          <Title size="text-lg">Job Requirements</Title>
-          <FormInput
-            label="Job Requrements Header"
-            id="jobRequirements[header]"
-            name="jobRequirements[header]"
-            required
-            placeholder="Add title"
-          />
-          <List
-            label="Points"
-            placeholder="Managing and training the team of quality controllers that you manage"
-            name="jobRequirements[points]"
-          />
-
-          <Divider />
-          <Title size="text-lg">Working Conditions</Title>
-          <FormInput
-            label="Working Conditions Header"
-            id="workingConditions[header]"
-            name="workingConditions[header]"
-            required
-            placeholder="Add title"
-          />
-          <List
-            label="Points"
-            placeholder="A premium if you are not sick for a year!"
-            name="workingConditions[points]"
-          />
-
-          <Divider />
-          <Title size="text-lg">Closure</Title>
+          {/* // ~~~~~~~~~~~~~~~~~~~CLOSURE~~~~~~~~~~~~~~~~~~ // */}
+          <Title size="gradient-border border-b pb-2 text-lg">Closure</Title>
           <FormInput
             label="Closure"
             id="closure"

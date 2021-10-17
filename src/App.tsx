@@ -5,6 +5,10 @@ import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Router from 'Router'
+import Button from 'components/atoms/Button'
+import { links } from 'constants/Links'
+import { useParams } from 'react-router'
+import { useRouter } from 'hooks/useRouter'
 
 const App = () => {
   const { setDarkMode } = useUserContext()
@@ -45,6 +49,7 @@ const App = () => {
   const isUser = !isEmpty(userData)
 
   const template = userData?.other?.template || 1
+  const isBusiness = userData?.other?.accountType === 'business'
 
   const navProps = {
     isUser,
@@ -53,13 +58,27 @@ const App = () => {
     accountFilled,
   }
 
+  const pathname = window.location.pathname
+  const atJobsExplore = pathname.includes(links.exploreJobs())
+
   return (
-    <Router
-      userData={userData}
-      isUser={isUser}
-      template={template}
-      navProps={navProps}
-    />
+    <>
+      <Router
+        userData={userData}
+        isUser={isUser}
+        template={template}
+        navProps={navProps}
+      />
+      {!isBusiness && isUser && !atJobsExplore && (
+        <div className="fixed bottom-10 right-10 dark:text-white">
+          <Button
+            link={links.exploreJobs()}
+            label="Explore Projects & Jobs"
+            gradient
+          />
+        </div>
+      )}
+    </>
   )
 }
 

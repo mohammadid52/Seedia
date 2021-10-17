@@ -6,13 +6,12 @@ export const links = {
   FORGOT_PASSWORD: '/forgot-password',
   SIGNUP: '/signup',
   PROFILE: '/profile',
-  BROWSE_PRODUCTS: (id?: string) => `/browse-products/${id}`,
   getProfileById: (
     id?: string,
     template?: 1 | 2,
     viewMode: string = 'private'
   ) => `/${id}/${template}/${viewMode}`,
-  DASHBAORD: '/dashboard',
+  DASHBAORD: '/home',
   SETTINGS: '/settings',
   CHOOSE_ACCOUNT: '/choose-account',
   HOME: '/',
@@ -25,11 +24,24 @@ export const links = {
   BUSINESS_STEP_2: dynamicRoute('business', 'stepTwo'),
   // BASE_API_URL: process.env.REACT_APP_BASE_URL,
   BASE_API_URL: 'http://localhost:3005',
+
+  // ~~~~~~~~~~~~All product related stuff here~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+
   getProductUrl: (productId: string) => `/product/${productId}`,
   createReview: (productId: string) => `/create-review/${productId}`,
   addProduct: () => `/add-product`,
   cart: `/cart`,
   friendsPurchases: () => `/friends-purchases`,
-  addProject: () => `/add-project`,
-  viewProject: (projectId: string) => `/project/${projectId}`,
+  BROWSE_PRODUCTS: (id?: string) => `/browse-products/${id}`,
+  // Add all product link terms here
+  productTerms: ['product', 'review', 'cart', 'purchases'],
+
+  // All project related links should include 'project'
+  addProject: () => `/project/add-project`,
+  viewProject: (projectId: string) => `/project/p/${projectId}`,
+  viewMyProjects: () => `/project/myProjects`,
+  exploreJobs: () => `/jobs/explore`,
+  searchJobs: (searchQuery: string) => `/jobs?q=${searchQuery}`,
+  // Add all project/job link terms here
+  projectTerms: ['project', 'jobs'],
 }

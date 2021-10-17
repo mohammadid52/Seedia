@@ -22,6 +22,7 @@ import Divider from 'components/atoms/Divider'
 import { BiTrashAlt } from 'react-icons/bi'
 import { PlusIcon } from '@heroicons/react/solid'
 import EmptyState from 'components/atoms/EmptyState'
+import useAccountType from 'hooks/useAccountType'
 
 const ModalContentByType = ({
   type,
@@ -234,7 +235,7 @@ const Background = ({
   }
 
   // @ts-ignore
-  const { background = {} } = !isEmpty(userData) ? {} : userData
+  const { background } = userData
   const {
     // @ts-ignore
     summary = '',
@@ -418,6 +419,8 @@ const Background = ({
     setLocalFields({ ...localFields })
   }
 
+  const { isBusiness } = useAccountType(userData)
+
   return (
     <>
       {showModal.show && (
@@ -503,60 +506,62 @@ const Background = ({
                 </div>
               }
             />
-            <Section
-              sectionTitle="Interests"
-              Icon={CgDetailsMore}
-              withSectionHeadings={
-                interests &&
-                interests.length > 0 &&
-                authUser && (
-                  <div>
-                    <Button
-                      secondary
-                      invert
-                      bgColor="gray"
-                      onClick={() => {
-                        addOnTrigger('interests')
-                        setShowModal({ show: true, type: 'interests' })
-                      }}
-                      Icon={AiOutlineEdit}
-                      size="sm"
-                      label={'Edit'}
-                    />
-                  </div>
-                )
-              }
-              content={
-                <div>
-                  {interests && interests.length > 0 ? (
-                    <div className="flex items-center flex-wrap justify-start gap-x-4">
-                      {map(interests, (interest: any, idx: number) => (
-                        <Button
-                          key={interest.id}
-                          className="pointer-events-none"
-                          gradient
-                          invert
-                          bgColor="pink"
-                          label={interest.name}
-                        />
-                      ))}
+            {!isBusiness && (
+              <Section
+                sectionTitle="Interests"
+                Icon={CgDetailsMore}
+                withSectionHeadings={
+                  interests &&
+                  interests.length > 0 &&
+                  authUser && (
+                    <div>
+                      <Button
+                        secondary
+                        invert
+                        bgColor="gray"
+                        onClick={() => {
+                          addOnTrigger('interests')
+                          setShowModal({ show: true, type: 'interests' })
+                        }}
+                        Icon={AiOutlineEdit}
+                        size="sm"
+                        label={'Edit'}
+                      />
                     </div>
-                  ) : (
-                    <EmptyState
-                      title="No interests added"
-                      subtitle="Get started by adding your interests to your profile."
-                      btnText="Add interests"
-                      BtnIcon={PlusIcon}
-                      showEditOption={authUser}
-                      iconUrl={'/interest.png'}
-                      onBtnClick={() =>
-                        setShowModal({ show: true, type: 'interests' })
-                      }
-                    />
-                  )}
-                </div>
-              }
-            />
+                  )
+                }
+                content={
+                  <div>
+                    {interests && interests.length > 0 ? (
+                      <div className="flex items-center flex-wrap justify-start gap-x-4">
+                        {map(interests, (interest: any, idx: number) => (
+                          <Button
+                            key={interest.id}
+                            className="pointer-events-none"
+                            gradient
+                            invert
+                            bgColor="pink"
+                            label={interest.name}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <EmptyState
+                        title="No interests added"
+                        subtitle="Get started by adding your interests to your profile."
+                        btnText="Add interests"
+                        BtnIcon={PlusIcon}
+                        showEditOption={authUser}
+                        iconUrl={'/interest.png'}
+                        onBtnClick={() =>
+                          setShowModal({ show: true, type: 'interests' })
+                        }
+                      />
+                    )}
+                  </div>
+                }
+              />
+            )}
             <Section
               sectionTitle="Experiences"
               Icon={CgDetailsMore}
