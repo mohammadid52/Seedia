@@ -42,6 +42,7 @@ const shortUser = {
   profileUrl: 1,
   profilePicture: 1,
   other: 1,
+  email: 1,
 }
 
 module.exports = {

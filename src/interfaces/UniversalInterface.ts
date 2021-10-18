@@ -94,6 +94,7 @@ export interface IParent {
   pwvpCount?: number
   profileUrl?: string
   myId?: string
+  groups?: string[]
   recommendation?: {
     given: IRecommendation[]
     received: IRecommendation[]
@@ -310,4 +311,18 @@ export interface IRequest {
   postedBy?: string
   postedOn?: Date
   user?: IParent
+  views?: number
+}
+
+// ~~~~~~~~~~~~~~~~~~~Group Interfaces~~~~~~~~~~~~~~~~~~~~ //
+
+export interface IGroup {
+  _id?: string
+  groupName: string
+  groupDescription?: string
+  members?: string[]
+  createdOn?: Date
+  admin?: string[]
+  createdBy?: string
+  messages?: any
 }

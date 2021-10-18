@@ -50,4 +50,7 @@ export const links = {
   viewMyRequests: () => `/jobs/myRequests`,
   viewRequestById: (requestId: string) => `/request/r/${requestId}`,
   searchEmployees: (searchQuery: string) => `/request?q=${searchQuery}`,
+
+  // Groups
+  createGroup: () => `/group/create-group`,
 }

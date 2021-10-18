@@ -30,6 +30,11 @@ const addProject = (values: any) =>
 const addRequest = (values: any) =>
   network.post('/requests/add', { requestData: values })
 
+// create group
+
+const createGroup = (values: any) =>
+  network.post('/groups/create-group', { ...values })
+
 export {
   followUser,
   unFollowUser,
@@ -38,4 +43,5 @@ export {
   uploadMultipleImages,
   addProject,
   addRequest,
+  createGroup,
 }

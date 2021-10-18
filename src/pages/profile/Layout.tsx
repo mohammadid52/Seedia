@@ -1,6 +1,8 @@
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import { links } from 'constants/Links'
+import { useRouter } from 'hooks/useRouter'
+import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
 import React from 'react'
 import { SIDEBAR_HEIGHT } from 'state/Redux/constants'
@@ -24,7 +26,11 @@ const Layout = ({
   business?: boolean
   userData?: IParent
 }) => {
-  return business ? (
+  const route: any = useRouter()
+  const { userId: userIdFromParam } = route?.match?.params
+  const { iAmOwnerOfThisProfile } = useUser(userIdFromParam, userData)
+
+  return business && iAmOwnerOfThisProfile ? (
     <div
       style={{ marginTop: SIDEBAR_HEIGHT }}
       className="flex-grow w-full  mx-auto xl:px-8 justify-start max-w-360 items-start lg:flex flex-col"
@@ -33,7 +39,7 @@ const Layout = ({
         className="w-full"
         cardTitle="Business Features"
         content={
-          <div className="gap-4 grid grid-cols-2 sm:grid-cols-8">
+          <div className="gap-4 grid grid-cols-2 sm:grid-cols-6 ">
             <Button
               link={links.viewMyProjects()}
               label="View My Projects"
@@ -46,6 +52,7 @@ const Layout = ({
               gradient
             />
             <Button link={links.addProduct()} label="Add Product" gradient />
+            <Button link={links.createGroup()} label="Create group" gradient />
           </div>
         }
       />

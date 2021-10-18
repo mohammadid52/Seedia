@@ -44,7 +44,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
   // @ts-ignore
   useEffect(() => {
     const templateFromUser = commonProps?.userData?.other?.template
-    if (template !== templateFromUser) {
+    if (template !== templateFromUser && iAmOwnerOfThisProfile) {
       const changeTemplate = templateFromUser
       history.replace(
         links.getProfileById(
@@ -62,9 +62,11 @@ const Profile = ({ userData }: { userData: IParent }) => {
   }
   const { isBusiness } = useAccountType(userData)
 
-  return isLoading && !isFetched ? (
-    <Loading />
-  ) : (
+  if (isLoading && !isFetched) {
+    return <Loading />
+  }
+
+  return (
     <div className="bg-gray-100 dark:bg-gray-900 smooth-scroll pt-24">
       <DashboardHeader userData={userData} />
       <Sidebar />

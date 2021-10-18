@@ -5,19 +5,32 @@ import { useMutation, useQueryClient } from 'react-query'
 const useFollow = (followingList: string[], targetID: string) => {
   const queryClient = useQueryClient()
 
+  const [localList, setLocalList] = useState(followingList)
+
   const addFollow = useMutation(followUser, {
-    onSuccess: () => queryClient.invalidateQueries('follow-user'),
+    onSuccess: (data) => {
+      setLocalList([...data.data.data])
+
+      // setValues((prev: any) => ({ ...prev, following: data.data.data }))
+
+      return queryClient.invalidateQueries('follow-user')
+    },
   })
 
   const removeFollow = useMutation(unFollowUser, {
-    onSuccess: () => queryClient.invalidateQueries('unfollow-user'),
+    onSuccess: (data) => {
+      setLocalList([...data.data.data])
+      // setValues((prev: any) => ({ ...prev, following: data.data.data }))
+
+      return queryClient.invalidateQueries('unfollow-user')
+    },
   })
 
   const [following, setFollowing] = useState(false)
 
   useEffect(() => {
-    setFollowing(followingList?.includes(targetID))
-  }, [])
+    setFollowing(localList?.includes(targetID))
+  }, [localList])
 
   return { following, setFollowing, addFollow, removeFollow }
 }

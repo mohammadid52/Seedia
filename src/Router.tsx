@@ -6,6 +6,7 @@ import ChooseAccount from 'pages/account/other/ChooseAccount'
 import ChooseTemplate from 'pages/account/other/ChooseTemplate'
 import Dashboard from 'pages/dashboard'
 import ForgotPassword from 'pages/ForgotPassword'
+import CreateGroup from 'pages/groups/CreateGroup'
 import Home from 'pages/home/Home'
 import NotFound from 'pages/NotFound'
 import AddProduct from 'pages/products/AddProduct'
@@ -16,6 +17,7 @@ import AddProject from 'pages/project/AddProject'
 import SearchedJobs from 'pages/project/ListView/SearchedJobs'
 import ProjectView from 'pages/project/ProjectView'
 import RequestsList from 'pages/request/RequestsList'
+import RequestView from 'pages/request/RequestView'
 import ResetPassword from 'pages/ResetPassword'
 import { lazy } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
@@ -113,7 +115,7 @@ const Router = ({
                 <ProjectView userData={userData} />
               </Route>
               <Route exact path="/request/r/:requestId">
-                <ProjectView userData={userData} />
+                <RequestView userData={userData} />
               </Route>
               <Route path="/request">
                 <SearchedEmployees userData={userData} />
@@ -145,6 +147,15 @@ const Router = ({
                 path="/jobs/place-request"
               >
                 <PlaceRequest userData={userData} />
+              </PrivateRoute>
+              {/* Groups */}
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/group/create-group"
+              >
+                <CreateGroup userData={userData} />
               </PrivateRoute>
               <PrivateRoute
                 // @ts-ignore

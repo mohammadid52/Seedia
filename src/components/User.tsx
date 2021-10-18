@@ -10,10 +10,14 @@ const User = ({
   user,
   following = false,
   disableFollow = false,
+  onBtnClick = undefined,
+  btnText = '',
 }: {
   user?: IParent
   following?: boolean
   disableFollow?: boolean
+  onBtnClick?: any
+  btnText?: string
 }) => {
   const isBusiness = user?.other?.accountType === 'business'
   const isPersonal = user?.other?.accountType === 'personal'
@@ -111,11 +115,15 @@ const User = ({
           className="mt-6"
           invert
           onClick={() =>
-            $following ? onUnFollowUser(user?._id) : onFollowUser(user?._id)
+            onBtnClick !== undefined
+              ? onBtnClick()
+              : $following
+              ? onUnFollowUser(user?._id)
+              : onFollowUser(user?._id)
           }
           rounded="rounded-full"
           size="lg"
-          label={$following ? 'Following' : 'Follow'}
+          label={onBtnClick ? btnText : $following ? 'Following' : 'Follow'}
         />
       </div>
     </div>

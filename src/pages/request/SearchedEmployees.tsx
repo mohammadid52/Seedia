@@ -5,7 +5,9 @@ import Title from 'components/atoms/Title'
 import Loading from 'components/Loading'
 import NarrowLayout from 'containers/NarrowLayout'
 import { useHeaderContext } from 'context/HeaderContext'
-import { IParent, IProject } from 'interfaces/UniversalInterface'
+import { IParent, IRequest } from 'interfaces/UniversalInterface'
+import { map } from 'lodash'
+import RequestCard from 'pages/request/RequestCard'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -25,8 +27,6 @@ const SearchedEmployees = ({ userData }: { userData: IParent }) => {
     enabled: false,
   })
 
-  const isBusiness = userData?.other?.accountType === 'business'
-
   const parsed = queryString.parse(window.location.search)
 
   const searchedQuery = parsed.q.toString()
@@ -41,27 +41,6 @@ const SearchedEmployees = ({ userData }: { userData: IParent }) => {
     }
   }, [window.location.search, isSearched])
 
-  //   const skills =
-  //     userData?.background && !isBusiness
-  //       ? map(userData?.background.skills, (d) => d.name)
-  //       : []
-
-  //   const jobTitleTags = !isBusiness ? getTags(userData?.company?.jobTitle) : []
-  //   const jobTypeTags = !isBusiness ? getTags(userData?.company?.jobType) : []
-
-  //   const {
-  //     data: relatedJobsData,
-  //     isFetched: rIsFetched,
-  //     isLoading: rIsLoading,
-  //   } = useQuery(
-  //     'related-jobs',
-  //     () => fetchRelatedJobs([...skills, ...jobTitleTags, ...jobTypeTags]),
-  //     { enabled: !isBusiness }
-  //   )
-
-  //   const profiles: IProject[] =
-  //     rIsFetched && !rIsLoading ? relatedJobsData.data.data : {}
-
   useEffect(() => {
     if (searchQuery.length >= 3) {
       searchApi()
@@ -69,8 +48,7 @@ const SearchedEmployees = ({ userData }: { userData: IParent }) => {
     }
   }, [searchQuery])
 
-  const searchedJobsData: IProject[] =
-    isFetched && !isLoading ? data.data.data : {}
+  const searchedData: IRequest[] = isFetched && !isLoading ? data.data.data : []
 
   if (isLoading && !isFetched) {
     return <Loading />
@@ -94,25 +72,28 @@ const SearchedEmployees = ({ userData }: { userData: IParent }) => {
             <Title>
               You have searched for `
               <span className="gradient-text">{searchQuery}</span>`. Found{' '}
-              {searchedJobsData?.length || 0} results
+              {searchedData?.length || 0} results
             </Title>
           }
         />
       )}
 
-      {/* <div className="mt-12">
-        {searchedJobsData.length > 0 && (
-          <SectionTitle title={`Jobs Related To ${searchQuery}`} />
-        )}
-
-        {searchedJobsData.length > 0 && (
-          <div className="grid  gap-4 grid-cols-4">
-            {map(searchedJobsData, (project) => (
-              <ProjectCard userId={userData._id.toString()} project={project} />
-            ))}
-          </div>
-        )}
-      </div> */}
+      {searchedData && searchedData.length > 0 && (
+        <div className="mt-12">
+          {searchedData.length > 0 && (
+            <div className="grid  gap-4 grid-cols-4">
+              {map(searchedData, (request) => (
+                <RequestCard
+                  isLoading={!isFetched && isLoading}
+                  userData={userData}
+                  userId={userData._id.toString()}
+                  request={request}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       {/* 
       {!isBusiness &&
         searchedJobsData.length === 0 &&

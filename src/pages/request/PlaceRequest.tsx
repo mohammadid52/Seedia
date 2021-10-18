@@ -9,6 +9,7 @@ import List from 'components/List'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { Form, Formik } from 'formik'
+import useAccountType from 'hooks/useAccountType'
 import { IParent, IRequest } from 'interfaces/UniversalInterface'
 import { useEffect, useState } from 'react'
 import { useMutation } from 'react-query'
@@ -33,12 +34,13 @@ const PlaceRequest = ({ userData }: { userData: IParent }) => {
 
   const { mutate, isLoading, isError, error, isSuccess } =
     useMutation(addRequest)
+  const { isBusiness } = useAccountType(userData)
 
   const [skillsError, setSkillsError] = useState('')
 
   const history = useHistory()
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess || isBusiness) {
       history.push(
         links.getProfileById(
           userData.profileUrl,
@@ -46,7 +48,7 @@ const PlaceRequest = ({ userData }: { userData: IParent }) => {
         )
       )
     }
-  }, [isSuccess])
+  }, [isSuccess, isBusiness])
 
   const onSubmit = async (values: any) => {
     if (values.skills.length > 0) {

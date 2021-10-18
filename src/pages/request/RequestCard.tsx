@@ -52,7 +52,7 @@ const RequestCard = ({
               isLoading={isLoading}
               className="tracking-wide mt-1 gradient-text"
             >
-              {request?.user?.email}
+              {user?.email}
             </Title>
             <Title
               size="text-sm"
@@ -68,12 +68,11 @@ const RequestCard = ({
                   {getFromNowTime(request.postedOn)}
                 </div>
 
-                <div>
+                <div onClick={(e) => e.stopPropagation()}>
                   {iAmOwnerOfThisProject ? (
                     <Button
                       label="View"
-                      onClick={(e: any) => {
-                        e.stopPropagation()
+                      onClick={() => {
                         history.push(links.viewRequestById(request._id))
                       }}
                       disabled={isLoading}
@@ -84,15 +83,10 @@ const RequestCard = ({
                       disabled={isLoading}
                       label="View Profile"
                       gradient
-                      onClick={(e: any) => {
-                        e.stopPropagation()
-                        history.push(
-                          links.getProfileById(
-                            user.profileUrl,
-                            user?.other?.template || 1
-                          )
-                        )
-                      }}
+                      link={links.getProfileById(
+                        user.profileUrl,
+                        user?.other?.template || 1
+                      )}
                     />
                   )}
                 </div>

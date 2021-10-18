@@ -148,9 +148,11 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     }
   }, [userIdFromParam, template])
 
-  return isLoading && !isFetched ? (
-    <Loading />
-  ) : (
+  if (isLoading && !isFetched) {
+    return <Loading />
+  }
+
+  return (
     <div className="bg-gray-100 dark:bg-gray-900 smooth-scroll pt-24">
       <DashboardHeader userData={userData} />
 

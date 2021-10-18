@@ -32,7 +32,9 @@ const fetchRelatedJobs = (relatedTags: string[]) =>
 // Request
 const fetchMyRequests = () => network.get(`/requests/my/list`)
 const fetchSearchedEmployees = (searchQuery: string) =>
-  network.get(`/request/list?search=${searchQuery}`)
+  network.get(`/requests/list?search=${searchQuery}`)
+const fetchSellerById = (projectId: string) =>
+  network.get(`/requests/r/${projectId}`)
 
 export {
   fetchProductDetails,
@@ -48,4 +50,5 @@ export {
   fetchShortUsers,
   fetchMyRequests,
   fetchSearchedEmployees,
+  fetchSellerById,
 }

@@ -17,10 +17,7 @@ const ProfileCard = ({
   targetId?: string
   sectionTitle?: string
 }) => {
-  const { iAmOwnerOfThisProfile, isFetched, isLoading } = useUser(
-    userData.profileUrl,
-    userData
-  )
+  const { iAmOwnerOfThisProfile } = useUser(userData.profileUrl, userData)
   const { following, addFollow, removeFollow } = useFollow(
     userData?.following,
     targetId
@@ -57,7 +54,7 @@ const ProfileCard = ({
                 {!iAmOwnerOfThisProfile && (
                   <Button
                     onClick={() =>
-                      following
+                      !following
                         ? addFollow.mutate(targetId)
                         : removeFollow.mutate(targetId)
                     }

@@ -1,4 +1,4 @@
-import { fetchProjectById } from 'apis/queries'
+import { fetchSellerById } from 'apis/queries'
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Meta from 'components/atoms/Meta/Meta'
@@ -6,61 +6,11 @@ import Loading from 'components/Loading'
 import NarrowLayout from 'containers/NarrowLayout'
 import useFollow from 'hooks/useFollow'
 import useUser from 'hooks/useUser'
-import { IParent, IProject, ISection } from 'interfaces/UniversalInterface'
-import map from 'lodash/map'
+import { IParent, IRequest } from 'interfaces/UniversalInterface'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { avatarPlaceholder } from 'state/Redux/constants'
-import { classNames } from 'utils/classNames'
-import { getFromNowTime, getTags, join } from 'utils/functions'
-
-const Section = ({ title, content }: ISection) => {
-  return (
-    <div className="my-8">
-      {title && (
-        <h4 className="mb-4 font-semibold tracking-tight text-lg text-gray-900 dark:text-white">
-          {title}
-        </h4>
-      )}
-      <p className="font-medium whitespace-pre-line tracking-tight text-base text-gray-600 dark:text-gray-400">
-        {content}
-      </p>
-    </div>
-  )
-}
-
-const DescriptionItem = ({
-  name,
-  value,
-  valueClassName,
-  nameClassName,
-}: {
-  name: string
-  value: string
-  valueClassName?: string
-  nameClassName?: string
-}) => {
-  return (
-    <div className="py-4 border-b border-gray-200 dark:border-gray-700 sm:py-5 sm:grid sm:grid-cols-2 sm:gap-4 ">
-      <dt
-        className={classNames(
-          nameClassName,
-          'text-sm uppercase font-medium gradient-text text-left'
-        )}
-      >
-        {name}
-      </dt>
-      <dd
-        className={classNames(
-          valueClassName,
-          'mt-1 text-sm dark:text-white text-right text-gray-900 sm:mt-0 sm:col-span-1'
-        )}
-      >
-        {value}
-      </dd>
-    </div>
-  )
-}
+import { getTags } from 'utils/functions'
 
 const TopCard = ({
   userData,
@@ -108,14 +58,14 @@ const TopCard = ({
                 </div>
                 <div className="space-y-1">
                   <h1 className="text-2xl leading-6 font-semibold dark:text-white text-gray-900">
-                    {userData?.business.name}
+                    {userData?.fullName}
                   </h1>
                   <h5 className="text-base leading-6 font-light mt-2 max-w-132 dark:text-gray-400 text-gray-900">
-                    {userData?.location.address}, {userData?.location.city},{' '}
-                    {userData?.location.country}
+                    {userData?.location.address || ''},{' '}
+                    {userData?.location.city}, {userData?.location.country}
                   </h5>
                   <h5 className="text-base leading-6 font-light mt-2 max-w-132 dark:text-gray-400 text-gray-900">
-                    {userData?.business.email}
+                    {userData?.email}
                   </h5>
                 </div>
               </div>
@@ -124,17 +74,18 @@ const TopCard = ({
                   <div className="grid grid-cols-2 gap-x-4">
                     <Button
                       onClick={() =>
-                        !following
-                          ? addFollow.mutate(userData._id)
-                          : removeFollow.mutate(userData._id)
+                        following
+                          ? removeFollow.mutate(userData._id)
+                          : addFollow.mutate(userData._id)
                       }
-                      label="Follow"
+                      invert={following}
+                      label={following ? 'Following' : 'Follow'}
                       gradient
                       size="lg"
                       className="px-6"
                     />
                     <Button
-                      label="Apply"
+                      label="Contact"
                       link={websiteUrl}
                       gradient
                       className="px-6"
@@ -155,17 +106,17 @@ const TopCard = ({
   )
 }
 
-const ProjectView = ({ userData }: { userData?: IParent }) => {
+const RequestView = ({ userData }: { userData?: IParent }) => {
   const params: any = useParams()
-  const projectId = params.projectId
+  const requestId = params.requestId
 
-  const { isLoading, data, isFetched } = useQuery('project', () =>
-    fetchProjectById(projectId)
+  const { isLoading, data, isFetched } = useQuery('request-view', () =>
+    fetchSellerById(requestId)
   )
-  const project: IProject = isFetched && !isLoading ? data.data.data : {}
+  const requestData: IRequest = isFetched && !isLoading ? data.data.data : {}
 
   const { iAmOwnerOfThisProfile } = useUser(
-    project?.company?.profileUrl,
+    requestData?.user?.profileUrl,
     userData,
     false
   )
@@ -174,9 +125,7 @@ const ProjectView = ({ userData }: { userData?: IParent }) => {
     return <Loading />
   }
 
-  const company = project.company
-  const { salary, location } = project
-  const { business, background } = company
+  const { user } = requestData
 
   return (
     <NarrowLayout
@@ -186,20 +135,23 @@ const ProjectView = ({ userData }: { userData?: IParent }) => {
     >
       <Meta
         pageUrl={window.location.href}
-        imageUrl={company && company.profilePicture}
-        pageTitle={`${business.name} | ${business.typeOfBusiness} | Jobs | 13RMS `}
-        title={business.name}
-        description={project.briefDescription}
-        keywords={getTags(project.briefDescription)}
+        imageUrl={user && user.profilePicture}
+        pageTitle={`${requestData.title} | 13RMS `}
+        title={requestData.title}
+        description={requestData.description}
+        keywords={getTags(
+          `${requestData.description} ${
+            requestData.title
+          } ${requestData.skills.join('')}`
+        )}
         // userName={''}
       />
       <div className="flex flex-col gap-y-12">
         <TopCard
-          followingList={userData.following}
-          views={project.views}
-          websiteUrl={project.website}
+          followingList={userData?.following || []}
+          views={requestData.views}
           iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
-          userData={company}
+          userData={user}
         />
         <Card
           content={
@@ -209,45 +161,14 @@ const ProjectView = ({ userData }: { userData?: IParent }) => {
                   Description
                 </h1>
                 <div className="whitespace-pre-line">
-                  {project.briefDescription}
+                  {requestData.description}
                 </div>
                 <br />
-                <div className="flex flex-col gap-y-4">
-                  {map(project.sections, (section) => (
-                    <Section title={section.title} content={section.content} />
-                  ))}
-                  <Section title={''} content={project.closure} />
-                </div>
-              </div>
-              <div>
-                <h1 className="dark:text-white text-gray-900 text-2xl mb-4 font-semibold">
-                  Function Description
-                </h1>
-                <dl className="">
-                  <DescriptionItem
-                    name={'Function Type'}
-                    value={join(project.functionType, 'name')}
-                  />
-                  <DescriptionItem
-                    name={'Salary'}
-                    value={`${salary.min} - ${salary.max} / ${salary.duration}`}
-                  />
-                  <DescriptionItem
-                    name={'Location'}
-                    value={`${location?.city || '--'}, ${
-                      location?.country || '--'
-                    }`}
-                  />
-                  <DescriptionItem
-                    name={'Posted'}
-                    value={getFromNowTime(project.postedOn)}
-                  />
-                </dl>
               </div>
             </div>
           }
         />
-        <Card
+        {/* <Card
           content={
             <div className="dark:text-gray-400 grid grid-cols-1 gap-x-12 sm:grid-cols-3 text-gray-900">
               <div className="sm:col-span-2">
@@ -298,10 +219,10 @@ const ProjectView = ({ userData }: { userData?: IParent }) => {
               </div>
             </div>
           }
-        />
+        /> */}
       </div>
     </NarrowLayout>
   )
 }
 
-export default ProjectView
+export default RequestView

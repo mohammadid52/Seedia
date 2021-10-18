@@ -44,7 +44,41 @@ app.post('/add', auth, async (req, res) => {
       .json(responseMsg('error', 'Request data not found', {}))
   }
 })
-app.get('/r/:requestId', auth, async (req, res) => {})
+app.get('/r/:requestId', auth, async (req, res) => {
+  const { requestId } = req.params
+  const token = req.user
+
+  const requestsCollection = res.locals.requestsCollection
+
+  const usersCollection = res.locals.usersCollection
+
+  if (requestId) {
+    const requestData = await getItem(requestsCollection, requestId)
+    const user = await getItem(usersCollection, requestData.postedBy)
+    if (requestData && user) {
+      const itsMyRequest = user._id.toString() === token?.id
+
+      let currentViews = requestData?.views || 0
+      let updatedViews = itsMyRequest ? currentViews : currentViews + 1
+      const updated = {
+        ...requestData,
+        user: user,
+      }
+      if (currentViews !== updatedViews) {
+        await updateData(requestsCollection, requestId, { views: updatedViews })
+      }
+
+      return res
+        .status(202)
+        .json(responseMsg('error', 'Request fetched successfully ', updated))
+    } else {
+      return res
+        .status(403)
+        .json(responseMsg('error', 'Cannot find project ', {}))
+    }
+  }
+})
+
 app.get('/list', async (req, res) => {
   const { search = '', related = [''] } = req.query
 
@@ -66,19 +100,23 @@ app.get('/list', async (req, res) => {
         .toArray()
 
       if (searchedEmployees.length > 0) {
+        const wrapId = searchedEmployees.map((pr) => addObjectId(pr.postedBy))
+
         const users = await getManyItems(
           usersCollection,
           {
             _id: {
-              $in: searchedEmployees.map((pr) => addObjectId(pr.postedBy)),
+              $in: wrapId,
             },
           },
           shortUser
         )
+
         searchedEmployees = searchedEmployees.map((pr) => {
           const user = users.find(
             (c) => c._id.toString() === pr.postedBy.toString()
           )
+
           return {
             ...pr,
             user,
