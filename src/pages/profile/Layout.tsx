@@ -52,7 +52,6 @@ const Layout = ({
               gradient
             />
             <Button link={links.addProduct()} label="Add Product" gradient />
-            <Button link={links.createGroup()} label="Create group" gradient />
           </div>
         }
       />

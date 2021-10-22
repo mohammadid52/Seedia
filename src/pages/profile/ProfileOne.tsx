@@ -10,6 +10,7 @@ import { useRouter } from 'hooks/useRouter'
 import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
+import GroupList from 'pages/groups/GroupList'
 import About from 'pages/profile/About'
 import AdditionalFeatures from 'pages/profile/AdditionalFeatures'
 import Background from 'pages/profile/Background'
@@ -84,7 +85,10 @@ const Profile = ({ userData }: { userData: IParent }) => {
               firstCol={
                 <div className="space-y-8">
                   <About {...commonProps} />
-                  {!isBusiness && <AdditionalFeatures />}
+                  {!isBusiness && iAmOwnerOfThisProfile && (
+                    <AdditionalFeatures />
+                  )}
+                  {iAmOwnerOfThisProfile && <GroupList userId={userData._id} />}
                 </div>
               }
               secondCol={

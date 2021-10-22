@@ -1,10 +1,10 @@
-import React from 'react'
+import { fetchUsers } from 'apis/queries'
 import Modal from 'components/atoms/Modal'
-import { IParent } from 'interfaces/UniversalInterface'
-import { useQuery } from 'react-query'
-import { fetchShortUsers, fetchUsers } from 'apis/queries'
-import { map } from 'lodash'
 import User from 'components/User'
+import { IParent } from 'interfaces/UniversalInterface'
+import { map } from 'lodash'
+import React from 'react'
+import { useQuery } from 'react-query'
 
 const UsersModal = ({
   show,
@@ -19,7 +19,6 @@ const UsersModal = ({
   userData: IParent
   setShow: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
-  console.log('🚀 ~ file: UsersModal.tsx ~ line 22 ~ members', members)
   const config = {
     users: userData.following,
   }

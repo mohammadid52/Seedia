@@ -1,3 +1,4 @@
+import '@material-tailwind/react/tailwind.css'
 import Button from 'components/atoms/Button'
 import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'

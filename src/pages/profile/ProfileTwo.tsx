@@ -26,6 +26,7 @@ import { useRouter } from 'hooks/useRouter'
 import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
+import GroupList from 'pages/groups/GroupList'
 import AdditionalFeatures from 'pages/profile/AdditionalFeatures'
 import Layout from 'pages/profile/Layout'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
@@ -192,7 +193,8 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                   </div>
                 }
               />
-              {!isBusiness && <AdditionalFeatures />}
+              {!isBusiness && iAmOwnerOfThisProfile && <AdditionalFeatures />}
+              {iAmOwnerOfThisProfile && <GroupList userId={userData._id} />}
             </div>
           }
           secondCol={

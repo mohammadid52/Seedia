@@ -53,4 +53,5 @@ export const links = {
 
   // Groups
   createGroup: () => `/group/create-group`,
+  groupById: (groupId: string) => `/group/g/${groupId}`,
 }

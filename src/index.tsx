@@ -2,6 +2,7 @@ import App from 'App'
 import Loading from 'components/Loading'
 import UserContextProvider from 'context/UserContext'
 import HeaderContextProvider from 'context/HeaderContext'
+import PostContextProvider from 'context/PostContext'
 import 'lightgallery/css/lg-thumbnail.css'
 import 'lightgallery/css/lg-zoom.css'
 // import styles
@@ -48,11 +49,13 @@ const MainApp = ({ hideLoader }: any) => {
         <QueryClientProvider client={queryClient}>
           <Provider store={store}>
             <UserContextProvider>
-              <HeaderContextProvider>
-                <div className="min-h-screen w-screen">
-                  <App />
-                </div>
-              </HeaderContextProvider>
+              <PostContextProvider>
+                <HeaderContextProvider>
+                  <div className="min-h-screen w-screen">
+                    <App />
+                  </div>
+                </HeaderContextProvider>
+              </PostContextProvider>
             </UserContextProvider>
           </Provider>
           <ReactQueryDevtools />

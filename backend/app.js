@@ -11,6 +11,7 @@ const reviewsRouter = require('./apis/reviews')
 const projectRouter = require('./apis/project')
 const requestsRouter = require('./apis/requests')
 const groupsRouter = require('./apis/groups')
+const postRouter = require('./apis/posts')
 
 const app = express()
 const bodyParser = require('body-parser')
@@ -36,6 +37,7 @@ client.connect(
     const projectsCollection = db.collection('projects')
     const requestsCollection = db.collection('requests')
     const groupsCollection = db.collection('groups')
+    const postCollection = db.collection('posts')
 
     const passUserCollection = async (req, res, next) => {
       res.locals.usersCollection = usersCollection
@@ -58,6 +60,10 @@ client.connect(
     }
     const passGroupsCollection = (req, res, next) => {
       res.locals.groupsCollection = groupsCollection
+      next()
+    }
+    const passPostCollection = (req, res, next) => {
+      res.locals.postCollection = postCollection
       next()
     }
 
@@ -87,6 +93,7 @@ client.connect(
       requestsRouter
     )
     app.use('/groups', passUserCollection, passGroupsCollection, groupsRouter)
+    app.use('/post', passUserCollection, passPostCollection, postRouter)
 
     app.use('/auth', passUserCollection, authenticationRouter)
 

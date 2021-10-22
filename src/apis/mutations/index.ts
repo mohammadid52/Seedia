@@ -35,6 +35,19 @@ const addRequest = (values: any) =>
 const createGroup = (values: any) =>
   network.post('/groups/create-group', { ...values })
 
+const makeGroupAdmin = ({
+  groupId,
+  memberId,
+  action,
+}: {
+  groupId: string
+  memberId: string
+  action: string
+}) => network.post(`/groups/admin/${groupId}/${memberId}?action=${action}`)
+
+// Posts
+const addPost = (data: any) => network.post(`/post/add-post`, { ...data })
+
 export {
   followUser,
   unFollowUser,
@@ -44,4 +57,6 @@ export {
   addProject,
   addRequest,
   createGroup,
+  makeGroupAdmin,
+  addPost,
 }

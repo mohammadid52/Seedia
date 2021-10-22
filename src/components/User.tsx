@@ -1,14 +1,13 @@
 import Badge from 'components/atoms/Badge'
 import Button from 'components/atoms/Button'
 import { links } from 'constants/Links'
-import { network } from 'helpers'
+import useFollow from 'hooks/useFollow'
 import { IParent } from 'interfaces/UniversalInterface'
-import { useState } from 'react'
 import { avatarPlaceholder } from 'state/Redux/constants'
 
 const User = ({
   user,
-  following = false,
+
   disableFollow = false,
   onBtnClick = undefined,
   btnText = '',
@@ -22,26 +21,10 @@ const User = ({
   const isBusiness = user?.other?.accountType === 'business'
   const isPersonal = user?.other?.accountType === 'personal'
 
-  const [$following, setFollowing] = useState(following)
-
-  const onFollowUser = async (id?: string) => {
-    try {
-      await network.post('/user/follow/' + id)
-
-      setFollowing(true)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-  const onUnFollowUser = async (id?: string) => {
-    try {
-      await network.post('/user/unfollow/' + id)
-
-      setFollowing(false)
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  const { following, addFollow, removeFollow } = useFollow(
+    user.following || [],
+    user._id
+  )
 
   return (
     <div
@@ -108,7 +91,7 @@ const User = ({
       </div>
       <div className="absolute bottom-3 items-center flex justify-center">
         <Button
-          title={$following ? 'Unfollow' : 'Follow'}
+          title={following ? 'Unfollow' : 'Follow'}
           gradient
           disabled={disableFollow}
           gradientHover={false}
@@ -117,13 +100,13 @@ const User = ({
           onClick={() =>
             onBtnClick !== undefined
               ? onBtnClick()
-              : $following
-              ? onUnFollowUser(user?._id)
-              : onFollowUser(user?._id)
+              : following
+              ? removeFollow.mutate(user?._id)
+              : addFollow.mutate(user?._id)
           }
           rounded="rounded-full"
           size="lg"
-          label={onBtnClick ? btnText : $following ? 'Following' : 'Follow'}
+          label={onBtnClick ? btnText : following ? 'Following' : 'Follow'}
         />
       </div>
     </div>

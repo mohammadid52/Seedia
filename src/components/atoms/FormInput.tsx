@@ -1,10 +1,9 @@
 import { Transition } from '@headlessui/react'
 import { ExclamationCircleIcon } from '@heroicons/react/solid'
+import FormError from 'components/atoms/form/FormError'
 import { useField } from 'formik'
 import React, { useState } from 'react'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import FormError from 'components/atoms/form/FormError'
-import { doResize } from 'utils/functions'
 
 const FormInput = ({
   label,
@@ -19,11 +18,13 @@ const FormInput = ({
   required,
   showPasswordButton = false,
   optional = false,
+  hideBorders = false,
   textarea = false,
   setUnsavedChanges = () => {},
   withButton,
   disabled,
   rows,
+  textClass = 'sm:text-sm',
   cols,
   ...props
 }: {
@@ -32,6 +33,7 @@ const FormInput = ({
   name?: string
   required?: boolean
   optional?: boolean
+  hideBorders?: boolean
   type?: string
   placeholder?: string
   error?: string
@@ -45,6 +47,7 @@ const FormInput = ({
   textarea?: boolean
   disabled?: boolean
   withButton?: any
+  textClass?: string
   setUnsavedChanges?: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const errorClass = `border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500`
@@ -86,15 +89,16 @@ const FormInput = ({
             <textarea
               rows={rows}
               cols={cols}
-              onKeyDown={doResize}
               id={id}
               placeholder={placeholder}
               onChange={onChange}
               className={`block border w-full pr-10 ${
-                error
-                  ? errorClass
-                  : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
-              } sm:text-sm p-2 rounded-md dark:bg-gray-900 dark:border-gray-700 dark:text-white`}
+                error ? errorClass : ''
+              } ${textClass} p-2 ${
+                hideBorders
+                  ? 'border-transparent'
+                  : 'dark:border-gray-700 border-gray-300'
+              } rounded-md dark:bg-gray-900 transition-all  dark:text-white`}
             />
             <div className="flex items-center absolute transition-all duration-200 top-0 right-0 p-3 ">
               {meta.touched && meta.error && (
@@ -141,10 +145,12 @@ const FormInput = ({
                 showPasswordButton ? (showPass ? 'text' : 'password') : type
               }
               className={`block border w-full pr-10 ${
-                error
-                  ? errorClass
-                  : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
-              } sm:text-sm p-2 rounded-md dark:bg-gray-900 dark:border-gray-700 dark:text-white`}
+                error ? errorClass : ''
+              } sm:text-sm p-2 ${
+                hideBorders
+                  ? 'border-transparent '
+                  : 'dark:border-gray-700 border-gray-300'
+              } rounded-md dark:bg-gray-900 dark:text-white`}
             />
             <div className="flex items-center absolute transition-all duration-200 inset-y-0 right-0 pr-3 ">
               {meta.touched && meta.error && (

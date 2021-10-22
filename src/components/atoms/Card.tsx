@@ -37,7 +37,7 @@ const Card = ({
 
   return (
     <div style={{ ...style }} id={id} className={`${transparentClass} `}>
-      <div className={transform ? 'transform scale-95' : 'p-4'}>
+      <div className={transform ? 'p-2 text-sm' : 'p-4'}>
         {cardTitle && (
           <>
             <div className="flex items-center  justify-between">

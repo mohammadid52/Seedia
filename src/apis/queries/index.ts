@@ -36,6 +36,13 @@ const fetchSearchedEmployees = (searchQuery: string) =>
 const fetchSellerById = (projectId: string) =>
   network.get(`/requests/r/${projectId}`)
 
+// Group
+const fetchGroups = () => network.get(`/groups/list`)
+const fetchGroupById = (groupId: string) => network.get(`/groups/g/${groupId}`)
+
+// Posts
+const fetchFeed = (limit: number) => network.get(`/post/feed?limit=${limit}`)
+
 export {
   fetchProductDetails,
   fetchAllProducts,
@@ -51,4 +58,7 @@ export {
   fetchMyRequests,
   fetchSearchedEmployees,
   fetchSellerById,
+  fetchGroups,
+  fetchFeed,
+  fetchGroupById,
 }

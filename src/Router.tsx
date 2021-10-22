@@ -7,6 +7,7 @@ import ChooseTemplate from 'pages/account/other/ChooseTemplate'
 import Dashboard from 'pages/dashboard'
 import ForgotPassword from 'pages/ForgotPassword'
 import CreateGroup from 'pages/groups/CreateGroup'
+import SingleGroupView from 'pages/groups/SingleGroupView'
 import Home from 'pages/home/Home'
 import NotFound from 'pages/NotFound'
 import AddProduct from 'pages/products/AddProduct'
@@ -156,6 +157,15 @@ const Router = ({
                 path="/group/create-group"
               >
                 <CreateGroup userData={userData} />
+              </PrivateRoute>
+              {/* See single group */}
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/group/g/:groupId"
+              >
+                <SingleGroupView userData={userData} />
               </PrivateRoute>
               <PrivateRoute
                 // @ts-ignore

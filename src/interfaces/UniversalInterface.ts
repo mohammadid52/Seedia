@@ -1,5 +1,16 @@
 import { Moment } from 'moment'
 import { User } from './UserInterface'
+
+// ~~~~~~~~~~~~~Other Interfaces~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+
+export interface NavProps {
+  isUser?: boolean
+  template?: 1 | 2
+  userId?: string
+  profileUrl?: string
+  accountFilled?: boolean
+}
+
 // ~~~~~~~~~~~~~User Interfaces~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 export interface IAbout {
   currentCompany?: string
@@ -84,12 +95,13 @@ export interface IParent {
   profilePicture?: string
   email?: string
   piv?: string[]
+  posts: IPost[]
   mobileNumber: string
   pwvp?: string[]
   following?: string[]
   followers?: string[]
   reviews: string[] // collection of reviewId
-  purchases: { productId: string; purchasedOn: Date }[] // collection of productId
+  purchases: IPurchases[] // collection of productId
   pivCount?: number
   pwvpCount?: number
   profileUrl?: string
@@ -99,19 +111,26 @@ export interface IParent {
     given: IRecommendation[]
     received: IRecommendation[]
   }
-  business?: {
-    name: string
-    email: string
-    number: string
-    additionalInfo: string
-    legalNumber: string
-    businessRegNumber: string
-    typeOfBusiness: string
-    bussinessEntityType: string
-    relationshipToBusiness: string
-    projects?: string[]
-    products?: string[]
-  }
+  business?: IBusiness
+}
+
+export interface IPurchases {
+  productId: string
+  purchasedOn: Date
+}
+
+export interface IBusiness {
+  name: string
+  email: string
+  number: string
+  additionalInfo: string
+  legalNumber: string
+  businessRegNumber: string
+  typeOfBusiness: string
+  bussinessEntityType: string
+  relationshipToBusiness: string
+  projects?: string[]
+  products?: string[]
 }
 
 export interface IShortProfile {
@@ -124,14 +143,6 @@ export interface IShortProfile {
   profilePicture?: string
   other?: IOther
   email?: string
-}
-
-export interface NavProps {
-  isUser?: boolean
-  template?: 1 | 2
-  userId?: string
-  profileUrl?: string
-  accountFilled?: boolean
 }
 
 export interface IExperience {
@@ -316,13 +327,36 @@ export interface IRequest {
 
 // ~~~~~~~~~~~~~~~~~~~Group Interfaces~~~~~~~~~~~~~~~~~~~~ //
 
+export interface IGroupMember extends IShortProfile {
+  isAdmin: boolean
+}
 export interface IGroup {
   _id?: string
   groupName: string
   groupDescription?: string
-  members?: string[]
+  members?: string[] | IGroupMember[]
   createdOn?: Date
   admin?: string[]
   createdBy?: string
   messages?: any
+  coverPicture?: string
+  profilePicture?: string
+}
+
+// ~~~~~~~~~~~~~~~~~~~Post Interfaces~~~~~~~~~~~~~~~~~~~~ //
+
+export interface IComment {
+  _id?: string
+  text?: string
+  userId?: string
+}
+export interface IPost {
+  _id?: string
+  text?: string
+  postedOn?: Date
+  postedBy?: string
+  links?: string[]
+  likes: string[]
+  postType?: string
+  user?: IParent
 }

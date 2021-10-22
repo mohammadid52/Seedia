@@ -43,7 +43,7 @@ const Modal = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed dark:bg-black inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <Dialog.Overlay className="fixed dark:bg-black inset-0 bg-gray-500 opacity-50 transition-opacity" />
           </Transition.Child>
 
           {/* This element is to trick the browser into centering the modal contents. */}
@@ -63,7 +63,7 @@ const Modal = ({
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div
-              className={`inline-block align-bottom  bg-white dark:bg-gray-900 rounded-lg px-4 pt-5  text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle  sm:p-6 pb-4`}
+              className={`inline-block align-bottom  bg-white dark:bg-gray-900 rounded-lg px-4 pt-5  text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-top  sm:p-6 pb-4`}
             >
               {!hideCloseBtn && (
                 <div className="hidden sm:block absolute top-0 right-0 pt-6 pr-6">

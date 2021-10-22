@@ -7,6 +7,7 @@ const responseMsg = (status = 'none', message = '', data = {}) => {
 const unique = (list) => [...new Set(list)]
 
 const addObjectId = (id) => ObjectId(id)
+const convertToString = (id = '') => id.toString()
 
 const getItem = async (collection, targetId) => {
   return await collection.findOne({
@@ -53,4 +54,5 @@ module.exports = {
   getManyItems,
   updateData,
   shortUser,
+  convertToString,
 }
