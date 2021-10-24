@@ -37,6 +37,7 @@ const Dropdown = ({ list }: { list: Item[] }) => {
               <Menu.Item>
                 {({ active }) => (
                   <div
+                    style={{ zIndex: 999 }}
                     onClick={(e) => {
                       e.stopPropagation()
                       if (typeof item.onClick === 'function') {

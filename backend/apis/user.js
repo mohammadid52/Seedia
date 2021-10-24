@@ -7,6 +7,7 @@ const {
   unique,
   addObjectId,
   getManyItems,
+  convertToString,
 } = require('../utils')
 var ObjectId = require('mongodb').ObjectId
 const jwt = require('jsonwebtoken')
@@ -357,15 +358,20 @@ router.post('/getAll/:id', auth, async (req, res) => {
   const token = req.user
 
   try {
-    const wrapid = uniqUsers.map((_id) => ObjectId(_id))
+    const wrapid = unique(
+      [...uniqUsers]
+        .map(convertToString)
+        .filter((d) => d !== token.id)
+        .map(addObjectId)
+    )
 
     const list = await usersCollection
       .find({
         $and: [
           { _id: { $not: { $eq: ObjectId(token.id) } } },
           { profileUrl: { $not: { $eq: id } } },
+          { _id: { $in: wrapid } },
         ],
-        _id: { $not: { $eq: { $in: wrapid } } },
       })
       .skip(skip)
       .limit(limit)

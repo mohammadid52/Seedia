@@ -37,7 +37,7 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
       } else {
         //  redirect to dashboard
         console.log('redirect to dashboard')
-        return history.push(links.DASHBAORD)
+        return history.push(links.FEED)
       }
     }
   }
@@ -84,7 +84,7 @@ const ChooseTemplate = ({ user }: { user: IParent }) => {
 
         setErrors([])
         window.location.reload()
-        history.push(links.DASHBAORD)
+        history.push(links.FEED)
       } catch (error) {
         setErrors(['Oops! Something went wrong'])
         console.error(error)

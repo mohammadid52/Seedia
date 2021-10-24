@@ -35,16 +35,39 @@ app.post('/add-post', auth, async (req, res) => {
           viewedBy: [],
         }
         const afterInsertPost = await postCollection.insertOne(updatedPost)
+        const postUrl = `${user?.firstName}_${
+          user?.lastName
+        }-${afterInsertPost.insertedId.toString()}`.toLowerCase()
+        const currentActivity = {
+          postUrl: postUrl,
+          type: 'post',
+          text: updatedPost.text,
+          subtext: `${user.firstName} posted this`,
+          postMedia:
+            updatedPost?.links && updatedPost?.links.length
+              ? updatedPost?.links[0]
+              : null,
+          userImage: user?.profilePicture,
+          activityIdx: user?.activity?.length || 0,
+        }
+
+        let activity =
+          user?.activity?.length > 0
+            ? [...user.activity, currentActivity]
+            : [currentActivity]
+
         let updatedPosts =
           user?.posts?.length > 0
-            ? [...user.posts]
-            : [
-                {
-                  ...updatedPost,
-                  _id: afterInsertPost.insertedId,
-                },
-              ]
-        await updateData(usersCollection, token.id, { posts: updatedPosts })
+            ? [...user.posts, afterInsertPost.insertedId]
+            : [afterInsertPost.insertedId]
+
+        await updateData(usersCollection, token.id, {
+          posts: updatedPosts,
+          activity: activity,
+        })
+        await updateData(postCollection, afterInsertPost.insertedId, {
+          postUrl: postUrl,
+        })
 
         return res
           .status(202)
@@ -124,9 +147,10 @@ app.post('/add-post', auth, async (req, res) => {
 //   }
 // })
 
-app.get('/view', async (req, res) => {
-  const { postId = '', userId = '' } = req.query
-
+app.post('/view', auth, async (req, res) => {
+  const { postId = '' } = req.query
+  const token = req.user
+  const userId = token.id
   if (postId && userId) {
     const postCollection = res.locals.postCollection
 
@@ -196,6 +220,82 @@ app.get('/feed', auth, async (req, res) => {
       }
     } else {
       return res.status(204).json(responseMsg('error', 'Cannot find user ', {}))
+    }
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(204)
+      .json(responseMsg('error', 'Something went wrong. Please try again', {}))
+  }
+})
+
+app.get('/p', async (req, res) => {
+  const { postUrl } = req.query
+
+  const postCollection = res.locals.postCollection
+  const usersCollection = res.locals.usersCollection
+
+  if (postUrl) {
+    try {
+      let post = await postCollection.findOne({ postUrl: postUrl })
+      const user = await getItem(usersCollection, post.postedBy)
+      if (post) {
+        post = {
+          ...post,
+          user,
+        }
+        return res
+          .status(202)
+          .json(responseMsg('success', 'Post fetched successfully', post))
+      } else {
+        return res
+          .status(204)
+          .json(responseMsg('error', 'Cannot find post.', {}))
+      }
+    } catch (error) {
+      console.error(error)
+      return res
+        .status(204)
+        .json(
+          responseMsg('error', 'Something went wrong. Please try again', {})
+        )
+    }
+  } else {
+    return res.status(404).json(responseMsg('error', 'Missing postId', {}))
+  }
+})
+app.get('/averagePostViews', auth, async (req, res) => {
+  const token = req.user
+
+  const postCollection = res.locals.postCollection
+  const usersCollection = res.locals.usersCollection
+
+  try {
+    const user = await getItem(usersCollection, token.id)
+    const userPosts = await getManyItems(
+      postCollection,
+      { _id: { $in: user.posts } },
+      { viewedBy: 1 }
+    )
+
+    if (userPosts && user) {
+      const postViews = userPosts.reduce(
+        (tot, post) =>
+          unique(post?.viewedBy).filter((d) => d.toString() !== token.id)
+            ?.length + tot,
+        0
+      )
+      return res
+        .status(202)
+        .json(
+          responseMsg('success', 'Post views successfully fetched', postViews)
+        )
+    } else {
+      return res
+        .status(204)
+        .json(
+          responseMsg('error', 'Cannot find post or user.', { userPosts, user })
+        )
     }
   } catch (error) {
     console.error(error)

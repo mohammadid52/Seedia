@@ -47,6 +47,7 @@ const makeGroupAdmin = ({
 
 // Posts
 const addPost = (data: any) => network.post(`/post/add-post`, { ...data })
+const viewPost = (postId: string) => network.post(`/post/view?postId=${postId}`)
 
 export {
   followUser,
@@ -59,4 +60,5 @@ export {
   createGroup,
   makeGroupAdmin,
   addPost,
+  viewPost,
 }

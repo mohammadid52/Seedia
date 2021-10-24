@@ -1,10 +1,15 @@
-import zIndex from '@material-ui/core/styles/zIndex'
+import { viewPost } from 'apis/mutations'
 import Dropdown from 'components/Dropdown/Dropdown'
+import PostBottom from 'components/posts/PostBottom'
+import { links } from 'constants/Links'
+import useOnScreen from 'hooks/useOnScreen'
 import { IPost } from 'interfaces/UniversalInterface'
 import moment from 'moment'
+import { useEffect, useRef } from 'react'
+import { useMutation } from 'react-query'
 import { avatarPlaceholder } from 'state/Redux/constants'
 
-const Post = ({ post, postRef = null }: { post: IPost; postRef?: any }) => {
+const Post = ({ post, userId }: { post: IPost; userId: string }) => {
   const user = post.user
 
   const dropdownList = [
@@ -16,19 +21,38 @@ const Post = ({ post, postRef = null }: { post: IPost; postRef?: any }) => {
     {
       id: '2',
       name: 'Copy link to post',
-      onClick: () => {},
+      onClick: () => {
+        navigator.clipboard.writeText(
+          window.origin + links.postById(post.postUrl)
+        )
+      },
     },
     {
       id: '3',
-      name: `Unfollow ${user.fullName}`,
+      name: `Unfollow ${user?.fullName || user.firstName}`,
       onClick: () => {},
     },
   ]
 
+  const { mutate } = useMutation(() => viewPost(post._id))
+
+  const postRef = useRef(null)
+  const isCardOnScreen = useOnScreen(postRef)
+
+  const isViewed = post.viewedBy.includes(userId)
+
+  useEffect(() => {
+    if (isCardOnScreen && !isViewed) {
+      setTimeout(() => {
+        mutate()
+      }, 300)
+    }
+  }, [isCardOnScreen, isViewed])
+
   return (
     <div
       ref={postRef}
-      className="rounded-lg dark:bg-gray-800 overflow-hidden  border border-gray-200 dark:border-gray-700 shadow-lg"
+      className="rounded-lg dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg"
     >
       <div className="flex w-full items-center justify-between px-6">
         <div className="flex  py-4">
@@ -42,13 +66,21 @@ const Post = ({ post, postRef = null }: { post: IPost; postRef?: any }) => {
             />
           </div>
           <div className="flex flex-col">
-            <h4 className="text-base dark:text-white font-bold">
-              {user?.fullName || 'Lorem Ipsum'}
-            </h4>
+            <a
+              href={links.getProfileById(
+                user.profileUrl,
+                user?.other?.template,
+                'public'
+              )}
+            >
+              <h4 className="text-base hover:underline  dark:text-white font-bold">
+                {user?.fullName || 'Lorem Ipsum'}
+              </h4>
+            </a>
             <span className="text-xs dark:text-gray-500">
               {user?.followers?.length || 0} followers
             </span>
-            <span className="text-xs dark:text-gray-500">
+            <span className="text-xs dark:text-gray-500 font-semibold">
               {moment(post.postedOn).fromNow()}
             </span>
           </div>
@@ -75,6 +107,8 @@ const Post = ({ post, postRef = null }: { post: IPost; postRef?: any }) => {
           #winter
         </span>
       </div>
+
+      <PostBottom />
     </div>
   )
 }

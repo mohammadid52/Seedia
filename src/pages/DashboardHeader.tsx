@@ -30,6 +30,7 @@ import {
   departmentsArray,
   productsArray,
 } from 'values/values'
+import useTheme from 'hooks/useTheme'
 
 const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   const { setDarkMode, showSidebar, setShowSidebar, darkMode } =
@@ -124,6 +125,8 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
 
   const isBusiness = userData?.other?.accountType === 'business'
 
+  const { logo } = useTheme()
+
   return (
     <Popover
       style={{ zIndex: 999 }}
@@ -151,7 +154,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                       <img
                         title="13RMS"
                         onClick={() => history.push('/')}
-                        src={process.env.PUBLIC_URL + '/logo.png'}
+                        src={logo}
                         className="h-16 w-16 "
                         alt="13RMS"
                       />

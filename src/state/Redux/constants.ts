@@ -1,4 +1,4 @@
-import avatar from 'assets/images/avatar.webp'
+import avatarPlaceholder from 'assets/images/avatar.webp'
 
 export const LOGIN = 'LOGIN'
 export const LOGIN_ERR = 'LOGIN_ERR'
@@ -15,8 +15,6 @@ export const SET_OTHER_USER_DATA = 'SET_USER_DATA'
 export const ADD_TO_BASKET = 'ADD_TO_BASKET'
 export const REMOVE_FROM_BASKET = 'REMOVE_FROM_BASKET'
 
-export const avatarPlaceholder = avatar
-
 // general constants
 export const PROFILE_TWO_EXPERIENCE = 'PROFILE_TWO_EXPERIENCE'
 export const SKILLS = 'SKILLS'
@@ -25,3 +23,5 @@ export const EDUCATION = 'EDUCATION'
 export const LANGUAGES = 'LANGUAGES'
 
 export const SIDEBAR_HEIGHT = 90
+
+export { avatarPlaceholder }

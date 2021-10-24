@@ -8,6 +8,7 @@ import EducationModal from 'components/modals/EducationModal'
 import ExperienceTwoModal from 'components/modals/ExperienceTwoModal'
 import LanguagesModal from 'components/modals/LanguagesModal'
 import SkillsModal from 'components/modals/SkillsModal'
+import Activity from 'components/ProfileComponents/Activity'
 import ProfileStrength from 'components/ProfileStrength'
 import Awards from 'components/profileTwo/Awards'
 import Cover from 'components/profileTwo/Cover'
@@ -209,6 +210,10 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                 </div>
               )}
               {!isBusiness && <Education {...commonBlockProps} />}
+              <Activity
+                userData={userData}
+                iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+              />
               <Recommendations
                 secondary
                 iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}

@@ -3,22 +3,25 @@ import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
 import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
-import { getAccessToken, network } from 'helpers'
+import { network } from 'helpers'
+import useAccountType from 'hooks/useAccountType'
 import { IParent } from 'interfaces/UniversalInterface'
 import React, { useState } from 'react'
 import { avatarPlaceholder } from 'state/Redux/constants'
+import { BsFillBookmarkFill } from 'react-icons/bs'
+import { fetchAvgViews } from 'apis/queries'
+import { useQuery } from 'react-query'
 
 const PersonalCard = ({
   className,
 
-  userData,
+  userData: user,
 }: {
   className?: string
   userData?: IParent
 }) => {
   const [showModal, setShowModal] = useState(false)
   const [saving, setSaving] = useState(false)
-  const token = getAccessToken()
 
   const [_image, setImage] = useState('')
 
@@ -39,7 +42,6 @@ const PersonalCard = ({
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: token,
       },
     }
 
@@ -48,7 +50,7 @@ const PersonalCard = ({
 
       if (data && data.data && data.data.location) {
         const updatedData = {
-          ...userData,
+          ...user,
           profilePicture: data.data.location,
         }
         //@ts-ignore
@@ -56,15 +58,9 @@ const PersonalCard = ({
 
         setValues({ ...updatedData })
 
-        await network.post(
-          '/user/update',
-          {
-            ...updatedData,
-          },
-          {
-            headers: { Authorization: token },
-          }
-        )
+        await network.post('/user/update', {
+          ...updatedData,
+        })
       }
     } catch (error) {
       console.error(error.message)
@@ -79,6 +75,12 @@ const PersonalCard = ({
     profileImageSelectorRef?.current?.click()
 
   const profileImageSelectorRef = React.useRef()
+
+  const { isBusiness } = useAccountType(user)
+
+  const { data } = useQuery('average-post-views', () => fetchAvgViews())
+
+  const postViews = data?.data?.data || 0
 
   return (
     <>
@@ -122,124 +124,73 @@ const PersonalCard = ({
         onChange={onImageSelect}
         accept="image/x-png,image/jpeg"
       />
-      <Card
-        cardTitle="About"
-        secondary
-        content={
-          <div className={`${className}`}>
-            <div>
-              <div className="">
-                <div className="border-b mb-2 pb-2 border-gray-200 dark:border-gray-600">
-                  <div className="flex items-center justify-center mb-4">
-                    <img
-                      className={`${
-                        !userData?.profilePicture ? '' : ''
-                      } h-24 w-24 border-gradient border-2 border-transparent rounded-full`}
-                      src={
-                        userData?.profilePicture
-                          ? userData?.profilePicture
-                          : avatarPlaceholder
-                      }
-                      alt={userData?.fullName}
-                    />
-                  </div>
 
-                  <div className="">
-                    <div className="text-center">
-                      <div className="mt-4 mb-1 text-xs hover:underline cursor-pointer  font-extrabold text-center dark:text-white">
-                        <a
-                          href={links.getProfileById(
-                            userData?.profileUrl,
-                            userData?.other?.template || 1
-                          )}
-                        >
-                          {userData?.fullName}
-                        </a>
-                      </div>
+      {/* ------------ Profile Card ---------*/}
+      <div className="rounded-lg border dark:border-gray-700  border-gray-200  overflow-hidden lg:max-w-xs bg-white dark:bg-gray-800">
+        <div
+          style={{
+            backgroundImage: `url(${
+              user?.coverPicture
+                ? user?.coverPicture
+                : 'https://source.unsplash.com/1600x900/?nature,water'
+            })`,
+          }}
+          className="w-full lg:h-20 sm:h-24 bg-center bg-no-repeat bg-cover h-20"
+        />
+        <div className="flex justify-center -mt-8">
+          <img
+            alt=""
+            src={user.profilePicture ? user.profilePicture : avatarPlaceholder}
+            className="rounded-full border-solid lg:h-16 lg:w-16 h-12 w-12  border-white border-2 -mt-3"
+          />
+        </div>
+        <div className="text-center px-3 pb-6 pt-2">
+          <h3 className="dark:text-white text-gray-900 text-base font-bold ">
+            {user.fullName}
+          </h3>
+          <p className="text-sm font-light text-white">
+            {isBusiness ? user.business.name : user.company.jobTitle}
+          </p>
+        </div>
+        <div className="flex gap-y-2  flex-col border-t py-2 text-xs font-medium text-gray-500 dark:text-gray-500 border-gray-200 dark:border-gray-700">
+          <div className="flex transition-all item-center px-4 py-1 cursor-pointer dark:hover:bg-gray-700 justify-between">
+            <h6 className="">Who viewed your profile</h6>
+            <span className="text-link font-semibold">{user.pwvpCount}</span>
+          </div>
+          <div className="flex transition-all item-center px-4 py-1 cursor-pointer dark:hover:bg-gray-700 justify-between">
+            <h6 className="">Views of your post</h6>
+            <span className="text-link font-semibold">{postViews}</span>
+          </div>
+        </div>
+        <div className="flex items-center cursor-pointer hover:bg-gray-200 transition-all dark:hover:bg-gray-700 gap-y-2  justify-start px-4 border-t py-2 text-xs font-medium text-gray-500 dark:text-gray-500 border-gray-200 dark:border-gray-700">
+          <BsFillBookmarkFill className="mr-2" />
+          <p>My Items</p>
+        </div>
+      </div>
+      {/* ------------ Profile Card Ends ---------*/}
 
-                      <p className="dark:text-gray-400 mb-2 text-xs text-center">
-                        {userData?.company?.jobTitle}
-                      </p>
-
-                      <p
-                        onClick={showFileExplorerForProfile}
-                        className="link-hover tracking-wide cursor-pointer text-sm text-center text-blue-600"
-                      >
-                        Change photo
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-4 text-sm">
-                  <p className="text-gray-900 dark:text-white">connections</p>
-                  <h6 className="font-semibold text-gray-900 dark:text-white">
-                    Expand your network
-                  </h6>
-                </div>
-
-                <div className=" hidden">
-                  <div className="">
-                    <p className="mb-2 text-gray-900 dark:text-white">
-                      Get access to exclusive tools and insights
-                    </p>
-                    <h6 className="font-semibold text-gray-900 dark:text-white">
-                      Try Premium 1 month for free
-                    </h6>
-                  </div>
-                </div>
-
-                <div className=" hover:bg-gray-100 dark:hover:bg-gray-600 py-1.5 border border-gray-200 dark:border-gray-600 rounded-md cursor-pointer overflow-hidden">
-                  <h6 className="text-sm cursor-pointer text-gray-900 dark:text-white font-semibold text-center">
-                    My items
-                  </h6>
-                </div>
+      {/* // ~~~~~~~~~~~~~~~~~~~Discover Cards ~~~~~~~~~~~~~~~~~~~~ // */}
+      <div className="rounded-lg border dark:border-gray-700  border-gray-200  overflow-hidden lg:max-w-xs bg-white dark:bg-gray-800 ">
+        <div className="">
+          <div className="p-4 flex flex-col gap-y-3 text-xs font-medium text-link">
+            <a href={links.groups()} className="hover:underline cursor-pointer">
+              Groups
+            </a>
+            <div className=" cursor-pointer flex items-center justify-between">
+              <p className="hover:underline ">Events</p>
+              <div className="text-gray-900 dark:text-gray-500 text-base hover:bg-gray-700 rounded-full h-6 transition-all w-6 flex items-center justify-center">
+                +
               </div>
             </div>
-
-            <div>
-              <div className="gap-y-2 flex text-sm flex-col my-4">
-                <div className="hover:underline cursor-pointer">
-                  <a href="/" className="dark:text-white text-gray-900">
-                    Groups
-                  </a>
-                </div>
-                <div className="flex cursor-pointer items-center hover:underline">
-                  <a href="/" className="dark:text-white text-gray-900">
-                    Events
-                  </a>
-                  <svg
-                    stroke="currentColor"
-                    fill="currentColor"
-                    strokeWidth="0"
-                    viewBox="0 0 1024 1024"
-                    version="1.1"
-                    height="1em"
-                    width="1em"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="text-gray-900 dark:text-white ml-2 text-xl "
-                  >
-                    <defs></defs>
-                    <path d="M474 152m8 0l60 0q8 0 8 8l0 704q0 8-8 8l-60 0q-8 0-8-8l0-704q0-8 8-8Z"></path>
-                    <path d="M168 474m8 0l672 0q8 0 8 8l0 60q0 8-8 8l-672 0q-8 0-8-8l0-60q0-8 8-8Z"></path>
-                  </svg>
-                </div>
-                <div className="cursor-pointer hover:underline">
-                  <a href="/" className="dark:text-white text-gray-900">
-                    Followed hashtags
-                  </a>
-                </div>
-              </div>
-
-              <div className=" hover:bg-gray-100 dark:hover:bg-gray-600 py-1.5 border border-gray-200 dark:border-gray-600 rounded-md cursor-pointer overflow-hidden">
-                <h6 className="cursor-pointer text-sm text-gray-900 dark:text-white font-semibold text-center">
-                  Discover more
-                </h6>
-              </div>
+            <div className="hover:underline cursor-pointer">
+              Followed Hastags
             </div>
           </div>
-        }
-      />
+          <div className="flex items-center cursor-pointer hover:bg-gray-200 transition-all dark:hover:bg-gray-700 gap-y-2  justify-center px-4 border-t py-4  text-sm font-medium text-gray-500 dark:text-gray-500 border-gray-200 dark:border-gray-700">
+            <p>Discover more</p>
+          </div>
+        </div>
+      </div>
     </>
   )
 }

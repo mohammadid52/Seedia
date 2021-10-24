@@ -29,7 +29,7 @@ const User = ({
   return (
     <div
       key={user?._id}
-      className="flex border border-gray-300 overflow-hidden m-0 dark:border-gray-600 sm:h-64 xl:h-72 xl:60 sm:w-56 rounded-xl relative flex-col items-center "
+      className="flex border box-rounded-xl border-gray-300 overflow-hidden m-0 dark:border-gray-600 sm:h-64 xl:h-72 xl:60 sm:w-56 rounded-xl relative flex-col items-center "
     >
       <Badge
         className={`${

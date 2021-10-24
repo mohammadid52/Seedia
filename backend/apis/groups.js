@@ -31,6 +31,7 @@ app.post('/create-group', auth, async (req, res) => {
       createdOn: new Date(),
       createdBy: token.id,
       admin: [...admin, token.id],
+      owner: token.id,
       members: [...members, token.id],
       messages: [], // not important for now
     }

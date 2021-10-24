@@ -36,7 +36,7 @@ const BusinessStepTwo = ({ userData }: { userData: IParent }) => {
       userData?.other?.hasOwnProperty('accountFilled') &&
       userData?.other?.accountFilled
     ) {
-      return history.push(links.DASHBAORD)
+      return history.push(links.FEED)
     }
   }
 
@@ -103,7 +103,7 @@ const BusinessStepTwo = ({ userData }: { userData: IParent }) => {
       } else {
         //  redirect to dashboard
         console.log('redirect to dashboard')
-        return history.push(links.DASHBAORD)
+        return history.push(links.FEED)
       }
     }
   }

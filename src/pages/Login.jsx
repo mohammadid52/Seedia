@@ -53,7 +53,7 @@ const Login = () => {
 
           setValues({ ...data.data, ...data })
           window.location.reload()
-          history.push(links.DASHBAORD)
+          history.push(links.FEED)
           localStorage.setItem('access_token', data.data.access_token)
         }
       } catch (error) {

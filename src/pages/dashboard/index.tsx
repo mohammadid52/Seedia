@@ -6,7 +6,6 @@ import { IParent, NavProps } from 'interfaces/UniversalInterface'
 import ListPosts from 'pages/dashboard/ListPosts'
 import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
-import GroupList from 'pages/groups/GroupList'
 import { useState } from 'react'
 import PersonalCard from './AboutMe'
 import PostInput from './PostInput'
@@ -34,24 +33,21 @@ const Dashboard = ({ userData }: DashboardProps) => {
         className={`h-auto pt-4 relative flow-root  transition-all duration-500 `}
       >
         <DashboardLayout
-          firstColClass={`md:hidden   max-h-152 lg:block sm:hidden xl:block `}
+          firstColClass={`max-h-152 lg:block  xl:block w-full  `}
           firstCol={
             <div className="flex flex-col gap-y-12">
               <PersonalCard userData={userData} />
-              <GroupList secondary userId={userData._id} />
+              {/* <GroupList secondary userId={userData._id} /> */}
             </div>
           }
           secondCol={
-            <div
-              className="flex gap-y-4 mx-auto  flex-col"
-              style={{ maxWidth: '40rem' }}
-            >
+            <div className="flex gap-y-4 mx-auto lg:max-w-2xl  flex-col">
               <PostInput
                 profilePicture={userData?.profilePicture}
                 posts={posts}
                 setPosts={setPosts}
               />
-              <ListPosts />
+              <ListPosts userData={userData} />
             </div>
           }
           thirdCol={

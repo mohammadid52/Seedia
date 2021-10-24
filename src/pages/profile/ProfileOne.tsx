@@ -1,3 +1,4 @@
+import Card from 'components/atoms/Card'
 import CustomFooter from 'components/CustomFooter'
 import Loading from 'components/Loading'
 import ProfileStrength from 'components/ProfileStrength'
@@ -21,7 +22,11 @@ import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Recommendations from 'pages/profile/Recommendations'
 import { useEffect } from 'react'
 import { useHistory } from 'react-router'
+import { avatarPlaceholder } from 'state/Redux/constants'
 import RandomUsers from './RandomUsers'
+import { eclipse } from 'utils/functions'
+import EmptyState from 'components/atoms/EmptyState'
+import Activity from 'components/ProfileComponents/Activity'
 
 const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
@@ -57,7 +62,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
     }
   }, [userIdFromParam, template])
 
-  const commonProps = {
+  const commonProps: { authUser: boolean; userData: IParent } = {
     authUser: showAllButtons,
     userData: iAmOwnerOfThisProfile ? userData : otherUserData,
   }
@@ -94,6 +99,10 @@ const Profile = ({ userData }: { userData: IParent }) => {
               secondCol={
                 <div className="space-y-8 py-0">
                   <Background {...commonProps} />
+                  <Activity
+                    userData={userData}
+                    iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                  />
                   <Recommendations
                     iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
                     {...commonProps}

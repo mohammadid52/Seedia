@@ -11,7 +11,8 @@ export const links = {
     template?: 1 | 2,
     viewMode: string = 'public'
   ) => `/${id}/${template || 1}/${viewMode || 'public'}`,
-  DASHBAORD: '/home',
+
+  FEED: '/feed',
   SETTINGS: '/settings',
   CHOOSE_ACCOUNT: '/choose-account',
   HOME: '/',
@@ -53,5 +54,13 @@ export const links = {
 
   // Groups
   createGroup: () => `/group/create-group`,
-  groupById: (groupId: string) => `/group/g/${groupId}`,
+  groupById: (groupId: string) => `/groups/${groupId}`,
+  groups: () => `/groups/`,
+
+  // Posts
+  postById: (postId: string) => `/posts/${postId}`,
+
+  // Followers
+  followers: () => `/feed/followers`,
+  followings: () => `/feed/followings`,
 }

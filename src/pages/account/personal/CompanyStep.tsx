@@ -43,7 +43,7 @@ const CompanyStep = ({ user }: { user?: IParent }) => {
       } else {
         //  redirect to dashboard
         console.log('redirect to dashboard')
-        return history.push(links.DASHBAORD)
+        return history.push(links.FEED)
       }
     }
   }

@@ -5,6 +5,7 @@ module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: 'class',
   theme: {
+    colors: { ...defaultTheme.colors, link: '#0a66c2' },
     fontSize: {
       ...defaultTheme.fontSize,
       '2xs': ['10px'],

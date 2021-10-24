@@ -154,7 +154,7 @@ const Navigation = ({
                   />
 
                   <Button
-                    link={links.DASHBAORD}
+                    link={links.FEED}
                     target=""
                     className="mx-4 "
                     label="Dashboard"

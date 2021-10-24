@@ -14,6 +14,7 @@ import { logOut } from 'state/Redux/Actions/authActions'
 import { avatarPlaceholder } from 'state/Redux/constants'
 import { classNames } from 'utils/classNames'
 import useAccountType from 'hooks/useAccountType'
+import useTheme from 'hooks/useTheme'
 
 const UniversalHeader = ({ userData }: { userData: IParent }) => {
   const history = useHistory()
@@ -74,6 +75,8 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
 
   const searchedQuery = parsed?.q?.toString()
 
+  const { logo } = useTheme()
+
   const [searchText, setSearchText] = useState(searchedQuery)
 
   const onKeyDown = (e: { key: string }) => {
@@ -90,7 +93,7 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
   }
 
   const navigation = [
-    { name: 'Home', href: links.DASHBAORD, current: false },
+    { name: 'Feed', href: links.FEED, current: false },
     { name: 'My Network', href: '#', current: false },
     { name: 'Notifications', href: '#', current: false },
     { name: 'Sell', href: '#', current: false },
@@ -124,7 +127,7 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
                 <div className="flex-shrink-0 flex items-center">
                   <img
                     className="block h-10 w-auto"
-                    src={process.env.PUBLIC_URL + '/logo.png'}
+                    src={logo}
                     alt="Workflow"
                   />
                 </div>

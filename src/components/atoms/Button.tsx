@@ -74,7 +74,7 @@ const Button = ({
 
   const gradientClass = `${
     invert
-      ? `gradient-text border border-gray-200 dark:border-gray-600 overflow-hidden  rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${gradientColor.x}-500`
+      ? `gradient-text box-${rounded} border border-gray-200 dark:border-gray-600 overflow-hidden  rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${gradientColor.x}-500`
       : `text-white via-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${gradientColor.x}-500 bg-gradient-to-br from-${gradientColor.x}-500 to-${gradientColor.y}-500`
   } `
 
@@ -164,7 +164,6 @@ const Button = ({
       disabled={disabled}
       hidden={hidden}
       type={type}
-      title={title}
       style={{
         ...style,
         filter: shadow ? 'drop-shadow(2px 4px 6px pink)' : undefined,
@@ -177,7 +176,7 @@ const Button = ({
             } transition-all flex items-center justify-center duration-200 ${
               disabled ? 'opacity-50' : ''
             }`
-      }`}
+      } `}
     >
       {loading && (
         <svg

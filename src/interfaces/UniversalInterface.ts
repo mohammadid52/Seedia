@@ -95,9 +95,10 @@ export interface IParent {
   profilePicture?: string
   email?: string
   piv?: string[]
-  posts: IPost[]
+  posts: string[]
   mobileNumber: string
   pwvp?: string[]
+  activity?: IActivity[]
   following?: string[]
   followers?: string[]
   reviews: string[] // collection of reviewId
@@ -112,6 +113,18 @@ export interface IParent {
     received: IRecommendation[]
   }
   business?: IBusiness
+}
+
+export type ActivityType = 'posted' | 'shared' | 'commented' | 'replied'
+
+export interface IActivity {
+  postUrl?: string
+  text?: string
+  subtext?: string
+  type?: ActivityType
+  postMedia?: string
+  userImage?: string
+  activityIdx?: number
 }
 
 export interface IPurchases {
@@ -341,6 +354,7 @@ export interface IGroup {
   messages?: any
   coverPicture?: string
   profilePicture?: string
+  owner?: string
 }
 
 // ~~~~~~~~~~~~~~~~~~~Post Interfaces~~~~~~~~~~~~~~~~~~~~ //
@@ -354,7 +368,9 @@ export interface IPost {
   _id?: string
   text?: string
   postedOn?: Date
+  postUrl?: string
   postedBy?: string
+  viewedBy?: string[]
   links?: string[]
   likes: string[]
   postType?: string

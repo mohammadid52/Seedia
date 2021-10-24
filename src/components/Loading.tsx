@@ -1,7 +1,10 @@
 import Meta from 'components/atoms/Meta/Meta'
+import useTheme from 'hooks/useTheme'
 import 'styles/animatedLoading.scss'
 
 const Loading = () => {
+  const { logo } = useTheme()
+
   return (
     <>
       <Meta pageTitle="Loading..." />
@@ -9,7 +12,7 @@ const Loading = () => {
       <div className="main-loader  flex-col h-screen w-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <img
           className="h-36  animate-pulse duration-75 w-36"
-          src={`${process.env.PUBLIC_URL}/logo.png`}
+          src={logo}
           alt="Loading..."
         />
 

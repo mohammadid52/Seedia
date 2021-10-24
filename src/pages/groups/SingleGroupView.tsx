@@ -45,7 +45,7 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
   const isMember = verifyMember()
   useEffect(() => {
     if (!isMember) {
-      history.push(links.DASHBAORD)
+      history.push(links.FEED)
     }
   }, [groupId, isMember])
 

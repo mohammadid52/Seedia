@@ -7,9 +7,11 @@ import ChooseTemplate from 'pages/account/other/ChooseTemplate'
 import Dashboard from 'pages/dashboard'
 import ForgotPassword from 'pages/ForgotPassword'
 import CreateGroup from 'pages/groups/CreateGroup'
+import GroupsView from 'pages/groups/GroupsView'
 import SingleGroupView from 'pages/groups/SingleGroupView'
 import Home from 'pages/home/Home'
 import NotFound from 'pages/NotFound'
+import SinglePostView from 'pages/posts/SinglePostView'
 import AddProduct from 'pages/products/AddProduct'
 import BrowseProducts from 'pages/products/BrowseProducts'
 import ProductDetails from 'pages/products/ProductDetails'
@@ -158,14 +160,32 @@ const Router = ({
               >
                 <CreateGroup userData={userData} />
               </PrivateRoute>
+              {/* Groups Page */}
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/groups/"
+              >
+                <GroupsView userData={userData} />
+              </PrivateRoute>
               {/* See single group */}
               <PrivateRoute
                 // @ts-ignore
                 exact
                 isUser={userData}
-                path="/group/g/:groupId"
+                path="/groups/:groupId"
               >
                 <SingleGroupView userData={userData} />
+              </PrivateRoute>
+              {/* See single group */}
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/posts/:postUrl"
+              >
+                <SinglePostView userData={userData} />
               </PrivateRoute>
               <PrivateRoute
                 // @ts-ignore
@@ -206,7 +226,7 @@ const Router = ({
                 // @ts-ignore
                 exact
                 isUser={isUser}
-                path="/home"
+                path="/feed"
               >
                 {/* @ts-ignore */}
                 <Dashboard {...navProps} userData={userData} />

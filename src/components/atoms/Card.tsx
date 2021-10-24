@@ -33,7 +33,7 @@ const Card = ({
     ? 'bg-transparent'
     : `${disablePadding ? 'py-4' : 'p-4'} border dark:border-gray-700 ${
         isLoading ? 'animate-pulse' : ''
-      } border-gray-200  dark:bg-gray-800 h-full rounded-md ${className}`
+      } border-gray-200  dark:bg-gray-800 bg-white h-full rounded-lg ${className}`
 
   return (
     <div style={{ ...style }} id={id} className={`${transparentClass} `}>

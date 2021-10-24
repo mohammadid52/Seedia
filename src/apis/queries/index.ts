@@ -42,6 +42,9 @@ const fetchGroupById = (groupId: string) => network.get(`/groups/g/${groupId}`)
 
 // Posts
 const fetchFeed = (limit: number) => network.get(`/post/feed?limit=${limit}`)
+const fetchPostById = (postUrl: string) =>
+  network.get(`/post/p?postUrl=${postUrl}`)
+const fetchAvgViews = () => network.get(`/post/averagePostViews`)
 
 export {
   fetchProductDetails,
@@ -61,4 +64,6 @@ export {
   fetchGroups,
   fetchFeed,
   fetchGroupById,
+  fetchPostById,
+  fetchAvgViews,
 }
