@@ -31,7 +31,7 @@ app.post('/create-group', auth, async (req, res) => {
       createdOn: new Date(),
       createdBy: token.id,
       admin: [...admin, token.id],
-      owner: token.id,
+
       members: [...members, token.id],
       messages: [], // not important for now
     }
@@ -98,6 +98,7 @@ app.get('/g/:groupId', auth, async (req, res) => {
     const group = await getItem(groupsCollection, groupId)
     if (group) {
       let membersId = group.members.map(addObjectId)
+      let adminsId = group.admin.map(addObjectId)
 
       const users = await getManyItems(
         usersCollection,
@@ -106,10 +107,14 @@ app.get('/g/:groupId', auth, async (req, res) => {
         },
         shortUser
       )
+      const admins = await getManyItems(usersCollection, {
+        _id: { $in: adminsId },
+      })
 
       const groupDetails = {
         ...group,
         members: users,
+        admin: admins,
       }
 
       return res

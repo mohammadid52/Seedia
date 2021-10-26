@@ -15,10 +15,15 @@ const createReview = (
 const addProduct = (values: any) =>
   network.post('/products/add', { newProductData: values })
 
+const mediaConfig = {
+  headers: { 'Content-Type': 'multipart/form-data' },
+}
+
 const uploadMultipleImages = (data: any) =>
-  network.post('/uploadImage/multiple', data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
+  network.post('/uploadImage/multiple', data, mediaConfig)
+
+const uploadMediaToServer = (fd: any) =>
+  network.post('/uploadImage', fd, mediaConfig)
 
 // add project
 
@@ -49,6 +54,9 @@ const makeGroupAdmin = ({
 const addPost = (data: any) => network.post(`/post/add-post`, { ...data })
 const viewPost = (postId: string) => network.post(`/post/view?postId=${postId}`)
 
+// Store
+const openStore = (data: any) => network.post('/store/add', { ...data })
+
 export {
   followUser,
   unFollowUser,
@@ -60,5 +68,7 @@ export {
   createGroup,
   makeGroupAdmin,
   addPost,
+  uploadMediaToServer,
   viewPost,
+  openStore,
 }

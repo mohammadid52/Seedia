@@ -1,6 +1,7 @@
-import Card from 'components/atoms/Card'
 import CustomFooter from 'components/CustomFooter'
+import DiscoverCard from 'components/DiscoverButton'
 import Loading from 'components/Loading'
+import Activity from 'components/ProfileComponents/Activity'
 import ProfileStrength from 'components/ProfileStrength'
 import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
@@ -11,7 +12,6 @@ import { useRouter } from 'hooks/useRouter'
 import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
-import GroupList from 'pages/groups/GroupList'
 import About from 'pages/profile/About'
 import AdditionalFeatures from 'pages/profile/AdditionalFeatures'
 import Background from 'pages/profile/Background'
@@ -22,11 +22,7 @@ import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Recommendations from 'pages/profile/Recommendations'
 import { useEffect } from 'react'
 import { useHistory } from 'react-router'
-import { avatarPlaceholder } from 'state/Redux/constants'
 import RandomUsers from './RandomUsers'
-import { eclipse } from 'utils/functions'
-import EmptyState from 'components/atoms/EmptyState'
-import Activity from 'components/ProfileComponents/Activity'
 
 const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
@@ -93,7 +89,8 @@ const Profile = ({ userData }: { userData: IParent }) => {
                   {!isBusiness && iAmOwnerOfThisProfile && (
                     <AdditionalFeatures />
                   )}
-                  {iAmOwnerOfThisProfile && <GroupList userId={userData._id} />}
+
+                  {iAmOwnerOfThisProfile && <DiscoverCard />}
                 </div>
               }
               secondCol={

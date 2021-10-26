@@ -145,15 +145,6 @@ const Navigation = ({
                   />
 
                   <Button
-                    link={links.BROWSE_PRODUCTS(profileUrl)}
-                    className="mx-4 "
-                    target=""
-                    Icon={BsBagFill}
-                    label="Browse products"
-                    gradient
-                  />
-
-                  <Button
                     link={links.FEED}
                     target=""
                     className="mx-4 "

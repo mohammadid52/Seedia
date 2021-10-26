@@ -28,7 +28,7 @@ const NormalFormInput = ({
   cols = 100,
   autoComplete = true,
   success = null,
-
+  info = '',
   ...props
 }: {
   label?: string
@@ -51,6 +51,7 @@ const NormalFormInput = ({
   textarea?: boolean
   rows?: number
   cols?: number
+  info?: string
 }) => {
   const errorClass = `border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500`
   const [showPass, setShowPass] = useState(false)
@@ -112,7 +113,7 @@ const NormalFormInput = ({
                 error
                   ? errorClass
                   : 'focus:ring-yellow-500 focus:border-yellow-500 border-gray-300'
-              } sm:text-sm p-2 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:border-gray-700 dark:text-white ${className}`}
+              } sm:text-sm p-2 rounded-md transition-all dark:placeholder-gray-600 dark:bg-gray-900 dark:border-gray-700 dark:text-white ${className}`}
             />
           )}
 
@@ -150,6 +151,15 @@ const NormalFormInput = ({
             )}
           </div>
         </div>
+
+        {info && (
+          <p
+            className="transition-all mt-1 duration-200 text-sm text-right text-gray-600 dark:text-gray-500"
+            id={`${name || id}-info`}
+          >
+            {info}
+          </p>
+        )}
 
         <Transition
           show={Boolean(error)}

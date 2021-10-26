@@ -113,6 +113,17 @@ export interface IParent {
     received: IRecommendation[]
   }
   business?: IBusiness
+  store?: IStore
+}
+
+export interface IStore {
+  _id: string
+  bannerImage: string
+  buttonLabel: string
+  buttonLink: string
+  createdOn: Date
+  createdBy: string
+  products: IProduct[]
 }
 
 export type ActivityType = 'posted' | 'shared' | 'commented' | 'replied'

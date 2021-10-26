@@ -1,18 +1,14 @@
 import { fetchPostById } from 'apis/queries'
-import Card from 'components/atoms/Card'
 import Meta from 'components/atoms/Meta/Meta'
 import Post from 'components/posts/Post'
 import SideCard from 'components/SideCard'
-import { links } from 'constants/Links'
-import useAccountType from 'hooks/useAccountType'
+import Spinner from 'components/Spinner'
+import VerticalProfileCard from 'components/VerticalProfileCard'
 import { useRouter } from 'hooks/useRouter'
 import { IParent, IPost } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
 import { useQuery } from 'react-query'
-import Spinner from 'components/Spinner'
-import { avatarPlaceholder } from 'state/Redux/constants'
-import VerticalProfileCard from 'components/VerticalProfileCard'
 
 const SinglePostView = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()

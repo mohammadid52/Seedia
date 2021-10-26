@@ -3,8 +3,33 @@ import useAccountType from 'hooks/useAccountType'
 import { IParent } from 'interfaces/UniversalInterface'
 import { avatarPlaceholder } from 'state/Redux/constants'
 
-const VerticalProfileCard = ({ user }: { user: IParent }) => {
+const VerticalProfileCard = ({
+  user,
+  content = null,
+}: {
+  user: IParent
+  content?: React.ReactNode
+}) => {
   const { isBusiness } = useAccountType(user)
+
+  const defaultContent = (
+    <>
+      <p className="text-sm font-medium dark:text-white text-gray-500 ">
+        {isBusiness ? user.business.name : user.company.jobTitle}
+      </p>
+      <a
+        className="dark:text-white text-gray-900 text-lg font-medium"
+        href={links.getProfileById(
+          user.profileUrl,
+          user.other.template,
+          'public'
+        )}
+      >
+        <div className="mt-2">View full profile</div>
+      </a>
+    </>
+  )
+
   return (
     <div className="rounded-lg border dark:border-gray-700  border-gray-200 overflow-hidden lg:max-w-xs bg-white dark:bg-gray-800">
       <img
@@ -27,19 +52,7 @@ const VerticalProfileCard = ({ user }: { user: IParent }) => {
         <h3 className="dark:text-white text-gray-900 text-base font-bold ">
           {user.fullName}
         </h3>
-        <p className="text-sm font-light text-white">
-          {isBusiness ? user.business.name : user.company.jobTitle}
-        </p>
-        <a
-          className="dark:text-white text-gray-900 text-lg font-medium"
-          href={links.getProfileById(
-            user.profileUrl,
-            user.other.template,
-            'public'
-          )}
-        >
-          <div className="mt-2">View full profile</div>
-        </a>
+        {content || defaultContent}
       </div>
     </div>
   )

@@ -6,7 +6,12 @@ const useUser = (
   profileUrl: string,
   userData?: IParent,
   fetchProfile: boolean = true
-) => {
+): {
+  otherUserData: IParent
+  isFetched: boolean
+  isLoading: boolean
+  iAmOwnerOfThisProfile: boolean
+} => {
   const iAmOwnerOfThisProfile =
     userData && getUniqId(profileUrl) === userData?._id
 

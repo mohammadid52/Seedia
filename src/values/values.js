@@ -1,11 +1,11 @@
 /* eslint-disable quotes */
-import brazil from 'assets/images/countries/brazil.png'
 import argentina from 'assets/images/countries/argentina.png'
 import australia from 'assets/images/countries/australia.png'
 import austria from 'assets/images/countries/austria.png'
 import belarus from 'assets/images/countries/belarus.png'
 import belgium from 'assets/images/countries/belgium.png'
 import bolivia from 'assets/images/countries/bolivia.png'
+import brazil from 'assets/images/countries/brazil.png'
 import canada from 'assets/images/countries/canada.png'
 import chile from 'assets/images/countries/chile.png'
 import china from 'assets/images/countries/china.png'
@@ -45,21 +45,18 @@ import taiwan from 'assets/images/countries/taiwan.png'
 import turkey from 'assets/images/countries/turkey.png'
 import uk from 'assets/images/countries/uk.png'
 import uruguay from 'assets/images/countries/uruguay.png'
-import venezuela from 'assets/images/countries/venezuela.png'
 import usa from 'assets/images/countries/usa.png'
+import venezuela from 'assets/images/countries/venezuela.png'
 import ww from 'assets/images/countries/ww.png'
-import { BiStore } from 'react-icons/bi'
-import { GiReceiveMoney } from 'react-icons/gi'
-import {
-  AiOutlineLogout,
-  AiOutlineSearch,
-  AiOutlineUsergroupDelete,
-} from 'react-icons/ai'
-import { FaAdversal, FaMoneyBillAlt, FaConnectdevelop } from 'react-icons/fa'
-import { MdFindReplace, MdAttachMoney } from 'react-icons/md'
-import { SiGoogleanalytics } from 'react-icons/si'
-import { BsFilePost } from 'react-icons/bs'
+import { links } from 'constants/Links'
 import { nanoid } from 'nanoid'
+import { AiOutlineSearch, AiOutlineUsergroupDelete } from 'react-icons/ai'
+import { BiStore } from 'react-icons/bi'
+import { BsFilePost } from 'react-icons/bs'
+import { FaAdversal, FaConnectdevelop, FaMoneyBillAlt } from 'react-icons/fa'
+import { GiReceiveMoney } from 'react-icons/gi'
+import { MdAttachMoney, MdFindReplace } from 'react-icons/md'
+import { SiGoogleanalytics } from 'react-icons/si'
 
 export const adjustColors = [
   { name: 'Deuteranomaly', value: 1 },
@@ -145,7 +142,7 @@ export const my13Rms = [
 ]
 
 export const callsToAction = [
-  { name: 'Open Store', href: '/#', icon: BiStore },
+  { name: 'Open Store', href: links.openStore(), icon: BiStore },
   { name: 'Sell', href: '/#', icon: GiReceiveMoney },
 ]
 

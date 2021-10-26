@@ -9,9 +9,10 @@ export const links = {
   getProfileById: (
     id?: string,
     template?: 1 | 2,
-    viewMode: string = 'public'
-  ) => `/${id}/${template || 1}/${viewMode || 'public'}`,
-
+    viewMode: string = 'private'
+  ) => `/${id}/${template || 1}/${viewMode || 'private'}`,
+  getProfile: (user: any) =>
+    `/${user.profileUrl}/${user?.other?.template || 1}/${'public'}`,
   FEED: '/feed',
   SETTINGS: '/settings',
   CHOOSE_ACCOUNT: '/choose-account',
@@ -63,4 +64,8 @@ export const links = {
   // Followers
   followers: () => `/feed/followers`,
   followings: () => `/feed/followings`,
+
+  // Store
+  openStore: () => `/open-store/`,
+  viewStore: (profileUrl: string) => `/${profileUrl}/store/`,
 }

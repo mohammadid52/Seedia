@@ -136,11 +136,19 @@ const GroupsView = ({ userData }: { userData: IParent }) => {
       <Card
         content={
           <div className="">
-            <div className="border-b border-gray-200 dark:border-gray-700">
+            <div className="border-b flex items-center justify-between border-gray-200 dark:border-gray-700">
               <Tabs
                 tabs={tabs}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
+              />
+              <Button
+                size="md"
+                rounded="rounded-full"
+                label={'Create group'}
+                link={links.createGroup()}
+                gradient
+                invert
               />
             </div>
             {isLoading && !isFetched ? (

@@ -11,6 +11,7 @@ import { avatarPlaceholder } from 'state/Redux/constants'
 import { BsFillBookmarkFill } from 'react-icons/bs'
 import { fetchAvgViews } from 'apis/queries'
 import { useQuery } from 'react-query'
+import DiscoverCard from 'components/DiscoverButton'
 
 const PersonalCard = ({
   className,
@@ -148,7 +149,7 @@ const PersonalCard = ({
           <h3 className="dark:text-white text-gray-900 text-base font-bold ">
             {user.fullName}
           </h3>
-          <p className="text-sm font-light text-white">
+          <p className="text-sm font-medium dark:text-white text-gray-500 ">
             {isBusiness ? user.business.name : user.company.jobTitle}
           </p>
         </div>
@@ -170,27 +171,7 @@ const PersonalCard = ({
       {/* ------------ Profile Card Ends ---------*/}
 
       {/* // ~~~~~~~~~~~~~~~~~~~Discover Cards ~~~~~~~~~~~~~~~~~~~~ // */}
-      <div className="rounded-lg border dark:border-gray-700  border-gray-200  overflow-hidden lg:max-w-xs bg-white dark:bg-gray-800 ">
-        <div className="">
-          <div className="p-4 flex flex-col gap-y-3 text-xs font-medium text-link">
-            <a href={links.groups()} className="hover:underline cursor-pointer">
-              Groups
-            </a>
-            <div className=" cursor-pointer flex items-center justify-between">
-              <p className="hover:underline ">Events</p>
-              <div className="text-gray-900 dark:text-gray-500 text-base hover:bg-gray-700 rounded-full h-6 transition-all w-6 flex items-center justify-center">
-                +
-              </div>
-            </div>
-            <div className="hover:underline cursor-pointer">
-              Followed Hastags
-            </div>
-          </div>
-          <div className="flex items-center cursor-pointer hover:bg-gray-200 transition-all dark:hover:bg-gray-700 gap-y-2  justify-center px-4 border-t py-4  text-sm font-medium text-gray-500 dark:text-gray-500 border-gray-200 dark:border-gray-700">
-            <p>Discover more</p>
-          </div>
-        </div>
-      </div>
+      <DiscoverCard />
     </>
   )
 }

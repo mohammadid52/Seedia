@@ -6,7 +6,6 @@ import { IParent, NavProps } from 'interfaces/UniversalInterface'
 import ListPosts from 'pages/dashboard/ListPosts'
 import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
-import { useState } from 'react'
 import PersonalCard from './AboutMe'
 import PostInput from './PostInput'
 
@@ -15,8 +14,6 @@ interface DashboardProps extends NavProps {
 }
 
 const Dashboard = ({ userData }: DashboardProps) => {
-  const [posts, setPosts] = useState([])
-
   const { isFetched, isLoading } = useUser(userData._id, userData)
 
   if (isLoading && !isFetched) {
@@ -42,11 +39,7 @@ const Dashboard = ({ userData }: DashboardProps) => {
           }
           secondCol={
             <div className="flex gap-y-4 mx-auto lg:max-w-2xl  flex-col">
-              <PostInput
-                profilePicture={userData?.profilePicture}
-                posts={posts}
-                setPosts={setPosts}
-              />
+              <PostInput profilePicture={userData?.profilePicture} />
               <ListPosts userData={userData} />
             </div>
           }

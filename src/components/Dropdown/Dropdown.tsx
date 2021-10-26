@@ -5,11 +5,13 @@ import { DotsVerticalIcon } from '@heroicons/react/solid'
 import { classNames } from 'utils/classNames'
 import map from 'lodash/map'
 import { IProduct } from 'interfaces/UniversalInterface'
+import { IconType } from 'react-icons/lib'
 
 type Item = {
   id: string
   onClick: (product?: IProduct) => void
   name: string
+  icon?: IconType
 }
 
 const Dropdown = ({ list }: { list: Item[] }) => {
@@ -51,6 +53,7 @@ const Dropdown = ({ list }: { list: Item[] }) => {
                       'block px-4 py-2 text-sm cursor-pointer'
                     )}
                   >
+                    {item.icon && <span>{item.icon}</span>}
                     {item.name}
                   </div>
                 )}

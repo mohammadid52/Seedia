@@ -4,7 +4,6 @@ import Section from 'components/atoms/products/Section'
 import Loading from 'components/Loading'
 import { useRouter } from 'hooks/useRouter'
 import useUser from 'hooks/useUser'
-import { ErrorFallback } from 'index'
 import { IParent, IProduct } from 'interfaces/UniversalInterface'
 import Product from 'pages/products/Product'
 import ProductLayout from 'pages/products/ProductLayout'
@@ -30,16 +29,12 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
   if (isLoading) {
     return <Loading />
   }
-  if (isError) {
-    return (
-      <ErrorFallback resetErrorBoundary={refetch} error={{ message: error }} />
-    )
-  }
+
   if (isSuccess) {
     const isBusiness = userData?.other?.accountType === 'business'
 
     return (
-      <>
+      <div className="bg-gray-100">
         <Meta
           pageUrl={window.location.href}
           pageTitle={`Browse Products - ${userData?.fullName} - 13RMS `}
@@ -74,9 +69,10 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
                 products.length > 0 &&
                 products.map((product) => <Product product={product} />)}
             </Section>
+            {isError && <p className="text-red-500 text-sm">{error}</p>}
           </div>
         </ProductLayout>
-      </>
+      </div>
     )
   }
 }

@@ -2,6 +2,7 @@ import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
 import CustomFooter from 'components/CustomFooter'
+import DiscoverCard from 'components/DiscoverButton'
 import Loading from 'components/Loading'
 import AwardsModal from 'components/modals/AwardsModal'
 import EducationModal from 'components/modals/EducationModal'
@@ -195,7 +196,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                 }
               />
               {!isBusiness && iAmOwnerOfThisProfile && <AdditionalFeatures />}
-              {iAmOwnerOfThisProfile && <GroupList userId={userData._id} />}
+              {iAmOwnerOfThisProfile && <DiscoverCard />}
             </div>
           }
           secondCol={

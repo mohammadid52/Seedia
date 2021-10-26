@@ -22,6 +22,8 @@ import ProjectView from 'pages/project/ProjectView'
 import RequestsList from 'pages/request/RequestsList'
 import RequestView from 'pages/request/RequestView'
 import ResetPassword from 'pages/ResetPassword'
+import OpenStore from 'pages/store/OpenStore'
+import ViewStore from 'pages/store/ViewStore'
 import { lazy } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import PrivateRoute from 'routes/PrivateRoute'
@@ -226,11 +228,23 @@ const Router = ({
                 // @ts-ignore
                 exact
                 isUser={isUser}
-                path="/feed"
+                path="/feed/"
               >
                 {/* @ts-ignore */}
                 <Dashboard {...navProps} userData={userData} />
               </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={isUser}
+                path="/open-store/"
+              >
+                <OpenStore userData={userData} />
+              </PrivateRoute>
+              <Route exact path="/:profileUrl/store/">
+                {/* @ts-ignore */}
+                <ViewStore userData={userData} />
+              </Route>
               <PrivateRoute
                 isUser={isUser}
                 // @ts-ignore

@@ -12,6 +12,7 @@ const projectRouter = require('./apis/project')
 const requestsRouter = require('./apis/requests')
 const groupsRouter = require('./apis/groups')
 const postRouter = require('./apis/posts')
+const storeRouter = require('./apis/store')
 
 const app = express()
 const bodyParser = require('body-parser')
@@ -94,6 +95,7 @@ client.connect(
     )
     app.use('/groups', passUserCollection, passGroupsCollection, groupsRouter)
     app.use('/post', passUserCollection, passPostCollection, postRouter)
+    app.use('/store', passUserCollection, passPostCollection, storeRouter)
 
     app.use('/auth', passUserCollection, authenticationRouter)
 

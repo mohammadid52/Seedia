@@ -66,6 +66,10 @@ const ListPosts = ({ userData }: { userData: IParent }) => {
             {posts.map((post, idx) => (
               <Post userId={userData._id} post={post} />
             ))}
+            <EmptyState
+              animation={animationData}
+              title="You're all caught up"
+            />
           </div>
         </InfiniteScroll>
       ) : (

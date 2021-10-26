@@ -273,10 +273,10 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                   <a
                                     key={item.name}
                                     href={item.href}
-                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-600 transition-all  rounded-lg hover:bg-gray-50 justify-start cursor-pointer"
+                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-600 transition-all  rounded-lg hover:bg-gray-200 justify-start cursor-pointer"
                                   >
                                     <div className="ml-4">
-                                      <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-900">
+                                      <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-700">
                                         {item.name}
                                       </p>
                                     </div>
@@ -288,37 +288,39 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                   <a
                                     key={item.name}
                                     href={item.href}
-                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-600 transition-all  rounded-lg hover:bg-gray-50 justify-start cursor-pointer"
+                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-600 transition-all  rounded-lg hover:bg-gray-200 justify-start cursor-pointer"
                                   >
                                     <div className="ml-4">
-                                      <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-900">
+                                      <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-700">
                                         {item.name}
                                       </p>
                                     </div>
                                   </a>
                                 ))}
                               </div>
-                              <div className="px-5 border-t border-gray-200 dark:border-gray-700 justify-between w-full py-5 bg-white dark:bg-gray-800 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
-                                {callsToAction.map((item) => (
-                                  <div
-                                    key={item.name}
-                                    className="w-1/2 flex  items-center justify-center "
-                                  >
-                                    <a
-                                      href={item.href}
-                                      className="-m-3 p-3 border border-gray-200 dark:border-gray-700 flex items-center rounded-md text-base font-medium dark:text-white text-gray-900 hover:bg-gray-100 transition-all dark:hover:bg-gray-600 w-full justify-center"
+                              {isBusiness && (
+                                <div className="px-5 border-t border-gray-200 dark:border-gray-700 justify-between w-full py-5 bg-white dark:bg-gray-800 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
+                                  {callsToAction.map((item) => (
+                                    <div
+                                      key={item.name}
+                                      className="w-1/2 flex  items-center justify-center "
                                     >
-                                      <item.icon
-                                        className="flex-shrink-0 h-4 w-4 text-gray-400"
-                                        aria-hidden="true"
-                                      />
-                                      <span className="ml-3 text-xs">
-                                        {item.name}
-                                      </span>
-                                    </a>
-                                  </div>
-                                ))}
-                              </div>
+                                      <a
+                                        href={item.href}
+                                        className="-m-3 p-3 border border-gray-200 dark:border-gray-700 flex items-center rounded-md text-base font-medium dark:text-white text-gray-900 hover:bg-gray-200 transition-all duration-300 dark:hover:bg-gray-600 w-full justify-center"
+                                      >
+                                        <item.icon
+                                          className="flex-shrink-0 h-4 w-4 text-gray-400"
+                                          aria-hidden="true"
+                                        />
+                                        <span className="ml-3 text-xs">
+                                          {item.name}
+                                        </span>
+                                      </a>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                           </Popover.Panel>
                         </Transition>
@@ -377,9 +379,14 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                       View profile
                                     </a>
                                   </div>
-                                  <div className="w-1/2 flex text-xs items-center justify-center dark:border-gray-700 darK:hover:border-gray-500 dark:hover:bg-gray-600 dark:text-white transition-all border-gray-200 py-2 rounded-md font-light hover:bg-gray-50 cursor-pointer hover:border-gray-300 border">
+                                  <a
+                                    href={_links.viewStore(
+                                      userData?.profileUrl
+                                    )}
+                                    className="w-1/2 flex text-xs items-center justify-center dark:border-gray-700 darK:hover:border-gray-500 dark:hover:bg-gray-600 dark:text-white transition-all border-gray-200 py-2 rounded-md font-light hover:bg-gray-50 cursor-pointer hover:border-gray-300 border"
+                                  >
                                     View store
-                                  </div>
+                                  </a>
                                 </div>
 
                                 {settings.map((item) => (
