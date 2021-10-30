@@ -95,10 +95,9 @@ export interface IParent {
   profilePicture?: string
   email?: string
   piv?: string[]
-  posts: string[]
   mobileNumber: string
   pwvp?: string[]
-  activity?: IActivity[]
+  savedJobs?: string[]
   following?: string[]
   followers?: string[]
   reviews: string[] // collection of reviewId
@@ -114,18 +113,41 @@ export interface IParent {
   }
   business?: IBusiness
   store?: IStore
+  // post related fields
+  // ~~~~ on post delete action. make sure to remove postId from these arrays ~~~~
+  savedPosts?: string[]
+  activity?: IActivity[]
+  posts: string[]
+  featuredPosts?: string[]
+  savedProfiles?: string[]
+  notifications?: INotification[]
+}
+
+export interface INotification {
+  _id?: string
+  url?: string
+  type?: string
+  message?: string
+  data?: any
 }
 
 export interface IStore {
-  _id: string
+  _id?: string
   bannerImage: string
   buttonLabel: string
   buttonLink: string
-  createdOn: Date
-  createdBy: string
-  products: IProduct[]
+  createdOn?: Date
+  createdBy?: string
+  isPublished?: boolean
+  products?: IProduct[]
+  section?: IStoreSection[]
 }
-
+export interface IStoreSection {
+  _id?: string
+  title?: string
+  image?: string
+  content?: string
+}
 export type ActivityType = 'posted' | 'shared' | 'commented' | 'replied'
 
 export interface IActivity {
@@ -136,6 +158,7 @@ export interface IActivity {
   postMedia?: string
   userImage?: string
   activityIdx?: number
+  post?: IPost
 }
 
 export interface IPurchases {
@@ -365,7 +388,8 @@ export interface IGroup {
   messages?: any
   coverPicture?: string
   profilePicture?: string
-  owner?: string
+  groupRules?: string
+  requests?: string[]
 }
 
 // ~~~~~~~~~~~~~~~~~~~Post Interfaces~~~~~~~~~~~~~~~~~~~~ //

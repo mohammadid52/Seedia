@@ -2,11 +2,11 @@ import { fetchAllProducts } from 'apis/queries'
 import Meta from 'components/atoms/Meta/Meta'
 import Section from 'components/atoms/products/Section'
 import Loading from 'components/Loading'
+import NarrowLayout from 'containers/NarrowLayout'
 import { useRouter } from 'hooks/useRouter'
 import useUser from 'hooks/useUser'
 import { IParent, IProduct } from 'interfaces/UniversalInterface'
 import Product from 'pages/products/Product'
-import ProductLayout from 'pages/products/ProductLayout'
 import ProfileCard from 'pages/products/ProfileCard/ProfileCard'
 import { useQuery } from 'react-query'
 
@@ -39,8 +39,8 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
           pageUrl={window.location.href}
           pageTitle={`Browse Products - ${userData?.fullName} - 13RMS `}
         />
-        <ProductLayout userData={userData}>
-          <div className="pt-24">
+        <NarrowLayout customMaxWidth="max-w-7xl" userData={userData}>
+          <div className="">
             <ProfileCard
               userData={userData}
               targetId={otherUserData?._id}
@@ -71,7 +71,7 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
             </Section>
             {isError && <p className="text-red-500 text-sm">{error}</p>}
           </div>
-        </ProductLayout>
+        </NarrowLayout>
       </div>
     )
   }

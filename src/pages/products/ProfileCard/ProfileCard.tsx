@@ -17,7 +17,10 @@ const ProfileCard = ({
   targetId?: string
   sectionTitle?: string
 }) => {
-  const { iAmOwnerOfThisProfile } = useUser(userData.profileUrl, userData)
+  const { iAmOwnerOfThisProfile, refetch: refetchProfile } = useUser(
+    userData.profileUrl,
+    userData
+  )
   const { following, addFollow, removeFollow } = useFollow(
     userData?.following,
     targetId

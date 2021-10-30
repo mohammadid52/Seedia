@@ -18,8 +18,6 @@ const CompanyStep = ({ user }: { user?: IParent }) => {
   const [isLoaded] = useState(true)
   const history = useHistory()
 
-  console.log('I am on company page')
-
   const redirection = () => {
     if (user) {
       if (!user?.other?.accountFilled) {

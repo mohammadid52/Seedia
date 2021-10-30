@@ -159,11 +159,7 @@ const GroupList = ({
                 groups.length > 0 &&
                 map(groups, (group) => <Group group={group} />)}
 
-              <Button
-                link={links.createGroup()}
-                label="Create group"
-                gradient
-              />
+              <Button label="Create group" gradient />
             </div>
           )
         }

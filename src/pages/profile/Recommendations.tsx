@@ -1,6 +1,7 @@
 import Loader from 'components/atoms/animation/Loader'
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
+import EmptyState from 'components/atoms/EmptyState'
 import FormInput from 'components/atoms/FormInput'
 import Modal from 'components/atoms/Modal'
 import Tabs from 'components/atoms/Tabs'
@@ -32,15 +33,14 @@ const Recommendations = ({
   const [fetching, setFetching] = useState(false)
 
   const [fetchGiven, setFetchGiven] = useState<any[]>([])
+
   const fetchReceivedList = async () => {
     setFetching(true)
     try {
       const config = {
         users: map(recommendation?.received, (g) => g.userId),
       }
-      const { data } = await network.post('/user/getUsers', config, {
-        headers: { Authorization: token },
-      })
+      const { data } = await network.post('/user/getUsers', config)
 
       const _r = map(data.data, (r, idx: number) => ({
         text: recommendation?.received[idx]?.text || 'Not found',
@@ -63,9 +63,7 @@ const Recommendations = ({
       const config = {
         users: map(recommendation?.given, (g) => g.userId),
       }
-      const { data } = await network.post('/user/getUsers', config, {
-        headers: { Authorization: token },
-      })
+      const { data } = await network.post('/user/getUsers', config)
 
       const _g = map(data.data, (g, idx: number) => ({
         text: recommendation?.given[idx].text,
@@ -130,20 +128,12 @@ const Recommendations = ({
 
   const { setValues } = useUserContext()
 
-  const token = getAccessToken()
-
   const onSave = async (values: any) => {
     setSaving(true)
     try {
       if (values.recommendation) {
         const config = { text: values.recommendation }
-        await network.post(
-          `/user/giveRecommendation/${userData?._id}`,
-          config,
-          {
-            headers: { Authorization: token },
-          }
-        )
+        await network.post(`/user/giveRecommendation/${userData?._id}`, config)
         onCancel()
 
         if (!iAmOwnerOfThisProfile) {
@@ -265,9 +255,11 @@ const Recommendations = ({
               ) : (
                 <div>
                   {iAmOwnerOfThisProfile ? (
-                    <p className="text-center text-gray-400">
-                      No recommendation given yet.
-                    </p>
+                    <EmptyState
+                      title="No recommendations recieved yet"
+                      subtitle="All recieved recommendations will show here "
+                      iconUrl={'/referral.png'}
+                    />
                   ) : (
                     <Button
                       label="Add recommendation"
@@ -311,9 +303,11 @@ const Recommendations = ({
                 })
               ) : (
                 <div>
-                  <p className="text-center text-gray-400">
-                    No recommendation given yet.
-                  </p>
+                  <EmptyState
+                    title="No recommendations given yet"
+                    subtitle="All given recommendations will show here "
+                    iconUrl={'/referral.png'}
+                  />
                 </div>
               ))}
           </div>

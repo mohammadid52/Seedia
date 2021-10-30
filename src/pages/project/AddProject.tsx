@@ -10,6 +10,7 @@ import Title from 'components/atoms/Title'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { Form, Formik } from 'formik'
+import useAccountType from 'hooks/useAccountType'
 import { IParent, IProject, ISection } from 'interfaces/UniversalInterface'
 import { map, remove, update } from 'lodash'
 import { nanoid } from 'nanoid'
@@ -19,6 +20,14 @@ import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 
 const AddProject = ({ userData }: { userData: IParent }) => {
+  const { isBusiness } = useAccountType(userData)
+
+  useEffect(() => {
+    if (!isBusiness) {
+      return history.push(links.FEED)
+    }
+  }, [isBusiness])
+
   const validationSchema = Yup.object({
     title: Yup.string().required('Title is required').min(10).max(150),
     salary: Yup.object({

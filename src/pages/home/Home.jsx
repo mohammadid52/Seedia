@@ -12,7 +12,7 @@ const Home = ({ isUser, profileUrl, template, accountFilled }) => {
     updateDocumentTitle('Home')
   }, [])
   return (
-    <div className="">
+    <div className="bg-gray-100 dark:bg-gray-900">
       <Navigation
         isUser={isUser}
         profileUrl={profileUrl}
@@ -22,7 +22,7 @@ const Home = ({ isUser, profileUrl, template, accountFilled }) => {
       />
       <div className="mx-auto max-w-smallScreen">
         <HomeContent />
-        <div className="flex flex-col dark:bg-gray-900 bg-white">
+        <div className="flex flex-col dark:bg-gray-900 ">
           <CustomSearchPanel />
           <Features />
         </div>

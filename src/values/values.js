@@ -146,66 +146,6 @@ export const callsToAction = [
   { name: 'Sell', href: '/#', icon: GiReceiveMoney },
 ]
 
-export const businessApps = [
-  {
-    icon: AiOutlineSearch,
-    name: 'Search for leads',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: BsFilePost,
-    name: 'Post a job',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: FaAdversal,
-    name: 'Advertise',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: FaMoneyBillAlt,
-    name: 'Sell products',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: AiOutlineUsergroupDelete,
-    name: 'Groups',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: MdFindReplace,
-    name: 'Pro finder',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: MdAttachMoney,
-    name: 'Salary',
-    description:
-      'Get a better understanding of where your traffic is coming from.',
-  },
-  {
-    icon: BsFilePost,
-    name: 'New product',
-    description: 'Lorem ipsum dolor sit amet',
-  },
-  {
-    icon: FaConnectdevelop,
-    name: 'New product developed',
-    description: 'Lorem ipsum dolor sit amet',
-  },
-  {
-    icon: SiGoogleanalytics,
-    name: 'Profile statistics',
-    description: 'Lorem ipsum dolor sit amet',
-  },
-]
-
 export const year = new Date().getFullYear()
 const startDate = 1950
 

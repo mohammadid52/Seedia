@@ -15,13 +15,13 @@ const VerticalProfileCard = ({
   const defaultContent = (
     <>
       <p className="text-sm font-medium dark:text-white text-gray-500 ">
-        {isBusiness ? user.business.name : user.company.jobTitle}
+        {isBusiness ? user?.business?.name : user?.company?.jobTitle}
       </p>
       <a
         className="dark:text-white text-gray-900 text-lg font-medium"
         href={links.getProfileById(
-          user.profileUrl,
-          user.other.template,
+          user?.profileUrl,
+          user?.other.template,
           'public'
         )}
       >
@@ -48,10 +48,17 @@ const VerticalProfileCard = ({
           className="rounded-full border-solid lg:h-16 lg:w-16 h-12 w-12  border-white border-2 -mt-3"
         />
       </div>
-      <div className="text-center px-3 pb-6 pt-2">
-        <h3 className="dark:text-white text-gray-900 text-base font-bold ">
+      <div className={`text-center ${content ? '' : 'px-3 pb-6 pt-2'}`}>
+        <a
+          href={links.getProfileById(
+            user.profileUrl,
+            user.other.template,
+            'private'
+          )}
+          className="dark:text-white cursor-pointer text-gray-900 text-base font-bold "
+        >
           {user.fullName}
-        </h3>
+        </a>
         {content || defaultContent}
       </div>
     </div>

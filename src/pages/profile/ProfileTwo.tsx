@@ -1,5 +1,6 @@
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
+import Meta from 'components/atoms/Meta/Meta'
 import Modal from 'components/atoms/Modal'
 import CustomFooter from 'components/CustomFooter'
 import DiscoverCard from 'components/DiscoverButton'
@@ -20,15 +21,14 @@ import Shortcuts from 'components/profileTwo/Shortcuts'
 import Skills from 'components/profileTwo/Skills'
 import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
+import EmptyState from 'components/atoms/EmptyState'
 import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
-import { updateDocumentTitle } from 'helpers'
 import useAccountType from 'hooks/useAccountType'
 import { useRouter } from 'hooks/useRouter'
 import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
-import GroupList from 'pages/groups/GroupList'
 import AdditionalFeatures from 'pages/profile/AdditionalFeatures'
 import Layout from 'pages/profile/Layout'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
@@ -37,25 +37,23 @@ import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import * as constants from 'state/Redux/constants'
 import Following from './Following'
+import BottomCard from 'components/BottomCard'
+import { isEmpty } from 'lodash'
 
 const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
   const route: any = useRouter()
 
-  const { viewMode, userId: userIdFromParam, template } = route?.match?.params
+  const { viewMode, userId: userIdFromParam } = route?.match?.params
 
-  const { otherUserData, iAmOwnerOfThisProfile, isFetched, isLoading } =
-    useUser(userIdFromParam, userData)
+  const {
+    otherUserData,
+    iAmOwnerOfThisProfile,
+    isFetched,
+    isLoading,
+    refetch: refetchProfile,
+  } = useUser(userIdFromParam, userData)
   const showAllButtons = iAmOwnerOfThisProfile && viewMode === 'private'
-
-  useEffect(() => {
-    if (!iAmOwnerOfThisProfile) {
-      // I am not owner of this profile so fetch other user data
-      updateDocumentTitle(otherUserData?.fullName)
-    } else {
-      updateDocumentTitle(userData.fullName)
-    }
-  }, [iAmOwnerOfThisProfile])
 
   const [unsavedChanges, setUnsavedChanges] = useState(false)
 
@@ -128,7 +126,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     }
   }
 
-  const { isBusiness } = useAccountType(userData)
+  const { isBusiness, getType } = useAccountType(userData)
 
   const commonBlockProps2 = {
     authUser: showAllButtons,
@@ -136,167 +134,205 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
   }
   const history = useHistory()
 
-  // @ts-ignore
+  const user = commonProps?.userData
   useEffect(() => {
-    const templateFromUser = commonProps?.userData?.other?.template
-    if (template !== templateFromUser) {
-      const changeTemplate = templateFromUser
-      history.push(
-        links.getProfileById(
-          commonProps?.userData?.profileUrl,
-          changeTemplate,
-          viewMode
-        )
-      )
+    if (!isEmpty(user)) {
+      history.push(links.getProfile(user, iAmOwnerOfThisProfile))
     }
-  }, [userIdFromParam, template])
+  }, [user])
 
   if (isLoading && !isFetched) {
     return <Loading />
   }
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-900 smooth-scroll pt-24">
+    <div className="bg-gray-100 dark:bg-gray-900 smooth-scroll min-h-screen pt-12">
       <DashboardHeader userData={userData} />
-
-      <Sidebar />
-      <div className="">
-        {showModal.show && (
-          <Modal
-            open={showModal.show}
-            onClose={onCancel}
-            setOpen={() => setShowModal({ show: false, type: '' })}
-            header={renderModalHeader(showModal.type)}
-          >
-            <div className="">
-              <div className="overflow-y-auto min-w-132  custom-scroll-mini darker my-4 px-1">
-                {renderModalContentByType(showModal.type)}
-              </div>
-            </div>
-          </Modal>
-        )}
-      </div>
-
-      {/* stylelint-disabled  */}
-      <div className="mx-auto min-h-screen pt-8 max-w-440">
-        <Layout
-          hideBorders
-          userData={userData}
-          business={isBusiness}
-          firstCol={
-            <div className="space-y-12">
-              <Card
-                className={` transition-transform duration-200`}
-                secondary
-                cardTitle="Shortcuts"
-                content={
-                  <div>
-                    <Shortcuts />
+      {!isEmpty(user) ? (
+        <div>
+          <Meta
+            pageTitle={`${user.fullName} | 13RMS`}
+            userName={user.fullName}
+            pageUrl={links.getProfile(user)}
+            imageUrl={user?.profilePicture}
+            pageType="social media"
+            title={`${user.fullName} | 13RMS`}
+            keywords={`profile,${user.fullName},13RMS,tradingpost, linkedin,instagram,facebook`}
+          />
+          <Sidebar />
+          <div className="">
+            {showModal.show && (
+              <Modal
+                open={showModal.show}
+                onClose={onCancel}
+                setOpen={() => setShowModal({ show: false, type: '' })}
+                header={renderModalHeader(showModal.type)}
+              >
+                <div className="">
+                  <div className="overflow-y-auto min-w-132  custom-scroll-mini darker my-4 px-1">
+                    {renderModalContentByType(showModal.type)}
                   </div>
-                }
-              />
-              {!isBusiness && iAmOwnerOfThisProfile && <AdditionalFeatures />}
-              {iAmOwnerOfThisProfile && <DiscoverCard />}
-            </div>
-          }
-          secondCol={
-            <div className="flex flex-col space-y-12">
-              <Cover {...commonBlockProps2} />
+                </div>
+              </Modal>
+            )}
+          </div>
 
-              {!isBusiness && <Experiences {...commonBlockProps} />}
-              {!isBusiness && (
-                <div className="grid-cols-1 grid space-x-6 sm:grid-cols-2 px-0 ">
-                  <Skills {...commonBlockProps} />
-                  <Awards {...commonBlockProps} />
+          {/* stylelint-disabled  */}
+          <div className="mx-auto min-h-screen  max-w-440">
+            <Layout
+              hideBorders
+              userData={userData}
+              business={isBusiness}
+              firstCol={
+                <div className="space-y-12">
+                  <Card
+                    className={` transition-transform duration-200`}
+                    secondary
+                    cardTitle="Shortcuts"
+                    content={
+                      <div>
+                        <Shortcuts />
+                      </div>
+                    }
+                  />
+                  {/* {iAmOwnerOfThisProfile && ( */}
+                  <AdditionalFeatures
+                    iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                    userData={userData}
+                    otherUserData={otherUserData}
+                    refetchProfile={refetchProfile}
+                    isBusiness={getType(user).isBusiness}
+                  />
+                  {/* )} */}
+                  {iAmOwnerOfThisProfile && (
+                    <DiscoverCard
+                      extraItems={[{ link: links.myItems(), name: 'My items' }]}
+                    />
+                  )}
                 </div>
-              )}
-              {!isBusiness && <Education {...commonBlockProps} />}
-              <Activity
-                userData={userData}
-                iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
-              />
-              <Recommendations
-                secondary
-                iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
-                {...commonProps}
-                recommendation={commonProps?.userData?.recommendation}
-              />
+              }
+              secondCol={
+                <div className="flex flex-col space-y-12">
+                  <Cover authUser={iAmOwnerOfThisProfile} userData={user} />
 
-              {!isBusiness && (
-                <div className="grid-cols-1 grid  sm:grid-cols-2 ">
-                  <Languages {...commonBlockProps} />
-                </div>
-              )}
-            </div>
-          }
-          thirdCol={
-            <div className="">
-              {showAllButtons && (
-                <div className="mb-12">
-                  <PublicProfileCard secondary userData={userData} />
-                </div>
-              )}
-              {showAllButtons && (
-                <ProfileStrength secondary {...commonBlockProps2} />
-              )}
-              <div className="xl:hidden block">
-                <Card
-                  className={`transition-transform duration-200`}
-                  secondary
-                  cardTitle="Shortcuts"
-                  content={
-                    <div>
-                      <Shortcuts />
+                  {!isBusiness && <Experiences {...commonBlockProps} />}
+                  {!isBusiness && (
+                    <div className="grid-cols-1 grid space-x-6 sm:grid-cols-2 px-0 ">
+                      <Skills {...commonBlockProps} />
+                      <Awards {...commonBlockProps} />
                     </div>
-                  }
-                />
-              </div>
-              <Following
-                showSingleCard
-                list={userData.following}
-                interests={userData?.background?.interests}
-              />
-              <PeopleAlsoViewed {...commonBlockProps2} secondary />
-            </div>
-          }
-        />
-      </div>
-      <CustomFooter />
+                  )}
+                  {!isBusiness && <Education {...commonBlockProps} />}
+                  <Activity
+                    userData={commonBlockProps.userData}
+                    iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                  />
+                  <Recommendations
+                    secondary
+                    iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                    {...commonProps}
+                    recommendation={commonProps?.userData?.recommendation}
+                  />
 
-      {showUnsaveModal && (
-        <Modal
-          hideCloseBtn
-          header="Discard changes"
-          open={showUnsaveModal}
-          setOpen={setShowUnsaveModal}
-        >
-          <>
-            <h1 className="text-lg dark:text-white text-gray-900 min-w-96">
-              You have unsaved changes
-            </h1>
-            <p className="text-gray-500 ">Do you want to save it?</p>
+                  {!isBusiness && (
+                    <div className="grid-cols-1 grid  sm:grid-cols-2 ">
+                      <Languages {...commonBlockProps} />
+                    </div>
+                  )}
+                  {iAmOwnerOfThisProfile && (
+                    <Following
+                      list={userData.following}
+                      interests={userData?.background?.interests}
+                    />
+                  )}
+                </div>
+              }
+              thirdCol={
+                <div className="">
+                  {showAllButtons && (
+                    <div className="mb-12">
+                      <PublicProfileCard secondary userData={userData} />
+                    </div>
+                  )}
+                  {showAllButtons && (
+                    <ProfileStrength secondary {...commonBlockProps2} />
+                  )}
+                  <div className="xl:hidden block">
+                    <Card
+                      className={`transition-transform duration-200`}
+                      secondary
+                      cardTitle="Shortcuts"
+                      content={
+                        <div>
+                          <Shortcuts />
+                        </div>
+                      }
+                    />
+                  </div>
+                  {iAmOwnerOfThisProfile && (
+                    <PeopleAlsoViewed
+                      // showSingleCard={false}
+                      {...commonBlockProps2}
+                      secondary
+                    />
+                  )}
+                </div>
+              }
+            />
+          </div>
+          {!iAmOwnerOfThisProfile && (
+            <BottomCard
+              myFollowings={userData.following}
+              userData={otherUserData}
+            />
+          )}
+          <CustomFooter />
 
-            <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
-              <Button
-                secondary
-                bgColor="gray"
-                onClick={() => {
-                  setShowUnsaveModal(false)
-                  setShowModal({ ...showModal, show: true })
-                }}
-                invert
-                label="No thanks"
-              />
-              <Button
-                gradient
-                label="Discard"
-                onClick={() => {
-                  setShowUnsaveModal(false)
-                }}
-              />
-            </div>
-          </>
-        </Modal>
+          {showUnsaveModal && (
+            <Modal
+              hideCloseBtn
+              header="Discard changes"
+              open={showUnsaveModal}
+              setOpen={setShowUnsaveModal}
+            >
+              <>
+                <h1 className="text-lg dark:text-white text-gray-900 min-w-96">
+                  You have unsaved changes
+                </h1>
+                <p className="text-gray-500 ">Do you want to save it?</p>
+
+                <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
+                  <Button
+                    secondary
+                    bgColor="gray"
+                    onClick={() => {
+                      setShowUnsaveModal(false)
+                      setShowModal({ ...showModal, show: true })
+                    }}
+                    invert
+                    label="No thanks"
+                  />
+                  <Button
+                    gradient
+                    label="Discard"
+                    onClick={() => {
+                      setShowUnsaveModal(false)
+                    }}
+                  />
+                </div>
+              </>
+            </Modal>
+          )}
+        </div>
+      ) : (
+        <div className="flex items-center  overflow-hidden  max-h-screen min-h-96   justify-center">
+          <EmptyState
+            hideBorders
+            title="Oops Can't find user."
+            subtitle={`Please check url`}
+            iconUrl={'/question.png'}
+          />
+        </div>
       )}
     </div>
   )

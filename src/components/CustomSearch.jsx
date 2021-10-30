@@ -66,19 +66,21 @@ const CustomSearchPanel = () => {
   }))(Tooltip)
 
   return (
-    <div className="mx-auto w-full max-w-md my-12  px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
-      <div className="grid sm:grid-cols-12 rounded-t-xl h-12 grid-cols-1 dark:border-gray-700 border">
+    <div className="mx-auto  w-full max-w-md my-12  px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
+      <div className="grid bg-white dark:bg-gray-900 sm:grid-cols-12 rounded-t-xl h-12 grid-cols-1 dark:border-gray-800 border">
         <HtmlTooltip
           title={
-            <div>
+            <div className="bg-white dark:bg-gray-900">
               {tooltipData.map((item, idx) => (
                 <div key={item.heading + idx} className="p-1 text-xs">
-                  <strong className=" mb-1">
+                  <strong className="text-gray-900 dark:text-white mb-1">
                     {item.heading}
                     <br />{' '}
                   </strong>
 
-                  <p className="text-gray-300 font-medium">{item.content}</p>
+                  <p className="text-gray-700 dark:text-gray-300 font-medium">
+                    {item.content}
+                  </p>
                 </div>
               ))}
             </div>
@@ -133,7 +135,7 @@ const CustomSearchPanel = () => {
           <CountryListDropdown />
         </div>
       </div>
-      <div className="grid space-x-12 sm:grid-cols-5 rounded-b-xl h-12 grid-cols-1 px-10 dark:border-gray-700 border">
+      <div className="bg-white dark:bg-gray-900 grid space-x-12 sm:grid-cols-5 rounded-b-xl h-12 grid-cols-1 px-10 dark:border-gray-800 border">
         {welcomeSearchLinks.map((item, idx) => {
           return (
             <>

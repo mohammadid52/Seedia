@@ -3,9 +3,7 @@ import Card from 'components/atoms/Card'
 import EmptyState from 'components/atoms/EmptyState'
 import { links } from 'constants/Links'
 import { IActivity, IParent } from 'interfaces/UniversalInterface'
-import { useState } from 'react'
 import { avatarPlaceholder } from 'state/Redux/constants'
-import { eclipse } from 'utils/functions'
 
 const Activity = ({
   iAmOwnerOfThisProfile,
@@ -23,7 +21,7 @@ const Activity = ({
         <div>
           {iAmOwnerOfThisProfile ? (
             <a href={links.followers()} className="block">
-              <div className="-mt-2 mb-2 text-blue-500 hover:underline font-medium tracking-wide ">
+              <div className="-mt-2 mb-2 text-link hover:underline font-medium tracking-wide ">
                 {userData?.followers?.length} followers
               </div>
             </a>
@@ -39,11 +37,11 @@ const Activity = ({
                   userData?.activity?.length > 1 ? 'grid-cols-2' : 'grid-cols-1'
                 }`}
               >
-                {slicedList.map((activity: IActivity) => {
+                {slicedList.map((activity: IActivity, idx) => {
                   const postUrl = links.postById(activity.postUrl)
                   const showUserImage = Boolean(activity.userImage)
                   return (
-                    <div className="sm:flex">
+                    <div key={activity.text + idx} className="sm:flex">
                       <div className="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
                         <img
                           src={
@@ -75,15 +73,18 @@ const Activity = ({
                   fullWidth
                   className="mt-4 "
                   invert
+                  target=""
                   gradient
-                  link={links.postById('sdsd')}
+                  link={links.recentActivity(userData.profileUrl)}
                 />
               </div>
             </div>
           ) : (
             <EmptyState
               title="No Activity"
-              subtitle="Your recent posts, comments, replies will be here"
+              subtitle={`${
+                iAmOwnerOfThisProfile ? 'Your' : `${userData.firstName}'s'`
+              } recent posts, comments, replies will be here`}
               iconUrl={'/no-activity.png'}
             />
           )}

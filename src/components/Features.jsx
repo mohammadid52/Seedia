@@ -54,7 +54,7 @@ const Features = () => {
     },
   ]
   return (
-    <div className="relative bg-white dark:bg-gray-900 py-16 sm:py-24 lg:py-32">
+    <div className="relative bg-gray-100 dark:bg-gray-900 py-16 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
         <p className="mt-2 text-xl font-extrabold dark:text-white text-gray-900 tracking-tight sm:text-3xl">
           Everything you need to get started with{' '}
@@ -67,7 +67,7 @@ const Features = () => {
           <div className="grid grid-cols-1 gap-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
             {features.map((feature) => (
               <div key={feature.name} className="max-h-60 max-w-60 ">
-                <div className="flow-root feature cursor-pointer bg-gray-50 dark:bg-gray-700 rounded-lg px-4 pb-8">
+                <div className="flow-root feature cursor-pointer bg-white border-gray-200 border dark:border-gray-800 dark:bg-gray-700 rounded-lg px-4 pb-8">
                   <div className="-mt-6">
                     <div>
                       <span className="feature-icon transform  inline-flex items-center justify-center p-2.5 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md shadow-lg">

@@ -20,7 +20,8 @@ const SinglePostView = ({ userData }: { userData: IParent }) => {
   )
 
   const post: IPost = !isLoading && isFetched && isSuccess ? data.data.data : {}
-  const user = post.user
+
+  const user = post?.user
 
   return (
     <div className="relative  dark:bg-gray-900 bg-gray-100 min-h-screen ">
@@ -46,7 +47,7 @@ const SinglePostView = ({ userData }: { userData: IParent }) => {
               {isLoading && !isFetched ? (
                 <Spinner />
               ) : (
-                <Post userId={userData._id} post={post} />
+                <Post userData={userData} userId={userData._id} post={post} />
               )}
             </div>
           }

@@ -8,8 +8,10 @@ const PeopleAlsoViewed = ({
   secondary = false,
   userData,
   authUser,
+  showSingleCard = true,
 }: {
   secondary?: boolean
+  showSingleCard?: boolean
   authUser?: boolean
   userData?: IParent
 }) => {
@@ -18,7 +20,7 @@ const PeopleAlsoViewed = ({
 
   const fetchPeopleYouViewedList = async () => {
     try {
-      const config = { users: userData?.piv }
+      const config = { users: userData?.piv, limit: 6 }
       const { data } = await network.post('/user/getUsers', config, {
         headers: { Authorization: token },
       })
@@ -40,20 +42,17 @@ const PeopleAlsoViewed = ({
       secondary={secondary}
       cardTitle={authUser ? 'People You Viewed' : 'Related Users'}
       content={
-        <div className="flex flex-col gap-y-4 items-center">
+        <div
+          className={`${
+            showSingleCard
+              ? 'flex flex-col items-center gap-4'
+              : 'grid-cols-1 grid mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4'
+          }  `}
+        >
           {list && list.length > 0 ? (
-            list.map((people: IParent, idx: number) => {
-              const following =
-                userData &&
-                userData?.following &&
-                userData?.following.length > 0 &&
-                // @ts-ignore
-                userData?.following?.includes(people?._id)
-
-              return (
-                <User key={people?._id} user={people} following={following} />
-              )
-            })
+            list.map((people: IParent, idx: number) => (
+              <User key={people?._id} user={people} />
+            ))
           ) : (
             <p className="text-gray-400 text-center">no users found</p>
           )}

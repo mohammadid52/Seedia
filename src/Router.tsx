@@ -1,53 +1,55 @@
 import { links } from 'constants/Links'
 import AuthContainer from 'containers/AuthContainer'
-import BusinessStepOne from 'pages/account/business/StepOne'
-import BusinessStepTwo from 'pages/account/business/StepTwo'
-import ChooseAccount from 'pages/account/other/ChooseAccount'
-import ChooseTemplate from 'pages/account/other/ChooseTemplate'
-import Dashboard from 'pages/dashboard'
-import ForgotPassword from 'pages/ForgotPassword'
-import CreateGroup from 'pages/groups/CreateGroup'
-import GroupsView from 'pages/groups/GroupsView'
-import SingleGroupView from 'pages/groups/SingleGroupView'
-import Home from 'pages/home/Home'
-import NotFound from 'pages/NotFound'
-import SinglePostView from 'pages/posts/SinglePostView'
-import AddProduct from 'pages/products/AddProduct'
-import BrowseProducts from 'pages/products/BrowseProducts'
-import ProductDetails from 'pages/products/ProductDetails'
-import ProfileTwo from 'pages/profile/ProfileTwo'
-import AddProject from 'pages/project/AddProject'
-import SearchedJobs from 'pages/project/ListView/SearchedJobs'
-import ProjectView from 'pages/project/ProjectView'
-import RequestsList from 'pages/request/RequestsList'
-import RequestView from 'pages/request/RequestView'
-import ResetPassword from 'pages/ResetPassword'
-import OpenStore from 'pages/store/OpenStore'
-import ViewStore from 'pages/store/ViewStore'
 import { lazy } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import PrivateRoute from 'routes/PrivateRoute'
 
-const CreateReview = lazy(() => import('pages/products/Review/CreateReview'))
-const PlaceRequest = lazy(() => import('pages/request/PlaceRequest'))
-const Profile = lazy(() => import('pages/profile/ProfileOne'))
-const Signup = lazy(() => import('pages/Signup'))
-const Cart = lazy(() => import('pages/cart/Cart'))
-const Login = lazy(() => import('pages/Login'))
-const CompanyStep = lazy(() => import('pages/account/personal/CompanyStep'))
-const LocationStep = lazy(() => import('pages/account/personal/LocationStep'))
-const EducationStep = lazy(() => import('pages/account/student/EducationStep'))
-const Settings = lazy(() => import('pages/Settings'))
+const BusinessStepOne = lazy(() => import('pages/account/business/StepOne')) // page
+const ChooseAccount = lazy(() => import('pages/account/other/ChooseAccount')) // page
+const BusinessStepTwo = lazy(() => import('pages/account/business/StepTwo')) // page
+const ChooseTemplate = lazy(() => import('pages/account/other/ChooseTemplate')) // page
+const Dashboard = lazy(() => import('pages/dashboard')) // page
+const UserFollowers = lazy(() => import('pages/followers/UserFollowers')) // page
+const ForgotPassword = lazy(() => import('pages/ForgotPassword')) // page
+const GroupsView = lazy(() => import('pages/groups/GroupsView')) // page
+const SingleGroupView = lazy(() => import('pages/groups/SingleGroupView')) // page
+const Home = lazy(() => import('pages/home/Home')) // page
+const NotFound = lazy(() => import('pages/NotFound')) // page
+const RecentActivity = lazy(() => import('pages/posts/RecentActivity')) // page
+const SinglePostView = lazy(() => import('pages/posts/SinglePostView')) // page
+const AddProduct = lazy(() => import('pages/products/AddProduct')) // page
+const BrowseProducts = lazy(() => import('pages/products/BrowseProducts')) // page
+const ProductDetails = lazy(() => import('pages/products/ProductDetails')) // page
+const ProfileTwo = lazy(() => import('pages/profile/ProfileTwo')) // page
+const AddProject = lazy(() => import('pages/project/AddProject')) // page
+const SearchedJobs = lazy(() => import('pages/project/ListView/SearchedJobs')) // page
+const ProjectView = lazy(() => import('pages/project/ProjectView')) // page
+const RequestsList = lazy(() => import('pages/request/RequestsList')) // page
+const RequestView = lazy(() => import('pages/request/RequestView')) // page
+const ResetPassword = lazy(() => import('pages/ResetPassword')) // page
+const OpenStore = lazy(() => import('pages/store/OpenStore')) // page
+const ViewStore = lazy(() => import('pages/store/ViewStore')) // page
+const CreateReview = lazy(() => import('pages/products/Review/CreateReview')) // page
+const PlaceRequest = lazy(() => import('pages/request/PlaceRequest')) // page
+const Profile = lazy(() => import('pages/profile/ProfileOne')) // page
+const Signup = lazy(() => import('pages/Signup')) // page
+const Cart = lazy(() => import('pages/cart/Cart')) // page
+const Login = lazy(() => import('pages/Login')) // page
+const CompanyStep = lazy(() => import('pages/account/personal/CompanyStep')) // page
+const LocationStep = lazy(() => import('pages/account/personal/LocationStep')) // page
+const EducationStep = lazy(() => import('pages/account/student/EducationStep')) // page
+const Settings = lazy(() => import('pages/Settings')) // page
+const MyItems = lazy(() => import('pages/savedItems/MyItems')) // page
 const FriendsPurchases = lazy(
-  () => import('pages/products/FriendsPurchases/FriendsPurchases')
+  () => import('pages/products/FriendsPurchases/FriendsPurchases') // page
 )
 const MyProjectsListView = lazy(
-  () => import('pages/project/ListView/MyProjectsListView')
+  () => import('pages/project/ListView/MyProjectsListView') // page
 )
 const ProjectsListView = lazy(
-  () => import('pages/project/ListView/ProjectListView')
+  () => import('pages/project/ListView/ProjectListView') // page
 )
-const SearchedEmployees = lazy(() => import('pages/request/SearchedEmployees'))
+const SearchedEmployees = lazy(() => import('pages/request/SearchedEmployees')) // page
 
 const Router = ({
   navProps,
@@ -154,14 +156,7 @@ const Router = ({
                 <PlaceRequest userData={userData} />
               </PrivateRoute>
               {/* Groups */}
-              <PrivateRoute
-                // @ts-ignore
-                exact
-                isUser={userData}
-                path="/group/create-group"
-              >
-                <CreateGroup userData={userData} />
-              </PrivateRoute>
+
               {/* Groups Page */}
               <PrivateRoute
                 // @ts-ignore
@@ -180,6 +175,7 @@ const Router = ({
               >
                 <SingleGroupView userData={userData} />
               </PrivateRoute>
+
               {/* See single group */}
               <PrivateRoute
                 // @ts-ignore
@@ -188,6 +184,14 @@ const Router = ({
                 path="/posts/:postUrl"
               >
                 <SinglePostView userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/:profileUrl/recent-activity"
+              >
+                <RecentActivity userData={userData} />
               </PrivateRoute>
               <PrivateRoute
                 // @ts-ignore
@@ -232,6 +236,33 @@ const Router = ({
               >
                 {/* @ts-ignore */}
                 <Dashboard {...navProps} userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={isUser}
+                path="/my-items/"
+              >
+                {/* @ts-ignore */}
+                <MyItems userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={isUser}
+                path="/feed/followers"
+              >
+                {/* @ts-ignore */}
+                <UserFollowers userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={isUser}
+                path="/feed/followings"
+              >
+                {/* @ts-ignore */}
+                <UserFollowers userData={userData} />
               </PrivateRoute>
               <PrivateRoute
                 // @ts-ignore

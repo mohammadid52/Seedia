@@ -1,69 +1,106 @@
-import { createGroup } from 'apis/mutations'
+import { createGroup, uploadMultipleImages } from 'apis/mutations'
+import placeholder from 'assets/svg/placeholder.png'
 import Error from 'components/alerts/Error'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
-import Meta from 'components/atoms/Meta/Meta'
-import Title from 'components/atoms/Title'
-import { links } from 'constants/Links'
-import NarrowLayout from 'containers/NarrowLayout'
 import { Form, Formik } from 'formik'
-import { IGroup, IParent } from 'interfaces/UniversalInterface'
-import remove from 'lodash/remove'
-import UsersModal from 'pages/groups/UsersModal'
-import { useEffect, useRef, useState } from 'react'
+import { IGroup } from 'interfaces/UniversalInterface'
+import { isEmpty, map } from 'lodash'
+import React, { useEffect, useRef, useState } from 'react'
+import { AiOutlineEdit } from 'react-icons/ai'
 import { useMutation } from 'react-query'
-import { useHistory } from 'react-router-dom'
 import { avatarPlaceholder } from 'state/Redux/constants'
 import * as Yup from 'yup'
 
-const CreateGroup = ({ userData }: { userData: IParent }) => {
+const CreateGroup = ({
+  onSuccess,
+  refetchGroup,
+  groupData = null,
+}: {
+  onSuccess?: () => void
+  refetchGroup: any
+  groupData?: IGroup
+}) => {
   const validationSchema = Yup.object({
     groupName: Yup.string().required('Group Name is required').min(10).max(150),
+    groupDescription: Yup.string()
+      .required('Group Description is required')
+      .min(10)
+      .max(150),
   })
 
   // @ts-ignore
   const initialValues: IGroup = {
-    groupName: '',
-    groupDescription: '',
-    members: [],
+    groupName: groupData?.groupName || '',
+    groupDescription: groupData?.groupDescription || '',
+    groupRules: groupData?.groupRules || '',
   }
 
-  const { mutate, isLoading, isError, error, isSuccess } =
-    useMutation(createGroup)
+  const formRef = useRef()
 
-  const history = useHistory()
+  const { mutate, isLoading, isError, error, isSuccess } = useMutation(
+    createGroup,
+    {
+      onSuccess: () => {
+        refetchGroup()
+      },
+    }
+  )
 
-  const [members, setMembers] = useState<string[]>([])
+  const upload = useMutation(uploadMultipleImages, {
+    onSuccess: (a, b) => {
+      const finalImageList: any[] = map(a.data.data, (img, idx: number) => img)
+      // @ts-ignore
+      if (formRef?.current && formRef?.current?.values) {
+        mutate({
+          // @ts-ignore
+          ...formRef?.current?.values,
+          coverPhoto: finalImageList.find(
+            (img) => img.originalname === coverPhoto.name
+          )?.location,
+
+          profilePhoto: finalImageList.find(
+            (img) => img.originalname === profilePhoto.name
+          )?.location,
+        })
+      }
+    },
+  })
 
   useEffect(() => {
-    if (isSuccess) {
-      history.push(
-        links.getProfileById(
-          userData.profileUrl,
-          userData?.other?.template || 1
-        )
-      )
+    if (isSuccess && upload.isSuccess) {
+      onSuccess()
     }
-  }, [isSuccess])
+  }, [isSuccess, upload.isSuccess])
+
+  const uploadFunction = () => {
+    const fd = new FormData()
+
+    fd.append('images', profilePhoto)
+    fd.append('images', coverPhoto)
+
+    setTimeout(() => {
+      upload.mutate(fd)
+    }, 500)
+  }
+
+  const editMode = !isEmpty(groupData)
+
+  useEffect(() => {
+    if (editMode) {
+      setCoverPhoto(groupData.coverPicture)
+      setProfilePhoto(groupData.profilePicture)
+    }
+  }, [editMode])
 
   const onSubmit = async (values: any) => {
-    if (members.length > 0) {
-      mutate({ ...values, members })
-    }
+    console.log(
+      '🚀 ~ file: CreateGroup.tsx ~ line 97 ~ onSubmit ~ values',
+      values
+    )
+    uploadFunction()
   }
 
-  const [showUsersModal, setShowUsersModal] = useState(false)
-
-  const onSelectUser = (userId: string) => {
-    const alreadyAdded = members && members.find((member) => member === userId)
-    if (alreadyAdded) {
-      remove(members, (member) => member === userId)
-      setMembers((prev: string[]) => [...prev])
-    } else {
-      members.push(userId)
-      setMembers((prev: string[]) => [...prev])
-    }
-  }
   const profileImageSelectorRef = useRef()
 
   const showFileExplorerForProfile = () =>
@@ -77,17 +114,11 @@ const CreateGroup = ({ userData }: { userData: IParent }) => {
     coverImageSelectorRef?.current?.click()
 
   const [profilePhoto, setProfilePhoto] = useState<any>()
+
   const [coverPhoto, setCoverPhoto] = useState<any>()
 
   return (
-    <NarrowLayout>
-      <UsersModal
-        onSelectUser={onSelectUser}
-        show={showUsersModal}
-        userData={userData}
-        members={members}
-        setShow={setShowUsersModal}
-      />
+    <div className="px-1">
       {/* HIDDEN IMAGE INPUT */}
       <input
         // @ts-ignore
@@ -106,83 +137,81 @@ const CreateGroup = ({ userData }: { userData: IParent }) => {
         onChange={(e) => setProfilePhoto(e.target.files[0])}
         accept="image/x-png,image/jpeg"
       />
-      <Meta pageTitle="Create Group | groups | 13RMS" />
-      <Title fontWeight="font-bold mb-8">Create Group</Title>
+
       <Formik
         initialValues={initialValues}
+        enableReinitialize
+        innerRef={formRef}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        <Form className="space-y-8">
-          <div className="flex items-center flex-col space-y-4   justify-center">
-            <img
-              onClick={() => showFileExplorerForCover()}
-              className=" cursor-pointer h-96 rounded-lg w-full shadow-xl"
-              src={
-                coverPhoto
-                  ? URL.createObjectURL(coverPhoto)
-                  : 'https://picsum.photos/200/300'
-              }
-              alt=""
-            />
-          </div>
-
-          <div className="grid grid-cols-4 gap-4">
-            <div>
+        <Form className="space-y-6">
+          <div className=" overflow-hidden  bg-white dark:bg-gray-900">
+            <div className="relative  group">
+              <div className="absolute top-0 right-0 p-4">
+                <AiOutlineEdit className="bg-gray-100   transition-all hover:bg-gray-300 duration-300 rounded-full p-2 text-gray-700 h-8 w-8" />
+              </div>
+              <img
+                alt=""
+                onClick={() => showFileExplorerForCover()}
+                src={
+                  coverPhoto
+                    ? editMode
+                      ? coverPhoto
+                      : URL.createObjectURL(coverPhoto)
+                    : placeholder
+                }
+                className="w-full lg:h-36 sm:h-24 object-cover h-20"
+              />
+            </div>
+            <div className="flex  relative justify-start mr-8 ml-4 -mt-12">
               <img
                 onClick={() => showFileExplorerForProfile()}
-                className="border-gradient border-transparent border-4 h-36 w-36 sm:h-40 sm:w-40 cursor-pointer rounded-full shadow-xl"
+                alt=""
                 src={
                   profilePhoto
-                    ? URL.createObjectURL(profilePhoto)
+                    ? editMode
+                      ? profilePhoto
+                      : URL.createObjectURL(profilePhoto)
                     : avatarPlaceholder
                 }
-                alt=""
-              />
-            </div>
-            <div className="col-span-3 space-y-4">
-              <FormInput
-                label="Group Name"
-                id="groupName"
-                name="groupName"
-                required
-                placeholder="Add group name"
-              />
-
-              <FormInput
-                label="Group Description"
-                id="groupDescription"
-                name="groupDescription"
-                placeholder="Add group description"
-                textarea
-                rows={4}
-                cols={255}
+                className=" border-solid lg:h-24 lg:w-24 h-16 w-16  border-white border-2 -mt-3"
               />
             </div>
           </div>
-          <div className="w-full flex flex-col gap-y-4 items-center justify-between ">
-            {members && members.length > 0 && (
-              <div className="border h-12 dark:border-gray-700 border-gray-400 rounded-lg w-full">
-                {/* {map(members, (member) => ())} */}
-              </div>
-            )}
-            <Button
-              rounded="rounded-lg"
-              loading={isLoading}
-              onClick={() => setShowUsersModal(true)}
-              gradient
-              invert
-              className="w-full"
-              size="lg"
-              label="Add member"
-            />
-          </div>
+          <FormInput
+            label="Group Name"
+            id="groupName"
+            name="groupName"
+            required
+            placeholder="Add group name"
+          />
 
-          <div className="flex items-center justify-end">
+          <FormInput
+            label="Description"
+            id="groupDescription"
+            name="groupDescription"
+            placeholder="What is the purpose of this group?"
+            textarea
+            rows={2}
+            cols={255}
+          />
+          <FormInput
+            label="Group rules"
+            id="groupRules"
+            name="groupRules"
+            placeholder="Set the tone and expectations of your group"
+            textarea
+            rows={2}
+            cols={255}
+          />
+
+          <div className="flex  items-center justify-end">
             <Button
               type="submit"
               rounded="rounded-lg"
-              loading={isLoading}
+              loading={upload.isLoading || isLoading}
+              disabled={upload.isLoading || isLoading}
               gradient
               size="lg"
               label="Submit"
@@ -192,7 +221,7 @@ const CreateGroup = ({ userData }: { userData: IParent }) => {
           {isError && <Error errors={[error.toString()]} />}
         </Form>
       </Formik>
-    </NarrowLayout>
+    </div>
   )
 }
 

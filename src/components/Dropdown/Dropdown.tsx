@@ -11,7 +11,7 @@ type Item = {
   id: string
   onClick: (product?: IProduct) => void
   name: string
-  icon?: IconType
+  Icon?: IconType
 }
 
 const Dropdown = ({ list }: { list: Item[] }) => {
@@ -50,10 +50,10 @@ const Dropdown = ({ list }: { list: Item[] }) => {
                       active
                         ? 'bg-gray-100 dark:bg-gray-600 dark:text-white text-gray-900'
                         : 'text-gray-700 dark:bg-gray-700 dark:text-white',
-                      'block px-4 py-2 text-sm cursor-pointer'
+                      'items-center px-4 py-2 flex text-sm cursor-pointer'
                     )}
                   >
-                    {item.icon && <span>{item.icon}</span>}
+                    {item.Icon && <item.Icon className="mr-2" />}
                     {item.name}
                   </div>
                 )}

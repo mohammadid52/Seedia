@@ -7,7 +7,7 @@ const Loading = () => {
 
   return (
     <>
-      <Meta pageTitle="Loading..." />
+      <Meta pageTitle="13RMS" />
 
       <div className="main-loader  flex-col h-screen w-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <img

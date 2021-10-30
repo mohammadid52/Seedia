@@ -160,9 +160,8 @@ app.get('/my/list', auth, async (req, res) => {
   try {
     const user = await getItem(usersCollection, token.id)
     if (user) {
-      const wrapId = user?.requests?.map(addObjectId)
       let requests = await getManyItems(requestsCollection, {
-        _id: { $in: wrapId },
+        postedBy: token.id,
       })
 
       requests = requests.map((pr) => ({

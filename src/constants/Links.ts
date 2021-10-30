@@ -11,8 +11,10 @@ export const links = {
     template?: 1 | 2,
     viewMode: string = 'private'
   ) => `/${id}/${template || 1}/${viewMode || 'private'}`,
-  getProfile: (user: any) =>
-    `/${user.profileUrl}/${user?.other?.template || 1}/${'public'}`,
+  getProfile: (user: any, isPrivate: boolean = false) =>
+    `/${user.profileUrl}/${user?.other?.template || 1}/${
+      isPrivate ? 'private' : 'public'
+    }`,
   FEED: '/feed',
   SETTINGS: '/settings',
   CHOOSE_ACCOUNT: '/choose-account',
@@ -54,12 +56,13 @@ export const links = {
   searchEmployees: (searchQuery: string) => `/request?q=${searchQuery}`,
 
   // Groups
-  createGroup: () => `/group/create-group`,
+
   groupById: (groupId: string) => `/groups/${groupId}`,
   groups: () => `/groups/`,
 
   // Posts
   postById: (postId: string) => `/posts/${postId}`,
+  recentActivity: (profileUrl: string) => `/${profileUrl}/recent-activity`,
 
   // Followers
   followers: () => `/feed/followers`,
@@ -68,4 +71,6 @@ export const links = {
   // Store
   openStore: () => `/open-store/`,
   viewStore: (profileUrl: string) => `/${profileUrl}/store/`,
+
+  myItems: () => `/my-items/`,
 }

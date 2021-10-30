@@ -1,6 +1,10 @@
 import { fetchGroupById } from 'apis/queries'
+import { exitGroup } from 'apis/mutations'
+import NoPosts from 'assets/svg/no-posts.svg'
+import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Meta from 'components/atoms/Meta/Meta'
+import DiscoverCard from 'components/DiscoverButton'
 import Loading from 'components/Loading'
 import Spinner from 'components/Spinner'
 import VerticalProfileCard from 'components/VerticalProfileCard'
@@ -8,19 +12,62 @@ import { links } from 'constants/Links'
 import useAccountType from 'hooks/useAccountType'
 import { IGroup, IParent } from 'interfaces/UniversalInterface'
 import moment from 'moment'
+import PostInput from 'pages/dashboard/PostInput'
 import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
-import { useEffect } from 'react'
-import { useQuery } from 'react-query'
-import { useHistory, useParams } from 'react-router'
-import { avatarPlaceholder } from 'state/Redux/constants'
-import PostInput from 'pages/dashboard/PostInput'
-import Button from 'components/atoms/Button'
-import { HiOutlinePhotograph } from 'react-icons/hi'
+import InviteUserModal from 'pages/groups/InviteUserModal'
+import { useEffect, useState } from 'react'
 import { BsCameraVideo } from 'react-icons/bs'
 import { CgPoll } from 'react-icons/cg'
-import NoPosts from 'assets/svg/no-posts.svg'
-import DiscoverCard from 'components/DiscoverButton'
+import { HiOutlinePhotograph } from 'react-icons/hi'
+import { useMutation, useQuery } from 'react-query'
+import { useHistory, useParams } from 'react-router'
+import Modal from 'components/atoms/Modal'
+import { avatarPlaceholder } from 'state/Redux/constants'
+import CreateGroup from 'pages/groups/CreateGroup'
+
+const ExitGroup = ({
+  userId,
+  groupId,
+}: {
+  userId: string
+  groupId: string
+}) => {
+  const [showModal, setShowModal] = useState(false)
+  const history = useHistory()
+  const { mutate } = useMutation(exitGroup, {
+    onSuccess: () => {
+      history.push(links.groups())
+    },
+  })
+
+  return (
+    <>
+      <Modal header="Confirm" open={showModal} setOpen={setShowModal}>
+        <div className=" ">
+          <p className="dark:text-gray-400 text-gray-500 text-lg">
+            Are you sure you want to exit this group?
+          </p>
+          <div className="flex items-center p-4 justify-end">
+            <Button
+              label="Confirm"
+              gradient
+              onClick={() => mutate({ targetId: userId, groupId: groupId })}
+            />
+          </div>
+        </div>
+      </Modal>
+      <div className="rounded-lg border dark:border-gray-700  border-gray-200  overflow-hidden lg:max-w-xs bg-white dark:bg-gray-800 ">
+        <h1
+          onClick={() => setShowModal(true)}
+          className="text-center hover:bg-red-500 hover:text-white rounded-lg p-2 cursor-pointer text-red-500"
+        >
+          Exit group
+        </h1>
+      </div>
+    </>
+  )
+}
 
 const SingleGroupView = ({ userData }: { userData: IParent }) => {
   const params: any = useParams()
@@ -56,24 +103,39 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
     }
   }, [groupId, isMember])
 
-  const { data, isLoading, isFetched } = useQuery('group-data', () =>
+  const { data, isLoading, isFetched, refetch } = useQuery('group-data', () =>
     fetchGroupById(groupId)
   )
   const groupData: IGroup = isFetched && !isLoading && data.data.data
 
-  const { isBusiness } = useAccountType(userData)
+  const { getType } = useAccountType(userData)
+  const [showModal, setShowModal] = useState(false)
+  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false)
 
   if (isLoading && !isFetched) {
     return <Loading />
   }
 
   const isOwner = groupData?.createdBy?.toString() === userData._id
+  const isAdmin = groupData?.admin?.includes(userData._id)
+
+  const authorized = isOwner || isAdmin
 
   return (
     isMember && (
       <div className="relative  dark:bg-gray-900 bg-gray-100 min-h-screen ">
         <DashboardHeader userData={userData} />
         <Meta pageTitle={`Post | Feed | 13RMS`} />
+
+        {authorized && (
+          <InviteUserModal
+            refetchGroup={refetch}
+            group={groupData}
+            followingList={userData.following}
+            open={showModal}
+            setOpen={setShowModal}
+          />
+        )}
 
         <div
           className={`h-auto pt-4 relative flow-root  transition-all duration-500 `}
@@ -88,23 +150,65 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                       content={
                         <div>
                           <div>
-                            {true && (
-                              <div className="ml-2 flex-shrink-0 items-center justify-center flex">
-                                <p className="px-2 inline-flex text-sm items-center justify-center leading-5 font-semibold rounded-md bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200">
-                                  Owner
-                                </p>
-                              </div>
-                            )}
-                            <p className="text-gray-600 dark:text-gray-400 text-sm tracking-wide mt-1">
-                              Created group:{' '}
+                            <div className="ml-2 flex-shrink-0 items-center justify-center flex">
+                              <p className="px-2 inline-flex text-sm items-center justify-center leading-5 font-semibold rounded-md bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200">
+                                {isOwner
+                                  ? 'Owner'
+                                  : isAdmin
+                                  ? 'Admin'
+                                  : 'Member'}
+                              </p>
+                            </div>
+
+                            <p className="mb-4 text-gray-600 dark:text-gray-400 text-sm tracking-wide mt-1">
+                              Group created:{' '}
                               {moment(groupData.createdOn).format('MMM YYYY')}
                             </p>
+                            {authorized && (
+                              <div className="flex border-t py-2 text-xs font-medium text-gray-500 dark:text-gray-500 border-gray-200 dark:border-gray-700 transition-all  item-center px-4 cursor-pointer justify-between">
+                                <h6 className="font-medium ">
+                                  Requests to join
+                                </h6>
+                                <a
+                                  href={links.followers()}
+                                  className="hover:underline text-link cursor-pointer font-semibold"
+                                >
+                                  {groupData?.requests?.length || 0}
+                                </a>
+                              </div>
+                            )}
                           </div>
                         </div>
                       }
                       user={userData}
                     />
                     <DiscoverCard />
+                    {!isOwner && (
+                      <ExitGroup groupId={groupId} userId={userData._id} />
+                    )}
+
+                    {/* <Modal
+                      setOpen={setShowCreateGroupModal}
+                      header="Create group"
+                      open={showCreateGroupModal}
+                    >
+                      <div className=" min-w-132 max-w-164 min-h-56 max-h-132 overflow-y-auto">
+                        <CreateGroup
+                          refetchGroup={refetch}
+                          groupData={groupData}
+                          onSuccess={() => setShowCreateGroupModal(false)}
+                        />
+                      </div>
+                    </Modal>
+
+                    {authorized && (
+                      <Button
+                        label="Edit group details"
+                        gradient
+                        onClick={() => setShowCreateGroupModal(true)}
+                        // link={links.editGroup(groupData._id)}
+                      />
+                    )} */}
                   </>
                 ) : (
                   <Spinner />
@@ -146,6 +250,8 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                     </div>
 
                     <PostInput
+                      // for now
+                      disabled
                       placeholder="Start a post in this group"
                       customButtons={
                         <>
@@ -211,12 +317,15 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                             />
                           ))}
                       </div>
-                      <Button
-                        gradient
-                        rounded="rounded-full"
-                        className="mt-4"
-                        label="Invite connections"
-                      />
+                      {authorized && (
+                        <Button
+                          onClick={() => setShowModal(true)}
+                          gradient
+                          rounded="rounded-full"
+                          className="mt-4"
+                          label="Invite connections"
+                        />
+                      )}
                     </div>
                   }
                 />
@@ -228,6 +337,16 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                     </p>
                   }
                 />
+                {groupData.groupRules && (
+                  <Card
+                    cardTitle="Group rules"
+                    content={
+                      <p className="text-gray-900 dark:text-gray-200 line-clamp ">
+                        {groupData.groupRules}
+                      </p>
+                    }
+                  />
+                )}
                 <Card
                   cardTitle="Admin"
                   content={
@@ -235,6 +354,7 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                       {/* Start */}
                       {/* @ts-ignore */}
                       {groupData.admin.map((_admin: IParent) => {
+                        const { isBusiness, isPersonal } = getType(_admin)
                         return (
                           <div className="flex ">
                             <div className="mr-4 mt-2 flex-shrink-0">
@@ -258,7 +378,10 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                               <p className="mt-1 text-sm dark:text-gray-500">
                                 {isBusiness
                                   ? _admin?.business?.name
-                                  : _admin?.company?.jobTitle}
+                                  : isPersonal
+                                  ? _admin?.company?.companyName
+                                  : _admin?.background?.education &&
+                                    _admin?.background?.education[0].name}
                               </p>
                             </div>
                           </div>

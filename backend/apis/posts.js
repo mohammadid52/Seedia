@@ -71,7 +71,7 @@ app.post('/add-post', auth, async (req, res) => {
 
         return res
           .status(202)
-          .json(responseMsg('success', 'Post added successfully', updatedPosts))
+          .json(responseMsg('success', 'Post added successfully', postUrl))
       } else {
         return res
           .status(204)
@@ -171,6 +171,209 @@ app.post('/view', auth, async (req, res) => {
       .json(responseMsg('error', 'postid or userid is missing', {}))
   }
 })
+app.post('/s', auth, async (req, res) => {
+  const { action = 'save', postId = '' } = req.query
+  const token = req.user
+  const userId = token.id
+  if (userId && postId) {
+    const usersCollection = res.locals.usersCollection
+
+    try {
+      const user = await getItem(usersCollection, userId)
+
+      if (user) {
+        let savedPosts = user?.savedPosts
+          ? unique([...user?.savedPosts].map(convertToString))
+          : []
+        if (action === 'save') {
+          savedPosts.push(postId)
+        } else {
+          const idx = savedPosts.findIndex((_postId) => _postId === postId)
+          savedPosts.splice(idx, 1)
+        }
+        await updateData(usersCollection, userId, { savedPosts: savedPosts })
+        return res
+          .status(202)
+          .json(responseMsg('success', 'Post saved or unsaved', savedPosts))
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  } else {
+    return res
+      .status(404)
+      .json(responseMsg('error', 'postid or userid is missing', {}))
+  }
+})
+// savedItems
+app.get('/s', auth, async (req, res) => {
+  const token = req.user
+  const userId = token.id
+  if (userId) {
+    const usersCollection = res.locals.usersCollection
+    const postCollection = res.locals.postCollection
+
+    try {
+      const user = await getItem(usersCollection, userId)
+
+      if (user) {
+        let savedPosts = user?.savedPosts
+          ? unique([...user?.savedPosts].map(addObjectId))
+          : []
+
+        let posts = await getManyItems(postCollection, {
+          _id: { $in: savedPosts },
+        })
+        if (posts && posts.length > 0) {
+          const users = await getManyItems(usersCollection, {
+            _id: { $in: posts.map((p) => addObjectId(p.postedBy)) },
+          })
+          posts = posts.map((post) => {
+            const user = users.find(
+              (user) => user._id.toString() === post.postedBy.toString()
+            )
+            return {
+              ...post,
+              user: user,
+            }
+          })
+          return res
+            .status(202)
+            .json(
+              responseMsg('success', 'Saved items fetched successfully', posts)
+            )
+        } else {
+          return res
+            .status(409)
+            .json(responseMsg('error', 'No posts found', {}))
+        }
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  } else {
+    return res
+      .status(404)
+      .json(responseMsg('error', 'postid or userid is missing', {}))
+  }
+})
+app.post('/f', auth, async (req, res) => {
+  const { action = 'feature', postId = '' } = req.query
+  const token = req.user
+  const userId = token.id
+  if (userId && postId) {
+    const usersCollection = res.locals.usersCollection
+
+    try {
+      const user = await getItem(usersCollection, userId)
+
+      if (user) {
+        let featuredPosts = user?.featuredPosts
+          ? unique([...user?.featuredPosts].map(convertToString))
+          : []
+        if (action === 'feature') {
+          featuredPosts.push(postId)
+        } else {
+          const idx = featuredPosts.findIndex((_postId) => _postId === postId)
+          featuredPosts.splice(idx, 1)
+        }
+        await updateData(usersCollection, userId, {
+          featuredPosts: featuredPosts,
+        })
+        return res
+          .status(202)
+          .json(
+            responseMsg('success', 'Post featured or unfeatured', featuredPosts)
+          )
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  } else {
+    return res
+      .status(404)
+      .json(responseMsg('error', 'postid or userid is missing', {}))
+  }
+})
+
+const getPosts = (user, postId, fieldName = 'posts') => {
+  let currentValue = user && user[fieldName] ? [...user[fieldName]] : []
+  if (currentValue.length > 0) {
+    currentValue = currentValue.map(convertToString)
+    const idx = currentValue.findIndex((a) => a === postId)
+    if (idx !== -1) {
+      currentValue.splice(idx, 1)
+    }
+  }
+  return currentValue
+}
+
+const getActivity = (user, postUrl) => {
+  let activity = user && user?.activity ? [...user.activity] : []
+  if (activity.length > 0) {
+    const exists = activity.findIndex((a) => a.postUrl === postUrl)
+    if (exists !== -1) {
+      activity.splice(exists, 1)
+    }
+  }
+  return activity
+}
+
+app.delete('/', auth, async (req, res) => {
+  const token = req.user
+  const { postId = '' } = req.query
+
+  const postCollection = res.locals.postCollection
+  const usersCollection = res.locals.usersCollection
+
+  try {
+    const post = await getItem(postCollection, postId)
+    const user = await getItem(usersCollection, token.id)
+
+    if (post.postedBy === token.id.toString()) {
+      if (post) {
+        try {
+          let savedPosts = getPosts(user, post._id, 'savedPosts')
+
+          let posts = getPosts(user, post._id)
+
+          let featuredPosts = getPosts(user, post._id, 'featuredPosts')
+
+          let activity = getActivity(user, post.postUrl)
+
+          await updateData(usersCollection, token.id, {
+            savedPosts: savedPosts,
+            posts: posts,
+            featuredPosts: featuredPosts,
+            activity: activity,
+          })
+          await postCollection.deleteOne({ _id: post._id })
+
+          return res
+            .status(202)
+            .json(responseMsg('success', 'Post deleted successfully', {}))
+        } catch (error) {
+          return res.status(203).json(responseMsg('error', error.message))
+        }
+      } else {
+        return res
+          .status(203)
+          .json(
+            responseMsg('error', 'Cannot find post. Please check credentials')
+          )
+      }
+    } else {
+      return res
+        .status(203)
+        .json(
+          responseMsg('error', 'Cannot verify auth. Please check credentials')
+        )
+    }
+  } catch (error) {
+    console.error(error.message)
+    return res.status(203).json(responseMsg('error', error.message))
+  }
+})
 
 app.get('/feed', auth, async (req, res) => {
   const token = req.user
@@ -189,35 +392,88 @@ app.get('/feed', auth, async (req, res) => {
       let idListObjectId = unique(
         [...user.followers, token.id].map(addObjectId)
       )
+      if (idListStringed.length > 0 && idListObjectId.length > 0) {
+        const users = await getManyItems(usersCollection, {
+          _id: { $in: idListObjectId },
+        })
 
-      const users = await getManyItems(usersCollection, {
-        _id: { $in: idListObjectId },
-      })
+        let posts = await postCollection
+          .find({
+            $and: [{ postedBy: { $in: idListStringed } }],
+          })
+          // .skip(_limit === 10 ? 0 : _limit > 10 ? _limit - 10 : 0)
+          .limit(_limit)
+          .sort({ postedOn: -1 })
+          .toArray()
+        if (posts && posts.length > 0) {
+          posts = posts.map((post) => {
+            const user = users.find(
+              (user) => user._id.toString() === post.postedBy.toString()
+            )
+            return {
+              ...post,
+              user: user,
+            }
+          })
+          return res
+            .status(202)
+            .json(responseMsg('success', 'Posts fetched successfully', posts))
+        } else {
+          return res
+            .status(409)
+            .json(responseMsg('error', 'No posts found', {}))
+        }
+      } else {
+        return res.status(204).json(responseMsg('error', 'empty array', {}))
+      }
+    } else {
+      return res.status(204).json(responseMsg('error', 'Cannot find user ', {}))
+    }
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(204)
+      .json(responseMsg('error', 'Something went wrong. Please try again', {}))
+  }
+})
+app.get('/recent-activity', auth, async (req, res) => {
+  const token = req.user
+  const { limit = 10, userId = token.id } = req.query
+
+  const _limit = Number(limit)
+
+  const postCollection = res.locals.postCollection
+  const usersCollection = res.locals.usersCollection
+  try {
+    const user = await getItem(usersCollection, userId)
+    if (user && user?.activity && user.activity.length > 0) {
+      const activity = user.activity
+      const postUrls = activity.map((d) => d.postUrl)
 
       let posts = await postCollection
         .find({
-          $and: [{ postedBy: { $in: idListStringed } }],
+          postUrl: { $in: postUrls },
         })
-        // .skip(_limit === 10 ? 0 : _limit > 10 ? _limit - 10 : 0)
         .limit(_limit)
         .sort({ postedOn: -1 })
         .toArray()
-      if (posts && posts.length > 0) {
-        posts = posts.map((post) => {
-          const user = users.find(
-            (user) => user._id.toString() === post.postedBy.toString()
+
+      const updatedActivity = activity.map((d) => {
+        const post = posts.find((p) => p.postUrl === d.postUrl)
+        return {
+          ...d,
+          post: { ...post, user },
+        }
+      })
+      return res
+        .status(202)
+        .json(
+          responseMsg(
+            'success',
+            'Activity fetched successfully',
+            updatedActivity
           )
-          return {
-            ...post,
-            user: user,
-          }
-        })
-        return res
-          .status(202)
-          .json(responseMsg('success', 'Posts fetched successfully', posts))
-      } else {
-        return res.status(409).json(responseMsg('error', 'No posts found', {}))
-      }
+        )
     } else {
       return res.status(204).json(responseMsg('error', 'Cannot find user ', {}))
     }
@@ -250,7 +506,9 @@ app.get('/p', async (req, res) => {
       } else {
         return res
           .status(204)
-          .json(responseMsg('error', 'Cannot find post.', {}))
+          .json(
+            responseMsg('error', 'Post is removed by the owner', { user: user })
+          )
       }
     } catch (error) {
       console.error(error)
@@ -272,30 +530,37 @@ app.get('/averagePostViews', auth, async (req, res) => {
 
   try {
     const user = await getItem(usersCollection, token.id)
-    const userPosts = await getManyItems(
-      postCollection,
-      { _id: { $in: user.posts } },
-      { viewedBy: 1 }
-    )
-
-    if (userPosts && user) {
-      const postViews = userPosts.reduce(
-        (tot, post) =>
-          unique(post?.viewedBy).filter((d) => d.toString() !== token.id)
-            ?.length + tot,
-        0
+    if (user && user.posts && user.posts.length > 0) {
+      const userPosts = await getManyItems(
+        postCollection,
+        { _id: { $in: user.posts } },
+        { viewedBy: 1 }
       )
-      return res
-        .status(202)
-        .json(
-          responseMsg('success', 'Post views successfully fetched', postViews)
+
+      if (userPosts && user) {
+        const postViews = userPosts.reduce(
+          (tot, post) =>
+            unique(post?.viewedBy).filter((d) => d.toString() !== token.id)
+              ?.length + tot,
+          0
         )
+        return res
+          .status(202)
+          .json(
+            responseMsg('success', 'Post views successfully fetched', postViews)
+          )
+      } else {
+        return res.status(204).json(
+          responseMsg('error', 'Cannot find post or user.', {
+            userPosts,
+            user,
+          })
+        )
+      }
     } else {
       return res
         .status(204)
-        .json(
-          responseMsg('error', 'Cannot find post or user.', { userPosts, user })
-        )
+        .json(responseMsg('error', 'Cannot find posts.', {}))
     }
   } catch (error) {
     console.error(error)

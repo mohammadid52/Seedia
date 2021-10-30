@@ -43,11 +43,7 @@ const ProjectsListView = ({ userData }: { userData: IParent }) => {
   }
 
   return (
-    <NarrowLayout
-      userData={userData}
-      customParentMaxWidth="max-w-360 relative"
-      customMaxWidth="max-w-360"
-    >
+    <NarrowLayout userData={userData} customMaxWidth="max-w-7xl">
       <Meta
         keywords="jobs, jobs at 13RMS, 13rms"
         pageUrl={window.location.href}

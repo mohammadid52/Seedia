@@ -179,11 +179,7 @@ const ProjectView = ({ userData }: { userData?: IParent }) => {
   const { business, background } = company
 
   return (
-    <NarrowLayout
-      userData={userData}
-      customParentMaxWidth="max-w-360 relative"
-      customMaxWidth="max-w-360"
-    >
+    <NarrowLayout userData={userData} customMaxWidth="max-w-7xl">
       <Meta
         pageUrl={window.location.href}
         imageUrl={company && company.profilePicture}

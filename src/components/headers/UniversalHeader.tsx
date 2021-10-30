@@ -118,11 +118,11 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
       : 'Search Products'
 
   return (
-    <Disclosure as="header" className="bg-gray-800">
+    <Disclosure as="header" className="dark:bg-gray-800 bg-white ">
       {({ open }) => (
         <>
-          <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:divide-y lg:divide-gray-700 lg:px-8">
-            <div className="relative h-16 flex justify-between">
+          <div className="max-w-7xl  mx-auto px-2 sm:px-4  lg:px-8">
+            <div className="relative border-b-2 pb-1 border-gray-200 dark:border-gray-700 h-16 flex justify-between">
               <div className="relative z-10 px-2 flex lg:px-0">
                 <div className="flex-shrink-0 flex items-center">
                   <img
@@ -147,7 +147,7 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
                     <input
                       id="search"
                       name="search"
-                      className="block w-full bg-gray-700 border border-transparent rounded-md py-2 pl-10 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:bg-white focus:border-white focus:ring-white focus:text-gray-900 text-white focus:placeholder-gray-500 sm:text-sm"
+                      className="block w-full bg-gray-200 focus:border-yellow-500 dark:bg-gray-700 border border-transparent rounded-md py-2 pl-10 pr-3 text-sm placeholder-gray-400 focus:outline-none focus:bg-white dark:focus:border-white  dark:focus:text-gray-100  focus:text-gray-900 text-white focus:placeholder-gray-500 sm:text-sm"
                       placeholder={dynamicPlaceholder}
                       value={searchText}
                       type="search"
@@ -172,14 +172,14 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
                 <button
                   onClick={() => history.push(links.cart)}
                   type="button"
-                  className="bg-gray-800 flex-shrink-0 rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  className="dark:bg-gray-800  ml-2 flex-shrink-0 rounded-full bg-white text-gray-400 hover:text-gray-800 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 >
                   <span className="sr-only">Basket</span>
                   <BsBag className="h-6 w-6" aria-hidden="true" />
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-800 ml-2 flex-shrink-0 rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  className="dark:bg-gray-800  ml-2 flex-shrink-0 rounded-full bg-white text-gray-400 hover:text-gray-800 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 >
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -246,7 +246,7 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
                   className={classNames(
                     item.current
                       ? 'text-white via-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 bg-gradient-to-br from-yellow-500 to-pink-500'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      : 'text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
                     'rounded-md py-2 px-3 inline-flex items-center text-sm font-medium'
                   )}
                   aria-current={item.current ? 'page' : undefined}
@@ -275,7 +275,7 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
                 </a>
               ))}
             </div>
-            <div className="border-t border-gray-700 pt-4 pb-3">
+            <div className="border-t dark:border-gray-700 border-gray-200 pt-4 pb-3">
               <div className="px-4 flex items-center">
                 <div className="flex-shrink-0">
                   <img
@@ -298,7 +298,7 @@ const UniversalHeader = ({ userData }: { userData: IParent }) => {
                 </div>
                 <button
                   type="button"
-                  className="ml-auto flex-shrink-0 bg-gray-800 rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  className="dark:bg-gray-800  ml-2 flex-shrink-0 rounded-full bg-white text-gray-400 hover:text-gray-800 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                 >
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />

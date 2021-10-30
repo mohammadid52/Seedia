@@ -8,6 +8,8 @@ const {
   addObjectId,
   getManyItems,
   convertToString,
+  getItem,
+  updateData,
 } = require('../utils')
 var ObjectId = require('mongodb').ObjectId
 const jwt = require('jsonwebtoken')
@@ -223,14 +225,38 @@ router.post('/verifyCode', async (req, res) => {
 // /user
 router.post('/getUsers', auth, async (req, res) => {
   const arrayOfId = req.body.users
+  const skipIds = req.body.skipIds || []
+  const limit = req.body.limit || 100
   const uniqUsers = unique(arrayOfId)
+  const token = req.user
 
   const usersCollection = res.locals.usersCollection
 
   const wrapid = uniqUsers.map(addObjectId)
 
   try {
-    const users = await getManyItems(usersCollection, { _id: { $in: wrapid } })
+    const user = await getItem(usersCollection, token.id)
+
+    const state = user?.location?.state
+    const city = user?.location?.city
+    const country = user?.location?.country
+
+    const users = await usersCollection
+      .find({
+        $and: [
+          { _id: { $nin: [user._id, ...skipIds?.map(addObjectId)] } },
+          {
+            $or: [
+              { _id: { $in: wrapid } },
+              { 'location.state': state },
+              { 'location.country': country },
+              { 'location.city': city },
+            ],
+          },
+        ],
+      })
+      .limit(limit)
+      .toArray()
 
     if (users && users.length > 0) {
       return res
@@ -244,6 +270,7 @@ router.post('/getUsers', auth, async (req, res) => {
     return res.status(202).json(responseMsg('error', error.message))
   }
 })
+
 // /user
 router.post('/getShortUsers', auth, async (req, res) => {
   const arrayOfId = req.body.users
@@ -680,6 +707,51 @@ router.post('/update', auth, async (req, res) => {
             ...dataToUpdate,
           })
         )
+      } catch (error) {
+        return res.status(203).json(responseMsg('error', error.message))
+      }
+    } else {
+      return res
+        .status(203)
+        .json(
+          responseMsg('error', 'Cannot find user. Please check credentials')
+        )
+    }
+  } catch (error) {
+    console.error(error.message)
+    return res.status(203).json(responseMsg('error', error.message))
+  }
+})
+// user/update
+router.post('/save-profile', auth, async (req, res) => {
+  const token = req.user
+  const { targetId = '', action = 'save' } = req.query
+
+  const usersCollection = res.locals.usersCollection
+
+  try {
+    const user = await getItem(usersCollection, token.id)
+
+    if (user) {
+      try {
+        let savedProfiles = []
+        if (action === 'save') {
+          savedProfiles =
+            user?.savedProfiles?.length > 0
+              ? [...user?.savedProfiles, targetId]
+              : [targetId]
+        } else {
+          const idx = savedProfiles.findIndex((d) => d === targetId)
+          savedProfiles.splice(idx, 1)
+        }
+
+        await updateData(usersCollection, user._id, {
+          savedProfiles: savedProfiles,
+        })
+
+        return res
+          .status(202)
+          .json(responseMsg('success', 'Saved profile', action))
       } catch (error) {
         return res.status(203).json(responseMsg('error', error.message))
       }

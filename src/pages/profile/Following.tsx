@@ -28,7 +28,7 @@ const Following = ({
   const fetchFollowingUsers = async () => {
     setFetching(true)
     try {
-      const config = { users: list }
+      const config = { users: list, limit: 6 }
       const { data } = await network.post('/user/getUsers', config, {
         headers: { Authorization: token },
       })

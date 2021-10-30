@@ -38,6 +38,7 @@ const fetchSellerById = (projectId: string) =>
 
 // Group
 const fetchGroups = () => network.get(`/groups/list`)
+const fetchRequestedGroups = () => network.get(`/groups/requested-list`)
 const fetchGroupById = (groupId: string) => network.get(`/groups/g/${groupId}`)
 
 // Posts
@@ -45,12 +46,16 @@ const fetchFeed = (limit: number) => network.get(`/post/feed?limit=${limit}`)
 const fetchPostById = (postUrl: string) =>
   network.get(`/post/p?postUrl=${postUrl}`)
 const fetchAvgViews = () => network.get(`/post/averagePostViews`)
+const fetchActivity = (userId: string, limit: number) =>
+  network.get(`/post/recent-activity?limit=${limit}&userId=${userId}`)
+const fetchedSavedItems = () => network.get(`/post/s`)
 
 export {
   fetchProductDetails,
   fetchAllProducts,
   fetchReviewsByProduct,
   fetchFriendsPurchase,
+  fetchActivity,
   fetchProjectById,
   fetchUsers,
   fetchUserById,
@@ -66,4 +71,6 @@ export {
   fetchGroupById,
   fetchPostById,
   fetchAvgViews,
+  fetchedSavedItems,
+  fetchRequestedGroups,
 }

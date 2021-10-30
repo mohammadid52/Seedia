@@ -2,6 +2,7 @@ import App from 'App'
 import Loading from 'components/Loading'
 import UserContextProvider from 'context/UserContext'
 import HeaderContextProvider from 'context/HeaderContext'
+import NotificationContextProvider from 'context/NotificationContext'
 import PostContextProvider from 'context/PostContext'
 import 'lightgallery/css/lg-thumbnail.css'
 import 'lightgallery/css/lg-zoom.css'
@@ -19,7 +20,13 @@ import 'styles/index.css'
 import 'styles/index.scss'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 // @ts-ignore
 export const ErrorFallback = ({ error, resetErrorBoundary }) => {
@@ -48,15 +55,17 @@ const MainApp = ({ hideLoader }: any) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <QueryClientProvider client={queryClient}>
           <Provider store={store}>
-            <UserContextProvider>
-              <PostContextProvider>
-                <HeaderContextProvider>
-                  <div className="min-h-screen w-screen">
-                    <App />
-                  </div>
-                </HeaderContextProvider>
-              </PostContextProvider>
-            </UserContextProvider>
+            <NotificationContextProvider>
+              <UserContextProvider>
+                <PostContextProvider>
+                  <HeaderContextProvider>
+                    <div className="min-h-screen w-screen">
+                      <App />
+                    </div>
+                  </HeaderContextProvider>
+                </PostContextProvider>
+              </UserContextProvider>
+            </NotificationContextProvider>
           </Provider>
           <ReactQueryDevtools />
         </QueryClientProvider>

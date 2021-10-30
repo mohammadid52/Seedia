@@ -1,29 +1,22 @@
-import { openStore } from 'apis/mutations'
+import { openStore, uploadMediaToServer } from 'apis/mutations'
 import { fetchAllProducts } from 'apis/queries'
-import placeholder from 'assets/svg/placeholder.png'
-import Error from 'components/alerts/Error'
 import Button from 'components/atoms/Button'
+import FormInput from 'components/atoms/FormInput'
 import Label from 'components/atoms/Label'
 import Meta from 'components/atoms/Meta/Meta'
-import NormalFormInput from 'components/atoms/NormalFormInput'
 import Section from 'components/atoms/products/Section'
 import Title from 'components/atoms/Title'
 import Spinner from 'components/Spinner'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
-import useMedia from 'hooks/useMedia'
-import { IParent, IProduct } from 'interfaces/UniversalInterface'
-import { get } from 'lodash'
+import { Form, Formik } from 'formik'
+import { IParent, IProduct, IStore } from 'interfaces/UniversalInterface'
 import Product from 'pages/products/Product'
+import BannerImage from 'pages/store/BannerImage'
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
-import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { storeActions } from 'state/Redux/index'
-
-const Block = ({ children }: { children: React.ReactNode }) => (
-  <div>{children}</div>
-)
+import * as Yup from 'yup'
 
 const ListProducts = ({ userId, onLoad }: { userId: string; onLoad: any }) => {
   const { isLoading, data, isFetched, isSuccess } = useQuery(
@@ -53,37 +46,28 @@ const ListProducts = ({ userId, onLoad }: { userId: string; onLoad: any }) => {
   )
 }
 
-const regex =
-  /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i
-
 const OpenStore = ({ userData }: { userData: IParent }) => {
-  const bannerRef = useRef()
-  const {
-    media,
-    uploadMedia,
-    isSuccess: mediaSuccess,
-    openFileExplorer,
-    HiddenInput,
-    isLoading: uploadingMedia,
-  } = useMedia(bannerRef)
+  const upload = useMutation(uploadMediaToServer, {
+    onSuccess: (a, b) => {
+      // @ts-ignore
+      const values = formRef?.current?.values
+      if (formRef?.current && values) {
+        const finalInput = {
+          bannerImage: a.data.data.location,
+          products: selectedProducts,
+          ...values,
+        }
 
-  const fields = useSelector((state: any) => get(state, 'store', {}))
-
-  const [error, setError] = useState('')
+        mutate({ storeData: finalInput })
+      }
+    },
+  })
 
   const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([])
 
-  const dispatch = useDispatch()
-
-  const onFieldChange = (e: any) => {
-    const { name, value } = e.target
-    dispatch(storeActions.changeStoreValues(name, value))
-  }
-
   const {
     isLoading: creatingStore,
-    isError: mutateIsError,
-    error: mutateError,
+
     mutate,
     isSuccess,
   } = useMutation(openStore)
@@ -102,126 +86,104 @@ const OpenStore = ({ userData }: { userData: IParent }) => {
     }
   }, [isSuccess])
 
-  const validateFields = () => {
-    let isValid = false
-    if (!fields.buttonLabel) {
-      isValid = false
-      setError('Button label is required')
-    } else {
-      isValid = true
-      setError('')
-    }
-
-    if (!fields.buttonLink) {
-      isValid = false
-      setError('Button link is required')
-    } else {
-      isValid = true
-      setError('')
-    }
-
-    if (!regex.test(fields.buttonLink)) {
-      isValid = false
-      setError('Link is not valid')
-    } else {
-      isValid = true
-      setError('')
-    }
-    return isValid
-  }
-
-  const [mediaUrl, setMediaUrl] = useState(null)
-
-  useEffect(() => {
-    if (mediaUrl && mediaSuccess) {
-      const finalInput = {
-        bannerImage: mediaUrl,
-        products: selectedProducts,
-        ...fields,
-      }
-
-      mutate({ storeData: finalInput })
-    }
-  }, [mediaSuccess, mediaUrl])
-
   const onSubmit = (e: any) => {
-    const isValid = validateFields()
-    if (isValid) {
-      const mediaUrl = uploadMedia(e)
-      setMediaUrl(mediaUrl)
-    }
+    const fd = new FormData()
+    fd.append('image', media)
+
+    upload.mutate(fd)
   }
+
+  const onImageSelect = (e: any, setFieldValue: any) => {
+    const img = e.target.files[0]
+
+    setFieldValue(img)
+  }
+
+  const validationSchema = Yup.object({
+    buttonLabel: Yup.string()
+      .required('Button label is required')
+      .min(3)
+      .max(150),
+    buttonLink: Yup.string()
+      // .test(regex)
+      .required('Button link is required')
+      .min(5)
+      .max(150),
+  })
+
+  // @ts-ignore
+  const initialValues: IStore = {
+    buttonLabel: '',
+    buttonLink: '',
+  }
+  const formRef = useRef()
+
+  const [media, setMedia] = useState()
 
   return (
-    <NarrowLayout>
+    <NarrowLayout customMaxWidth="max-w-7xl" userData={userData}>
       <Meta pageTitle={`Open Store | 13RMS`} />
       <Title fontWeight="font-bold mb-8">Open store</Title>
-      <div className="my-4 flex flex-col gap-y-12">
-        <Block>
-          <Label text="Banner Image" />
-          <div
-            style={{
-              backgroundImage: `url(${
-                media ? URL.createObjectURL(media) : placeholder
-              })`,
-            }}
-            className="h-96 bg-center flex items-center justify-center bg-no-repeat bg-cover shadow-xl rounded-xl w-full border border-gray-200"
-          >
-            <HiddenInput />
-            <h1
-              onClick={openFileExplorer}
-              className="text-3xl font-bold  transition-all cursor-pointer bg-transparent hover:bg-white px-2 py-2 hover:text-gray-700 text-white"
-            >
-              {media ? 'Change' : '+ Choose'} Banner Image
-            </h1>
-          </div>
-        </Block>
-        <Block>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+
+      <Formik
+        initialValues={initialValues}
+        innerRef={formRef}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        <Form className="my-4 flex flex-col gap-y-12">
+          <div className="grid grid-cols-1 gap-y-12">
             <div>
-              <Label text="Button label" />
-              <NormalFormInput
-                value={fields.buttonLabel}
-                info="The name of button"
-                name="buttonLabel"
-                onChange={onFieldChange}
-                placeholder="Discover"
+              <Label text="Banner Image" />
+              <BannerImage
+                media={media}
+                setMedia={setMedia}
+                onImageSelect={onImageSelect}
               />
             </div>
             <div>
-              <Label text="Button link" />
-              <NormalFormInput
-                name="buttonLink"
-                info="Link of button"
-                value={fields.buttonLink}
-                placeholder="www.myshoppingsite.com"
-                onChange={onFieldChange}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+                <div>
+                  <Label text="Button label" />
+                  <FormInput
+                    info="The name of button"
+                    name="buttonLabel"
+                    placeholder="Discover"
+                  />
+                </div>
+                <div>
+                  <Label text="Button link" />
+                  <FormInput
+                    name="buttonLink"
+                    info="Link of button"
+                    placeholder="www.myshoppingsite.com"
+                  />
+                </div>
+              </div>
+            </div>
+            <div>
+              <Label text="Select product" />
+              <ListProducts
+                onLoad={(products: IProduct[]) => setSelectedProducts(products)}
+                userId={userData._id}
               />
+              <div>
+                <div className="flex items-center justify-end">
+                  <Button
+                    // onClick={onSubmit}
+                    type="submit"
+                    rounded="rounded-lg"
+                    loading={creatingStore || upload.isLoading}
+                    gradient
+                    size="lg"
+                    label="Create store"
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </Block>
-        <Block>
-          <Label text="Select product" />
-          <ListProducts
-            onLoad={(products: IProduct[]) => setSelectedProducts(products)}
-            userId={userData._id}
-          />
-        </Block>
-        <Block>
-          <div className="flex items-center justify-end">
-            <Button
-              onClick={onSubmit}
-              rounded="rounded-lg"
-              loading={creatingStore || uploadingMedia}
-              gradient
-              size="lg"
-              label="Create store"
-            />
-          </div>
-          {mutateIsError && <Error errors={[mutateError.toString()]} />}
-          {error && <Error errors={[error.toString()]} />}
-        </Block>
-      </div>
+        </Form>
+      </Formik>
     </NarrowLayout>
   )
 }

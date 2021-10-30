@@ -146,9 +146,16 @@ const PersonalCard = ({
           />
         </div>
         <div className="text-center px-3 pb-6 pt-2">
-          <h3 className="dark:text-white text-gray-900 text-base font-bold ">
+          <a
+            href={links.getProfileById(
+              user.profileUrl,
+              user.other.template,
+              'public'
+            )}
+            className="dark:text-white  text-gray-900 text-base font-bold "
+          >
             {user.fullName}
-          </h3>
+          </a>
           <p className="text-sm font-medium dark:text-white text-gray-500 ">
             {isBusiness ? user.business.name : user.company.jobTitle}
           </p>
@@ -163,10 +170,13 @@ const PersonalCard = ({
             <span className="text-link font-semibold">{postViews}</span>
           </div>
         </div>
-        <div className="flex items-center cursor-pointer hover:bg-gray-200 transition-all dark:hover:bg-gray-700 gap-y-2  justify-start px-4 border-t py-2 text-xs font-medium text-gray-500 dark:text-gray-500 border-gray-200 dark:border-gray-700">
+        <a
+          href={links.myItems()}
+          className="flex items-center cursor-pointer hover:bg-gray-200 transition-all dark:hover:bg-gray-700 gap-y-2  justify-start px-4 border-t py-2 text-xs font-medium text-gray-500 dark:text-gray-500 border-gray-200 dark:border-gray-700"
+        >
           <BsFillBookmarkFill className="mr-2" />
           <p>My Items</p>
-        </div>
+        </a>
       </div>
       {/* ------------ Profile Card Ends ---------*/}
 

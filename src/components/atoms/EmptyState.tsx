@@ -10,6 +10,7 @@ const EmptyState = ({
   onBtnClick,
   showEditOption,
   animation,
+  hideBorders = false,
 }: {
   title: string
   subtitle?: string
@@ -18,6 +19,7 @@ const EmptyState = ({
   BtnIcon?: any
   animation?: any
   showEditOption?: boolean
+  hideBorders?: boolean
   onBtnClick?: () => void
 }) => {
   const defaultOptions = {
@@ -30,7 +32,13 @@ const EmptyState = ({
   }
 
   return (
-    <div className="text-center bg-white dark:bg-transparent border flex flex-col items-center justify-evenly dark:border-gray-600 border-gray-300 border-dashed p-4 py-12 rounded-lg">
+    <div
+      className={`${
+        hideBorders
+          ? 'py-6'
+          : 'dark:border-gray-600 border border-gray-300 border-dashed py-12'
+      } text-center bg-white dark:bg-transparent  flex flex-col items-center justify-evenly  p-4  rounded-lg`}
+    >
       {iconUrl && (
         <img
           alt="experience"

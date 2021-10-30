@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import React, { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import { noop } from 'lodash'
@@ -11,6 +11,7 @@ const Modal = ({
   onClose,
   disableBackdropClose = true,
   hideCloseBtn = false,
+  fixedBottom,
 }: {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -19,6 +20,7 @@ const Modal = ({
 
   disableBackdropClose?: boolean
   hideCloseBtn?: boolean
+  fixedBottom?: React.ReactNode
   onClose?: () => void
 }) => {
   return (
@@ -86,6 +88,11 @@ const Modal = ({
                   </div>
                 )}
                 {children}
+                {fixedBottom && (
+                  <div className="absolute dark:border-gray-800 border-t bg-white dark:bg-gray-900 bottom-0 mx-6 inset-x-0">
+                    {fixedBottom}
+                  </div>
+                )}
               </div>
             </div>
           </Transition.Child>

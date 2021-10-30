@@ -64,7 +64,7 @@ const ListPosts = ({ userData }: { userData: IParent }) => {
         >
           <div className="grid  grid-cols-1 gap-y-6">
             {posts.map((post, idx) => (
-              <Post userId={userData._id} post={post} />
+              <Post userData={userData} userId={userData._id} post={post} />
             ))}
             <EmptyState
               animation={animationData}

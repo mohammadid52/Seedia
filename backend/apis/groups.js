@@ -8,31 +8,37 @@ const {
   getItem,
   updateData,
   shortUser,
+  unique,
 } = require('../utils')
 var ObjectId = require('mongodb').ObjectId
+const uuid = require('uuid')
 require('dotenv').config()
 
 app.post('/create-group', auth, async (req, res) => {
   const token = req.user
   const {
-    members = [],
     groupName = '',
     groupDescription = '',
+    groupRules = '',
     admin = [],
+    coverPhoto,
+    profilePhoto,
   } = req.body
   // collection
   const groupsCollection = res.locals.groupsCollection
   const usersCollection = res.locals.usersCollection
 
-  if (members && groupName) {
+  if (groupName) {
     const data = {
       groupName,
       groupDescription,
+      groupRules,
       createdOn: new Date(),
       createdBy: token.id,
-      admin: [...admin, token.id],
-
-      members: [...members, token.id],
+      admin: [...admin],
+      members: [token.id],
+      coverPicture: coverPhoto,
+      profilePicture: profilePhoto,
       messages: [], // not important for now
     }
 
@@ -62,21 +68,72 @@ app.get('/list', auth, async (req, res) => {
   try {
     const user = await getItem(usersCollection, token.id)
     if (user) {
-      const groups = user.groups
+      const groups = user?.groups
 
-      const fullGroups = await getManyItems(groupsCollection, {
-        _id: { $in: groups.map(addObjectId) },
-      })
-      if (fullGroups && fullGroups.length > 0) {
-        return res
-          .status(200)
-          .json(
-            responseMsg('success', 'Groups Fetched successfully', fullGroups)
-          )
+      if (groups && groups.length > 0) {
+        const fullGroups = await getManyItems(groupsCollection, {
+          _id: { $in: groups.map(addObjectId) },
+        })
+
+        if (fullGroups && fullGroups.length > 0) {
+          return res
+            .status(200)
+            .json(
+              responseMsg('success', 'Groups Fetched successfully', fullGroups)
+            )
+        } else {
+          return res
+            .status(404)
+            .json(responseMsg('error', "Can't find groups", {}))
+        }
       } else {
         return res
-          .status(404)
-          .json(responseMsg('error', "Can't find groups", {}))
+          .status(204)
+          .json(responseMsg('error', 'User is not connected to any groups', {}))
+      }
+    } else {
+      return res.status(404).json(responseMsg('error', "Can't find user", {}))
+    }
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(404)
+      .json(responseMsg('error', 'Something went wrong', {}))
+  }
+})
+app.get('/requested-list', auth, async (req, res) => {
+  const token = req.user
+
+  // collection
+  const groupsCollection = res.locals.groupsCollection
+  const usersCollection = res.locals.usersCollection
+  try {
+    const user = await getItem(usersCollection, token.id)
+    if (user) {
+      const groupIds = user?.notifications?.filter(
+        (n) => n.type === 'group-invite-request'
+      ).data._id
+
+      if (groupIds && groupIds.length > 0) {
+        const fullGroups = await getManyItems(groupsCollection, {
+          _id: { $in: groupIds.map(addObjectId) },
+        })
+
+        if (fullGroups && fullGroups.length > 0) {
+          return res
+            .status(200)
+            .json(
+              responseMsg('success', 'Groups Fetched successfully', fullGroups)
+            )
+        } else {
+          return res
+            .status(404)
+            .json(responseMsg('error', "Can't find groups", {}))
+        }
+      } else {
+        return res
+          .status(204)
+          .json(responseMsg('error', 'User is not connected to any groups', {}))
       }
     } else {
       return res.status(404).json(responseMsg('error', "Can't find user", {}))
@@ -170,6 +227,167 @@ app.post('/admin/:groupId/:memberId', auth, async (req, res) => {
     return res
       .status(404)
       .json(responseMsg('error', 'Something went wrong', {}))
+  }
+})
+
+app.post('/send-invite', auth, async (req, res) => {
+  const { targetIdArray = '', groupId = '' } = req.body
+  if (targetIdArray && targetIdArray.length > 0 && groupId) {
+    const usersCollection = res.locals.usersCollection
+    const groupsCollection = res.locals.groupsCollection
+
+    try {
+      let userIds = targetIdArray.map(addObjectId)
+
+      const users = await getManyItems(usersCollection, {
+        _id: { $in: userIds },
+      })
+      const group = await getItem(groupsCollection, groupId)
+
+      if (users && users.length > 0 && group) {
+        let newNotification = {
+          _id: uuid.v4(),
+          type: 'group-invite-request',
+          data: group,
+          message: `You have a new group invite request from`,
+        }
+
+        const userUpdateArray = users.map((user) => {
+          const userNotifications =
+            user?.notifications?.length > 0
+              ? [...user.notifications, newNotification]
+              : [newNotification]
+          return {
+            updateOne: {
+              filter: { _id: ObjectId(user._id) },
+              update: { $set: { notifications: userNotifications } },
+            },
+          }
+        })
+
+        let requests =
+          group?.requests?.length > 0
+            ? [...group.requests, ...targetIdArray]
+            : [...targetIdArray]
+
+        await usersCollection.bulkWrite(userUpdateArray)
+        await updateData(groupsCollection, groupId, {
+          requests: unique(requests),
+        })
+
+        return res
+          .status(204)
+          .json(responseMsg('error', 'Invite sent successfully', {}))
+      } else {
+        return res
+          .status(204)
+          .json(responseMsg('error', 'User not found or group dont exist', {}))
+      }
+    } catch (error) {}
+  } else {
+    return res.status(404).json(responseMsg('error', 'No id found', {}))
+  }
+})
+app.post('/invite', auth, async (req, res) => {
+  const {
+    targetId = '',
+    groupId = '',
+    notificationId = '',
+    type = 'accept',
+  } = req.body
+  if (targetId && groupId && notificationId) {
+    const usersCollection = res.locals.usersCollection
+    const groupsCollection = res.locals.groupsCollection
+
+    try {
+      const user = await getItem(usersCollection, targetId)
+      const group = await getItem(groupsCollection, groupId)
+
+      if (user && group) {
+        const groupMembers = [...group.members, targetId]
+        const notificationIdx = user.notifications.findIndex(
+          (n) => n._id === notificationId
+        )
+        const userNotifications = user?.notifications
+        const requestIdx = group.requests.findIndex((r) => r === targetId)
+        const requests = group.requests
+        userNotifications.splice(notificationIdx, 1)
+        requests.splice(requestIdx, 1)
+
+        const userGroups =
+          user?.groups && user?.groups?.length > 0
+            ? [...user.groups, group._id]
+            : [group._id]
+
+        const userPayload =
+          type === 'accept'
+            ? { notifications: userNotifications, groups: userGroups }
+            : { notifications: userNotifications }
+
+        await updateData(usersCollection, targetId, userPayload)
+
+        const groupPayload =
+          type === 'accept' ? { requests, members: groupMembers } : { requests }
+
+        await updateData(groupsCollection, groupId, groupPayload)
+
+        return res
+          .status(202)
+          .json(
+            responseMsg(
+              'success',
+              `Invite ${
+                type === 'accept' ? 'Accept' : 'Declined'
+              } successfully`,
+              {}
+            )
+          )
+      } else {
+        return res
+          .status(204)
+          .json(responseMsg('error', 'User not found or group dont exist', {}))
+      }
+    } catch (error) {}
+  } else {
+    return res.status(404).json(responseMsg('error', 'Missing data', req.body))
+  }
+})
+app.post('/exit', auth, async (req, res) => {
+  const { targetId = '', groupId = '' } = req.body
+  if (targetId && groupId) {
+    const usersCollection = res.locals.usersCollection
+    const groupsCollection = res.locals.groupsCollection
+
+    try {
+      const user = await getItem(usersCollection, targetId)
+      const group = await getItem(groupsCollection, groupId)
+
+      if (user && group) {
+        const groupMembers = [...group.members].filter((m) => m !== targetId)
+        const groupAdmins = [...group.admin].filter((m) => m !== targetId)
+
+        const userGroups = [...user?.groups].filter((g) => g !== groupId)
+
+        await updateData(usersCollection, targetId, {
+          groups: userGroups,
+        })
+
+        await updateData(groupsCollection, groupId, {
+          members: groupMembers,
+          admin: groupAdmins,
+        })
+
+        return res
+          .status(202)
+          .json(responseMsg('success', `Successfully exited from group`, {}))
+      } else {
+        return res
+          .status(204)
+          .json(responseMsg('error', 'User not found or group dont exist', {}))
+      }
+    } catch (error) {}
+  } else {
+    return res.status(404).json(responseMsg('error', 'Missing data', req.body))
   }
 })
 

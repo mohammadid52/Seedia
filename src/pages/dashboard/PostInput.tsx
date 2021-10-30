@@ -12,10 +12,12 @@ const PostInput = ({
   profilePicture,
   customButtons = null,
   placeholder = 'Start a post',
+  disabled,
 }: {
   profilePicture?: string
   customButtons?: React.ReactNode
   placeholder?: string
+  disabled?: boolean
 }) => {
   const [showPostModal, setShowPostModal] = useState(false)
 
@@ -57,7 +59,9 @@ const PostInput = ({
 
   return (
     <>
-      <PostModal open={showPostModal} setOpen={setShowPostModal} />
+      {!disabled && (
+        <PostModal open={showPostModal} setOpen={setShowPostModal} />
+      )}
       <Card
         content={
           <div className="flex flex-col space-y-8">

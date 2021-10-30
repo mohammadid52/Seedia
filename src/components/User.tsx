@@ -5,6 +5,29 @@ import useFollow from 'hooks/useFollow'
 import { IParent } from 'interfaces/UniversalInterface'
 import { avatarPlaceholder } from 'state/Redux/constants'
 
+const FullName = ({ user }: { user?: IParent }) => {
+  return (
+    <h4
+      title={user?.fullName}
+      className="dark:text-white text-center hover:underline cursor-pointer text-gray-900 font-semibold tracking-wide text-lg"
+    >
+      <a
+        style={{ zIndex: 999 }}
+        className="cursor-pointer"
+        // target="_blank"
+        // rel="noreferrer"
+        href={links.getProfileById(
+          user?.profileUrl,
+          user?.other?.template || 1,
+          'private'
+        )}
+      >
+        {user?.fullName}
+      </a>
+    </h4>
+  )
+}
+
 const User = ({
   user,
 
@@ -29,7 +52,7 @@ const User = ({
   return (
     <div
       key={user?._id}
-      className="flex border box-rounded-xl border-gray-300 overflow-hidden m-0 dark:border-gray-600 sm:h-64 xl:h-72 xl:60 sm:w-56 rounded-xl relative flex-col items-center "
+      className="flex border  border-gray-300 overflow-hidden m-0 dark:border-gray-600 sm:h-64 xl:h-72 xl:60 sm:w-56 rounded-xl relative flex-col items-center "
     >
       <Badge
         className={`${
@@ -51,22 +74,7 @@ const User = ({
         />
       </div>
       <div>
-        <h4
-          title={user?.fullName}
-          className="dark:text-white text-center hover:underline cursor-pointer text-gray-900 font-semibold tracking-wide text-lg"
-        >
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href={links.getProfileById(
-              user?.profileUrl,
-              user?.other?.template || 1,
-              'public'
-            )}
-          >
-            {user?.fullName}
-          </a>
-        </h4>
+        <FullName user={user} />
 
         <div className=" flex items-center justify-center ">
           <h3

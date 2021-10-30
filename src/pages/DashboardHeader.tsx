@@ -3,40 +3,161 @@
 import { Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import { MenuAlt2Icon } from '@heroicons/react/solid'
+import { invite } from 'apis/mutations'
 import Button from 'components/atoms/Button'
+import EmptyState from 'components/atoms/EmptyState'
 import Selector from 'components/atoms/Selector'
 import CountryListDropdown from 'components/CountryListDropdown'
 import Toggle from 'components/ThemeToggle'
 import { links as _links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
-import { IParent } from 'interfaces/UniversalInterface'
+import useTheme from 'hooks/useTheme'
+import { INotification, IParent } from 'interfaces/UniversalInterface'
 import { find, map } from 'lodash'
 import { Fragment, useState } from 'react'
-import { AiOutlineHome } from 'react-icons/ai'
+import {
+  AiOutlineHome,
+  AiOutlineLogout,
+  AiOutlineSearch,
+  AiOutlineUsergroupDelete,
+} from 'react-icons/ai'
 import { BiUserCircle } from 'react-icons/bi'
-import { BsBagFill, BsPeople } from 'react-icons/bs'
+import { BsBagFill, BsFilePost, BsPeople } from 'react-icons/bs'
+import { FaAdversal, FaConnectdevelop, FaMoneyBillAlt } from 'react-icons/fa'
+import { FiSettings } from 'react-icons/fi'
 import { GiReceiveMoney } from 'react-icons/gi'
 import { IoMdNotificationsOutline } from 'react-icons/io'
+import { MdAttachMoney, MdFindReplace } from 'react-icons/md'
+import { SiGoogleanalytics } from 'react-icons/si'
+import { useMutation } from 'react-query'
 import { useDispatch } from 'react-redux'
 import { NavLink, useHistory } from 'react-router-dom'
 import { logOut } from 'state/Redux/Actions/authActions'
 import { avatarPlaceholder } from 'state/Redux/constants'
-import { AiOutlineLogout } from 'react-icons/ai'
-import { FiSettings } from 'react-icons/fi'
 import { classNames } from 'utils/classNames'
-import {
-  businessApps,
-  callsToAction,
-  departmentsArray,
-  productsArray,
-} from 'values/values'
-import useTheme from 'hooks/useTheme'
+import { callsToAction, departmentsArray, productsArray } from 'values/values'
+
+const GroupInviteNotification = ({
+  userData,
+  notification,
+}: {
+  userData: IParent
+  notification: INotification
+}) => {
+  const { mutate } = useMutation(invite)
+  const onGroupInvite = (
+    group: any,
+    type: 'accept' | 'decline',
+    notificationId: string
+  ) => {
+    mutate({ type, groupId: group._id, notificationId, targetId: userData._id })
+  }
+
+  return (
+    <div
+      className={`${
+        userData?.notifications.length > 1
+          ? 'border-b border-gray-200 dark:border-gray-700'
+          : ''
+      } flex items-center pb-2 `}
+    >
+      <div className="w-0 flex-1 flex justify-start">
+        <p className=" text-sm font-medium dark:text-white text-gray-900">
+          {notification.message}{' '}
+          <span className="underline">{notification.data.groupName}</span>
+        </p>
+
+        <div className="flex items-center">
+          <button
+            onClick={() =>
+              onGroupInvite(notification.data, 'accept', notification._id)
+            }
+            className="ml-4 flex-shrink-0 dark:bg-gray-800 text-link bg-white rounded-md text-sm font-medium hover:underline   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Accept
+          </button>
+          <button
+            onClick={() =>
+              onGroupInvite(notification.data, 'accept', notification._id)
+            }
+            className="ml-4 flex-shrink-0 dark:bg-gray-800 text-gray-500 bg-white rounded-md text-sm font-medium hover:underline   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Decline
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   const { setDarkMode, showSidebar, setShowSidebar, darkMode } =
     useUserContext()
   const dispatch = useDispatch()
   const history = useHistory()
+
+  const businessApps = [
+    {
+      icon: AiOutlineSearch,
+      name: 'Search for leads',
+      description:
+        'Get a better understanding of where your traffic is coming from.',
+    },
+    {
+      icon: BsFilePost,
+      link: _links.addProject(),
+      name: 'Post a job',
+      description:
+        'Get a better understanding of where your traffic is coming from.',
+    },
+    {
+      icon: FaAdversal,
+      name: 'Advertise',
+      description:
+        'Get a better understanding of where your traffic is coming from.',
+    },
+    {
+      icon: FaMoneyBillAlt,
+      name: 'Sell products',
+      description:
+        'Get a better understanding of where your traffic is coming from.',
+    },
+    {
+      icon: AiOutlineUsergroupDelete,
+      name: 'Groups',
+      link: _links.groups(),
+      description:
+        'Get a better understanding of where your traffic is coming from.',
+    },
+    {
+      icon: MdFindReplace,
+      name: 'Pro finder',
+      description:
+        'Get a better understanding of where your traffic is coming from.',
+    },
+    {
+      icon: MdAttachMoney,
+      name: 'Salary',
+      description:
+        'Get a better understanding of where your traffic is coming from.',
+    },
+    {
+      icon: BsFilePost,
+      name: 'New product',
+      link: _links.addProduct(),
+      description: 'Lorem ipsum dolor sit amet',
+    },
+    {
+      icon: FaConnectdevelop,
+      name: 'New product developed',
+      description: 'Lorem ipsum dolor sit amet',
+    },
+    {
+      icon: SiGoogleanalytics,
+      name: 'Profile statistics',
+      description: 'Lorem ipsum dolor sit amet',
+    },
+  ]
 
   const sellList1 = [
     {
@@ -103,7 +224,6 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
     { href: '/#', title: 'My Network', Icon: BsPeople },
     // { href: '/#', title: 'Jobs', Icon: CgWorkAlt },
     // { href: '/#', title: 'Messaging', Icon: BiMessageDetail },
-    { href: '/#', title: 'Notifications', Icon: IoMdNotificationsOutline },
   ]
 
   const navClass =
@@ -229,6 +349,94 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                       </span>
                     </NavLink>
                   ))}
+
+                  <Popover className="relative">
+                    {({ open }) => (
+                      <>
+                        <Popover.Button
+                          className={classNames(
+                            open ? 'text-gray-900' : 'text-gray-500',
+                            `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
+                          )}
+                        >
+                          <span className={navClass}>
+                            <div className="relative">
+                              <IoMdNotificationsOutline className="h-6 w-6" />
+                              {userData?.notifications?.length > 0 && (
+                                <div className="absolute top-0 right-0">
+                                  <span className="flex h-3 w-3">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            <span className="hidden lg:flex text-xs items-center">
+                              Notifications
+                              <ChevronDownIcon
+                                className={classNames(
+                                  open ? 'text-gray-600' : 'text-gray-400',
+                                  'h-4 w-4 group-hover:text-gray-500 ml-2'
+                                )}
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </span>
+                        </Popover.Button>
+
+                        <Transition
+                          show={open}
+                          as={Fragment}
+                          enter="transition ease-out duration-200"
+                          enterFrom="opacity-0 translate-y-1"
+                          enterTo="opacity-100 translate-y-0"
+                          leave="transition ease-in duration-150"
+                          leaveFrom="opacity-100 translate-y-0"
+                          leaveTo="opacity-0 translate-y-1"
+                        >
+                          <Popover.Panel
+                            static
+                            style={{ left: '0rem' }}
+                            className="absolute z-10  mt-4 transform w-screen max-w-md lg:max-w-lg sm:px-6 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+                          >
+                            <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden">
+                              <div className="relative dark:bg-gray-800 bg-white px-5 py-6 sm:gap-8 sm:p-8 ">
+                                <div className="grid grid-cols-1">
+                                  {userData?.notifications &&
+                                  userData?.notifications.length > 0 ? (
+                                    userData?.notifications?.map(
+                                      (notification) => {
+                                        const isGroupInvite =
+                                          notification.type ===
+                                          'group-invite-request'
+                                        if (isGroupInvite) {
+                                          return (
+                                            <GroupInviteNotification
+                                              userData={userData}
+                                              key={notification._id}
+                                              notification={notification}
+                                            />
+                                          )
+                                        }
+                                      }
+                                    )
+                                  ) : (
+                                    <EmptyState
+                                      hideBorders
+                                      title="No Notifications"
+                                      subtitle={`Your all notifications will be here`}
+                                      iconUrl={'/notification.png'}
+                                    />
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </Popover.Panel>
+                        </Transition>
+                      </>
+                    )}
+                  </Popover>
+
                   <Popover className="relative">
                     {({ open }) => (
                       <>
@@ -515,14 +723,14 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                           aria-hidden="true"
                                         />
                                       </div>
-                                      <div className="ml-4">
+                                      <a href={item.link} className="ml-4">
                                         <p className="text-sm font-medium dark:text-white text-gray-900">
                                           {item.name}
                                         </p>
                                         <p className="mt-1 text-xs dark:text-gray-400 text-gray-500">
                                           {item.description}
                                         </p>
-                                      </div>
+                                      </a>
                                     </a>
                                   ))}
                                 </div>

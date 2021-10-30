@@ -26,6 +26,7 @@ const FormInput = ({
   rows,
   textClass = 'sm:text-sm',
   cols,
+  info = '',
   ...props
 }: {
   label?: string
@@ -45,9 +46,11 @@ const FormInput = ({
   cols?: number
   showPasswordButton?: boolean
   textarea?: boolean
+  info?: string
   disabled?: boolean
   withButton?: any
   textClass?: string
+
   setUnsavedChanges?: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const errorClass = `border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500`
@@ -89,6 +92,8 @@ const FormInput = ({
             <textarea
               rows={rows}
               cols={cols}
+              autoFocus
+              // ref={inputRef}
               id={id}
               placeholder={placeholder}
               onChange={onChange}
@@ -139,6 +144,8 @@ const FormInput = ({
             <input
               disabled={disabled}
               id={id}
+              // ref={inputRef}
+              autoFocus
               onChange={onChange}
               placeholder={placeholder}
               type={
@@ -179,6 +186,7 @@ const FormInput = ({
               )}
             </div>
           </div>
+
           <div className="flex mt-2 items-center justify-between">
             <Transition
               show={Boolean(meta.touched && meta.error)}

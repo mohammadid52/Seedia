@@ -1,5 +1,6 @@
 import '@material-tailwind/react/tailwind.css'
 import Button from 'components/atoms/Button'
+import Notification from 'components/notifications'
 import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import { getUserValues } from 'helpers'
@@ -77,6 +78,7 @@ const App = () => {
           />
         </div>
       )}
+      <Notification />
     </>
   )
 }

@@ -1,3 +1,6 @@
+import EmptyState from 'components/atoms/EmptyState'
+import Meta from 'components/atoms/Meta/Meta'
+import BottomCard from 'components/BottomCard'
 import CustomFooter from 'components/CustomFooter'
 import DiscoverCard from 'components/DiscoverButton'
 import Loading from 'components/Loading'
@@ -6,11 +9,11 @@ import ProfileStrength from 'components/ProfileStrength'
 import PublicProfileCard from 'components/PublicProfileCard'
 import Sidebar from 'components/Sidebar'
 import { links } from 'constants/Links'
-import { updateDocumentTitle } from 'helpers'
 import useAccountType from 'hooks/useAccountType'
 import { useRouter } from 'hooks/useRouter'
 import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
+import { isEmpty } from 'lodash'
 import DashboardHeader from 'pages/DashboardHeader'
 import About from 'pages/profile/About'
 import AdditionalFeatures from 'pages/profile/AdditionalFeatures'
@@ -26,108 +29,141 @@ import RandomUsers from './RandomUsers'
 
 const Profile = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
-  const { viewMode, userId: userIdFromParam, template } = route?.match?.params
+  const { viewMode, userId: userIdFromParam } = route?.match?.params
 
-  const { otherUserData, iAmOwnerOfThisProfile, isFetched, isLoading } =
-    useUser(userIdFromParam, userData)
+  const {
+    otherUserData,
+    iAmOwnerOfThisProfile,
+    isFetched,
+    isLoading,
+    refetch: refetchProfile,
+  } = useUser(userIdFromParam, userData)
   const showAllButtons = iAmOwnerOfThisProfile && viewMode === 'private'
 
   const history = useHistory()
-
-  useEffect(() => {
-    if (!iAmOwnerOfThisProfile) {
-      // I am not owner of this profile so fetch other user data
-      updateDocumentTitle(otherUserData?.fullName)
-    } else {
-      updateDocumentTitle(userData?.fullName)
-    }
-  }, [iAmOwnerOfThisProfile])
-
-  // @ts-ignore
-  useEffect(() => {
-    const templateFromUser = commonProps?.userData?.other?.template
-    if (template !== templateFromUser && iAmOwnerOfThisProfile) {
-      const changeTemplate = templateFromUser
-      history.replace(
-        links.getProfileById(
-          commonProps?.userData.profileUrl,
-          changeTemplate,
-          viewMode
-        )
-      )
-    }
-  }, [userIdFromParam, template])
 
   const commonProps: { authUser: boolean; userData: IParent } = {
     authUser: showAllButtons,
     userData: iAmOwnerOfThisProfile ? userData : otherUserData,
   }
-  const { isBusiness } = useAccountType(userData)
+
+  const user = commonProps?.userData
+
+  useEffect(() => {
+    if (!isEmpty(user)) {
+      history.push(links.getProfile(user, iAmOwnerOfThisProfile))
+    }
+  }, [user])
+
+  const { isBusiness, getType } = useAccountType(userData)
 
   if (isLoading && !isFetched) {
     return <Loading />
   }
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-900 smooth-scroll pt-24">
+    <div className="bg-gray-100 min-h-screen dark:bg-gray-900 smooth-scroll pt-12">
       <DashboardHeader userData={userData} />
-      <Sidebar />
-      <div className="flex">
-        <div
-          className="mx-auto min-h-screen pt-8 w-full"
-          style={{ maxWidth: '90rem' }}
-        >
-          <Cover isBusiness={isBusiness} {...commonProps} />
 
-          <div className="my-6">
-            <Layout
-              userData={userData}
-              business={isBusiness}
-              firstCol={
-                <div className="space-y-8">
-                  <About {...commonProps} />
-                  {!isBusiness && iAmOwnerOfThisProfile && (
-                    <AdditionalFeatures />
-                  )}
+      {!isEmpty(user) ? (
+        <div>
+          <Meta
+            pageTitle={`${user.fullName} | 13RMS`}
+            userName={user.fullName}
+            pageUrl={links.getProfile(user)}
+            imageUrl={user?.profilePicture}
+            pageType="social media"
+            title={`${user.fullName} | 13RMS`}
+            keywords={`profile,${user.fullName},13RMS,tradingpost, linkedin,instagram,facebook`}
+          />
+          <Sidebar />
+          <div className="flex">
+            <div
+              className="mx-auto min-h-screen  w-full"
+              style={{ maxWidth: '90rem' }}
+            >
+              <Cover isBusiness={isBusiness} {...commonProps} />
 
-                  {iAmOwnerOfThisProfile && <DiscoverCard />}
-                </div>
-              }
-              secondCol={
-                <div className="space-y-8 py-0">
-                  <Background {...commonProps} />
-                  <Activity
-                    userData={userData}
-                    iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
-                  />
-                  <Recommendations
-                    iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
-                    {...commonProps}
-                    recommendation={commonProps?.userData?.recommendation}
-                  />
-                  <Following
-                    list={commonProps?.userData?.following}
-                    interests={commonProps?.userData?.background?.interests}
-                  />
-                  <RandomUsers
-                    skipList={commonProps?.userData?.following}
-                    userData={userData}
-                    list={userData.following}
-                  />
-                </div>
-              }
-              thirdCol={
-                <div className="space-y-8">
-                  {showAllButtons && <PublicProfileCard userData={userData} />}
-                  {showAllButtons && <ProfileStrength {...commonProps} />}
-                  <PeopleAlsoViewed {...commonProps} />
-                </div>
-              }
-            />
+              <div className="my-6">
+                <Layout
+                  userData={userData}
+                  business={isBusiness}
+                  firstCol={
+                    <div className="space-y-8">
+                      <About {...commonProps} />
+                      {/* {iAmOwnerOfThisProfile && ( */}
+                      <AdditionalFeatures
+                        refetchProfile={refetchProfile}
+                        iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                        userData={userData}
+                        otherUserData={otherUserData}
+                        isBusiness={getType(user).isBusiness}
+                      />
+                      {/* // )} */}
+
+                      {iAmOwnerOfThisProfile && (
+                        <DiscoverCard
+                          extraItems={[
+                            { link: links.myItems(), name: 'My items' },
+                          ]}
+                        />
+                      )}
+                    </div>
+                  }
+                  secondCol={
+                    <div className="space-y-8 py-0">
+                      <Background {...commonProps} />
+                      <Activity
+                        userData={user}
+                        iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                      />
+                      <Recommendations
+                        iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                        {...commonProps}
+                        recommendation={user.recommendation}
+                      />
+
+                      <RandomUsers
+                        skipList={user?.following}
+                        userData={userData}
+                        list={userData.following}
+                      />
+                    </div>
+                  }
+                  thirdCol={
+                    <div className="space-y-8 ">
+                      {iAmOwnerOfThisProfile && (
+                        <PublicProfileCard userData={userData} />
+                      )}
+                      {iAmOwnerOfThisProfile && (
+                        <ProfileStrength {...commonProps} />
+                      )}
+
+                      <PeopleAlsoViewed {...commonProps} />
+                    </div>
+                  }
+                />
+              </div>
+            </div>
           </div>
+          {!iAmOwnerOfThisProfile && (
+            <BottomCard
+              myFollowings={userData.following}
+              userData={otherUserData}
+            />
+          )}
+          <CustomFooter />
         </div>
-      </div>
-      <CustomFooter />
+      ) : (
+        <div className="flex items-center  overflow-hidden  max-h-screen min-h-96   justify-center">
+          <EmptyState
+            hideBorders
+            title="Oops Can't find user."
+            subtitle={`Please check url`}
+            iconUrl={'/question.png'}
+          />
+        </div>
+      )}
     </div>
   )
 }

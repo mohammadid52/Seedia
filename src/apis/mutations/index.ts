@@ -3,6 +3,14 @@ import { network } from 'helpers'
 // follow & Unfollow
 const followUser = (id: string) => network.post(`/user/follow/${id}`)
 const unFollowUser = (id: string) => network.post(`/user/unfollow/${id}`)
+type SaveProfile = {
+  targetId: string
+  action: 'save' | 'unsave'
+}
+const saveProfile = (options: SaveProfile) =>
+  network.post(
+    `/user/save-profile?targetId=${options.targetId}&action=${options.action}`
+  )
 
 // create-review
 const createReview = (
@@ -50,12 +58,49 @@ const makeGroupAdmin = ({
   action: string
 }) => network.post(`/groups/admin/${groupId}/${memberId}?action=${action}`)
 
+type SendInvite = {
+  targetIdArray: string[]
+  groupId: string
+}
+
+const sendInvite = (data: SendInvite) =>
+  network.post(`/groups/send-invite/`, { ...data })
+
+type Invite = {
+  targetId: string
+  groupId: string
+  notificationId: string
+  type: 'accept' | 'decline'
+}
+
+type Exit = {
+  targetId: string
+  groupId: string
+}
+
+const invite = (data: Invite) => network.post(`/groups/invite/`, { ...data })
+const exitGroup = (data: Exit) => network.post(`/groups/exit/`, { ...data })
+
 // Posts
 const addPost = (data: any) => network.post(`/post/add-post`, { ...data })
+const deletePost = (postId: any) => network.delete(`/post?postId=${postId}`)
 const viewPost = (postId: string) => network.post(`/post/view?postId=${postId}`)
+const saveUnsavePost = ({
+  postId,
+  action,
+}: {
+  postId: string
+  action: string
+}) => network.post(`/post/s?action=${action}&postId=${postId}`)
 
+const featurePost = ({ postId, action }: { postId: string; action: string }) =>
+  network.post(`/post/f?action=${action}&postId=${postId}`)
 // Store
 const openStore = (data: any) => network.post('/store/add', { ...data })
+const addNewSection = (data: any) =>
+  network.post('/store/section-add', { ...data })
+const publishStore = (action: any) =>
+  network.post(`/store/publish?action=${action}`)
 
 export {
   followUser,
@@ -65,10 +110,19 @@ export {
   uploadMultipleImages,
   addProject,
   addRequest,
+  addNewSection,
   createGroup,
+  publishStore,
   makeGroupAdmin,
   addPost,
   uploadMediaToServer,
   viewPost,
+  featurePost,
   openStore,
+  saveUnsavePost,
+  deletePost,
+  sendInvite,
+  invite,
+  saveProfile,
+  exitGroup,
 }

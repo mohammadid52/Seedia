@@ -1,25 +1,104 @@
-import { viewPost } from 'apis/mutations'
+import {
+  saveUnsavePost,
+  viewPost,
+  featurePost,
+  deletePost,
+} from 'apis/mutations'
 import Dropdown from 'components/Dropdown/Dropdown'
 import PostBottom from 'components/posts/PostBottom'
 import { links } from 'constants/Links'
 import useOnScreen from 'hooks/useOnScreen'
-import { IPost } from 'interfaces/UniversalInterface'
+import { IPost, IParent } from 'interfaces/UniversalInterface'
 import moment from 'moment'
-import { useEffect, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { FaRegBookmark, FaBookmark } from 'react-icons/fa'
 import { useMutation } from 'react-query'
+import { nanoid } from 'nanoid'
 import { avatarPlaceholder } from 'state/Redux/constants'
+import {
+  AiOutlineStar,
+  AiFillStar,
+  AiOutlineLink,
+  AiOutlineEdit,
+  AiOutlineDelete,
+} from 'react-icons/ai'
+import { useNotifications } from 'context/NotificationContext'
 
-const Post = ({ post, userId }: { post: IPost; userId: string }) => {
+const Post = ({
+  post,
+  userId,
+  userData,
+}: {
+  post: IPost
+  userId: string
+  userData: IParent
+}) => {
   const user = post.user
+  const postId: string = post._id.toString()
 
-  const dropdownList = [
+  const { mutate } = useMutation(() => viewPost(postId))
+
+  const postRef = useRef(null)
+  const isCardOnScreen = useOnScreen(postRef)
+
+  const isViewed = post.viewedBy.includes(userId)
+
+  const iAmOwnerOfThisPost = user._id.toString() === userId
+  const { setNotification } = useNotifications()
+
+  const saveMutations = useMutation(saveUnsavePost)
+  const featureMutations = useMutation(featurePost)
+  const deleteMutations = useMutation(deletePost)
+
+  useEffect(() => {
+    if (isCardOnScreen && !isViewed && !iAmOwnerOfThisPost) {
+      setTimeout(() => {
+        mutate()
+      }, 300)
+    }
+  }, [isCardOnScreen, isViewed])
+
+  const isSaved = userData?.savedPosts?.includes(postId.toString())
+  const isFeatured = userData?.featuredPosts?.includes(postId.toString())
+
+  const [saved, setSaved] = useState(isSaved)
+  const [featured, setFeatured] = useState(isFeatured)
+
+  const commonDropdownList = [
     {
-      id: '1',
-      name: 'Save for later',
-      onClick: () => {},
+      id: nanoid(),
+      name: saved ? 'Unsave' : 'Save for later',
+      onClick: () => {
+        if (saved) {
+          // @ts-ignore
+          saveMutations.mutate({
+            action: 'unsave',
+            postId: postId.toString(),
+          })
+          setSaved(false)
+          setNotification({
+            buttonText: 'My items',
+            buttonUrl: links.myItems(),
+            show: true,
+            title: 'Post unsaved.',
+          })
+        } else {
+          // @ts-ignore
+          saveMutations.mutate({ action: 'save', postId: postId.toString() })
+          setSaved(true)
+          setNotification({
+            buttonText: 'My items',
+            buttonUrl: links.myItems(),
+            show: true,
+            title: 'Post saved.',
+          })
+        }
+      },
+      Icon: saved ? FaBookmark : FaRegBookmark,
     },
     {
-      id: '2',
+      Icon: AiOutlineLink,
+      id: nanoid(),
       name: 'Copy link to post',
       onClick: () => {
         navigator.clipboard.writeText(
@@ -27,6 +106,10 @@ const Post = ({ post, userId }: { post: IPost; userId: string }) => {
         )
       },
     },
+  ]
+
+  const dropdownList = [
+    ...commonDropdownList,
     {
       id: '3',
       name: `Unfollow ${user?.fullName || user.firstName}`,
@@ -34,20 +117,54 @@ const Post = ({ post, userId }: { post: IPost; userId: string }) => {
     },
   ]
 
-  const { mutate } = useMutation(() => viewPost(post._id))
-
-  const postRef = useRef(null)
-  const isCardOnScreen = useOnScreen(postRef)
-
-  const isViewed = post.viewedBy.includes(userId)
-
-  useEffect(() => {
-    if (isCardOnScreen && !isViewed) {
-      setTimeout(() => {
-        mutate()
-      }, 300)
-    }
-  }, [isCardOnScreen, isViewed])
+  // Show this if the post is mine
+  const myDropdownList = [
+    ...commonDropdownList,
+    {
+      id: '1',
+      name: 'Feature on top of profile',
+      onClick: () => {
+        if (featured) {
+          // @ts-ignore
+          featureMutations.mutate({
+            action: 'unfeature',
+            postId: postId.toString(),
+          })
+          setFeatured(false)
+          setNotification({
+            show: true,
+            title: 'Post removed from featured list.',
+          })
+        } else {
+          // @ts-ignore
+          featureMutations.mutate({
+            action: 'feature',
+            postId: postId.toString(),
+          })
+          setNotification({
+            show: true,
+            title: 'Post added to featured list.',
+          })
+          setFeatured(true)
+        }
+      },
+      Icon: featured ? AiFillStar : AiOutlineStar,
+    },
+    {
+      id: '4',
+      name: `Edit post`,
+      Icon: AiOutlineEdit,
+      onClick: () => {},
+    },
+    {
+      id: '5',
+      name: `Delete post`,
+      Icon: AiOutlineDelete,
+      onClick: () => {
+        deleteMutations.mutate(postId)
+      },
+    },
+  ]
 
   return (
     <div
@@ -68,35 +185,37 @@ const Post = ({ post, userId }: { post: IPost; userId: string }) => {
           <div className="flex flex-col">
             <a
               href={links.getProfileById(
-                user.profileUrl,
+                user?.profileUrl,
                 user?.other?.template,
                 'public'
               )}
             >
               <h4 className="text-base hover:underline  dark:text-white font-bold">
-                {user?.fullName || 'Lorem Ipsum'}
+                {user?.fullName || '--'}
               </h4>
             </a>
-            <span className="text-xs dark:text-gray-500">
-              {user?.followers?.length || 0} followers
-            </span>
-            <span className="text-xs dark:text-gray-500 font-semibold">
-              {moment(post.postedOn).fromNow()}
+            <span className="text-gray-500 text-xs dark:text-gray-500">
+              {user?.followers?.length || 0} followers{' '}
+              <span className="text-xs dark:text-gray-500 text-gray-500 font-medium">
+                • {moment(post.postedOn).fromNow()}
+              </span>
             </span>
           </div>
         </div>
         <div className="relative">
-          <Dropdown list={dropdownList} />
+          <Dropdown list={iAmOwnerOfThisPost ? myDropdownList : dropdownList} />
         </div>
       </div>
       <div className="px-6 pb-4">
-        <p className="text-gray-700 dark:text-gray-400 text-sm">{post.text}</p>
+        <p className="text-gray-700 dark:text-gray-400 text-sm whitespace-pre-line">
+          {post.text}
+        </p>
       </div>
       {post.links && post.links.length > 0 && (
         <img className="w-full" src={post.links[0]} alt="Mountain" />
       )}
 
-      <div className="px-6 pt-4 pb-2">
+      {/* <div className="px-6 pt-4 pb-2">
         <span className="inline-block bg-gray-200 dark:bg-gray-700 dark:text-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
           #photography
         </span>
@@ -106,7 +225,7 @@ const Post = ({ post, userId }: { post: IPost; userId: string }) => {
         <span className="inline-block bg-gray-200 dark:bg-gray-700 dark:text-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
           #winter
         </span>
-      </div>
+      </div> */}
 
       <PostBottom />
     </div>

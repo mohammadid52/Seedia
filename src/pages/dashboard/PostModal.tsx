@@ -2,9 +2,11 @@ import { addPost } from 'apis/mutations'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
 import Modal from 'components/atoms/Modal'
+import { links } from 'constants/Links'
+import { useNotifications } from 'context/NotificationContext'
 import { usePostContext } from 'context/PostContext'
 import { Form, Formik } from 'formik'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useMutation } from 'react-query'
 
 const PostModal = ({
@@ -14,26 +16,21 @@ const PostModal = ({
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
-  const { mutate, isLoading, isError, isSuccess, error } = useMutation(
-    addPost,
-    {
-      onSuccess: () => {
-        setNewPostAdded(true)
-      },
-    }
-  )
-
-  const onEmojiClick = (event: any, emojiObject: any): void => {
-    console.log('emojiObject', emojiObject)
-  }
-
+  const { setNotification } = useNotifications()
   const { setNewPostAdded } = usePostContext()
-
-  useEffect(() => {
-    if (isSuccess) {
+  const { mutate, isLoading, isError, error } = useMutation(addPost, {
+    onSuccess: (data) => {
+      const postUrl = data.data.data
+      setNewPostAdded(true)
       setOpen(false)
-    }
-  }, [isSuccess])
+      setNotification({
+        show: true,
+        title: 'New post added.',
+        buttonText: 'View',
+        buttonUrl: links.postById(postUrl),
+      })
+    },
+  })
 
   const initialValues = {
     text: '',
@@ -59,7 +56,7 @@ const PostModal = ({
             <FormInput
               gridClass="hideBorders"
               hideBorders
-              textClass="text-sm sm:text-lg"
+              textClass="text-sm text-gray-700 dark:text-gray-100 sm:text-lg"
               placeholder="What do you want to talk about?"
               rows={10}
               name="text"
