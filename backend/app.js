@@ -105,9 +105,9 @@ client.connect(
       res.sendFile(path.join(__dirname, 'build', 'index.html'))
     })
 
-    app.get('*', (req, res) => {
-      res.send('Invalid APi. Please check api url')
-    })
+    // app.get('*', (req, res) => {
+    //   res.send('Invalid APi. Please check api url')
+    // })
   }
 )
 
