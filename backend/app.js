@@ -100,16 +100,14 @@ client.connect(
     app.use('/auth', passUserCollection, authenticationRouter)
 
     app.use('/uploadImage', mediaUploadRouter)
-
-    console.log('Connected')
   }
 )
 
 app.use(express.static(path.join(__dirname, 'build')))
 app.use(express.static(path.join(__dirname, 'build', 'static')))
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'))
 })
 
 // ~~~~~~~~~~~~~~~~~~IGNORE THIS~~~~~~~~~~~~~~~~~~~~~ //
