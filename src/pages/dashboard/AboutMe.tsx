@@ -1,17 +1,16 @@
+import { fetchAvgViews } from 'apis/queries'
 import Button from 'components/atoms/Button'
-import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
+import DiscoverCard from 'components/DiscoverButton'
 import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import { network } from 'helpers'
 import useAccountType from 'hooks/useAccountType'
 import { IParent } from 'interfaces/UniversalInterface'
 import React, { useState } from 'react'
-import { avatarPlaceholder } from 'state/Redux/constants'
 import { BsFillBookmarkFill } from 'react-icons/bs'
-import { fetchAvgViews } from 'apis/queries'
 import { useQuery } from 'react-query'
-import DiscoverCard from 'components/DiscoverButton'
+import { avatarPlaceholder } from 'state/Redux/constants'
 
 const PersonalCard = ({
   className,
@@ -127,7 +126,9 @@ const PersonalCard = ({
       />
 
       {/* ------------ Profile Card ---------*/}
-      <div className="rounded-lg border dark:border-gray-700  border-gray-200  overflow-hidden lg:max-w-xs bg-white dark:bg-gray-800">
+      <div
+        className={`rounded-lg   border dark:border-gray-700 transition-all  border-gray-200  overflow-hidden lg:max-w-xs bg-white dark:bg-gray-800`}
+      >
         <div
           style={{
             backgroundImage: `url(${

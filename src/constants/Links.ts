@@ -73,4 +73,6 @@ export const links = {
   viewStore: (profileUrl: string) => `/${profileUrl}/store/`,
 
   myItems: () => `/my-items/`,
+
+  toAction: (action: string) => `/users?action=${action}`,
 }

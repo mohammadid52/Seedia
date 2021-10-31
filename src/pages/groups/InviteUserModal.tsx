@@ -69,7 +69,7 @@ const InviteUserModal = ({
   }
 
   const users: IParent[] =
-    !isLoading && isFetched && isSuccess ? data.data.data : []
+    !isLoading && isFetched && isSuccess ? data.data.data.users : []
 
   const [localUsers, setLocalUsers] = useState<IParent[]>([])
   useEffect(() => {

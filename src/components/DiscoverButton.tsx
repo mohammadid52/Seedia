@@ -6,7 +6,7 @@ const DiscoverCard = ({
   extraItems?: { name: string; link: string }[]
 }) => {
   return (
-    <div className="rounded-lg border dark:border-gray-700  border-gray-200  overflow-hidden lg:max-w-xs bg-white dark:bg-gray-800 ">
+    <div className="rounded-lg  border dark:border-gray-700  border-gray-200  overflow-hidden lg:max-w-xs bg-white dark:bg-gray-800 ">
       <div className="">
         <div className="p-4 flex flex-col gap-y-3 text-xs font-medium text-link">
           <a href={links.groups()} className="hover:underline cursor-pointer">

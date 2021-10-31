@@ -42,13 +42,19 @@ const fetchRequestedGroups = () => network.get(`/groups/requested-list`)
 const fetchGroupById = (groupId: string) => network.get(`/groups/g/${groupId}`)
 
 // Posts
-const fetchFeed = (limit: number) => network.get(`/post/feed?limit=${limit}`)
+type FeedInput = {
+  skip: number
+  limit: number
+}
+const fetchFeed = ({ limit = 10, skip = 0 }: FeedInput) =>
+  network.get(`/post/feed?limit=${limit}&skip=${skip}`)
 const fetchPostById = (postUrl: string) =>
   network.get(`/post/p?postUrl=${postUrl}`)
 const fetchAvgViews = () => network.get(`/post/averagePostViews`)
 const fetchActivity = (userId: string, limit: number) =>
   network.get(`/post/recent-activity?limit=${limit}&userId=${userId}`)
 const fetchedSavedItems = () => network.get(`/post/s`)
+const fetchedSavedProfiles = () => network.get(`/post/savedProfiles`)
 
 export {
   fetchProductDetails,
@@ -73,4 +79,5 @@ export {
   fetchAvgViews,
   fetchedSavedItems,
   fetchRequestedGroups,
+  fetchedSavedProfiles,
 }

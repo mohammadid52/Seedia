@@ -1,46 +1,41 @@
+import { fetchUsers } from 'apis/queries'
+import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
+import EmptyState from 'components/atoms/EmptyState'
+import Spinner from 'components/Spinner'
 import User from 'components/User'
-import { getAccessToken, network } from 'helpers'
+import { links } from 'constants/Links'
 import { IParent } from 'interfaces/UniversalInterface'
-import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
 
 const PeopleAlsoViewed = ({
   secondary = false,
   userData,
-  authUser,
+
   showSingleCard = true,
 }: {
   secondary?: boolean
   showSingleCard?: boolean
-  authUser?: boolean
+
   userData?: IParent
 }) => {
-  const [list, setList] = useState([])
-  const token = getAccessToken()
-
-  const fetchPeopleYouViewedList = async () => {
-    try {
-      const config = { users: userData?.piv, limit: 6 }
-      const { data } = await network.post('/user/getUsers', config, {
-        headers: { Authorization: token },
-      })
-      setList(data.data)
-    } catch (error) {
-      console.error(error)
-    }
+  const config = {
+    users: userData.piv,
+    limit: 4,
   }
+  const { data, isLoading, isFetched, isSuccess } = useQuery(
+    'people-also-viewed-list',
+    () => fetchUsers(config),
+    { enabled: userData?.pivCount > 0 }
+  )
 
-  useEffect(() => {
-    // @ts-ignore
-    if (userData?.pivCount > 0) {
-      fetchPeopleYouViewedList()
-    }
-  }, [])
+  const list: IParent[] =
+    isFetched && !isLoading && isSuccess ? data.data.data.users : []
 
   return (
     <Card
       secondary={secondary}
-      cardTitle={authUser ? 'People You Viewed' : 'Related Users'}
+      cardTitle={'People You Viewed'}
       content={
         <div
           className={`${
@@ -49,12 +44,32 @@ const PeopleAlsoViewed = ({
               : 'grid-cols-1 grid mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4'
           }  `}
         >
-          {list && list.length > 0 ? (
-            list.map((people: IParent, idx: number) => (
-              <User key={people?._id} user={people} />
-            ))
+          {isLoading ? (
+            <div className="flex items-center justify-center">
+              <Spinner />
+            </div>
+          ) : list && list.length > 0 ? (
+            <div className="flex items-center gap-4 justify-center flex-col">
+              {list.map((people: IParent, idx: number) => (
+                <User key={people?._id} user={people} />
+              ))}
+              <div className="">
+                <Button
+                  label="see more"
+                  rounded="rounded-full"
+                  gradient
+                  link={links.toAction('piv')}
+                  size="lg"
+                />
+              </div>
+            </div>
           ) : (
-            <p className="text-gray-400 text-center">no users found</p>
+            <EmptyState
+              hideBorders
+              title="Oops Can't find users."
+              subtitle={``}
+              iconUrl={'/no-users.png'}
+            />
           )}
         </div>
       }

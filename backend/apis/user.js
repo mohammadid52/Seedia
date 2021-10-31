@@ -241,27 +241,31 @@ router.post('/getUsers', auth, async (req, res) => {
     const city = user?.location?.city
     const country = user?.location?.country
 
-    const users = await usersCollection
-      .find({
-        $and: [
-          { _id: { $nin: [user._id, ...skipIds?.map(addObjectId)] } },
-          {
-            $or: [
-              { _id: { $in: wrapid } },
-              { 'location.state': state },
-              { 'location.country': country },
-              { 'location.city': city },
-            ],
-          },
-        ],
-      })
-      .limit(limit)
-      .toArray()
+    const filter = {
+      $and: [
+        { _id: { $nin: [user._id, ...skipIds?.map(addObjectId)] } },
+        {
+          $or: [
+            { _id: { $in: wrapid } },
+            { 'location.state': state },
+            { 'location.country': country },
+            { 'location.city': city },
+          ],
+        },
+      ],
+    }
+
+    const dataCount = await usersCollection.find(filter).count()
+
+    const users = await usersCollection.find(filter).limit(limit).toArray()
 
     if (users && users.length > 0) {
-      return res
-        .status(202)
-        .json(responseMsg('success', 'Fetch successfully', users))
+      return res.status(202).json(
+        responseMsg('success', 'Fetch successfully', {
+          users,
+          count: dataCount,
+        })
+      )
     } else {
       return res.status(203).json(responseMsg('error', "Can't find users"))
     }
@@ -738,7 +742,7 @@ router.post('/save-profile', auth, async (req, res) => {
         if (action === 'save') {
           savedProfiles =
             user?.savedProfiles?.length > 0
-              ? [...user?.savedProfiles, targetId]
+              ? unique([...user?.savedProfiles, targetId])
               : [targetId]
         } else {
           const idx = savedProfiles.findIndex((d) => d === targetId)

@@ -1,13 +1,12 @@
-import Loader from 'components/atoms/animation/Loader'
+import { fetchUsers } from 'apis/queries'
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
+import Spinner from 'components/Spinner'
 import User from 'components/User'
-import { getAccessToken, network } from 'helpers'
-import { useRouter } from 'hooks/useRouter'
 import { IParent } from 'interfaces/UniversalInterface'
 import { map } from 'lodash'
-import { useEffect, useState } from 'react'
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
+import { useQuery } from 'react-query'
 
 const Following = ({
   list,
@@ -18,40 +17,23 @@ const Following = ({
   list?: string[]
   interests?: { name: string; id: string }[]
 }) => {
-  const route: any = useRouter()
-  const userIdFromParam = route?.match?.params?.userId
-  const [following, setFollowing] = useState([])
+  const config = { users: list, limit: 6 }
 
-  const [fetching, setFetching] = useState(false)
-  const token = getAccessToken()
+  const { data, isLoading, isFetched, isSuccess } = useQuery(
+    `user-list-following-1234`,
+    () => fetchUsers(config),
+    { enabled: list && list.length > 0 }
+  )
 
-  const fetchFollowingUsers = async () => {
-    setFetching(true)
-    try {
-      const config = { users: list, limit: 6 }
-      const { data } = await network.post('/user/getUsers', config, {
-        headers: { Authorization: token },
-      })
-      setFollowing(data.data)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setFetching(false)
-    }
-  }
-
-  useEffect(() => {
-    if (list && list.length > 0 && following.length === 0) {
-      fetchFollowingUsers()
-    }
-  }, [userIdFromParam])
+  const users: IParent[] =
+    !isLoading && isFetched && isSuccess ? data.data.data.users : []
 
   return (
     <Card
       className="mb-12"
       cardTitle="Following"
       withCardHeadings={
-        following.length > 6 && (
+        users.length > 6 && (
           <>
             <Button
               gradient
@@ -75,11 +57,11 @@ const Following = ({
       }
       content={
         <div>
-          {fetching ? (
+          {isLoading ? (
             <div className="h-56 flex items-center justify-center">
-              <Loader />
+              <Spinner />
             </div>
-          ) : following.length > 0 ? (
+          ) : users.length > 0 ? (
             <div
               className={`${
                 showSingleCard
@@ -87,17 +69,9 @@ const Following = ({
                   : 'grid-cols-1 grid mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4'
               }  `}
             >
-              {map(following, (user: IParent, idx) => {
-                // @ts-ignore
-                const following = list && list.includes(user?._id)
-                return (
-                  <User
-                    user={user}
-                    key={user._id.toString()}
-                    following={following}
-                  />
-                )
-              })}
+              {map(users, (user: IParent, idx) => (
+                <User user={user} key={user._id.toString()} />
+              ))}
             </div>
           ) : null}
         </div>

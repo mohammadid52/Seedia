@@ -27,7 +27,7 @@ const BottomCard = ({
         'transform transition-all duration-500 fixed bottom-5 inset-x-0'
       )}
     >
-      <div className=" h-20  overflow-hidden p-4 mx-auto bg-white border dark:border-gray-700 border-gray-200 shadow-xl rounded-lg dark:bg-gray-800  max-w-112">
+      <div className=" min-h-20 max-h-32  overflow-hidden p-4 mx-auto bg-white border dark:border-gray-700 border-gray-200 shadow-xl rounded-lg dark:bg-gray-800  max-w-112">
         <div className="flex items-center justify-between">
           <div className="flex">
             <div className="mr-4 flex-shrink-0">

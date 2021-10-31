@@ -26,7 +26,7 @@ const UsersModal = ({
     fetchUsers(config)
   )
 
-  const friends: IParent[] = isFetched && !isLoading && data.data.data
+  const friends: IParent[] = isFetched && !isLoading ? data.data.data.users : []
   return (
     <Modal open={show} setOpen={setShow}>
       {friends && friends.length > 0 && (

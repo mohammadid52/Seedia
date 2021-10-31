@@ -1,5 +1,6 @@
 import { links } from 'constants/Links'
 import AuthContainer from 'containers/AuthContainer'
+import UsersList from 'pages/UserList'
 import { lazy } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import PrivateRoute from 'routes/PrivateRoute'
@@ -259,6 +260,15 @@ const Router = ({
                 // @ts-ignore
                 exact
                 isUser={isUser}
+                path="/users"
+              >
+                {/* @ts-ignore */}
+                <UsersList userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={isUser}
                 path="/feed/followings"
               >
                 {/* @ts-ignore */}
@@ -280,15 +290,17 @@ const Router = ({
                 isUser={isUser}
                 // @ts-ignore
                 exact
-                path="/:userId/:template/:viewMode"
+                path="/:userId/1/:viewMode"
               >
-                {template === 1 ? (
-                  // @ts-ignore
-                  <Profile userData={userData} />
-                ) : (
-                  // @ts-ignore
-                  <ProfileTwo userData={userData} />
-                )}
+                <Profile userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                isUser={isUser}
+                // @ts-ignore
+                exact
+                path="/:userId/2/:viewMode"
+              >
+                <ProfileTwo userData={userData} />
               </PrivateRoute>
 
               <PrivateRoute

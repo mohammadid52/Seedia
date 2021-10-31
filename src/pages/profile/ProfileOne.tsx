@@ -19,7 +19,6 @@ import About from 'pages/profile/About'
 import AdditionalFeatures from 'pages/profile/AdditionalFeatures'
 import Background from 'pages/profile/Background'
 import Cover from 'pages/profile/Cover'
-import Following from 'pages/profile/Following'
 import Layout from 'pages/profile/Layout'
 import PeopleAlsoViewed from 'pages/profile/PeopleAlsoViewed'
 import Recommendations from 'pages/profile/Recommendations'
@@ -62,7 +61,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen dark:bg-gray-900 smooth-scroll pt-12">
+    <div className="bg-gray-100 min-h-screen dark:bg-gray-900 smooth-scroll pt-32">
       <DashboardHeader userData={userData} />
 
       {!isEmpty(user) ? (
@@ -139,7 +138,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
                         <ProfileStrength {...commonProps} />
                       )}
 
-                      <PeopleAlsoViewed {...commonProps} />
+                      <PeopleAlsoViewed userData={userData} showSingleCard />
                     </div>
                   }
                 />

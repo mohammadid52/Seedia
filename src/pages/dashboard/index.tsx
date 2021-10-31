@@ -47,11 +47,6 @@ const Dashboard = ({ userData }: DashboardProps) => {
             <div className="space-y-12">
               <SideCard />
               <SideCard />
-              {/* <Following
-                showSingleCard
-                list={userData?.following}
-                interests={userData?.background?.interests}
-              /> */}
             </div>
           }
         />

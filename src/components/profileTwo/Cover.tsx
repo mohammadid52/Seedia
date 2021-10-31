@@ -15,7 +15,6 @@ const Cover = ({
   authUser: boolean
   userData?: IParent
 }) => {
-  console.log('🚀 ~ file: Cover.tsx ~ line 18 ~ authUser', authUser)
   const [saving, setSaving] = useState(false)
   const [showModal, setShowModal] = useState(false)
 
