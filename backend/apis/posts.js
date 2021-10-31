@@ -446,7 +446,7 @@ app.get('/feed', auth, async (req, res) => {
   try {
     const user = await getItem(usersCollection, token.id)
     if (user) {
-      let ids = [...user.followers, token.id]
+      let ids = [...user?.followers, token.id]
 
       let idListStringed = unique(ids.map(convertToString))
       let idListObjectId = unique(ids.map(addObjectId))
