@@ -101,18 +101,16 @@ client.connect(
 
     app.use('/uploadImage', mediaUploadRouter)
 
-    app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, 'build', 'index.html'))
-    })
-
-    // app.get('*', (req, res) => {
-    //   res.send('Invalid APi. Please check api url')
-    // })
+    console.log('Connected')
   }
 )
 
 app.use(express.static(path.join(__dirname, 'build')))
 app.use(express.static(path.join(__dirname, 'build', 'static')))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+})
 
 // ~~~~~~~~~~~~~~~~~~IGNORE THIS~~~~~~~~~~~~~~~~~~~~~ //
 
