@@ -19,11 +19,7 @@ const VerticalProfileCard = ({
       </p>
       <a
         className="dark:text-white text-gray-900 text-lg font-medium"
-        href={links.getProfileById(
-          user?.profileUrl,
-          user?.other.template,
-          'public'
-        )}
+        href={links.getProfile(user)}
       >
         <div className="mt-2">View full profile</div>
       </a>
@@ -50,11 +46,7 @@ const VerticalProfileCard = ({
       </div>
       <div className={`text-center ${content ? '' : 'px-3 pb-6 pt-2'}`}>
         <a
-          href={links.getProfileById(
-            user.profileUrl,
-            user.other.template,
-            'private'
-          )}
+          href={links.getProfile(user, true)}
           className="dark:text-white cursor-pointer text-gray-900 text-base font-bold "
         >
           {user.fullName}

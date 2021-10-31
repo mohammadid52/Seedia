@@ -228,11 +228,7 @@ const Recommendations = ({
                         By,
                         <span className="mx-2 cursor-pointer flex items-center hover:underline">
                           <a
-                            href={links.getProfileById(
-                              recom.user._id,
-                              recom.user.other.template,
-                              'public'
-                            )}
+                            href={links.getProfile(recom.user)}
                             target="_blank"
                             rel="noreferrer"
                           >

@@ -148,16 +148,12 @@ const PersonalCard = ({
         </div>
         <div className="text-center px-3 pb-6 pt-2">
           <a
-            href={links.getProfileById(
-              user.profileUrl,
-              user.other.template,
-              'public'
-            )}
+            href={links.getProfile(user)}
             className="dark:text-white  text-gray-900 text-base font-bold "
           >
             {user.fullName}
           </a>
-          <p className="text-sm font-medium dark:text-white text-gray-500 ">
+          <p className="text-sm font-medium dark:text-gray-500 text-gray-500 ">
             {isBusiness ? user.business.name : user.company.jobTitle}
           </p>
         </div>
