@@ -30,7 +30,7 @@ const Layout = ({
   const { userId: userIdFromParam } = route?.match?.params
   const { iAmOwnerOfThisProfile } = useUser(userIdFromParam, userData)
 
-  return business && iAmOwnerOfThisProfile ? (
+  return iAmOwnerOfThisProfile ? (
     <div
       style={{ marginTop: SIDEBAR_HEIGHT }}
       className="flex-grow w-full  mx-auto xl:px-8 justify-start max-w-360 items-start lg:flex flex-col"
@@ -40,12 +40,20 @@ const Layout = ({
         cardTitle="Business Features"
         content={
           <div className="gap-4 grid grid-cols-2 sm:grid-cols-6 ">
-            <Button
-              link={links.viewMyProjects()}
-              label="View My Projects"
-              gradient
-            />
-            <Button label="Add Project" link={links.addProject()} gradient />
+            {business && (
+              <>
+                <Button
+                  link={links.viewMyProjects()}
+                  label="View My Projects"
+                  gradient
+                />
+                <Button
+                  label="Add Project"
+                  link={links.addProject()}
+                  gradient
+                />
+              </>
+            )}
             <Button
               link={links.BROWSE_PRODUCTS(userData?.profileUrl)}
               label="Browse Products"

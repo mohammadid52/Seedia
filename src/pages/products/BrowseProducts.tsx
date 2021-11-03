@@ -17,12 +17,13 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
 
   const { otherUserData, iAmOwnerOfThisProfile } = useUser(profileUrl, userData)
 
-  const { isLoading, error, data, isFetched, isSuccess, isError, refetch } =
-    useQuery('all-products', () =>
+  const { isLoading, error, data, isFetched, isSuccess, isError } = useQuery(
+    'all-products',
+    () =>
       fetchAllProducts(
         iAmOwnerOfThisProfile ? userData._id : otherUserData?._id
       )
-    )
+  )
 
   const products: IProduct[] = isFetched && !isLoading && data.data.data
 
@@ -31,8 +32,6 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
   }
 
   if (isSuccess) {
-    const isBusiness = userData?.other?.accountType === 'business'
-
     return (
       <div className="bg-gray-100">
         <Meta
@@ -46,7 +45,7 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
               targetId={otherUserData?._id}
               iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
             />
-            {isBusiness && (
+            {
               <Section
                 showChildren={products && products.length > 0}
                 title={
@@ -59,7 +58,7 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
                   products.length > 0 &&
                   products.map((product) => <Product product={product} />)}
               </Section>
-            )}
+            }
 
             <Section
               showChildren={products && products.length > 0}
