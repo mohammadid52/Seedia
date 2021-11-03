@@ -9,7 +9,6 @@ import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import { NavProps } from 'interfaces/UniversalInterface'
 import { Fragment, useState } from 'react'
-import { BsBagFill } from 'react-icons/bs'
 import { classNames } from 'utils/classNames'
 import { adjustColors } from 'values/values'
 

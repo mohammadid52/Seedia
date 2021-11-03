@@ -24,7 +24,6 @@ import { useMutation, useQuery } from 'react-query'
 import { useHistory, useParams } from 'react-router'
 import Modal from 'components/atoms/Modal'
 import { avatarPlaceholder } from 'state/Redux/constants'
-import CreateGroup from 'pages/groups/CreateGroup'
 
 const ExitGroup = ({
   userId,
@@ -110,7 +109,6 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
 
   const { getType } = useAccountType(userData)
   const [showModal, setShowModal] = useState(false)
-  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false)
 
   if (isLoading && !isFetched) {
     return <Loading />

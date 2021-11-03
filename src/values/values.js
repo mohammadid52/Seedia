@@ -50,13 +50,8 @@ import venezuela from 'assets/images/countries/venezuela.png'
 import ww from 'assets/images/countries/ww.png'
 import { links } from 'constants/Links'
 import { nanoid } from 'nanoid'
-import { AiOutlineSearch, AiOutlineUsergroupDelete } from 'react-icons/ai'
 import { BiStore } from 'react-icons/bi'
-import { BsFilePost } from 'react-icons/bs'
-import { FaAdversal, FaConnectdevelop, FaMoneyBillAlt } from 'react-icons/fa'
 import { GiReceiveMoney } from 'react-icons/gi'
-import { MdAttachMoney, MdFindReplace } from 'react-icons/md'
-import { SiGoogleanalytics } from 'react-icons/si'
 
 export const adjustColors = [
   { name: 'Deuteranomaly', value: 1 },

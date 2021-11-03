@@ -70,10 +70,6 @@ const PersonalCard = ({
     setSaving(false)
   }
 
-  const showFileExplorerForProfile = () =>
-    //@ts-ignore
-    profileImageSelectorRef?.current?.click()
-
   const profileImageSelectorRef = React.useRef()
 
   const { isBusiness } = useAccountType(user)

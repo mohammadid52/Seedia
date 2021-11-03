@@ -14,7 +14,7 @@ const SinglePostView = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
   const { postUrl } = route?.match?.params
 
-  const { data, isLoading, isFetched, isSuccess, isError, error } = useQuery(
+  const { data, isLoading, isFetched, isSuccess } = useQuery(
     `post-${postUrl}`,
     () => fetchPostById(postUrl)
   )

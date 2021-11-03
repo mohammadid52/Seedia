@@ -21,9 +21,7 @@ const SearchedJobs = ({ userData }: { userData: IParent }) => {
     data,
     refetch: searchApi,
     isLoading,
-    isError,
-    error,
-    isSuccess,
+
     isFetched,
   } = useQuery('searched-jobs', () => fetchSearchedJobs(searchQuery), {
     enabled: false,

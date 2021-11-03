@@ -8,7 +8,7 @@ import Tabs from 'components/atoms/Tabs'
 import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import { Form, Formik } from 'formik'
-import { getAccessToken, network } from 'helpers'
+import { network } from 'helpers'
 import { IParent, IRecommendation } from 'interfaces/UniversalInterface'
 import { map } from 'lodash'
 import { useEffect, useState } from 'react'
@@ -17,7 +17,7 @@ import * as Yup from 'yup'
 
 const Recommendations = ({
   recommendation,
-  authUser,
+
   userData,
   secondary = false,
   iAmOwnerOfThisProfile = false,
