@@ -40,8 +40,8 @@ const ListProducts = ({ userId, onLoad }: { userId: string; onLoad?: any }) => {
         <Spinner />
       ) : (
         products &&
-        products.length > 0 &&
-        products.map((product) => (
+        products?.length > 0 &&
+        products?.map((product) => (
           <Product key={product._id} product={product} />
         ))
       )}

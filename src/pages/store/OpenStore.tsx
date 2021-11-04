@@ -11,6 +11,7 @@ import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { Form, Formik } from 'formik'
 import { IParent, IProduct, IStore } from 'interfaces/UniversalInterface'
+import { isEmpty } from 'lodash'
 import Product from 'pages/products/Product'
 import BannerImage from 'pages/store/BannerImage'
 import { useEffect, useRef, useState } from 'react'
@@ -37,8 +38,8 @@ const ListProducts = ({ userId, onLoad }: { userId: string; onLoad: any }) => {
         <Spinner />
       ) : (
         products &&
-        products.length > 0 &&
-        products.map((product) => (
+        products?.length > 0 &&
+        products?.map((product) => (
           <Product key={product._id} product={product} />
         ))
       )}
@@ -75,7 +76,7 @@ const OpenStore = ({ userData }: { userData: IParent }) => {
   const history = useHistory()
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess || !isEmpty(userData?.store)) {
       history.push(
         links.getProfileById(
           userData.profileUrl,
