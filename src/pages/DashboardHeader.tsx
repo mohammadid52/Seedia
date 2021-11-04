@@ -506,7 +506,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                   </a>
                                 ))}
                               </div>
-                              {isBusiness && (
+                              {
                                 <div className="px-5 border-t border-gray-200 dark:border-gray-700 justify-between w-full py-5 bg-white dark:bg-gray-800 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
                                   {callsToAction.map((item) => (
                                     <div
@@ -528,7 +528,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                     </div>
                                   ))}
                                 </div>
-                              )}
+                              }
                             </div>
                           </Popover.Panel>
                         </Transition>
