@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addToBasket, removeFromBasket } from 'state/Redux/Actions/userActions'
 import { getBasket } from 'helpers'
 import UniversalHeader from 'components/headers/UniversalHeader'
+import DashboardHeader from 'pages/DashboardHeader'
 // @ts-nocheck
 const INIT = {
   productName: 'Basic Tee 6-Pack',
@@ -125,7 +126,7 @@ const ProductDetails = ({ userData }: { userData: IParent }) => {
         keywords={product?.tags?.join(', ')}
         userName={''}
       />
-      <UniversalHeader userData={userData} />
+      <DashboardHeader userData={userData} />
 
       <div className="bg-white dark:bg-gray-900">
         <div className="pt-6 ">

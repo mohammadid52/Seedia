@@ -10,7 +10,7 @@ const ProfileCard = ({
   userData,
 
   targetId,
-  sectionTitle = 'Your Profile Card',
+  sectionTitle = '',
 }: {
   userData: IParent
   iAmOwnerOfThisProfile?: boolean
@@ -27,8 +27,8 @@ const ProfileCard = ({
   )
 
   return (
-    <div className="">
-      <SectionTitle title={sectionTitle} />
+    <div className="pt-24 ">
+      {sectionTitle && <SectionTitle title={sectionTitle} />}
       <Card
         className="p-6"
         content={

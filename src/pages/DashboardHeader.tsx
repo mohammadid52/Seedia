@@ -11,11 +11,14 @@ import CountryListDropdown from 'components/CountryListDropdown'
 import Toggle from 'components/ThemeToggle'
 import { links as _links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
+import useAccountType from 'hooks/useAccountType'
 import useTheme from 'hooks/useTheme'
 import { INotification, IParent } from 'interfaces/UniversalInterface'
-import { find, map } from 'lodash'
+import find from 'lodash/find'
+import map from 'lodash/map'
 import { Fragment, useState } from 'react'
 import {
+  AiOutlineArrowRight,
   AiOutlineHome,
   AiOutlineLogout,
   AiOutlineSearch,
@@ -26,8 +29,9 @@ import { BsBagFill, BsFilePost, BsPeople } from 'react-icons/bs'
 import { FaAdversal, FaConnectdevelop, FaMoneyBillAlt } from 'react-icons/fa'
 import { FiSettings } from 'react-icons/fi'
 import { GiReceiveMoney } from 'react-icons/gi'
-import { IoMdNotificationsOutline } from 'react-icons/io'
-import { MdAttachMoney, MdFindReplace } from 'react-icons/md'
+import { IoMdNotifications } from 'react-icons/io'
+import { MdAttachMoney, MdFindReplace, MdWork } from 'react-icons/md'
+import { RiApps2Line } from 'react-icons/ri'
 import { SiGoogleanalytics } from 'react-icons/si'
 import { useMutation } from 'react-query'
 import { useDispatch } from 'react-redux'
@@ -96,68 +100,63 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   const dispatch = useDispatch()
   const history = useHistory()
 
+  const { isBusiness } = useAccountType(userData)
+
   const businessApps = [
     {
       icon: AiOutlineSearch,
       name: 'Search for leads',
-      description:
-        'Get a better understanding of where your traffic is coming from.',
     },
-    {
+    isBusiness && {
       icon: BsFilePost,
       link: _links.addProject(),
-      name: 'Post a job',
-      description:
-        'Get a better understanding of where your traffic is coming from.',
+      name: 'Post A Job',
+    },
+    isBusiness && {
+      icon: BsFilePost,
+      link: _links.exploreJobs(),
+      name: 'Explore Projects And Jobs',
+    },
+    isBusiness && {
+      icon: MdWork,
+      link: _links.placeRequest(),
+      name: 'Place Request For Work',
     },
     {
       icon: FaAdversal,
       name: 'Advertise',
-      description:
-        'Get a better understanding of where your traffic is coming from.',
     },
     {
       icon: FaMoneyBillAlt,
       name: 'Sell products',
-      description:
-        'Get a better understanding of where your traffic is coming from.',
     },
     {
       icon: AiOutlineUsergroupDelete,
       name: 'Groups',
       link: _links.groups(),
-      description:
-        'Get a better understanding of where your traffic is coming from.',
     },
     {
       icon: MdFindReplace,
       name: 'Pro finder',
-      description:
-        'Get a better understanding of where your traffic is coming from.',
     },
     {
       icon: MdAttachMoney,
       name: 'Salary',
-      description:
-        'Get a better understanding of where your traffic is coming from.',
     },
     {
       icon: BsFilePost,
       name: 'New product',
       link: _links.addProduct(),
-      description: 'Lorem ipsum dolor sit amet',
     },
     {
       icon: FaConnectdevelop,
       name: 'New product developed',
-      description: 'Lorem ipsum dolor sit amet',
     },
     {
       icon: SiGoogleanalytics,
       name: 'Profile statistics',
-      description: 'Lorem ipsum dolor sit amet',
     },
-  ]
+  ].filter(Boolean)
 
   const sellList1 = [
     {
@@ -242,8 +241,6 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
       icon: AiOutlineLogout,
     },
   ]
-
-  const isBusiness = userData?.other?.accountType === 'business'
 
   const { logo } = useTheme()
 
@@ -354,6 +351,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                     {({ open }) => (
                       <>
                         <Popover.Button
+                          title="Notifications"
                           className={classNames(
                             open ? 'text-gray-900' : 'text-gray-500',
                             `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
@@ -361,7 +359,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                         >
                           <span className={navClass}>
                             <div className="relative">
-                              <IoMdNotificationsOutline className="h-6 w-6" />
+                              <IoMdNotifications />
                               {userData?.notifications?.length > 0 && (
                                 <div className="absolute top-0 right-0">
                                   <span className="flex h-3 w-3">
@@ -372,11 +370,10 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                               )}
                             </div>
                             <span className="hidden lg:flex text-xs items-center">
-                              Notifications
                               <ChevronDownIcon
                                 className={classNames(
                                   open ? 'text-gray-600' : 'text-gray-400',
-                                  'h-4 w-4 group-hover:text-gray-500 ml-2'
+                                  'h-4 w-4 group-hover:text-gray-500'
                                 )}
                                 aria-hidden="true"
                               />
@@ -441,13 +438,14 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                     {({ open }) => (
                       <>
                         <Popover.Button
+                          title="Sell"
                           className={classNames(
                             open ? 'text-gray-900' : 'text-gray-500',
                             `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
                           )}
                         >
                           <span className={`${navClass}`}>
-                            <GiReceiveMoney className="" />
+                            <GiReceiveMoney />
                             <span className="hidden lg:flex text-xs items-center">
                               Sell{' '}
                               <ChevronDownIcon
@@ -475,13 +473,21 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                             static
                             className="absolute z-10 -ml-4 mt-4 transform px-12 max-w-md w-screen lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                           >
-                            <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                              <div className="relative border-b border-gray-200 dark:border-gray-700 grid gap-6 dark:bg-gray-800 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                            <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden dark:bg-gray-800 bg-white">
+                              <div className="border-b dark:border-gray-700">
+                                <EmptyState
+                                  hideBorders
+                                  title="Sell"
+                                  subtitle={`Go Shopping`}
+                                  iconUrl={'/trade.png'}
+                                />
+                              </div>
+                              <div className="relative border-b border-gray-200 dark:border-gray-700 grid gap-4  px-5 py-6 sm:gap-4 sm:px-8 ">
                                 {sellList1.map((item) => (
                                   <a
                                     key={item.name}
                                     href={item.href}
-                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-600 transition-all  rounded-lg hover:bg-gray-200 justify-start cursor-pointer"
+                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-700 transition-all  rounded-lg hover:bg-gray-200 box-rounded-lg-2 justify-start cursor-pointer"
                                   >
                                     <div className="ml-4">
                                       <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-700">
@@ -491,12 +497,12 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                   </a>
                                 ))}
                               </div>
-                              <div className="relative grid gap-6 dark:bg-gray-800 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                              <div className="relative grid gap-4 dark:bg-gray-800 bg-white px-5 py-6 sm:gap-4 sm:px-8">
                                 {sellList2.map((item) => (
                                   <a
                                     key={item.name}
                                     href={item.href}
-                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-600 transition-all  rounded-lg hover:bg-gray-200 justify-start cursor-pointer"
+                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-700 transition-all  rounded-lg hover:bg-gray-200 box-rounded-lg-2 justify-start cursor-pointer"
                                   >
                                     <div className="ml-4">
                                       <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-700">
@@ -515,7 +521,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                     >
                                       <a
                                         href={item.href}
-                                        className="-m-3 p-3 border border-gray-200 dark:border-gray-700 flex items-center rounded-md text-base font-medium dark:text-white text-gray-900 hover:bg-gray-200 transition-all duration-300 dark:hover:bg-gray-600 w-full justify-center"
+                                        className="-m-3 p-3 border border-gray-200 dark:border-gray-700 flex items-center rounded-md text-base font-medium box-rounded-md-2 dark:text-white text-gray-900 hover:bg-gray-200 transition-all duration-300 dark:hover:bg-gray-700 w-full justify-center"
                                       >
                                         <item.icon
                                           className="flex-shrink-0 h-4 w-4 text-gray-400"
@@ -540,13 +546,14 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                     {({ open }) => (
                       <>
                         <Popover.Button
+                          title="My 13RMS"
                           className={classNames(
                             open ? 'text-gray-900' : 'text-gray-500',
                             `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
                           )}
                         >
                           <span className={navClass}>
-                            <BiUserCircle className="" />
+                            <BiUserCircle />
                             <span className="hidden lg:flex text-xs items-center">
                               My 13RMS{' '}
                               <ChevronDownIcon
@@ -574,7 +581,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                             static
                             className="absolute z-10 -ml-4 mt-4 transform px-2 w-screen max-w-md sm:px-6 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                           >
-                            <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                            <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden">
                               <div className="relative grid gap-6 bg-white dark:bg-gray-800 px-5 py-6 sm:gap-8 sm:p-8">
                                 <div className="flex w-full space-x-4 items-center space-between">
                                   <div className="w-1/2 flex text-xs items-center justify-center dark:border-gray-700 darK:hover:border-gray-500 dark:hover:bg-gray-600 dark:text-white transition-all border-gray-200 py-2 rounded-md font-light hover:bg-gray-50 cursor-pointer hover:border-gray-300 border">
@@ -669,19 +676,19 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                     {({ open }) => (
                       <>
                         <Popover.Button
+                          title="Business Apps"
                           className={classNames(
                             open ? 'text-gray-900' : 'text-gray-500',
                             `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
                           )}
                         >
                           <span className={navClass}>
-                            <BiUserCircle className="" />
+                            <RiApps2Line />
                             <span className="hidden lg:flex text-xs items-center">
-                              Business Apps{' '}
                               <ChevronDownIcon
                                 className={classNames(
                                   open ? 'text-gray-600' : 'text-gray-400',
-                                  'h-4 w-4 group-hover:text-gray-500 ml-2'
+                                  'h-4 w-4 group-hover:text-gray-500'
                                 )}
                                 aria-hidden="true"
                               />
@@ -704,33 +711,34 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                             style={{ left: '-13rem' }}
                             className="absolute z-10  mt-4 transform w-screen max-w-md lg:max-w-2xl sm:px-6 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                           >
-                            <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                            <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden">
                               <div className="relative dark:bg-gray-800 bg-white px-5 py-6 sm:gap-8 sm:p-8 ">
                                 <p className="inline-block text-lg sm:text-xl tracking-wide mb-4 border-b-2 border-pink-600 mt-2 font-bold text-gray-900 dark:text-white">
                                   13RMS
                                 </p>
 
-                                <div className="grid mt-4 gap-8 lg:grid-cols-2">
+                                <div className="grid mt-4 gap-8 lg:grid-cols-2 grid-cols-1">
                                   {businessApps.map((item) => (
                                     <a
                                       key={item.name}
-                                      href={item.name}
-                                      className="-m-3 p-3 cursor-pointer flex items-start rounded-lg dark:hover:bg-gray-600 hover:bg-gray-100"
+                                      href={item.link}
+                                      className="-m-3 p-3 cursor-pointer relative flex items-center rounded-lg dark:hover:bg-gray-700 animated-arrow__container hover:bg-gray-100 "
                                     >
-                                      <div className="flex-shrink-0 flex items-center justify-center h-7 w-7 bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-md shadow-lg text-white sm:h-8 sm:w-8">
+                                      <div className="flex-shrink-0 flex items-center justify-center h-7 w-7  rounded-md shadow-lg text-white bg-gradient sm:h-8 sm:w-8">
                                         <item.icon
                                           className="h-4 w-4"
                                           aria-hidden="true"
                                         />
                                       </div>
-                                      <a href={item.link} className="ml-4">
-                                        <p className="text-sm font-medium dark:text-white text-gray-900">
-                                          {item.name}
-                                        </p>
-                                        <p className="mt-1 text-xs dark:text-gray-400 text-gray-500">
-                                          {item.description}
-                                        </p>
-                                      </a>
+
+                                      <p className="text-sm ml-4 font-medium dark:text-white text-gray-900">
+                                        {item.name}
+                                      </p>
+
+                                      <AiOutlineArrowRight
+                                        className="h-4 w-4 text-gray-500 absolute animated-arrow right-2 dark:text-gray-400"
+                                        aria-hidden="true"
+                                      />
                                     </a>
                                   ))}
                                 </div>

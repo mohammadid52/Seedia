@@ -370,6 +370,16 @@ button {
 .box-rounded-md {
   @include box(6px, 1px);
 }
+.box-rounded-md-2 {
+  @include box(6px, 2px);
+}
+
+.box-rounded-lg {
+  @include box(8px, 1px);
+}
+.box-rounded-lg-2 {
+  @include box(8px, 2px);
+}
 
 .line-clamp {
   display: -webkit-box;
@@ -384,4 +394,20 @@ button {
 
 .plain-card {
   @apply rounded-lg border dark:border-gray-700  border-gray-200 overflow-hidden lg:max-w-xs bg-white dark:bg-gray-800;
+}
+
+.animated-arrow__container {
+  &:hover {
+    .animated-arrow {
+      transform: translateX(0px);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  .animated-arrow {
+    transform: translateX(-10px);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s ease-in-out;
+  }
 }

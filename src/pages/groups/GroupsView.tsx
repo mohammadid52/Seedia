@@ -1,5 +1,5 @@
 import { fetchGroups, fetchRequestedGroups } from 'apis/queries'
-import IdleUser from 'assets/svg/idle-user.svg'
+import IdleUser from 'assets/svg/no-groups.svg'
 import AnimatedContainer from 'components/animation/AnimatedContainer'
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'

@@ -7,7 +7,7 @@ const Captcha = ({
   setIsVerified: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const handleLoad = () => {
-    console.log('Loaded')
+    // console.log('Loaded')
   }
 
   const verify = (res: any) => {

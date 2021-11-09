@@ -451,7 +451,6 @@ app.get('/feed', auth, async (req, res) => {
           ? [...user?.following, token.id]
           : [token.id]
 
-      console.log('🚀 ~ file: posts.js ~ line 450 ~ app.get ~ ids', ids)
       let idListStringed = unique(ids.map(convertToString))
       let idListObjectId = unique(ids.map(addObjectId))
 

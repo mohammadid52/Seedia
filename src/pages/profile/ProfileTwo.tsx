@@ -44,7 +44,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
   const route: any = useRouter()
 
-  const { viewMode, userId: userIdFromParam } = route?.match?.params
+  const { viewMode = 'public', userId: userIdFromParam } = route?.match?.params
 
   const {
     otherUserData,
@@ -137,7 +137,12 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const user = commonProps?.userData
   useEffect(() => {
     if (!isEmpty(user)) {
-      history.push(links.getProfile(user, iAmOwnerOfThisProfile))
+      history.push(
+        links.getProfile(
+          user,
+          iAmOwnerOfThisProfile ? viewMode === 'private' : false
+        )
+      )
     }
   }, [user])
 

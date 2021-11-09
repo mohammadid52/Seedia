@@ -79,21 +79,16 @@ const AdditionalFeatures = ({
 
   return (
     <Card
+      className={`${
+        (!isBusiness && iAmOwnerOfThisProfile) || !iAmOwnerOfThisProfile
+          ? 'block'
+          : 'hidden'
+      }`}
       cardTitle="Additional Features"
       content={
         <div className="flex flex-col gap-y-6">
           {!isBusiness && iAmOwnerOfThisProfile && (
             <>
-              <Button
-                link={links.exploreJobs()}
-                label="Explore Projects & Jobs"
-                gradient
-              />
-              <Button
-                link={links.placeRequest()}
-                label="Place Request For Work"
-                gradient
-              />
               <Button
                 link={links.viewMyRequests()}
                 label="View My Requests"

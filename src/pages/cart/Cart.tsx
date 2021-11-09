@@ -9,6 +9,7 @@ import { getBasket } from 'helpers'
 import useUser from 'hooks/useUser'
 import { IParent, IProduct } from 'interfaces/UniversalInterface'
 import { map } from 'lodash'
+import DashboardHeader from 'pages/DashboardHeader'
 import Product from 'pages/products/Product'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
@@ -78,7 +79,7 @@ const Cart = ({ userData }: { userData: IParent }) => {
   return (
     <>
       <Meta pageTitle={`My Cart - 13RMS`} />
-      <UniversalHeader userData={userData} />
+      <DashboardHeader userData={userData} />
 
       <NarrowLayout customMaxWidth="max-w-7xl">
         <PageTitle title="Your Cart" />

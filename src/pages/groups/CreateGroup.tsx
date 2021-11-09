@@ -94,10 +94,6 @@ const CreateGroup = ({
   }, [editMode])
 
   const onSubmit = async (values: any) => {
-    console.log(
-      '🚀 ~ file: CreateGroup.tsx ~ line 97 ~ onSubmit ~ values',
-      values
-    )
     uploadFunction()
   }
 
