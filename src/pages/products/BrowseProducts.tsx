@@ -36,7 +36,7 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
       <div className="bg-gray-100">
         <Meta
           pageUrl={window.location.href}
-          pageTitle={`Browse Products - ${userData?.fullName} - 13RMS `}
+          pageTitle={`Explore Products - ${userData?.fullName} - 13RMS `}
         />
         <NarrowLayout customMaxWidth="max-w-7xl" userData={userData}>
           <div className="">

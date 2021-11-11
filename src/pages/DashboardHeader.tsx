@@ -23,6 +23,7 @@ import {
   AiOutlineHome,
   AiOutlineLogout,
   AiOutlineSearch,
+  AiOutlineShoppingCart,
   AiOutlineUsergroupDelete,
 } from 'react-icons/ai'
 import { BiUserCircle } from 'react-icons/bi'
@@ -294,17 +295,16 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
               </div>
               <div className="flex   items-center max-w-440 mx-auto">
                 <div className="flex items-center">
-                  <div className="">
-                    <a href={_links.HOME}>
-                      <img
-                        title="13RMS"
-                        onClick={() => history.push('/')}
-                        src={logo}
-                        className="h-16 w-16 "
-                        alt="13RMS"
-                      />
-                    </a>
-                  </div>
+                  <a href={_links.HOME}>
+                    <img
+                      title="13RMS"
+                      onClick={() => history.push('/')}
+                      src={logo}
+                      className="h-16 w-16 "
+                      alt="13RMS"
+                    />
+                  </a>
+
                   <div className="hidden max-w-132 border-gray-200 transform ml-4  scale-95 z-10 rounded-xl h-12  lg:flex dark:border-gray-700 border">
                     <div className="ml-2">
                       <Selector
@@ -330,7 +330,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                         id="home_search_panel"
                         name="search"
                         type="text"
-                        className="relative  dark:bg-gray-900 dark:text-white w-full border-none outline-none shadow-none focus:outline-none text-xs  pl-3 pr-10 py-2 text-left  dark:placeholder-gray-400 placeholder-gray-500 h-full"
+                        className="relative  dark:bg-gray-900 dark:text-white w-full border-none outline-none shadow-none focus:outline-none text-sm  pl-3 pr-10 py-2 text-left  dark:placeholder-gray-400 placeholder-gray-500 h-full"
                         placeholder={
                           searchPlaceHolder + ' ' + selectedProduct.label
                         }
@@ -868,6 +868,10 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                       </>
                     )}
                   </Popover>
+                  <NavLink title={'Cart'} to={'/cart'} className={navClass}>
+                    <AiOutlineShoppingCart />
+                    <span className="hidden text-xs ml-2 xl:block">Cart</span>
+                  </NavLink>
                 </Popover.Group>
               </div>
 
@@ -876,7 +880,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                 className="mx-4 "
                 target=""
                 Icon={BsBagFill}
-                label="Browse Products"
+                label="Explore Products"
                 gradient
               />
             </div>

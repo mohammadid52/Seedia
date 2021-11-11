@@ -15,7 +15,7 @@ const saveProfile = (options: SaveProfile) =>
 // create-review
 const createReview = (
   productId: string,
-  config: { reviewText: string; rating: string }
+  config: { reviewText: string; rating: string; reviewTitle: string }
 ) => network.post(`/reviews/add/${productId}`, config)
 
 interface ReviewAction {

@@ -8,10 +8,13 @@ import Title from 'components/atoms/Title'
 import { links } from 'constants/Links'
 import { ErrorFallback } from 'index'
 import { IProduct, IReview } from 'interfaces/UniversalInterface'
-import { find, forEach, isObject, times } from 'lodash'
+import { find, forEach, isObject, orderBy, times } from 'lodash'
 import ReviewList from 'pages/products/Review/ReviewList'
 import { useQuery } from 'react-query'
 import { classNames } from 'utils/classNames'
+import Tabs from 'components/Tabs'
+import useTabs from 'hooks/useTabs'
+import { useEffect, useState } from 'react'
 
 const WriteReviewButton = ({ productId }: { productId: string }) => {
   return (
@@ -29,8 +32,10 @@ const FirstCol = ({
   productId,
   reviews,
   highestRatedStar,
+  alreadyReviewGiven,
 }: {
   productId: string
+  alreadyReviewGiven: boolean
   reviews: IReview[]
   highestRatedStar: number
 }) => {
@@ -50,7 +55,7 @@ const FirstCol = ({
       <span className="mt-1 block mb-4 text-gray-500 font-medium text-sm    ">
         {highestRatedStar} out 5 stars
       </span>
-      <WriteReviewButton productId={productId} />
+      {<WriteReviewButton productId={productId} />}
     </div>
   )
 }
@@ -105,26 +110,30 @@ const ReviewSection = ({
   userId?: string
 }) => {
   const config = { idArray: reviewsIds }
-  const { isError, isIdle, isLoading, error, data, isFetched, refetch } =
-    useQuery('reviews', () => fetchReviewsByProduct(productId, config), {
+  const { isIdle, isLoading, data, isFetched } = useQuery(
+    'reviews',
+    () => fetchReviewsByProduct(productId, config),
+    {
       enabled: Boolean(reviewsIds && reviewsIds.length > 0),
-    })
+    }
+  )
 
-  const alreadyReviewGiven = find(
-    reviewsIds,
-    (review) => review.userId === userId
+  const alreadyReviewGiven = Boolean(
+    find(reviewsIds, (review) => review.userId === userId)
   )
 
   const reviews: IReview[] = isFetched && !isLoading ? data.data.data : []
 
-  if (isLoading && !isIdle) {
-    return <MiniLoading />
-  }
-  if (isError) {
-    return (
-      <ErrorFallback resetErrorBoundary={refetch} error={{ message: error }} />
-    )
-  }
+  const filters = [
+    { name: 'Latest' },
+    { name: '5 stars' },
+    { name: '4 stars' },
+    { name: '3 stars' },
+    { name: '2 stars' },
+    { name: '1 star' },
+  ]
+
+  const { currentTab, setCurrentTab, helpers } = useTabs(filters)
 
   function getCountOfEachRating() {
     let obj: any = {}
@@ -206,17 +215,52 @@ const ReviewSection = ({
     highestRatedStar,
   }
 
+  const [onLatest, on5Stars, on4Stars, on3Stars, on2Stars, on1Stars] = helpers
+
+  const latestReviews = orderBy(reviews, ['createdOn'], ['desc'])
+  const [filteredReviews, setFilteredReviews] = useState([...latestReviews])
+
+  const getFiltered = (n: number) =>
+    reviews.filter((r) => Number(r.rating) === n)
+
+  useEffect(() => {
+    if (onLatest) {
+      setFilteredReviews([...latestReviews])
+    } else if (on5Stars) {
+      setFilteredReviews([...getFiltered(5)])
+    } else if (on4Stars) {
+      setFilteredReviews([...getFiltered(4)])
+    } else if (on3Stars) {
+      setFilteredReviews([...getFiltered(3)])
+    } else if (on2Stars) {
+      setFilteredReviews([...getFiltered(2)])
+    } else if (on1Stars) {
+      setFilteredReviews([...getFiltered(1)])
+    }
+  }, [on5Stars, on4Stars, on3Stars, on2Stars, on1Stars])
+
+  if (isLoading && !isIdle) {
+    return <MiniLoading />
+  }
+
   return (
     <div className="p-6">
       <div className="grid grid-cols-2 gap-x-4">
-        <FirstCol {...commonProps} />
+        <FirstCol alreadyReviewGiven={alreadyReviewGiven} {...commonProps} />
         <SecondCol
           ratingPercentage={ratingPercentage}
           highestRatedStar={highestRatedStar}
         />
         {reviews && reviews.length > 0 ? (
           <div className="border-t col-span-2 mt-12 border-gray-200 dark:border-gray-700 py-8">
-            <ReviewList userId={userId} reviews={reviews} />
+            <div className="flex items-center justify-center mb-2">
+              <Tabs
+                currentTab={currentTab}
+                setCurrentTab={setCurrentTab}
+                tabs={filters}
+              />
+            </div>
+            <ReviewList userId={userId} reviews={filteredReviews} />
           </div>
         ) : null}
       </div>

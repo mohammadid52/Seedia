@@ -1,33 +1,24 @@
-import { RadioGroup } from '@headlessui/react'
-import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 import { fetchProductDetails } from 'apis/queries'
 import Button from 'components/atoms/Button'
+import Card from 'components/atoms/Card'
 import Meta from 'components/atoms/Meta/Meta'
 import Loading from 'components/Loading'
-import { ErrorFallback } from 'index'
-import {
-  IHighlight,
-  IParent,
-  IProduct,
-  IProductImage,
-} from 'interfaces/UniversalInterface'
-import { map, slice } from 'lodash'
-import ReviewSection from 'pages/products/Review/ReviewSection'
-import { useState } from 'react'
-import { useQuery } from 'react-query'
-import { useParams } from 'react-router'
-import { classNames } from 'utils/classNames'
-import lgZoom from 'lightgallery/plugins/zoom'
-import LightGallery from 'lightgallery/react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addToBasket, removeFromBasket } from 'state/Redux/Actions/userActions'
-import { getBasket } from 'helpers'
-import UniversalHeader from 'components/headers/UniversalHeader'
-import DashboardHeader from 'pages/DashboardHeader'
-import 'styles/productDetails.scss'
-import NarrowLayout from 'containers/NarrowLayout'
-import Card from 'components/atoms/Card'
 import { links } from 'constants/Links'
+import NarrowLayout from 'containers/NarrowLayout'
+import { getBasket } from 'helpers'
+import { IParent, IProduct, IProductImage } from 'interfaces/UniversalInterface'
+import { map } from 'lodash'
+import DashboardHeader from 'pages/DashboardHeader'
+import ReviewSection from 'pages/products/Review/ReviewSection'
+import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router'
+import { addToBasket, removeFromBasket } from 'state/Redux/Actions/userActions'
+import 'styles/productDetails.scss'
+import { classNames } from 'utils/classNames'
+
 // @ts-nocheck
 const INIT = {
   productName: 'Basic Tee 6-Pack',
@@ -72,10 +63,22 @@ const INIT = {
   details:
     'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
 }
-const reviews = { href: '#', average: 4, totalCount: 117 }
 
 const FirstCol = ({ product }: { product: IProduct }) => {
   const [selectedImage, setSelectedImage] = useState(product?.images[1]?.url)
+  const dispatch = useDispatch()
+  const _addToBasket = () => {
+    dispatch(addToBasket(product))
+  }
+  const _removeFromBasket = () => {
+    dispatch(removeFromBasket(product))
+  }
+
+  const basket = useSelector((state) => getBasket(state))
+
+  const inBasket: boolean = basket?.products?.find(
+    (p: any) => p._id === product._id
+  )
 
   return (
     <Card
@@ -154,6 +157,24 @@ const FirstCol = ({ product }: { product: IProduct }) => {
                   ${product.price}
                 </h4>
               </div>
+              <div className="flex items-center justify-between gap-x-4">
+                <Button
+                  size="xl"
+                  className="mt-10"
+                  fullWidth
+                  gradient
+                  invert
+                  onClick={inBasket ? _removeFromBasket : _addToBasket}
+                  label={inBasket ? 'Remove from basket' : 'Add to basket'}
+                />
+                <Button
+                  size="xl"
+                  className="mt-10"
+                  fullWidth
+                  gradient
+                  label="Buy now"
+                />
+              </div>
               {/* <div className="_p-price-box">
                 <div className="p-list">
                   <span className="dark:text-gray-300 text-gray-700 ">
@@ -195,36 +216,17 @@ const ProductDetails = ({ userData }: { userData: IParent }) => {
 
   const product: IProduct = isFetched && !isLoading ? data.data.data : INIT
 
-  const dispatch = useDispatch()
-  const _addToBasket = () => {
-    dispatch(addToBasket(product))
-  }
-  const _removeFromBasket = () => {
-    dispatch(removeFromBasket(product))
-  }
-
-  const basket = useSelector((state) => getBasket(state))
-
-  const inBasket: boolean = basket?.products?.find(
-    (p: any) => p._id === product._id
-  )
-
-  const [selectedColor, setSelectedColor] = useState(
-    product
-      ? product.availableColors[0]
-      : { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' }
-  )
-  const [selectedSize, setSelectedSize] = useState(
-    product ? product.availableSizes[1] : { name: 'XXS', inStock: false }
-  )
+  // const [selectedColor, setSelectedColor] = useState(
+  //   product
+  //     ? product.availableColors[0]
+  //     : { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' }
+  // )
+  // const [selectedSize, setSelectedSize] = useState(
+  //   product ? product.availableSizes[1] : { name: 'XXS', inStock: false }
+  // )
 
   if (isLoading) {
     return <Loading />
-  }
-  if (isError) {
-    return (
-      <ErrorFallback resetErrorBoundary={refetch} error={{ message: error }} />
-    )
   }
 
   return (

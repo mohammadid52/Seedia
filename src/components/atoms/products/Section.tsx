@@ -1,3 +1,5 @@
+import Card from 'components/atoms/Card'
+import EmptyState from 'components/atoms/EmptyState'
 import SectionTitle from 'components/atoms/SectionTitle'
 import { LegacyRef } from 'react'
 
@@ -6,7 +8,7 @@ const Section = ({
   title = '',
   showChildren,
   // @ts-ignore
-  noDataText = '',
+  noDataText = 'No products found',
   _ref,
 }: {
   _ref?: LegacyRef<HTMLDivElement> | undefined
@@ -25,10 +27,18 @@ const Section = ({
           {children}
         </div>
       ) : (
-        <p className="text-xl font-light mt-8 tracking-tight dark:text-gray-400 text-gray-900">
-          {/* eslint-disable-next-line quotes */}
-          {noDataText || "Uh oh! We coudn't find any products for this user"}
-        </p>
+        <Card
+          content={
+            <div>
+              <EmptyState
+                title={noDataText}
+                subtitle="Cannot find products"
+                hideBorders
+                iconUrl="/empty-cart.png"
+              />
+            </div>
+          }
+        />
       )}
     </div>
   )

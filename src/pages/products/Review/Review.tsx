@@ -16,6 +16,7 @@ const Review = ({ review, userId }: { review: IReview; userId: string }) => {
     value: review.rating,
     edit: false,
   }
+  console.log('🚀 ~ file: Review.tsx ~ line 14 ~ Review ~ review', review)
 
   const mutation = useMutation(doReviewAction)
 
@@ -35,7 +36,7 @@ const Review = ({ review, userId }: { review: IReview; userId: string }) => {
           <ReactStars {...ratingConfig} />
         </div>
         <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Awesome
+          {review?.reviewTitle || ''}
         </h1>
         <div>
           <p className="mt-1 flex items-center font-light dark:text-gray-300 text-gray-700">

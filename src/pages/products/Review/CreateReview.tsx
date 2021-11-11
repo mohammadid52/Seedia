@@ -30,6 +30,7 @@ const CreateReview = () => {
   const product: IProduct = isFetched && !isLoading ? data.data.data : {}
 
   const validationSchema = Yup.object({
+    reviewTitle: Yup.string().required('Review title is required'),
     reviewText: Yup.string()
       .required('Review is required')
       .min(10, 'Review must be atleast 10 characters long.')
@@ -42,8 +43,9 @@ const CreateReview = () => {
     isError: mutateIsError,
     error: mutateError,
     isSuccess,
-  } = useMutation((values: { reviewText: string; rating: string }) =>
-    createReview(productId, values)
+  } = useMutation(
+    (values: { reviewText: string; reviewTitle: string; rating: string }) =>
+      createReview(productId, values)
   )
 
   if (isLoading) {
@@ -74,7 +76,14 @@ const CreateReview = () => {
       >
         <Form className="space-y-6">
           <FormInput
-            label="Review"
+            label="Title"
+            id="reviewTitle"
+            name="reviewTitle"
+            placeholder="Add a title"
+            required
+          />
+          <FormInput
+            label="Description"
             id="reviewText"
             name="reviewText"
             placeholder="Write your review"

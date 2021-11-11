@@ -36,7 +36,7 @@ export const links = {
   addProduct: () => `/add-product`,
   cart: `/cart`,
   friendsPurchases: () => `/friends-purchases`,
-  BROWSE_PRODUCTS: (id?: string) => `/browse-products/${id}`,
+  BROWSE_PRODUCTS: (id?: string) => `/explore-products/${id}`,
   // Add all product link terms here
   productTerms: ['product', 'review', 'cart', 'purchases'],
 

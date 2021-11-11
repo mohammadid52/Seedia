@@ -1,3 +1,5 @@
+import Card from 'components/atoms/Card'
+import EmptyState from 'components/atoms/EmptyState'
 import Meta from 'components/atoms/Meta/Meta'
 import PageTitle from 'components/atoms/PageTitle'
 import Section from 'components/atoms/products/Section'
@@ -81,17 +83,26 @@ const Cart = ({ userData }: { userData: IParent }) => {
       <DashboardHeader userData={userData} />
 
       <NarrowLayout customMaxWidth="max-w-7xl">
-        <PageTitle title="Your Cart" />
         {products.length > 0 ? (
-          <ProductList productList={basket?.products} />
+          <div className="">
+            <div className="mb-4">
+              <PageTitle title="Your Cart" />
+            </div>
+            <ProductList productList={basket?.products} />
+          </div>
         ) : (
-          <Title
-            className="mt-4"
-            textColor="text-gray-600 dark:text-gray-600"
-            fontWeight="font-light"
-          >
-            Uh oh! Your cart is empty
-          </Title>
+          <Card
+            content={
+              <div>
+                <EmptyState
+                  title="Your cart is empty"
+                  subtitle="You have no items in your cart"
+                  hideBorders
+                  iconUrl="/empty-cart.png"
+                />
+              </div>
+            }
+          />
         )}
 
         <Section

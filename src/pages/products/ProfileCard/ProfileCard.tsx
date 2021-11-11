@@ -27,7 +27,7 @@ const ProfileCard = ({
   )
 
   return (
-    <div className="pt-24 ">
+    <div className=" ">
       {sectionTitle && <SectionTitle title={sectionTitle} />}
       <Card
         className="p-6"

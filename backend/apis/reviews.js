@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 const router = require('express').Router()
 const auth = require('../middleware/verifyAuth')
-const { responseMsg, getItem } = require('../utils')
+const { responseMsg, getItem, updateData } = require('../utils')
 var ObjectId = require('mongodb').ObjectId
 require('dotenv').config()
 
@@ -68,7 +68,7 @@ router.post('/r/:productId', auth, async (req, res) => {
 router.post('/add/:productId', auth, async (req, res) => {
   const productId = req.params.productId
   const token = req.user
-  const { reviewText, rating } = req.body
+  const { reviewText, rating, reviewTitle } = req.body
 
   if (!productId) {
     return res.status(404).json(responseMsg('error', 'productId not found', {}))
@@ -79,25 +79,13 @@ router.post('/add/:productId', auth, async (req, res) => {
   const usersCollection = res.locals.usersCollection
   const reviewsCollection = res.locals.reviewsCollection
 
-  const product = await productsCollection.findOne({
-    _id: ObjectId(productId),
-  })
-  const user = await usersCollection.findOne({ _id: ObjectId(token.id) })
-
-  // const reviewWrapId = product?.reviews.map((obj) => ObjectId(obj.reviewId))
-
-  // const reviewsForCurrentProduct = await reviewsCollection
-  //   .find({
-  //     $and: [
-  //       { _id: { $in: reviewWrapId } },
-  //       { productId: ObjectId(productId) },
-  //     ],
-  //   })
-  //   .toArray()
+  const product = await getItem(productsCollection, productId)
+  const user = await getItem(usersCollection, token.id)
 
   const newAddedReview = await reviewsCollection.insertOne({
     createdOn: new Date(),
     reviewText,
+    reviewTitle: reviewTitle,
     rating,
     userId: ObjectId(user._id),
     likes: [],
@@ -111,32 +99,8 @@ router.post('/add/:productId', auth, async (req, res) => {
 
   try {
     if (product && user && newAddedReview) {
-      await usersCollection.updateOne(
-        { _id: ObjectId(token.id) },
-        {
-          $set: {
-            reviews:
-              user?.reviews?.length > 0
-                ? [
-                    ...user.reviews,
-                    {
-                      productId: ObjectId(productId),
-                      reviewId: newAddedReview.insertedId,
-                    },
-                  ]
-                : [
-                    {
-                      productId: ObjectId(productId),
-                      reviewId: newAddedReview.insertedId,
-                    },
-                  ],
-          },
-        },
-        { new: true }
-      )
-
       const reviews =
-        product?.length > 0
+        product?.reviews?.length > 0
           ? [
               ...product.reviews,
               {
@@ -151,26 +115,24 @@ router.post('/add/:productId', auth, async (req, res) => {
               },
             ]
 
-      // const totalRating = reviewsForCurrentProduct.reduce(
-      //   (tot, r) => r.rating + tot,
-      //   0
-      // )
-
-      // const averageRating = totalRating / reviews.length
-      await productsCollection.updateOne(
-        { _id: ObjectId(productId) },
-        {
-          $set: {
-            productId: ObjectId(productId),
-            // rating: {
-            //   averageRating: averageRating,
-            //   count: reviews.length,
-            // },
-            reviews: reviews,
-          },
-        },
-        { new: true }
-      )
+      await updateData(productsCollection, productId, { reviews })
+      await updateData(usersCollection, token.id, {
+        reviews:
+          user?.reviews?.length > 0
+            ? [
+                ...user.reviews,
+                {
+                  productId: ObjectId(productId),
+                  reviewId: newAddedReview.insertedId,
+                },
+              ]
+            : [
+                {
+                  productId: ObjectId(productId),
+                  reviewId: newAddedReview.insertedId,
+                },
+              ],
+      })
       return res
         .status(202)
         .json(responseMsg('success', 'Review added successfully', {}))
@@ -189,7 +151,7 @@ router.post('/add/:productId', auth, async (req, res) => {
   }
 })
 
-router.post('/action', async (req, res) => {
+router.post('/action', auth, async (req, res) => {
   const token = req.user
   // action must be 'like' or 'dislike'
   const { action = 'like', reviewId = '' } = req.query
@@ -205,8 +167,9 @@ router.post('/action', async (req, res) => {
         review?.dislikes && review?.dislikes?.length > 0
           ? [...review.dislikes]
           : []
-      const likeIdx = likes.findIndex(token.id)
-      const dislikeIdx = dislikes.findIndex(token.id)
+
+      const likeIdx = likes.findIndex((d) => d === token.id)
+      const dislikeIdx = dislikes.findIndex((d) => d === token.id)
       if (action === 'like') {
         // check if already liked or disliked
         // if liked, remove id from array
@@ -214,23 +177,29 @@ router.post('/action', async (req, res) => {
 
         if (likeIdx !== -1) {
           likes.splice(likeIdx, 1)
+        } else {
+          likes.push(token.id)
         }
         if (dislikeIdx !== -1) {
-          dislikes.splice(likeIdx, 1)
-          likes.push(token.id)
+          dislikes.splice(dislikeIdx, 1)
         }
       } else {
         // check if already liked or disliked
         // if disliked, remove id from array
         // if liked, remove id from liked array and add in disliked array
-        if (likeIdx !== -1) {
-          likes.splice(likeIdx, 1)
-          dislikes.push(token.id)
-        }
         if (dislikeIdx !== -1) {
           dislikes.splice(dislikeIdx, 1)
         }
+        if (likeIdx !== -1) {
+          likes.splice(likeIdx, 1)
+        } else {
+          dislikes.push(token.id)
+        }
       }
+
+      console.log(likes, dislikes)
+      await updateData(reviewsCollection, reviewId, { likes, dislikes })
+
       return res
         .status(202)
         .json(

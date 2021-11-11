@@ -73,7 +73,7 @@ const Router = ({
                 // @ts-ignore
                 exact
                 isUser={userData}
-                path="/browse-products/:profileUrl"
+                path="/explore-products/:profileUrl"
               >
                 <BrowseProducts userData={userData} />
               </PrivateRoute>

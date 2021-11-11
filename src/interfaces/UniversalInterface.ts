@@ -319,9 +319,10 @@ export interface IHighlight {
 
 export interface IReview {
   _id: string
+  reviewTitle: string
   reviewText: string
   userId: string
-  rating: number
+  rating: string
   likes: string[]
   user?: IParent
   dislikes: string[]
