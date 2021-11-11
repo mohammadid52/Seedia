@@ -146,12 +146,12 @@ app.get('/my/list', auth, async (req, res) => {
   try {
     const company = await getItem(usersCollection, token.id)
     if (company) {
-      const wrapId = company?.business?.projects.map(addObjectId)
+      const wrapId = company?.business?.projects?.map(addObjectId)
       let projects = await getManyItems(projectsCollection, {
         _id: { $in: wrapId },
       })
 
-      projects = projects.map((pr) => ({
+      projects = projects?.map((pr) => ({
         ...pr,
         company,
         location: company.location,
