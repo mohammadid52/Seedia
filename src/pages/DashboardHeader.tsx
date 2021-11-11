@@ -28,7 +28,12 @@ import {
 } from 'react-icons/ai'
 import { BiUserCircle } from 'react-icons/bi'
 import { BsBagFill, BsFilePost, BsPeople } from 'react-icons/bs'
-import { FaAdversal, FaConnectdevelop, FaMoneyBillAlt } from 'react-icons/fa'
+import {
+  FaAdversal,
+  FaConnectdevelop,
+  FaMoneyBillAlt,
+  FaMoneyBillWave,
+} from 'react-icons/fa'
 import { FiSettings } from 'react-icons/fi'
 import { GiReceiveMoney } from 'react-icons/gi'
 import { IoIosBriefcase, IoMdNotifications } from 'react-icons/io'
@@ -642,6 +647,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                           )}
                         >
                           <span className={`${navClass}`}>
+                            <FaMoneyBillWave />
                             <span className="hidden lg:flex text-xs items-center">
                               Sell{' '}
                               <ChevronDownIcon
