@@ -1,22 +1,20 @@
-import HomeContent from 'components/HomeContent'
-
-import Features from 'components/Features'
+import Meta from 'components/atoms/Meta/Meta'
 import Footer from 'components/CustomFooter'
 import CustomSearchPanel from 'components/CustomSearch'
+import Features from 'components/Features'
+import HomeContent from 'components/HomeContent'
 import Navigation from 'components/Navigation'
-import { useEffect } from 'react'
-import { updateDocumentTitle } from 'helpers'
 
 const Home = ({ isUser, profileUrl, template, accountFilled }) => {
-  useEffect(() => {
-    updateDocumentTitle('Home')
-  }, [])
   return (
     <div className="bg-gray-100 dark:bg-gray-900">
+      <Meta
+        title="Home - Trading post - 13RMS"
+        pageTitle="Home - Trading post - 13RMS"
+      />
       <Navigation
         isUser={isUser}
         profileUrl={profileUrl}
-        _
         template={template}
         accountFilled={accountFilled}
       />
