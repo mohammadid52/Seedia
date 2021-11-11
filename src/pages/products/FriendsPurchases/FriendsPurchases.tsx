@@ -72,6 +72,7 @@ const FriendsPurchases = ({ userData }: { userData: IParent }) => {
           products.length > 0 &&
           products.map((product) => (
             <Product
+              userId={userData._id}
               loadingFriends={isLoading2 && !isFetched2}
               purchasedBy={getFriendsList(product.purchasedBy)}
               showWhoPurchased

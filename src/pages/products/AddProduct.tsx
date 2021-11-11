@@ -48,12 +48,12 @@ const AddProduct = ({
       .max(200, maxMsg('Product Name', 200)),
     productDescription: Yup.string()
       .required('Product description is required')
-      .min(50, minMsg('Product Description', 50))
-      .max(600, maxMsg('Product Description', 600)),
+      .min(50, minMsg('Product Description', 50)),
+
     details: Yup.string()
       .required('Product details is required')
-      .min(50, minMsg('Product details', 50))
-      .max(600, maxMsg('Product details', 600)),
+      .min(50, minMsg('Product details', 50)),
+
     price: Yup.string()
       .required('Price is required')
       .matches(/^[0-9.]+$/, 'Must be only digits'),
@@ -96,7 +96,7 @@ const AddProduct = ({
     }
   }
   return (
-    <NarrowLayout>
+    <NarrowLayout userData={userData}>
       <Meta pageTitle="Add Product" />
       <Title fontWeight="font-bold mb-8">Add New Product</Title>
       <Formik

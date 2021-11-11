@@ -399,15 +399,63 @@ button {
 .animated-arrow__container {
   &:hover {
     .animated-arrow {
-      transform: translateX(0px);
+      transform: translateX(-5px);
       opacity: 1;
       visibility: visible;
     }
   }
   .animated-arrow {
-    transform: translateX(-10px);
+    transform: translateX(-15px);
     visibility: hidden;
     opacity: 0;
     transition: 0.3s ease-in-out;
+  }
+}
+
+// ##################################################################### //
+// ###############################product related###################################### //
+// ##################################################################### //
+
+.primary {
+  width: 600px;
+  height: 400px;
+  background-color: #cccccc;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.thumbnail-image {
+  width: 100px;
+  height: 100px;
+  margin: 20px auto;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: 4px solid transparent;
+}
+
+.rating-bar[value] {
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+
+  width: 250px;
+  height: 10px;
+  &::-webkit-progress-bar {
+    border-radius: 2px;
+    background-color: $gray-200;
+  }
+
+  &::-webkit-progress-value {
+    background-color: $yellow;
+    border-radius: 2px;
+  }
+}
+
+.dark .rating-bar[value] {
+  &::-webkit-progress-bar {
+    border-radius: 2px;
+    background-color: $gray-700;
   }
 }

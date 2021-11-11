@@ -40,7 +40,7 @@ const ListProducts = ({ userId, onLoad }: { userId: string; onLoad: any }) => {
         products &&
         products?.length > 0 &&
         products?.map((product) => (
-          <Product key={product._id} product={product} />
+          <Product userId={userId} key={product._id} product={product} />
         ))
       )}
     </Section>

@@ -18,10 +18,20 @@ const createReview = (
   config: { reviewText: string; rating: string }
 ) => network.post(`/reviews/add/${productId}`, config)
 
+interface ReviewAction {
+  action: 'like' | 'dislike'
+  reviewId: string
+}
+const doReviewAction = ({ action, reviewId }: ReviewAction) =>
+  network.post(`/reviews/action?action=${action}&reviewId=${reviewId}`)
+
 // add product
 
 const addProduct = (values: any) =>
   network.post('/products/add', { newProductData: values })
+
+const deleteProduct = (productId: any) =>
+  network.delete(`/products/delete-product?productId=${productId}`)
 
 const mediaConfig = {
   headers: { 'Content-Type': 'multipart/form-data' },
@@ -125,4 +135,6 @@ export {
   invite,
   saveProfile,
   exitGroup,
+  deleteProduct,
+  doReviewAction,
 }

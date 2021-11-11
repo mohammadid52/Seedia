@@ -7,9 +7,36 @@ const {
   getManyItems,
   addObjectId,
   updateData,
+  removedWords,
 } = require('../utils')
 var ObjectId = require('mongodb').ObjectId
 require('dotenv').config()
+
+async function getUsersRelatedToProject(project, collection) {
+  const separatedTitle = project?.title?.split(' ')
+  const separatedDescription = project?.briefDescription?.split(' ')
+
+  const concatedKeywords = [...separatedTitle, ...separatedDescription]
+  const keywords = concatedKeywords.filter((word) => word.length > 2)
+  const keywordsNoDuplicate = [...new Set(keywords)]
+  const joinedKeywords = keywordsNoDuplicate
+    .filter((tag) => !removedWords.includes(tag))
+    .join(' ')
+
+  let usersRelatedToProject = await collection
+    .find({
+      $text: {
+        $search: 'react',
+        $caseSensitive: false,
+        $diacriticSensitive: true,
+      },
+    })
+    .project({ score: { $meta: 'textScore' } })
+    .sort({ score: { $meta: 'textScore' } })
+    .toArray()
+
+  return usersRelatedToProject
+}
 
 // ~~~~~~~~~~~~~~Add new project~~~~~~~~~~~~~~ //
 app.post('/add', auth, async (req, res) => {
@@ -51,7 +78,11 @@ app.post('/add', auth, async (req, res) => {
         return res
           .status(204)
           .json(
-            responseMsg('success', 'New project successfully added', newProject)
+            responseMsg(
+              'success',
+              'New project successfully added',
+              project.insertedId
+            )
           )
       }
     } catch (error) {
@@ -79,6 +110,7 @@ app.get('/p/:projectId', auth, async (req, res) => {
 
   if (projectId) {
     const project = await getItem(projectsCollection, projectId)
+
     const company = await getItem(usersCollection, project.postedBy)
     if (project && company) {
       const itsMyProject = company._id.toString() === token?.id

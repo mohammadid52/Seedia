@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 const router = require('express').Router()
 const auth = require('../middleware/verifyAuth')
-const { responseMsg } = require('../utils')
+const { responseMsg, getItem } = require('../utils')
 var ObjectId = require('mongodb').ObjectId
 require('dotenv').config()
 
@@ -178,6 +178,72 @@ router.post('/add/:productId', auth, async (req, res) => {
       return res
         .status(204)
         .json(responseMsg('error', 'Cannot fetch reviews.', {}))
+    }
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(204)
+      .json(
+        responseMsg('error', 'Oops! Something went wrong. Please try again', {})
+      )
+  }
+})
+
+router.post('/action', async (req, res) => {
+  const token = req.user
+  // action must be 'like' or 'dislike'
+  const { action = 'like', reviewId = '' } = req.query
+  const reviewsCollection = res.locals.reviewsCollection
+
+  try {
+    const review = await getItem(reviewsCollection, reviewId)
+
+    if (review) {
+      let likes =
+        review?.likes && review?.likes?.length > 0 ? [...review.likes] : []
+      let dislikes =
+        review?.dislikes && review?.dislikes?.length > 0
+          ? [...review.dislikes]
+          : []
+      const likeIdx = likes.findIndex(token.id)
+      const dislikeIdx = dislikes.findIndex(token.id)
+      if (action === 'like') {
+        // check if already liked or disliked
+        // if liked, remove id from array
+        // if disliked, remove id from disliked array and add in liked array
+
+        if (likeIdx !== -1) {
+          likes.splice(likeIdx, 1)
+        }
+        if (dislikeIdx !== -1) {
+          dislikes.splice(likeIdx, 1)
+          likes.push(token.id)
+        }
+      } else {
+        // check if already liked or disliked
+        // if disliked, remove id from array
+        // if liked, remove id from liked array and add in disliked array
+        if (likeIdx !== -1) {
+          likes.splice(likeIdx, 1)
+          dislikes.push(token.id)
+        }
+        if (dislikeIdx !== -1) {
+          dislikes.splice(dislikeIdx, 1)
+        }
+      }
+      return res
+        .status(202)
+        .json(
+          responseMsg(
+            'success',
+            'Review like/dislike action done successfully',
+            review
+          )
+        )
+    } else {
+      return res
+        .status(204)
+        .json(responseMsg('error', 'Cannot find user or review data', {}))
     }
   } catch (error) {
     console.error(error)

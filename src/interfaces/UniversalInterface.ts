@@ -301,6 +301,8 @@ export interface IProduct {
     userId: string
     reviewId: string
   }[]
+  postedBy?: string
+  user?: IParent
 }
 
 export interface IProductImage {
@@ -320,9 +322,9 @@ export interface IReview {
   reviewText: string
   userId: string
   rating: number
-  likes: number
+  likes: string[]
   user?: IParent
-  dislikes: number
+  dislikes: string[]
   createdOn: Date | null
 }
 

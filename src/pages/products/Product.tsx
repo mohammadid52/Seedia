@@ -4,19 +4,26 @@ import { IProduct, IShortProfile } from 'interfaces/UniversalInterface'
 import QuickOverview from 'pages/products/QuickOverview'
 import { useState } from 'react'
 import { eclipse } from 'utils/functions'
+import { useMutation } from 'react-query'
+import { deleteProduct } from 'apis/mutations'
 
 const Product = ({
   product,
   showWhoPurchased = false,
   purchasedBy,
   loadingFriends,
+  userId,
 }: {
   loadingFriends?: boolean
   product: IProduct
   showWhoPurchased?: boolean
   purchasedBy?: IShortProfile[]
+  userId: string
 }) => {
   const [quickOverviewModal, setQuickOverviewModal] = useState(false)
+  const itsMyProduct = product.postedBy.toString() === userId
+
+  const _delete = useMutation(deleteProduct, { onSuccess: () => {} })
 
   const dropdownList = [
     {
@@ -40,7 +47,14 @@ const Product = ({
         setQuickOverviewModal(true)
       },
     },
-  ]
+    itsMyProduct && {
+      id: 'ddfd413',
+      name: 'Delete',
+      onClick: () => {
+        _delete.mutate(product._id)
+      },
+    },
+  ].filter(Boolean)
 
   return (
     <>

@@ -7,6 +7,8 @@ const {
   addObjectId,
   getItem,
   getManyItems,
+  updateData,
+  convertToString,
 } = require('../utils')
 var ObjectId = require('mongodb').ObjectId
 require('dotenv').config()
@@ -42,6 +44,8 @@ router.get('/postedBy/:userId', auth, async (req, res) => {
   }
 })
 
+// Get single product -->
+
 router.get('/p/:productId', auth, async (req, res) => {
   const token = req.user
   const { productId } = req.params
@@ -54,9 +58,11 @@ router.get('/p/:productId', auth, async (req, res) => {
 
   // add token id to products collection to track views and interests
 
-  const product = await getItem(productsCollection, productId)
+  let product = await getItem(productsCollection, productId)
 
   const user = await getItem(usersCollection, token.id)
+
+  const productOwner = await getItem(usersCollection, product.postedBy)
 
   const getUniqProductsViewedList = () => {
     const productId = ObjectId(product._id)
@@ -109,6 +115,11 @@ router.get('/p/:productId', auth, async (req, res) => {
 
   try {
     if (product && user) {
+      product = {
+        ...product,
+        user: productOwner,
+      }
+
       await usersCollection.updateOne(
         { _id: ObjectId(token.id) },
         {
@@ -385,6 +396,57 @@ router.post('/add', auth, async (req, res) => {
           )
         )
     }
+  }
+})
+
+const getUpdatedValues = (user, productId) => {
+  let currentValue =
+    user && user?.business?.products ? [...user.business.products] : []
+  if (currentValue.length > 0) {
+    currentValue = currentValue.map(convertToString)
+    const idx = currentValue.findIndex((a) => a === productId)
+    if (idx !== -1) {
+      currentValue.splice(idx, 1)
+    }
+  }
+  return currentValue
+}
+
+router.delete('/delete-product', auth, async (req, res) => {
+  const { productId } = req.query
+  const token = req.user
+
+  const productsCollection = res.locals.productsCollection
+  const usersCollection = res.locals.usersCollection
+
+  if (productId) {
+    try {
+      const product = await getItem(productsCollection, productId)
+      const user = await getItem(usersCollection, token.id)
+      if (product && user) {
+        const updatedProducts = getUpdatedValues(user, productId)
+        await updateData(usersCollection, {
+          'business.products': updatedProducts,
+        })
+        await productsCollection.deleteOne({ _id: ObjectId(productId) })
+
+        return res
+          .status(202)
+          .json(responseMsg('success', 'Product deleted successfully', {}))
+      } else {
+        return res
+          .status(403)
+          .json(responseMsg('error', 'Cannot find product', {}))
+      }
+    } catch (error) {
+      return res
+        .status(204)
+        .json(responseMsg('error', 'Something went wrong..', {}))
+    }
+  } else {
+    return res
+      .status(204)
+      .json(responseMsg('error', 'Product Id not found', {}))
   }
 })
 

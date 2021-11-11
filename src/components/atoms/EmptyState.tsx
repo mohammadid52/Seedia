@@ -12,7 +12,7 @@ const EmptyState = ({
   animation,
   hideBorders = false,
 }: {
-  title: string
+  title?: string
   subtitle?: string
   iconUrl?: string
   btnText?: string
@@ -55,9 +55,11 @@ const EmptyState = ({
           width={200}
         />
       )}
-      <h3 className="mt-2 text-lg font-medium dark:text-gray-300 text-gray-900">
-        {title}
-      </h3>
+      {title && (
+        <h3 className="mt-2 text-lg font-medium dark:text-gray-300 text-gray-900">
+          {title}
+        </h3>
+      )}
       <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
       {showEditOption && (
         <>

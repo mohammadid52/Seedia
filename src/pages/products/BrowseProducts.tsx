@@ -56,7 +56,9 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
               >
                 {products &&
                   products.length > 0 &&
-                  products.map((product) => <Product product={product} />)}
+                  products.map((product) => (
+                    <Product userId={userData._id} product={product} />
+                  ))}
               </Section>
             }
 
@@ -66,7 +68,9 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
             >
               {products &&
                 products.length > 0 &&
-                products.map((product) => <Product product={product} />)}
+                products.map((product) => (
+                  <Product userId={userData._id} product={product} />
+                ))}
             </Section>
             {isError && <p className="text-red-500 text-sm">{error}</p>}
           </div>

@@ -14,6 +14,7 @@ import { useUserContext } from 'context/UserContext'
 import useAccountType from 'hooks/useAccountType'
 import useTheme from 'hooks/useTheme'
 import { INotification, IParent } from 'interfaces/UniversalInterface'
+import { isEmpty } from 'lodash'
 import find from 'lodash/find'
 import map from 'lodash/map'
 import { Fragment, useState } from 'react'
@@ -29,7 +30,7 @@ import { BsBagFill, BsFilePost, BsPeople } from 'react-icons/bs'
 import { FaAdversal, FaConnectdevelop, FaMoneyBillAlt } from 'react-icons/fa'
 import { FiSettings } from 'react-icons/fi'
 import { GiReceiveMoney } from 'react-icons/gi'
-import { IoMdNotifications } from 'react-icons/io'
+import { IoIosBriefcase, IoMdNotifications } from 'react-icons/io'
 import { MdAttachMoney, MdFindReplace, MdWork } from 'react-icons/md'
 import { RiApps2Line } from 'react-icons/ri'
 import { SiGoogleanalytics } from 'react-icons/si'
@@ -104,18 +105,8 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
 
   const businessApps = [
     {
-      icon: AiOutlineSearch,
-      name: 'Search for leads',
-    },
-    isBusiness && {
-      icon: BsFilePost,
-      link: _links.addProject(),
-      name: 'Post A Job',
-    },
-    isBusiness && {
-      icon: BsFilePost,
-      link: _links.exploreJobs(),
-      name: 'Explore Projects And Jobs',
+      icon: FaMoneyBillAlt,
+      name: 'Sell products',
     },
     isBusiness && {
       icon: MdWork,
@@ -123,38 +114,52 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
       name: 'Place Request For Work',
     },
     {
-      icon: FaAdversal,
-      name: 'Advertise',
+      // !====== Change Icon ======!
+      icon: AiOutlineSearch,
+      name: 'Open Store',
     },
     {
-      icon: FaMoneyBillAlt,
-      name: 'Sell products',
+      icon: BsFilePost,
+      name: 'New product developed',
+      link: _links.addProduct(),
     },
+
+    isBusiness && {
+      icon: BsFilePost,
+      link: _links.addProject(),
+      name: 'Post A Job/Project',
+    },
+
+    {
+      icon: SiGoogleanalytics,
+      name: 'Profile statistics',
+    },
+
     {
       icon: AiOutlineUsergroupDelete,
       name: 'Groups',
       link: _links.groups(),
     },
-    {
-      icon: MdFindReplace,
-      name: 'Pro finder',
+
+    isBusiness && {
+      icon: BsFilePost,
+      link: _links.exploreJobs(),
+      name: 'Explore Projects And Jobs',
     },
+
+    {
+      icon: FaAdversal,
+      name: 'Advertise',
+    },
+
     {
       icon: MdAttachMoney,
       name: 'Salary',
     },
+
     {
-      icon: BsFilePost,
-      name: 'New product',
-      link: _links.addProduct(),
-    },
-    {
-      icon: FaConnectdevelop,
-      name: 'New product developed',
-    },
-    {
-      icon: SiGoogleanalytics,
-      name: 'Profile statistics',
+      icon: AiOutlineSearch,
+      name: 'Search for leads',
     },
   ].filter(Boolean)
 
@@ -218,13 +223,6 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
     departmentsArray[0]
   )
 
-  const links = [
-    { href: '/dashboard', title: 'Home', Icon: AiOutlineHome },
-    { href: '/#', title: 'My Network', Icon: BsPeople },
-    // { href: '/#', title: 'Jobs', Icon: CgWorkAlt },
-    // { href: '/#', title: 'Messaging', Icon: BiMessageDetail },
-  ]
-
   const navClass =
     'flex flex-col items-center font-medium text-base dark:text-gray-400 text-gray-500 link-hover'
 
@@ -241,6 +239,36 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
       icon: AiOutlineLogout,
     },
   ]
+
+  const isProductsPosted = userData?.business?.products?.length > 0
+  const isStoreOpened = !isEmpty(userData?.store)
+
+  const sellProducts = [
+    isProductsPosted && {
+      name: 'My Products',
+      href: _links.BROWSE_PRODUCTS(userData?._id),
+      subtitle: '',
+    },
+    !isStoreOpened && {
+      name: 'Open Store',
+      href: _links.openStore(),
+      subtitle: 'and sell your products like a professional',
+    },
+    isStoreOpened && {
+      name: 'My Store',
+      href: _links.viewStore(userData?.profileUrl),
+    },
+    isStoreOpened && {
+      name: 'Edit Store',
+      href: _links.BROWSE_PRODUCTS(userData?._id),
+      subtitle: 'View store as other. Add product to store',
+    },
+    {
+      name: 'Sell more products',
+      subtitle: '',
+      href: _links.addProduct(),
+    },
+  ].filter(Boolean)
 
   const { logo } = useTheme()
 
@@ -333,214 +361,14 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                 </div>
 
                 <Popover.Group as="nav" className="hidden  md:flex space-x-10">
-                  {map(links, (link, idx) => (
-                    <NavLink
-                      key={idx}
-                      title={link.title}
-                      to={link.href}
-                      className={navClass}
-                    >
-                      <link.Icon />
-                      <span className="hidden text-xs ml-2 xl:block">
-                        {link.title}
-                      </span>
-                    </NavLink>
-                  ))}
-
-                  <Popover className="relative">
-                    {({ open }) => (
-                      <>
-                        <Popover.Button
-                          title="Notifications"
-                          className={classNames(
-                            open ? 'text-gray-900' : 'text-gray-500',
-                            `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
-                          )}
-                        >
-                          <span className={navClass}>
-                            <div className="relative">
-                              <IoMdNotifications />
-                              {userData?.notifications?.length > 0 && (
-                                <div className="absolute top-0 right-0">
-                                  <span className="flex h-3 w-3">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                            <span className="hidden lg:flex text-xs items-center">
-                              <ChevronDownIcon
-                                className={classNames(
-                                  open ? 'text-gray-600' : 'text-gray-400',
-                                  'h-4 w-4 group-hover:text-gray-500'
-                                )}
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </span>
-                        </Popover.Button>
-
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          enter="transition ease-out duration-200"
-                          enterFrom="opacity-0 translate-y-1"
-                          enterTo="opacity-100 translate-y-0"
-                          leave="transition ease-in duration-150"
-                          leaveFrom="opacity-100 translate-y-0"
-                          leaveTo="opacity-0 translate-y-1"
-                        >
-                          <Popover.Panel
-                            static
-                            style={{ left: '0rem' }}
-                            className="absolute z-10  mt-4 transform w-screen max-w-md lg:max-w-lg sm:px-6 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
-                          >
-                            <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden">
-                              <div className="relative dark:bg-gray-800 bg-white px-5 py-6 sm:gap-8 sm:p-8 ">
-                                <div className="grid grid-cols-1">
-                                  {userData?.notifications &&
-                                  userData?.notifications.length > 0 ? (
-                                    userData?.notifications?.map(
-                                      (notification) => {
-                                        const isGroupInvite =
-                                          notification.type ===
-                                          'group-invite-request'
-                                        if (isGroupInvite) {
-                                          return (
-                                            <GroupInviteNotification
-                                              userData={userData}
-                                              key={notification._id}
-                                              notification={notification}
-                                            />
-                                          )
-                                        }
-                                      }
-                                    )
-                                  ) : (
-                                    <EmptyState
-                                      hideBorders
-                                      title="No Notifications"
-                                      subtitle={`Your all notifications will be here`}
-                                      iconUrl={'/notification.png'}
-                                    />
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </Popover.Panel>
-                        </Transition>
-                      </>
-                    )}
-                  </Popover>
-
-                  <Popover className="relative">
-                    {({ open }) => (
-                      <>
-                        <Popover.Button
-                          title="Sell"
-                          className={classNames(
-                            open ? 'text-gray-900' : 'text-gray-500',
-                            `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
-                          )}
-                        >
-                          <span className={`${navClass}`}>
-                            <GiReceiveMoney />
-                            <span className="hidden lg:flex text-xs items-center">
-                              Sell{' '}
-                              <ChevronDownIcon
-                                className={classNames(
-                                  open ? 'text-gray-600' : 'text-gray-400',
-                                  'h-4 w-4 group-hover:text-gray-500 ml-2'
-                                )}
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </span>
-                        </Popover.Button>
-
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          enter="transition ease-out duration-200"
-                          enterFrom="opacity-0 translate-y-1"
-                          enterTo="opacity-100 translate-y-0"
-                          leave="transition ease-in duration-150"
-                          leaveFrom="opacity-100 translate-y-0"
-                          leaveTo="opacity-0 translate-y-1"
-                        >
-                          <Popover.Panel
-                            static
-                            className="absolute z-10 -ml-4 mt-4 transform px-12 max-w-md w-screen lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
-                          >
-                            <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden dark:bg-gray-800 bg-white">
-                              <div className="border-b dark:border-gray-700">
-                                <EmptyState
-                                  hideBorders
-                                  title="Sell"
-                                  subtitle={`Go Shopping`}
-                                  iconUrl={'/trade.png'}
-                                />
-                              </div>
-                              <div className="relative border-b border-gray-200 dark:border-gray-700 grid gap-4  px-5 py-6 sm:gap-4 sm:px-8 ">
-                                {sellList1.map((item) => (
-                                  <a
-                                    key={item.name}
-                                    href={item.href}
-                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-700 transition-all  rounded-lg hover:bg-gray-200 box-rounded-lg-2 justify-start cursor-pointer"
-                                  >
-                                    <div className="ml-4">
-                                      <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-700">
-                                        {item.name}
-                                      </p>
-                                    </div>
-                                  </a>
-                                ))}
-                              </div>
-                              <div className="relative grid gap-4 dark:bg-gray-800 bg-white px-5 py-6 sm:gap-4 sm:px-8">
-                                {sellList2.map((item) => (
-                                  <a
-                                    key={item.name}
-                                    href={item.href}
-                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-700 transition-all  rounded-lg hover:bg-gray-200 box-rounded-lg-2 justify-start cursor-pointer"
-                                  >
-                                    <div className="ml-4">
-                                      <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-700">
-                                        {item.name}
-                                      </p>
-                                    </div>
-                                  </a>
-                                ))}
-                              </div>
-                              {
-                                <div className="px-5 border-t border-gray-200 dark:border-gray-700 justify-between w-full py-5 bg-white dark:bg-gray-800 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
-                                  {callsToAction.map((item) => (
-                                    <div
-                                      key={item.name}
-                                      className="w-1/2 flex  items-center justify-center "
-                                    >
-                                      <a
-                                        href={item.href}
-                                        className="-m-3 p-3 border border-gray-200 dark:border-gray-700 flex items-center rounded-md text-base font-medium box-rounded-md-2 dark:text-white text-gray-900 hover:bg-gray-200 transition-all duration-300 dark:hover:bg-gray-700 w-full justify-center"
-                                      >
-                                        <item.icon
-                                          className="flex-shrink-0 h-4 w-4 text-gray-400"
-                                          aria-hidden="true"
-                                        />
-                                        <span className="ml-3 text-xs">
-                                          {item.name}
-                                        </span>
-                                      </a>
-                                    </div>
-                                  ))}
-                                </div>
-                              }
-                            </div>
-                          </Popover.Panel>
-                        </Transition>
-                      </>
-                    )}
-                  </Popover>
+                  <NavLink
+                    title={'Home'}
+                    to={'/dashboard'}
+                    className={navClass}
+                  >
+                    <AiOutlineHome />
+                    <span className="hidden text-xs ml-2 xl:block">Home</span>
+                  </NavLink>
 
                   <Popover className="relative">
                     {({ open }) => (
@@ -582,6 +410,15 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                             className="absolute z-10 -ml-4 mt-4 transform px-2 w-screen max-w-md sm:px-6 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
                           >
                             <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden">
+                              <img
+                                alt=""
+                                src={
+                                  userData?.coverPicture
+                                    ? userData?.coverPicture
+                                    : 'https://source.unsplash.com/1600x900/?nature,water'
+                                }
+                                className="w-full border-b border-gray-200 dark:border-gray-700 lg:h-28 sm:h-24 object-cover h-20"
+                              />
                               <div className="relative grid gap-6 bg-white dark:bg-gray-800 px-5 py-6 sm:gap-8 sm:p-8">
                                 <div className="flex w-full space-x-4 items-center space-between">
                                   <div className="w-1/2 flex text-xs items-center justify-center dark:border-gray-700 darK:hover:border-gray-500 dark:hover:bg-gray-600 dark:text-white transition-all border-gray-200 py-2 rounded-md font-light hover:bg-gray-50 cursor-pointer hover:border-gray-300 border">
@@ -672,6 +509,201 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                     )}
                   </Popover>
 
+                  <NavLink title={'My Network'} to={'/#'} className={navClass}>
+                    <BsPeople />
+                    <span className="hidden text-xs ml-2 xl:block">
+                      My Network
+                    </span>
+                  </NavLink>
+
+                  <NavLink
+                    title={'Jobs'}
+                    to={_links.exploreJobs()}
+                    className={navClass}
+                  >
+                    <IoIosBriefcase />
+                    <span className="hidden text-xs ml-2 xl:block">Jobs</span>
+                  </NavLink>
+
+                  <Popover className="relative">
+                    {({ open }) => (
+                      <>
+                        <Popover.Button
+                          title="Go Shopping"
+                          className={classNames(
+                            open ? 'text-gray-900' : 'text-gray-500',
+                            `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
+                          )}
+                        >
+                          <span className={`${navClass}`}>
+                            <GiReceiveMoney />
+                            <span className="hidden lg:flex text-xs items-center">
+                              Go Shopping{' '}
+                              <ChevronDownIcon
+                                className={classNames(
+                                  open ? 'text-gray-600' : 'text-gray-400',
+                                  'h-4 w-4 group-hover:text-gray-500 ml-2'
+                                )}
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </span>
+                        </Popover.Button>
+
+                        <Transition
+                          show={open}
+                          as={Fragment}
+                          enter="transition ease-out duration-200"
+                          enterFrom="opacity-0 translate-y-1"
+                          enterTo="opacity-100 translate-y-0"
+                          leave="transition ease-in duration-150"
+                          leaveFrom="opacity-100 translate-y-0"
+                          leaveTo="opacity-0 translate-y-1"
+                        >
+                          <Popover.Panel
+                            static
+                            className="absolute z-10 -ml-4 mt-4 transform px-12 max-w-md w-screen lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+                          >
+                            <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden dark:bg-gray-800 bg-white">
+                              <div className="border-b dark:border-gray-700">
+                                <EmptyState
+                                  hideBorders
+                                  title={`Go Shopping`}
+                                  iconUrl={'/shopping-cart.png'}
+                                />
+                              </div>
+                              <div className="relative border-b border-gray-200 dark:border-gray-700 grid gap-4  px-5 py-6 sm:gap-4 sm:px-8 ">
+                                {sellList1.map((item) => (
+                                  <a
+                                    key={item.name}
+                                    href={item.href}
+                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-700 transition-all  rounded-lg hover:bg-gray-200  justify-start cursor-pointer"
+                                  >
+                                    <div className="ml-4">
+                                      <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-700">
+                                        {item.name}
+                                      </p>
+                                    </div>
+                                  </a>
+                                ))}
+                              </div>
+                              <div className="relative grid gap-4 dark:bg-gray-800 bg-white px-5 py-6 sm:gap-4 sm:px-8">
+                                {sellList2.map((item) => (
+                                  <a
+                                    key={item.name}
+                                    href={item.href}
+                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-700 transition-all  rounded-lg hover:bg-gray-200  justify-start cursor-pointer"
+                                  >
+                                    <div className="ml-4">
+                                      <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-700">
+                                        {item.name}
+                                      </p>
+                                    </div>
+                                  </a>
+                                ))}
+                              </div>
+                              {
+                                <div className="px-5 border-t border-gray-200 dark:border-gray-700 justify-between w-full py-5 bg-white dark:bg-gray-800 space-y-6 sm:flex sm:space-y-0 sm:space-x-10 sm:px-8">
+                                  {callsToAction.map((item) => (
+                                    <div
+                                      key={item.name}
+                                      className="w-1/2 flex  items-center justify-center "
+                                    >
+                                      <a
+                                        href={item.href}
+                                        className="-m-3 p-3 border border-gray-200 dark:border-gray-700 flex items-center rounded-md text-base font-medium box-rounded-md-2 dark:text-white text-gray-900 hover:bg-gray-200 transition-all duration-300 dark:hover:bg-gray-700 w-full justify-center"
+                                      >
+                                        <item.icon
+                                          className="flex-shrink-0 h-4 w-4 text-gray-400"
+                                          aria-hidden="true"
+                                        />
+                                        <span className="ml-3 text-xs">
+                                          {item.name}
+                                        </span>
+                                      </a>
+                                    </div>
+                                  ))}
+                                </div>
+                              }
+                            </div>
+                          </Popover.Panel>
+                        </Transition>
+                      </>
+                    )}
+                  </Popover>
+                  <Popover className="relative">
+                    {({ open }) => (
+                      <>
+                        <Popover.Button
+                          title="Go Shopping"
+                          className={classNames(
+                            open ? 'text-gray-900' : 'text-gray-500',
+                            `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
+                          )}
+                        >
+                          <span className={`${navClass}`}>
+                            <span className="hidden lg:flex text-xs items-center">
+                              Sell{' '}
+                              <ChevronDownIcon
+                                className={classNames(
+                                  open ? 'text-gray-600' : 'text-gray-400',
+                                  'h-4 w-4 group-hover:text-gray-500 ml-2'
+                                )}
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </span>
+                        </Popover.Button>
+
+                        <Transition
+                          show={open}
+                          as={Fragment}
+                          enter="transition ease-out duration-200"
+                          enterFrom="opacity-0 translate-y-1"
+                          enterTo="opacity-100 translate-y-0"
+                          leave="transition ease-in duration-150"
+                          leaveFrom="opacity-100 translate-y-0"
+                          leaveTo="opacity-0 translate-y-1"
+                        >
+                          <Popover.Panel
+                            static
+                            className="absolute z-10 -ml-4 mt-4 transform px-12 max-w-md w-screen lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+                          >
+                            <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden dark:bg-gray-800 bg-white">
+                              <div className="border-b dark:border-gray-700">
+                                <EmptyState
+                                  hideBorders
+                                  title="Sell"
+                                  iconUrl={'/trade.png'}
+                                />
+                              </div>
+                              <div className="relative grid gap-4 dark:bg-gray-800 bg-white px-5 py-6 sm:gap-4 sm:px-8">
+                                {sellProducts.map((item) => (
+                                  <a
+                                    key={item.name}
+                                    href={item.href}
+                                    className="-m-3 p-3 mt-1 flex items-center text-left dark:hover:bg-gray-700 transition-all  rounded-lg hover:bg-gray-200  justify-start cursor-pointer"
+                                  >
+                                    <div className="ml-4">
+                                      <p className="text-xs dark:text-white text-left font-medium mb-0 text-gray-700">
+                                        {item.name}
+                                      </p>
+                                      {item?.subtitle && (
+                                        <p className="text-xs dark:text-gray-500 text-left mt-1 text-gray-500">
+                                          {item.subtitle}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          </Popover.Panel>
+                        </Transition>
+                      </>
+                    )}
+                  </Popover>
+
                   <Popover className="relative">
                     {({ open }) => (
                       <>
@@ -713,11 +745,11 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                           >
                             <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden">
                               <div className="relative dark:bg-gray-800 bg-white px-5 py-6 sm:gap-8 sm:p-8 ">
-                                <p className="inline-block text-lg sm:text-xl tracking-wide mb-4 border-b-2 border-pink-600 mt-2 font-bold text-gray-900 dark:text-white">
-                                  13RMS
-                                </p>
-
                                 <div className="grid mt-4 gap-8 lg:grid-cols-2 grid-cols-1">
+                                  <p className="inline-block text-lg sm:text-xl tracking-wide border-b-2 border-pink-600 mt-2 font-bold text-gray-900 dark:text-white">
+                                    13RMS
+                                  </p>
+
                                   {businessApps.map((item) => (
                                     <a
                                       key={item.name}
@@ -741,6 +773,93 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                                       />
                                     </a>
                                   ))}
+                                </div>
+                              </div>
+                            </div>
+                          </Popover.Panel>
+                        </Transition>
+                      </>
+                    )}
+                  </Popover>
+
+                  <Popover className="relative">
+                    {({ open }) => (
+                      <>
+                        <Popover.Button
+                          title="Notifications"
+                          className={classNames(
+                            open ? 'text-gray-900' : 'text-gray-500',
+                            `group bg-transparent transition-all rounded-md inline-flex items-center text-base font-medium ${navClass} focus:outline-none`
+                          )}
+                        >
+                          <span className={navClass}>
+                            <div className="relative">
+                              <IoMdNotifications />
+                              {userData?.notifications?.length > 0 && (
+                                <div className="absolute top-0 right-0">
+                                  <span className="flex h-3 w-3">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            <span className="hidden lg:flex text-xs items-center">
+                              <ChevronDownIcon
+                                className={classNames(
+                                  open ? 'text-gray-600' : 'text-gray-400',
+                                  'h-4 w-4 group-hover:text-gray-500'
+                                )}
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </span>
+                        </Popover.Button>
+
+                        <Transition
+                          show={open}
+                          as={Fragment}
+                          enter="transition ease-out duration-200"
+                          enterFrom="opacity-0 translate-y-1"
+                          enterTo="opacity-100 translate-y-0"
+                          leave="transition ease-in duration-150"
+                          leaveFrom="opacity-100 translate-y-0"
+                          leaveTo="opacity-0 translate-y-1"
+                        >
+                          <Popover.Panel
+                            static
+                            style={{ left: '0rem' }}
+                            className="absolute z-10  mt-4 transform w-screen max-w-md lg:max-w-lg sm:px-6 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2"
+                          >
+                            <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden">
+                              <div className="relative dark:bg-gray-800 bg-white px-5 py-6 sm:gap-8 sm:p-8 ">
+                                <div className="grid grid-cols-1">
+                                  {userData?.notifications &&
+                                  userData?.notifications.length > 0 ? (
+                                    userData?.notifications?.map(
+                                      (notification) => {
+                                        const isGroupInvite =
+                                          notification.type ===
+                                          'group-invite-request'
+                                        if (isGroupInvite) {
+                                          return (
+                                            <GroupInviteNotification
+                                              userData={userData}
+                                              key={notification._id}
+                                              notification={notification}
+                                            />
+                                          )
+                                        }
+                                      }
+                                    )
+                                  ) : (
+                                    <EmptyState
+                                      hideBorders
+                                      title="No Notifications"
+                                      subtitle={`Your all notifications will be here`}
+                                      iconUrl={'/notification.png'}
+                                    />
+                                  )}
                                 </div>
                               </div>
                             </div>

@@ -9,6 +9,7 @@ import NormalFormInput from 'components/atoms/NormalFormInput'
 import Title from 'components/atoms/Title'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
+import { useNotifications } from 'context/NotificationContext'
 import { Form, Formik } from 'formik'
 import useAccountType from 'hooks/useAccountType'
 import { IParent, IProject, ISection } from 'interfaces/UniversalInterface'
@@ -57,8 +58,22 @@ const AddProject = ({ userData }: { userData: IParent }) => {
     closure: '',
   }
 
-  const { mutate, isLoading, isError, error, isSuccess } =
-    useMutation(addProject)
+  const { setNotification } = useNotifications()
+
+  const { mutate, isLoading, isError, error, isSuccess } = useMutation(
+    addProject,
+    {
+      onSuccess: (data) => {
+        const projectId = data.data.data
+        setNotification({
+          show: true,
+          title: 'New project added.',
+          buttonText: 'View',
+          buttonUrl: links.viewProject(projectId),
+        })
+      },
+    }
+  )
 
   const history = useHistory()
   useEffect(() => {

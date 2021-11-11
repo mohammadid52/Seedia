@@ -21,6 +21,7 @@ const UploadImages = ({
 
   const { setValue, setError } = helpers
   const [imageList, setImageList] = useState<any[]>([])
+
   const {
     mutate,
     isLoading,
@@ -31,10 +32,14 @@ const UploadImages = ({
   } = useMutation(uploadMultipleImages)
 
   const onImageSelect = (e: any): void => {
-    const img = e.target.files[0]
-    imageList.push(img)
+    console.log('🚀 ~ file: UploadImages.tsx ~ line 43 ~ onImageSelect ~ e', e)
+    const imgs: File[] = Object.values(e.target.files)
 
-    setImageList((prev) => [...prev])
+    if (imgs.length > 0) {
+      imgs.forEach((img) => imageList.push(img))
+
+      setImageList((prev) => [...prev])
+    }
   }
 
   const showFileExplorer = () => productImageRef?.current?.click()
@@ -80,7 +85,7 @@ const UploadImages = ({
             (image, idx) =>
               // <div key={idx}>
               image && (
-                <LightGallery speed={500} plugins={[lgZoom]}>
+                <LightGallery key={idx} speed={500} plugins={[lgZoom]}>
                   <img
                     className={`shadow-lg  rounded-lg`}
                     src={URL.createObjectURL(image)}
@@ -95,6 +100,7 @@ const UploadImages = ({
       <input
         ref={productImageRef}
         className="hidden"
+        multiple
         type="file"
         onChange={onImageSelect}
         accept="image/x-png,image/jpeg"

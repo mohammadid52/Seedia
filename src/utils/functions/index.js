@@ -93,22 +93,54 @@ export const doResize = (e) => {
   else textbox.rows = rows
 }
 
+export const removedWords = [
+  'a',
+  'an',
+  'the',
+  'and',
+  'but',
+  'or',
+  'for',
+  'nor',
+  'so',
+  'yet',
+  'at',
+  'by',
+  'from',
+  'in',
+  'into',
+  'of',
+  'on',
+  'to',
+  'with',
+  'am',
+  'are',
+  'be',
+  'been',
+  'can',
+  'could',
+  'did',
+  'do',
+  'does',
+  'had',
+  'has',
+  'have',
+  'is',
+  'may',
+  'might',
+  'must',
+  'ought to',
+  'shall',
+  'should',
+  'was',
+  'were',
+  'will',
+  'would',
+]
+
 export const getTags = (str) => {
   if (str && str.length > 0) {
-    return str
-      .split(' ')
-      .filter(
-        (tags) =>
-          tags !== 'in' ||
-          tags !== 'or' ||
-          tags !== 'of' ||
-          tags !== 'the' ||
-          tags !== 'is' ||
-          tags !== 'can' ||
-          tags !== 'so' ||
-          tags !== '.' ||
-          tags !== 'to'
-      )
+    return str.split(' ').filter((tag) => !removedWords.includes(tag))
   }
 }
 

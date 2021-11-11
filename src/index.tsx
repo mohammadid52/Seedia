@@ -30,15 +30,18 @@ const queryClient = new QueryClient({
 
 // @ts-ignore
 export const ErrorFallback = ({ error, resetErrorBoundary }) => {
-  return (
-    <NotFound
-      tryAgain={resetErrorBoundary}
-      tryAgainText="Try again"
-      errorCode={'403'}
-      errorTitle={'Oops! Something went wrong'}
-      errorMessage={error.message}
-    />
-  )
+  if (process.env.NODE_ENV === 'development') {
+    return (
+      <NotFound
+        tryAgain={resetErrorBoundary}
+        tryAgainText="Try again"
+        errorCode={'403'}
+        errorTitle={'Oops! Something went wrong'}
+        errorMessage={error.message}
+      />
+    )
+  }
+  return null
 }
 
 const loader = document.querySelector('.main-loader')
