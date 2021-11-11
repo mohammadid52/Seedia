@@ -197,7 +197,6 @@ router.post('/action', auth, async (req, res) => {
         }
       }
 
-      console.log(likes, dislikes)
       await updateData(reviewsCollection, reviewId, { likes, dislikes })
 
       return res
