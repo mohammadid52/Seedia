@@ -112,7 +112,7 @@ client.connect(
 
 // ~~~~~~~~~~~~~~~~~~IGNORE THIS~~~~~~~~~~~~~~~~~~~~~ //
 
-const PORT = 4005
+const PORT = 3005
 
 app.listen(PORT, () => {
   console.log(`API Server running on ${PORT}`)
