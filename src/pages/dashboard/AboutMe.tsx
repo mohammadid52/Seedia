@@ -144,7 +144,7 @@ const PersonalCard = ({
         </div>
         <div className="text-center px-3 pb-6 pt-2">
           <a
-            href={links.getProfile(user)}
+            href={links.getProfile(user, true)}
             className="dark:text-white  text-gray-900 text-base font-bold "
           >
             {user.fullName}

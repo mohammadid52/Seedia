@@ -10,7 +10,7 @@ const EmptyState = ({
   onBtnClick,
   showEditOption,
   animation,
-  hideBorders = false,
+  hideBorders = true,
 }: {
   title?: string
   subtitle?: string

@@ -59,6 +59,7 @@ const App = () => {
   }
 
   const pathname = window.location.pathname
+
   const atJobsExplore = pathname.includes('jobs')
 
   return (

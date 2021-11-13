@@ -29,11 +29,17 @@ const ExperienceTwoModal = ({
 
   useEffect(() => {
     if (!isEmpty(userData)) {
-      setLocalFields({ experiences: [...experiences] })
+      setLocalFields({
+        experiences: [...experiences].map((exp) => ({
+          ...exp,
+          joinDate: new Date(exp.joinDate),
+          leaveDate: new Date(exp.leaveDate),
+        })),
+      })
     }
   }, [])
   const addNewExperience = () => {
-    const newExperience: IExperience = {
+    const newExperience: any = {
       id: nanoid(6),
       jobTitle: '',
       companyName: '',

@@ -3,6 +3,7 @@ import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
 import { useUserContext } from 'context/UserContext'
 import { getAccessToken, network } from 'helpers'
+import useAccountType from 'hooks/useAccountType'
 import { IParent } from 'interfaces/UniversalInterface'
 import { noop } from 'lodash'
 import React, { useState } from 'react'
@@ -77,10 +78,11 @@ const Cover = ({
 
   const profileImageSelectorRef = React.useRef()
 
-  const isBusiness = userData?.other?.accountType === 'business'
+  const isBusiness = useAccountType(userData)
+  const { location } = userData
 
   return (
-    <div className="">
+    <div className="exportContent">
       {authUser && (
         <Modal
           header={`Profile Photo`}
@@ -144,7 +146,8 @@ const Cover = ({
                     <div className="dark:text-white text-gray-900 text-base font-medium border-b border-gray-200 dark:border-gray-600 pb-4 ">
                       {userData?.business?.name}{' '}
                       <span className="ml-2 dark:text-gray-400 text-gray-500 text-xs">
-                        - {userData?.location?.address}
+                        - {location?.address}, {location?.city},{' '}
+                        {location?.state} {location?.country}
                       </span>
                     </div>
                   ) : (

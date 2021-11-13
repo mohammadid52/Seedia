@@ -171,6 +171,13 @@ export const languageKnownLevel = [
   { name: 'Fluent', id: '3' },
 ]
 
+export const skillsStrength = [
+  { name: 'Poor', id: '1' },
+  { name: 'Avergage', id: '2' },
+  { name: 'Good', id: '3' },
+  { name: 'Excellent', id: '4' },
+]
+
 export const productsArray = [
   // { label: 'All', value: 'all' },
   { label: 'All', value: 'all' },

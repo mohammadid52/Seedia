@@ -79,7 +79,7 @@ const Modal = ({
                   </button>
                 </div>
               )}
-              <div>
+              <div className="modal-body">
                 {header && (
                   <div className="modal-header divider dark:divider ">
                     <h3 className="dark:text-white text-gray-900 text-2xl font-semibold">
@@ -87,7 +87,7 @@ const Modal = ({
                     </h3>
                   </div>
                 )}
-                {children}
+                <div className="">{children}</div>
                 {fixedBottom && (
                   <div className="absolute dark:border-gray-800 border-t bg-white dark:bg-gray-900 bottom-0 mx-6 inset-x-0">
                     {fixedBottom}

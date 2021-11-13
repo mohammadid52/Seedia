@@ -76,6 +76,19 @@ export const eclipse = (str = '', len = 50) => {
 export const join = (arr, key, joinPattern = ',') =>
   arr.map((d) => d[key]).join(joinPattern)
 
+export const toDataURL = (url, callback) => {
+  var xhr = new XMLHttpRequest()
+  xhr.onload = function () {
+    var reader = new FileReader()
+    reader.onloadend = function () {
+      callback(reader.result)
+    }
+    reader.readAsDataURL(xhr.response)
+  }
+  xhr.open('GET', url)
+  xhr.responseType = 'blob'
+  xhr.send()
+}
 export const doResize = (e) => {
   const textbox = e.target
   var maxrows = 50
@@ -91,6 +104,27 @@ export const doResize = (e) => {
 
   if (rows > maxrows) textbox.rows = maxrows
   else textbox.rows = rows
+}
+
+export const plural = (str = '', len = 0) => {
+  if (len > 1) {
+    return `${str}s`
+  } else {
+    return str
+  }
+}
+
+export const sumOfMonths = (diff = 0) => {
+  if (diff <= 12) {
+    return `${diff} ${plural('month', diff)}`
+  } else if (diff % 12 === 0) {
+    return `${diff / 12} ${plural('year', diff)}`
+  } else {
+    return `${12 - (diff % 12)} ${plural('year', diff)} ${diff % 12} ${plural(
+      'month',
+      diff
+    )}`
+  }
 }
 
 export const removedWords = [

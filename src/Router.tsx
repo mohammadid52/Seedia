@@ -51,6 +51,7 @@ const ProjectsListView = lazy(
   () => import('pages/project/ListView/ProjectListView') // page
 )
 const SearchedEmployees = lazy(() => import('pages/request/SearchedEmployees')) // page
+const Resume = lazy(() => import('pages/Resume')) // page
 
 const Router = ({
   navProps,
@@ -76,6 +77,14 @@ const Router = ({
                 path="/explore-products/:profileUrl"
               >
                 <BrowseProducts userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/:profileUrl/resume"
+              >
+                <Resume userData={userData} />
               </PrivateRoute>
 
               <Route path="/product/:productId">

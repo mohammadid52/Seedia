@@ -42,6 +42,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export const useUserContext: any = () => useContext(UserContext)
+export const useUserContext = () => useContext(UserContext)
 
 export default UserContextProvider

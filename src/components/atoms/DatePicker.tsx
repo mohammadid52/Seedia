@@ -8,6 +8,11 @@ const DatePicker = ({
   required,
   optional,
   placeholder,
+  className = '',
+  minDate,
+  maxDate,
+  showMonthYearPicker = true,
+  additionanProps,
 }: {
   date: any
   setDate: any
@@ -15,7 +20,12 @@ const DatePicker = ({
   label?: string
   placeholder?: string
   required?: boolean
+  showMonthYearPicker?: boolean
   optional?: boolean
+  className?: string
+  maxDate?: any
+  minDate?: any
+  additionanProps?: any
 }) => {
   return (
     <div>
@@ -38,17 +48,20 @@ const DatePicker = ({
         )}
       </div>
       <DatepickerModule
+        {...additionanProps}
         required
         selectsStart
-        dateFormat="MM/yyyy"
-        showMonthYearPicker
+        dateFormat="dd/MM/yyyy"
+        showMonthYearPicker={showMonthYearPicker}
         selected={date}
         onChange={(date) => setDate(date)}
         // minDate={new Date()}
         showPopperArrow={false}
         placeholderText={placeholder}
+        minDate={minDate}
+        maxDate={maxDate}
         calendarClassName="rasta-stripes"
-        className="dark:bg-gray-900 rounded-md border dark:border-gray-700 dark:placeholder-gray-700 dark:text-white"
+        className={`dark:bg-gray-900 rounded-md border dark:border-gray-700 dark:placeholder-gray-700 dark:text-white ${className}`}
         popperModifiers={{
           // @ts-ignore
           offset: {

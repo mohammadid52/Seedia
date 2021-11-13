@@ -1,16 +1,27 @@
-import { IModalProps, ISkill } from 'interfaces/UniversalInterface'
-import React, { useEffect, useState } from 'react'
-import { nanoid } from 'nanoid'
-import { getAccessToken, network } from 'helpers'
-import { wait } from 'utils/wait'
-import { isEmpty, map, remove } from 'lodash'
 import Button from 'components/atoms/Button'
 import NormalFormInput from 'components/atoms/NormalFormInput'
+import Selector from 'components/atoms/Selector'
+import { network } from 'helpers'
+import {
+  IModalProps,
+  ISkill,
+  SkillStrength,
+} from 'interfaces/UniversalInterface'
+import { isEmpty, map, remove } from 'lodash'
+import { nanoid } from 'nanoid'
+import React, { useEffect, useState } from 'react'
 import { BiTrashAlt } from 'react-icons/bi'
+import { wait } from 'utils/wait'
+import { skillsStrength } from 'values/values'
 
-const initialState: { skills: ISkill[]; skillText: string } = {
+const initialState: {
+  skills: ISkill[]
+  skillText: string
+  skillStrength: SkillStrength
+} = {
   skills: [],
   skillText: '',
+  skillStrength: 'Average',
 }
 
 const SkillsModal = ({
@@ -27,7 +38,11 @@ const SkillsModal = ({
 
   useEffect(() => {
     if (!isEmpty(userData)) {
-      setLocalFields({ skillText: '', skills: [...skills] })
+      setLocalFields({
+        skillText: '',
+        skills: [...skills],
+        skillStrength: 'Average',
+      })
     }
   }, [])
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,19 +50,25 @@ const SkillsModal = ({
     const { name, value } = e.target
     setLocalFields({ ...localFields, [name]: value })
   }
+  const onStrengthChange = (item: any) => {
+    setUnsavedChanges(true)
+
+    setLocalFields({ ...localFields, skillStrength: item.name })
+  }
 
   const onSkillAdd = () => {
     const skill = {
       id: nanoid(6),
       name: localFields.skillText,
+      strength: localFields.skillStrength,
     }
     setLocalFields({
       ...localFields,
       skills: [...localFields.skills, skill],
       skillText: '',
+      skillStrength: 'Average',
     })
   }
-  const token = getAccessToken()
 
   const [saving, setSaving] = useState(false)
   const onSave = async () => {
@@ -70,15 +91,9 @@ const SkillsModal = ({
 
       setValues({ ...updatedData })
 
-      await network.post(
-        '/user/update',
-        {
-          ...updatedData,
-        },
-        {
-          headers: { Authorization: token },
-        }
-      )
+      await network.post('/user/update', {
+        ...updatedData,
+      })
 
       // add data to local state
       onCancel()
@@ -101,18 +116,21 @@ const SkillsModal = ({
   }
 
   return (
-    <div>
+    <div className="min-h-156 relative min-w-160 overflow-x-hidden">
       <div className="my-2">
-        <div className="overflow-y-auto max-h-64 custom-scroll-mini darker">
+        <div className="overflow-y-auto max-h-112  custom-scroll-mini darker">
           {localFields.skills && localFields.skills.length > 0 && (
-            <ul className="gap-y-6 list-disc py-4 ">
+            <ul className="gap-6 grid grid-cols-3 list-disc py-4 ">
               {map(localFields.skills, (skill, idx: number) => {
                 return (
                   <li
-                    className="list-disc text-gray-900 on-hover-container p-4  relative dark:text-white flex items-center  cursor-pointer text-left"
+                    className="border border-gray-200 rounded-lg dark:border-gray-700 text-gray-900 on-hover-container p-4  relative dark:text-white flex items-center  cursor-pointer text-left"
                     key={skill.name + idx}
                   >
-                    {skill.name}
+                    {skill.name}{' '}
+                    <span className="text-sm text-gray-400 dark:text-gray-500 ml-2">
+                      ({skill?.strength || 'Average'})
+                    </span>
                     <span
                       onClick={() => onSkillRemove(skill.id)}
                       className="absolute on-hover-item pr-4 right-0"
@@ -126,31 +144,40 @@ const SkillsModal = ({
           )}
         </div>
       </div>
-      <div className="divider dark:divider mx-4 ">
-        <h3 className="text-gray-900 dark:text-gray-500 mb-2">New Skill:</h3>
-        <div className="flex items-center space-x-2">
-          <NormalFormInput
-            name="skillText"
-            placeholder="Enter new skill"
-            value={localFields.skillText}
-            onChange={onChange}
-          />
+      <div className="absolute bottom-0 right-0 left-0">
+        <div className="divider dark:divider mx-4 ">
+          <h3 className="text-gray-900 dark:text-gray-500 mb-2">New Skill:</h3>
+          <div className="flex items-center space-x-2">
+            <NormalFormInput
+              name="skillText"
+              placeholder="Enter new skill"
+              value={localFields.skillText}
+              onChange={onChange}
+            />
+            <Selector
+              list={skillsStrength}
+              placeholder="Select strength"
+              onSelect={onStrengthChange}
+              selectedItem={localFields.skillStrength}
+            />
+
+            <Button
+              onClick={onSkillAdd}
+              disabled={localFields.skillText.length <= 3}
+              gradient
+              label="Add"
+            />
+          </div>
+        </div>
+        <div className="mt-5 sm:mt-4 flex justify-end  items-center">
           <Button
-            onClick={onSkillAdd}
-            disabled={localFields.skillText.length <= 3}
             gradient
-            label="Add"
+            loading={saving}
+            disabled={saving}
+            onClick={onSave}
+            label="Save"
           />
         </div>
-      </div>
-      <div className="mt-5 sm:mt-4 flex justify-end  items-center">
-        <Button
-          gradient
-          loading={saving}
-          disabled={saving}
-          onClick={onSave}
-          label="Save"
-        />
       </div>
     </div>
   )

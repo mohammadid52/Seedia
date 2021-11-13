@@ -26,9 +26,10 @@ export const links = {
   LOCATION_S: dynamicRoute('student', 'location'),
   BUSINESS_STEP_1: dynamicRoute('business', 'stepOne'),
   BUSINESS_STEP_2: dynamicRoute('business', 'stepTwo'),
-  BASE_API_URL: process.env.REACT_APP_BASE_URL,
-  // BASE_API_URL: 'http://localhost:3005',
+  // BASE_API_URL: process.env.REACT_APP_BASE_URL,
+  BASE_API_URL: 'http://localhost:3005',
 
+  seeResume: (profileUrl: string) => `/${profileUrl}/resume`,
   // ~~~~~~~~~~~~All product related stuff here~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   getProductUrl: (productId: string) => `/product/${productId}`,
@@ -76,4 +77,3 @@ export const links = {
 
   toAction: (action: string) => `/users?action=${action}`,
 }
-// Test 1.2.3.4.5.6.7

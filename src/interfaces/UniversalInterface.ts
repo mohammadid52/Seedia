@@ -79,6 +79,12 @@ export interface IOther {
   createdOn: string | Date
 }
 // key-user
+
+export interface ISocialMedia {
+  id: string
+  name: string
+  url: string
+}
 export interface IParent {
   // user?: IUser
   _id?: string
@@ -91,11 +97,13 @@ export interface IParent {
   location?: ILocation
   background?: IBackground
   other?: IOther
+  socialMedia: ISocialMedia[]
   coverPicture?: string
   profilePicture?: string
   email?: string
   piv?: string[]
   mobileNumber: string
+  birthDate?: Date
   pwvp?: string[]
   savedJobs?: string[]
   following?: string[]
@@ -195,13 +203,13 @@ export interface IShortProfile {
 export interface IExperience {
   jobTitle: string
   companyName: string
-  startedAt?: string
+  startedAt?: Date
   companyAddress?: string
-  endedAt?: string
+  endedAt?: Date
   description: string
-  leaveDate?: string
+  leaveDate?: Date
   id: string
-  joinDate: string
+  joinDate: Date
 }
 
 export interface IBackground {
@@ -227,9 +235,12 @@ export interface IEducation {
   name: string
 }
 
+export type SkillStrength = 'Poor' | 'Average' | 'Good' | 'Excellent'
+
 export interface ISkill {
   id: string
   name: string
+  strength?: SkillStrength
 }
 
 export interface IAward {

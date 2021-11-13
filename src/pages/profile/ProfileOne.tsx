@@ -1,3 +1,4 @@
+import AdditionalInfo from 'components/AdditionalInfo'
 import EmptyState from 'components/atoms/EmptyState'
 import Meta from 'components/atoms/Meta/Meta'
 import BottomCard from 'components/BottomCard'
@@ -90,6 +91,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
                   firstCol={
                     <div className="space-y-8">
                       <About {...commonProps} />
+                      <AdditionalInfo secondary {...commonProps} />
                       {/* {iAmOwnerOfThisProfile && ( */}
                       <AdditionalFeatures
                         refetchProfile={refetchProfile}

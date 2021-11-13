@@ -39,6 +39,7 @@ import * as constants from 'state/Redux/constants'
 import Following from './Following'
 import BottomCard from 'components/BottomCard'
 import { isEmpty } from 'lodash'
+import AdditionalInfo from 'components/AdditionalInfo'
 
 const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const [showModal, setShowModal] = useState({ show: false, type: '' })
@@ -190,6 +191,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
               business={isBusiness}
               firstCol={
                 <div className="space-y-12">
+                  <AdditionalInfo secondary {...commonProps} />
                   <Card
                     className={` transition-transform duration-200`}
                     secondary
@@ -200,6 +202,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                       </div>
                     }
                   />
+
                   {/* {iAmOwnerOfThisProfile && ( */}
                   <AdditionalFeatures
                     iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
@@ -220,13 +223,13 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                 <div className="flex flex-col space-y-12">
                   <Cover authUser={iAmOwnerOfThisProfile} userData={user} />
 
-                  {!isBusiness && <Experiences {...commonBlockProps} />}
-                  {!isBusiness && (
-                    <div className="grid-cols-1 grid space-x-6 sm:grid-cols-2 px-0 ">
-                      <Skills {...commonBlockProps} />
-                      <Awards {...commonBlockProps} />
-                    </div>
-                  )}
+                  <Experiences {...commonBlockProps} />
+
+                  <div className="grid-cols-1 grid space-x-6 sm:grid-cols-2 px-0 ">
+                    <Skills {...commonBlockProps} />
+                    <Awards {...commonBlockProps} />
+                  </div>
+
                   {!isBusiness && <Education {...commonBlockProps} />}
                   <Activity
                     userData={commonBlockProps.userData}
@@ -239,11 +242,11 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                     recommendation={commonProps?.userData?.recommendation}
                   />
 
-                  {!isBusiness && (
-                    <div className="grid-cols-1 grid  sm:grid-cols-2 ">
-                      <Languages {...commonBlockProps} />
-                    </div>
-                  )}
+                  {/* {!isBusiness && ( */}
+                  <div className="grid-cols-1 grid  sm:grid-cols-2 ">
+                    <Languages {...commonBlockProps} />
+                  </div>
+                  {/* )} */}
                   {iAmOwnerOfThisProfile && (
                     <Following
                       list={userData.following}
@@ -254,6 +257,16 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
               }
               thirdCol={
                 <div className="">
+                  {iAmOwnerOfThisProfile && viewMode === 'public' && (
+                    <Button
+                      gradient
+                      fullWidth
+                      label="Edit profile"
+                      target=""
+                      className="mb-6"
+                      link={links.getProfile(userData, true)}
+                    />
+                  )}
                   {showAllButtons && (
                     <div className="mb-12">
                       <PublicProfileCard secondary userData={userData} />
@@ -293,7 +306,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
           )}
           <CustomFooter />
 
-          {showUnsaveModal && (
+          {/* {showUnsaveModal && (
             <Modal
               hideCloseBtn
               header="Discard changes"
@@ -327,7 +340,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                 </div>
               </>
             </Modal>
-          )}
+          )} */}
         </div>
       ) : (
         <div className="flex items-center  overflow-hidden  max-h-screen min-h-96   justify-center">

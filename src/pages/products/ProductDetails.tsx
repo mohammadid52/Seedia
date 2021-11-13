@@ -209,9 +209,8 @@ const ProductDetails = ({ userData }: { userData: IParent }) => {
   const params: any = useParams()
   const productId = params.productId
 
-  const { isLoading, error, data, isFetched, isError, refetch } = useQuery(
-    'product',
-    () => fetchProductDetails(productId)
+  const { isLoading, data, isFetched } = useQuery('product', () =>
+    fetchProductDetails(productId)
   )
 
   const product: IProduct = isFetched && !isLoading ? data.data.data : INIT

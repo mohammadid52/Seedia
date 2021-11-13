@@ -279,7 +279,7 @@ const Background = ({
   }
 
   const addNewExperience = () => {
-    const newExperience: IExperience = {
+    const newExperience: any = {
       id: nanoid(6),
       jobTitle: '',
       companyName: '',

@@ -51,6 +51,7 @@ const Skills = ({ setShowModal, userData, showEditOption }: IBlockProps) => {
             ) : (
               <EmptyState
                 title="No skills"
+                hideBorders
                 subtitle="Add new skills to enhance your profile."
                 btnText="Add skills"
                 showEditOption={showEditOption}

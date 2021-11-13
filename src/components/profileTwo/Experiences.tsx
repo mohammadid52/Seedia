@@ -7,6 +7,7 @@ import EmptyState from 'components/atoms/EmptyState'
 import { PlusIcon } from '@heroicons/react/solid'
 import { IBlockProps } from 'interfaces/UniversalInterface'
 import { PROFILE_TWO_EXPERIENCE } from 'state/Redux/constants'
+import { sumOfMonths } from 'utils/functions'
 
 const Experiences = ({
   userData,
@@ -47,7 +48,7 @@ const Experiences = ({
             <nav aria-label="Progress">
               <ol className="overflow-hidden ">
                 {experiences?.length > 0 ? (
-                  experiences?.map((step: any, stepIdx: number) => (
+                  experiences?.map((step, stepIdx: number) => (
                     <li
                       key={stepIdx}
                       className={classNames(
@@ -94,11 +95,19 @@ const Experiences = ({
 
                           <div className="space-y-1">
                             <span className="block text-xs text-right italic font-medium  text-gray-400">
-                              1 year 5 months
+                              {sumOfMonths(
+                                Number(
+                                  moment(step.leaveDate).diff(
+                                    moment(step.joinDate),
+                                    'months',
+                                    true
+                                  )
+                                )
+                              )}{' '}
                             </span>
                             <span className="block text-xs italic font-medium  text-gray-500">
-                              {moment(step.from).format('MMMM YYYY')} -{' '}
-                              {moment(step.to).format('MMMM YYYY')}
+                              {moment(step.joinDate).format('MMMM YYYY')} -{' '}
+                              {moment(step.leaveDate).format('MMMM YYYY')}
                             </span>
                           </div>
                         </div>
