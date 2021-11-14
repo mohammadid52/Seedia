@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import Meta from 'components/atoms/Meta/Meta'
 import { useUserContext } from 'context/UserContext'
 import 'css/aos.css'
@@ -5,6 +6,7 @@ import 'css/bootstrap.min.css'
 import 'css/font-awesome/css/all.min.css'
 import 'css/main.css'
 import useAccountType from 'hooks/useAccountType'
+import useScript from 'hooks/useScript'
 // @ts-ignore
 import html2pdf from 'html2pdf.js'
 import { IParent, SkillStrength } from 'interfaces/UniversalInterface'
@@ -97,22 +99,27 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
   }
 
   const [imageUrl, setImageUrl] = useState('')
-  // const fetchBlob = async () => {
-  //   try {
-  //     await fetch(userData.profilePicture, { mode: 'no-cors' })
-  //       .then((res) => res.blob())
-  //       .then((blob) => {
-  //         let objectUrl = URL.createObjectURL(blob)
-  //         setImageUrl(objectUrl)
-  //       })
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
 
-  // useEffect(() => {
-  //   fetchBlob()
-  // }, [userData.profilePicture])
+  const getBase64FromUrl = async (url: RequestInfo): Promise<unknown> => {
+    const data = await fetch(url)
+    const blob = await data.blob()
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(blob)
+      reader.onloadend = () => {
+        const base64data = reader.result
+        resolve(base64data)
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (!imageUrl && userData.profilePicture) {
+      getBase64FromUrl(userData.profilePicture)
+        .then(setImageUrl)
+        .catch(console.error)
+    }
+  }, [userData.profilePicture, imageUrl])
 
   return (
     <>
@@ -127,14 +134,20 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
       />
 
       <div>
-        <div className="page-content pt-4">
-          <div className="container">
+        <div className="page-content  pt-4">
+          <div className="container ">
             <div id="exportToPdf" className="cover shadow-lg bg-white">
               <div className="cover-bg p-3 p-lg-4 text-white">
                 <div className="row">
                   <div className="col-lg-4 col-md-5">
                     <div className="avatar hover-effect bg-white shadow-sm p-1">
-                      <img src={imageUrl} alt="" width="200" height="200" />
+                      <img
+                        src={imageUrl}
+                        id="imageid"
+                        alt=""
+                        width="200"
+                        height="200"
+                      />
                     </div>
                   </div>
                   <div className="col-lg-8 col-md-7 text-center text-md-start">
@@ -165,14 +178,7 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
                       >
                         Download CV
                       </div>
-                      <a
-                        className="btn btn-light text-dark shadow-sm mt-1 me-1"
-                        href="right-resume.docx"
-                        // download={`Resume ${userData.fullName}`}
-                        download
-                      >
-                        Download CV (Word)
-                      </a>
+
                       <a
                         className="btn btn-success shadow-sm mt-1"
                         href="#contact"
