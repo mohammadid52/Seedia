@@ -216,10 +216,7 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
   const history = useHistory()
   useEffect(() => {
     const isValid = checkValidity()
-    console.log(
-      '🚀 ~ file: Resume.tsx ~ line 188 ~ useEffect ~ isValid',
-      isValid
-    )
+
     if (!isValid) {
       setShowResumeValidityModal(true)
       // return history.push(links.getProfile(userData))
@@ -237,7 +234,7 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
         imageUrl={user?.profileUrl}
         pageTitle={`Resume - ${user?.fullName} | 13RMS `}
         title={user?.fullName}
-        description={user?.background?.summary}
+        // description={user?.background?.summary}
         // keywords={product?.tags?.join(', ')}
         userName={user?.profileUrl}
       />
