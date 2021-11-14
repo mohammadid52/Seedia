@@ -21,7 +21,10 @@ const ListPosts = ({ userData }: { userData: IParent }) => {
     },
     {
       onSuccess: (data) => {
-        setPosts([...posts, ...data.data.data.posts])
+        const _posts = data?.data?.data?.posts
+        if (_posts && _posts.length > 0) {
+          setPosts([...posts, ..._posts])
+        }
       },
     }
   )
