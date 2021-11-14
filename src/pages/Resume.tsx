@@ -206,8 +206,11 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
         setError('')
       }
     }
-    setIsSuccess(false)
-    wait(3000).then(() => setIsChecking(false))
+
+    wait(3000).then(() => {
+      setIsChecking(false)
+      setIsSuccess(true)
+    })
 
     return isValid
   }
