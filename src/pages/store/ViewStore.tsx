@@ -28,7 +28,7 @@ const ListProducts = ({ userId, onLoad }: { userId: string; onLoad?: any }) => {
   )
   const products: IProduct[] = isFetched && !isLoading && data.data.data
 
-  if (isSuccess && products.length > 0) {
+  if (isSuccess && products && products?.length > 0) {
     if (onLoad) {
       onLoad(products)
     }

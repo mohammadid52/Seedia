@@ -60,8 +60,7 @@ const App = () => {
 
   const pathname = window.location.pathname
 
-  const atJobsExplore = pathname.includes('jobs')
-  const atResume = pathname.includes('resume')
+  const removeFromThis = ['jobs', 'store', 'resume']
 
   return (
     <>
@@ -71,7 +70,7 @@ const App = () => {
         template={template}
         navProps={navProps}
       />
-      {!isBusiness && isUser && !atJobsExplore && !atResume && (
+      {!isBusiness && isUser && removeFromThis.includes(pathname) && (
         <div className="fixed bottom-10 right-10 dark:text-white">
           <Button
             link={links.exploreJobs()}

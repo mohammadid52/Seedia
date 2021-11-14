@@ -30,11 +30,11 @@ const AddProduct = ({
 }) => {
   const { isBusiness } = useAccountType(userData)
 
-  useEffect(() => {
-    if (!isBusiness) {
-      return history.push(links.FEED)
-    }
-  }, [isBusiness])
+  // useEffect(() => {
+  //   if (!isBusiness) {
+  //     return history.push(links.FEED)
+  //   }
+  // }, [isBusiness])
 
   const minMsg = (field: string, number: number) =>
     `${field} must be atleast ${number} characters`

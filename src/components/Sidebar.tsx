@@ -1,6 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Disclosure } from '@headlessui/react'
 import { HomeIcon, ColorSwatchIcon } from '@heroicons/react/outline'
+import { MenuAlt2Icon } from '@heroicons/react/solid'
 import { useUserContext } from 'context/UserContext'
 import { classNames } from 'utils/classNames'
 import { adjustColors } from 'values/values'
@@ -17,17 +18,26 @@ export default function Sidebar() {
       children: adjustColors,
     },
   ]
-  const { showSidebar, darkMode, setDarkMode } = useUserContext()
+  const { showSidebar, darkMode, setDarkMode, setShowSidebar } =
+    useUserContext()
   return (
     <div
       style={{ zIndex: 99999 }}
       className={`flex h-screen  fixed transition-all  duration-200 ${
         showSidebar ? 'max-w-64 w-full border-r' : 'max-w-0'
-      } flex-col flex-grow  dark:border-gray-600 border-gray-200 pt-5 pb-4 bg-white dark:bg-gray-700 overflow-y-auto`}
+      } flex-col flex-grow  dark:border-gray-800 border-gray-200 pt-5 pb-4 bg-white dark:bg-gray-800 overflow-y-auto`}
     >
       <div className="mt-5 px-4 flex-grow flex flex-col">
+        <div
+          title="sidebar"
+          className="flex absolute right-0 mr-6 items-center h-9 w-9 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 rounded p-2 justify-center"
+          tabIndex={0}
+          onClick={() => setShowSidebar(!showSidebar)}
+        >
+          <MenuAlt2Icon className="h-6 xl:h-4 xl:w-4 w-6 dark:text-white text-gray-900" />
+        </div>
         <nav
-          className="flex-1 px-2 min-w-full whitespace-nowrap space-y-4 bg-white dark:bg-gray-700"
+          className="flex-1 px-2 mt-12 min-w-full whitespace-nowrap space-y-4 bg-white dark:bg-gray-800"
           aria-label="Sidebar"
         >
           {navigation.map((item) =>
@@ -37,7 +47,7 @@ export default function Sidebar() {
                   href="/#"
                   className={classNames(
                     item.current
-                      ? 'bg-gray-100 dark:bg-gray-600 dark:text-white text-gray-900'
+                      ? 'bg-gray-100 dark:bg-gray-700 dark:text-white text-gray-900'
                       : 'bg-white dark:bg-gray-600 dark:text-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                     'group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md'
                   )}
@@ -62,7 +72,7 @@ export default function Sidebar() {
                       className={classNames(
                         item.current
                           ? 'bg-gray-100 text-gray-900'
-                          : 'bg-white dark:bg-gray-600 dark:text-white  text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                          : 'bg-white dark:bg-gray-700 dark:text-white  text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                         'group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'
                       )}
                     >

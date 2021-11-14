@@ -9,6 +9,7 @@ import Title from 'components/atoms/Title'
 import Spinner from 'components/Spinner'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
+import { useNotifications } from 'context/NotificationContext'
 import { Form, Formik } from 'formik'
 import { IParent, IProduct, IStore } from 'interfaces/UniversalInterface'
 import { isEmpty } from 'lodash'
@@ -16,7 +17,7 @@ import Product from 'pages/products/Product'
 import BannerImage from 'pages/store/BannerImage'
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
-import { useHistory } from 'react-router-dom'
+import { Redirect, useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 
 const ListProducts = ({ userId, onLoad }: { userId: string; onLoad: any }) => {
@@ -24,9 +25,22 @@ const ListProducts = ({ userId, onLoad }: { userId: string; onLoad: any }) => {
     'list-all-my-products',
     () => fetchAllProducts(userId)
   )
-  const products: IProduct[] = isFetched && !isLoading && data.data.data
+  const products: IProduct[] = isFetched && !isLoading ? data.data.data : []
 
-  if (isSuccess && products.length > 0) {
+  const { setNotification } = useNotifications()
+
+  if (!products || products.length === 0) {
+    setNotification({
+      show: true,
+      // eslint-disable-next-line quotes
+      title: "You don't have enough products for store.",
+      buttonText: 'Add now',
+      buttonUrl: links.addProduct(),
+    })
+    return <Redirect to={links.FEED} />
+  }
+
+  if (isSuccess && products && products?.length > 0) {
     if (onLoad) {
       onLoad(products)
     }
@@ -48,6 +62,8 @@ const ListProducts = ({ userId, onLoad }: { userId: string; onLoad: any }) => {
 }
 
 const OpenStore = ({ userData }: { userData: IParent }) => {
+  const isStoreOpened = !isEmpty(userData?.store)
+
   const upload = useMutation(uploadMediaToServer, {
     onSuccess: (a, b) => {
       // @ts-ignore
@@ -120,6 +136,15 @@ const OpenStore = ({ userData }: { userData: IParent }) => {
   const formRef = useRef()
 
   const [media, setMedia] = useState()
+  const { setNotification } = useNotifications()
+
+  if (isStoreOpened) {
+    setNotification({
+      show: true,
+      title: 'Store is already created.',
+    })
+    return <Redirect to={links.FEED} />
+  }
 
   return (
     <NarrowLayout customMaxWidth="max-w-7xl" userData={userData}>

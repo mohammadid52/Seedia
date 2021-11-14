@@ -108,21 +108,29 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   const history = useHistory()
 
   const { isBusiness } = useAccountType(userData)
+  const isStoreOpened = !isEmpty(userData?.store)
 
   const businessApps = [
     {
       icon: FaMoneyBillAlt,
       name: 'Sell products',
+      link: _links.addProduct(),
     },
     isBusiness && {
       icon: MdWork,
       link: _links.placeRequest(),
       name: 'Place Request For Work',
     },
-    {
+    !isStoreOpened && {
       // !====== Change Icon ======!
       icon: AiOutlineSearch,
+      link: _links.openStore(),
       name: 'Open Store',
+    },
+    isStoreOpened && {
+      icon: AiOutlineSearch,
+      link: _links.viewStore(userData?.profileUrl),
+      name: 'View Store',
     },
     {
       icon: BsFilePost,
@@ -230,7 +238,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   )
 
   const navClass =
-    'flex flex-col items-center font-medium text-base dark:text-gray-400 text-gray-500 link-hover'
+    'flex flex-col items-center  font-medium text-base dark:text-gray-400 text-gray-500 link-hover'
 
   const settings = [
     {
@@ -247,7 +255,6 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   ]
 
   const isProductsPosted = userData?.business?.products?.length > 0
-  const isStoreOpened = !isEmpty(userData?.store)
 
   const sellProducts = [
     isProductsPosted && {
@@ -270,13 +277,16 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
       subtitle: 'View store as other. Add product to store',
     },
     {
-      name: 'Sell more products',
+      name: `Sell ${isProductsPosted ? 'more' : ''} products`,
       subtitle: '',
       href: _links.addProduct(),
     },
   ].filter(Boolean)
 
   const { logo } = useTheme()
+
+  const labelClass = 'hidden text-xs ml-2 2xl:block mt-1'
+  const iconLabelClass = 'hidden 2xl:block mr-2 mt-1'
 
   return (
     <Popover
@@ -365,14 +375,14 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                   </div>
                 </div>
 
-                <Popover.Group as="nav" className="hidden  md:flex space-x-10">
+                <Popover.Group as="nav" className="hidden  md:flex space-x-7">
                   <NavLink
                     title={'Home'}
                     to={'/dashboard'}
                     className={navClass}
                   >
                     <AiOutlineHome />
-                    <span className="hidden text-xs ml-2 xl:block">Home</span>
+                    <span className={labelClass}>Home</span>
                   </NavLink>
 
                   <Popover className="relative">
@@ -388,11 +398,11 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                           <span className={navClass}>
                             <BiUserCircle />
                             <span className="hidden lg:flex text-xs items-center">
-                              My 13RMS{' '}
+                              <span className={iconLabelClass}>My 13RMS</span>
                               <ChevronDownIcon
                                 className={classNames(
                                   open ? 'text-gray-600' : 'text-gray-400',
-                                  'h-4 w-4 group-hover:text-gray-500 ml-2'
+                                  'h-4 w-4 group-hover:text-gray-500'
                                 )}
                                 aria-hidden="true"
                               />
@@ -516,9 +526,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
 
                   <NavLink title={'My Network'} to={'/#'} className={navClass}>
                     <BsPeople />
-                    <span className="hidden text-xs ml-2 xl:block">
-                      My Network
-                    </span>
+                    <span className={labelClass}>My Network</span>
                   </NavLink>
 
                   <NavLink
@@ -527,7 +535,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                     className={navClass}
                   >
                     <IoIosBriefcase />
-                    <span className="hidden text-xs ml-2 xl:block">Jobs</span>
+                    <span className={labelClass}>Jobs</span>
                   </NavLink>
 
                   <Popover className="relative">
@@ -543,11 +551,13 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                           <span className={`${navClass}`}>
                             <GiReceiveMoney />
                             <span className="hidden lg:flex text-xs items-center">
-                              Go Shopping{' '}
+                              <span className={iconLabelClass}>
+                                Go Shopping
+                              </span>
                               <ChevronDownIcon
                                 className={classNames(
                                   open ? 'text-gray-600' : 'text-gray-400',
-                                  'h-4 w-4 group-hover:text-gray-500 ml-2'
+                                  'h-4 w-4 group-hover:text-gray-500'
                                 )}
                                 aria-hidden="true"
                               />
@@ -649,11 +659,11 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                           <span className={`${navClass}`}>
                             <FaMoneyBillWave />
                             <span className="hidden lg:flex text-xs items-center">
-                              Sell{' '}
+                              <span className={iconLabelClass}>Sell</span>
                               <ChevronDownIcon
                                 className={classNames(
                                   open ? 'text-gray-600' : 'text-gray-400',
-                                  'h-4 w-4 group-hover:text-gray-500 ml-2'
+                                  'h-4 w-4  group-hover:text-gray-500'
                                 )}
                                 aria-hidden="true"
                               />
@@ -876,19 +886,21 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                   </Popover>
                   <NavLink title={'Cart'} to={'/cart'} className={navClass}>
                     <AiOutlineShoppingCart />
-                    <span className="hidden text-xs ml-2 xl:block">Cart</span>
+                    <span className={labelClass}>Cart</span>
                   </NavLink>
                 </Popover.Group>
               </div>
 
-              <Button
-                link={_links.BROWSE_PRODUCTS(userData?.profileUrl)}
-                className="mx-4 "
-                target=""
-                Icon={BsBagFill}
-                label="Explore Products"
-                gradient
-              />
+              {/* <div className=" hidden">
+                <Button
+                  link={_links.BROWSE_PRODUCTS(userData?.profileUrl)}
+                  className="mx-4 "
+                  target=""
+                  Icon={BsBagFill}
+                  label="Explore Products"
+                  gradient
+                />
+              </div> */}
             </div>
           </div>
         </>
