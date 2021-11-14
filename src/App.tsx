@@ -61,6 +61,7 @@ const App = () => {
   const pathname = window.location.pathname
 
   const atJobsExplore = pathname.includes('jobs')
+  const atResume = pathname.includes('resume')
 
   return (
     <>
@@ -70,7 +71,7 @@ const App = () => {
         template={template}
         navProps={navProps}
       />
-      {!isBusiness && isUser && !atJobsExplore && (
+      {!isBusiness && isUser && !atJobsExplore && !atResume && (
         <div className="fixed bottom-10 right-10 dark:text-white">
           <Button
             link={links.exploreJobs()}

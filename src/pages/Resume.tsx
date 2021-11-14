@@ -138,13 +138,13 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
     })
   }
 
-  useEffect(() => {
-    if (!imageUrl && user.profilePicture) {
-      getBase64FromUrl(user.profilePicture)
-        .then(setImageUrl)
-        .catch(console.error)
-    }
-  }, [user.profilePicture, imageUrl])
+  // useEffect(() => {
+  //   if (!imageUrl && user.profilePicture) {
+  //     getBase64FromUrl(user.profilePicture)
+  //       .then(setImageUrl)
+  //       .catch(console.error)
+  //   }
+  // }, [user.profilePicture, imageUrl])
 
   const [error, setError] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
@@ -284,7 +284,7 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
                     <div className="col-lg-4 col-md-5">
                       <div className="avatar hover-effect bg-white shadow-sm p-1">
                         <img
-                          src={imageUrl}
+                          src={user.profilePicture}
                           id="imageid"
                           alt=""
                           width="200"
