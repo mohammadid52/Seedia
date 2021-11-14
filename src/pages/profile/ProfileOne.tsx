@@ -91,7 +91,11 @@ const Profile = ({ userData }: { userData: IParent }) => {
                   firstCol={
                     <div className="space-y-8">
                       <About {...commonProps} />
-                      <AdditionalInfo secondary {...commonProps} />
+                      <AdditionalInfo
+                        refetch={refetchProfile}
+                        secondary
+                        {...commonProps}
+                      />
                       {/* {iAmOwnerOfThisProfile && ( */}
                       <AdditionalFeatures
                         refetchProfile={refetchProfile}

@@ -34,7 +34,7 @@ const AdditionalInfo = ({
   secondary: boolean
   authUser: boolean
   userData: IParent
-  refetch?: any
+  refetch: any
 }) => {
   const [showModal, setShowModal] = useState(false)
 

@@ -191,7 +191,11 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
               business={isBusiness}
               firstCol={
                 <div className="space-y-12">
-                  <AdditionalInfo secondary {...commonProps} />
+                  <AdditionalInfo
+                    refetch={refetchProfile}
+                    secondary
+                    {...commonProps}
+                  />
                   <Card
                     className={` transition-transform duration-200`}
                     secondary
