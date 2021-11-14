@@ -29,10 +29,12 @@ const AdditionalInfo = ({
   secondary,
   userData,
   authUser,
+  refetch,
 }: {
   secondary: boolean
   authUser: boolean
   userData: IParent
+  refetch?: any
 }) => {
   const [showModal, setShowModal] = useState(false)
 
@@ -125,6 +127,8 @@ const AdditionalInfo = ({
       await network.post('/user/update', {
         ...updatedData,
       })
+
+      refetch()
 
       // add data to local state
       setShowModal(false)

@@ -276,7 +276,11 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                     <ProfileStrength secondary {...commonBlockProps2} />
                   )}
                   <div className="xl:hidden space-y-12 block">
-                    <AdditionalInfo secondary {...commonProps} />
+                    <AdditionalInfo
+                      refetch={refetchProfile}
+                      secondary
+                      {...commonProps}
+                    />
                     <Card
                       className={` transition-transform duration-200`}
                       secondary

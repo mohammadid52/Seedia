@@ -142,7 +142,11 @@ const Profile = ({ userData }: { userData: IParent }) => {
 
                       <div className="xl:hidden space-y-12 block">
                         <About {...commonProps} />
-                        <AdditionalInfo secondary {...commonProps} />
+                        <AdditionalInfo
+                          refetch={refetchProfile}
+                          secondary
+                          {...commonProps}
+                        />
                         {/* {iAmOwnerOfThisProfile && ( */}
                         <AdditionalFeatures
                           refetchProfile={refetchProfile}
