@@ -154,27 +154,51 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
   function checkValidity(): boolean {
     setIsChecking(true)
     let isValid = true
-    if (user) {
-      const { background } = user
-      if (!user?.profileUrl) {
+    if (userData) {
+      const { background } = userData
+      if (!userData?.profileUrl) {
         setError('Please add your profile picture')
         isValid = false
-      } else if (!background?.summary) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!background?.summary) {
         setError('Please add summary')
         isValid = false
-      } else if (!user.birthDate) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!userData.birthDate) {
         setError('Please add birthdate')
         isValid = false
-      } else if (!background?.skills) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!background?.skills) {
         setError('Please add skills')
         isValid = false
-      } else if (!background?.experiences) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!background?.experiences) {
         setError('Please add experiences')
         isValid = false
-      } else if (!isBusiness && !background?.education) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!isBusiness && !background?.education) {
         setError('Please add education')
         isValid = false
-      } else if (!user?.socialMedia) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!userData?.socialMedia) {
         setError('Please add atleast one social media link')
         isValid = false
       } else {
@@ -187,7 +211,6 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
 
     return isValid
   }
-
   const [showResumeValidityModal, setShowResumeValidityModal] = useState(false)
 
   const history = useHistory()
@@ -211,12 +234,12 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
     <>
       <Meta
         pageUrl={window.location.href}
-        imageUrl={user.profileUrl}
-        pageTitle={`Resume - ${user.fullName} | 13RMS `}
-        title={user.fullName}
-        description={user.background.summary}
+        imageUrl={user?.profileUrl}
+        pageTitle={`Resume - ${user?.fullName} | 13RMS `}
+        title={user?.fullName}
+        description={user?.background?.summary}
         // keywords={product?.tags?.join(', ')}
-        userName={user.profileUrl}
+        userName={user?.profileUrl}
       />
 
       <Modal

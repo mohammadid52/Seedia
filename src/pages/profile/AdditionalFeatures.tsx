@@ -73,22 +73,46 @@ const AdditionalFeatures = ({
       if (!userData?.profileUrl) {
         setError('Please add your profile picture')
         isValid = false
-      } else if (!background?.summary) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!background?.summary) {
         setError('Please add summary')
         isValid = false
-      } else if (!userData.birthDate) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!userData.birthDate) {
         setError('Please add birthdate')
         isValid = false
-      } else if (!background?.skills) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!background?.skills) {
         setError('Please add skills')
         isValid = false
-      } else if (!background?.experiences) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!background?.experiences) {
         setError('Please add experiences')
         isValid = false
-      } else if (!isBusiness && !background?.education) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!isBusiness && !background?.education) {
         setError('Please add education')
         isValid = false
-      } else if (!userData?.socialMedia) {
+      } else {
+        isValid = true
+        setError('')
+      }
+      if (!userData?.socialMedia) {
         setError('Please add atleast one social media link')
         isValid = false
       } else {
