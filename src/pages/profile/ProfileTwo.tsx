@@ -127,12 +127,12 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
     }
   }
 
-  const { isBusiness, getType } = useAccountType(userData)
-
   const commonBlockProps2 = {
     authUser: showAllButtons,
     userData: iAmOwnerOfThisProfile ? userData : otherUserData,
   }
+  const { isBusiness, getType } = useAccountType(commonBlockProps2.userData)
+
   const history = useHistory()
 
   const user = commonProps?.userData
@@ -243,7 +243,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                   />
 
                   {/* {!isBusiness && ( */}
-                  <div className="grid-cols-1 grid  sm:grid-cols-2 ">
+                  <div className="grid-cols-1 grid   ">
                     <Languages {...commonBlockProps} />
                   </div>
                   {/* )} */}
@@ -256,7 +256,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                 </div>
               }
               thirdCol={
-                <div className="">
+                <div className="space-y-12">
                   {iAmOwnerOfThisProfile && viewMode === 'public' && (
                     <Button
                       gradient
@@ -268,16 +268,17 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                     />
                   )}
                   {showAllButtons && (
-                    <div className="mb-12">
+                    <div className="">
                       <PublicProfileCard secondary userData={userData} />
                     </div>
                   )}
                   {showAllButtons && (
                     <ProfileStrength secondary {...commonBlockProps2} />
                   )}
-                  <div className="xl:hidden block">
+                  <div className="xl:hidden space-y-12 block">
+                    <AdditionalInfo secondary {...commonProps} />
                     <Card
-                      className={`transition-transform duration-200`}
+                      className={` transition-transform duration-200`}
                       secondary
                       cardTitle="Shortcuts"
                       content={
@@ -286,6 +287,23 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                         </div>
                       }
                     />
+
+                    {/* {iAmOwnerOfThisProfile && ( */}
+                    <AdditionalFeatures
+                      iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                      userData={userData}
+                      otherUserData={otherUserData}
+                      refetchProfile={refetchProfile}
+                      isBusiness={getType(user).isBusiness}
+                    />
+                    {/* )} */}
+                    {iAmOwnerOfThisProfile && (
+                      <DiscoverCard
+                        extraItems={[
+                          { link: links.myItems(), name: 'My items' },
+                        ]}
+                      />
+                    )}
                   </div>
                   {iAmOwnerOfThisProfile && (
                     <PeopleAlsoViewed

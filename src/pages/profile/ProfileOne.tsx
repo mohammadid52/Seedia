@@ -140,6 +140,28 @@ const Profile = ({ userData }: { userData: IParent }) => {
                         <ProfileStrength {...commonProps} />
                       )}
 
+                      <div className="xl:hidden space-y-12 block">
+                        <About {...commonProps} />
+                        <AdditionalInfo secondary {...commonProps} />
+                        {/* {iAmOwnerOfThisProfile && ( */}
+                        <AdditionalFeatures
+                          refetchProfile={refetchProfile}
+                          iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                          userData={userData}
+                          otherUserData={otherUserData}
+                          isBusiness={getType(user).isBusiness}
+                        />
+                        {/* // )} */}
+
+                        {iAmOwnerOfThisProfile && (
+                          <DiscoverCard
+                            extraItems={[
+                              { link: links.myItems(), name: 'My items' },
+                            ]}
+                          />
+                        )}
+                      </div>
+
                       <PeopleAlsoViewed userData={userData} showSingleCard />
                     </div>
                   }

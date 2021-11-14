@@ -55,7 +55,7 @@ const AdditionalInfo = ({
       }
       setLocalFields({
         ...localFields,
-        birthDate: new Date(userData?.birthDate) || '',
+        birthDate: userData?.birthDate ? new Date(userData?.birthDate) : '',
         twitter: getUrl('twitter') || '',
         facebook: getUrl('facebook') || '',
         instagram: getUrl('instagram') || '',

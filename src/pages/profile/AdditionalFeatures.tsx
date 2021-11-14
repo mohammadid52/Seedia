@@ -61,6 +61,9 @@ const AdditionalFeatures = ({
   const [showResumeValidityModal, setShowResumeValidityModal] = useState(false)
 
   const [error, setError] = useState('')
+  const [isSuccess, setIsSuccess] = useState(false)
+
+  const [isChecking, setIsChecking] = useState(false)
 
   function checkValidity(): boolean {
     setIsChecking(true)
@@ -113,10 +116,6 @@ const AdditionalFeatures = ({
   const onAdd = () => {
     setShowResumeValidityModal(false)
   }
-
-  const [isSuccess, setIsSuccess] = useState(false)
-
-  const [isChecking, setIsChecking] = useState(false)
 
   return (
     <>
