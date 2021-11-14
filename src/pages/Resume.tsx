@@ -33,10 +33,10 @@ import { wait } from 'utils/wait'
 
 const RenderHtml = ({ userData }: { userData: IParent }) => {
   const route: any = useRouter()
-  const { userId: userIdFromParam } = route?.match?.params
+  const { profileUrl } = route?.match?.params
 
   const { otherUserData, iAmOwnerOfThisProfile, isFetched, isLoading } =
-    useUser(userIdFromParam, userData)
+    useUser(profileUrl, userData)
 
   const user = iAmOwnerOfThisProfile ? userData : otherUserData
 
