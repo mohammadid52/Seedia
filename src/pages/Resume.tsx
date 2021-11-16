@@ -6,6 +6,7 @@ import EmptyState from 'components/atoms/EmptyState'
 import Meta from 'components/atoms/Meta/Meta'
 import Modal from 'components/atoms/Modal'
 import Loading from 'components/Loading'
+import Sidebar from 'components/Sidebar'
 import { links } from 'constants/Links'
 import { useUserContext } from 'context/UserContext'
 import 'css/aos.css'
@@ -123,20 +124,20 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
     setContactFields({ ...contactFields, [name]: value })
   }
 
-  const [imageUrl, setImageUrl] = useState('')
+  // const [imageUrl, setImageUrl] = useState('')
 
-  const getBase64FromUrl = async (url: RequestInfo): Promise<unknown> => {
-    const data = await fetch(url)
-    const blob = await data.blob()
-    return new Promise((resolve) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(blob)
-      reader.onloadend = () => {
-        const base64data = reader.result
-        resolve(base64data)
-      }
-    })
-  }
+  // const getBase64FromUrl = async (url: RequestInfo): Promise<unknown> => {
+  //   const data = await fetch(url)
+  //   const blob = await data.blob()
+  //   return new Promise((resolve) => {
+  //     const reader = new FileReader()
+  //     reader.readAsDataURL(blob)
+  //     reader.onloadend = () => {
+  //       const base64data = reader.result
+  //       resolve(base64data)
+  //     }
+  //   })
+  // }
 
   // useEffect(() => {
   //   if (!imageUrl && user.profilePicture) {
@@ -241,6 +242,8 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
         // keywords={product?.tags?.join(', ')}
         userName={user?.profileUrl}
       />
+
+      <Sidebar />
 
       <Modal
         open={showResumeValidityModal}

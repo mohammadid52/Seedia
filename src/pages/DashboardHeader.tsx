@@ -4,7 +4,6 @@ import { Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import { MenuAlt2Icon } from '@heroicons/react/solid'
 import { invite } from 'apis/mutations'
-import Button from 'components/atoms/Button'
 import EmptyState from 'components/atoms/EmptyState'
 import Selector from 'components/atoms/Selector'
 import CountryListDropdown from 'components/CountryListDropdown'
@@ -16,7 +15,6 @@ import useTheme from 'hooks/useTheme'
 import { INotification, IParent } from 'interfaces/UniversalInterface'
 import { isEmpty } from 'lodash'
 import find from 'lodash/find'
-import map from 'lodash/map'
 import { Fragment, useState } from 'react'
 import {
   AiOutlineArrowRight,
@@ -27,17 +25,12 @@ import {
   AiOutlineUsergroupDelete,
 } from 'react-icons/ai'
 import { BiUserCircle } from 'react-icons/bi'
-import { BsBagFill, BsFilePost, BsPeople } from 'react-icons/bs'
-import {
-  FaAdversal,
-  FaConnectdevelop,
-  FaMoneyBillAlt,
-  FaMoneyBillWave,
-} from 'react-icons/fa'
+import { BsFilePost, BsPeople } from 'react-icons/bs'
+import { FaAdversal, FaMoneyBillAlt, FaMoneyBillWave } from 'react-icons/fa'
 import { FiSettings } from 'react-icons/fi'
 import { GiReceiveMoney } from 'react-icons/gi'
 import { IoIosBriefcase, IoMdNotifications } from 'react-icons/io'
-import { MdAttachMoney, MdFindReplace, MdWork } from 'react-icons/md'
+import { MdAttachMoney, MdWork } from 'react-icons/md'
 import { RiApps2Line } from 'react-icons/ri'
 import { SiGoogleanalytics } from 'react-icons/si'
 import { useMutation } from 'react-query'

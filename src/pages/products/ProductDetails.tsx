@@ -4,6 +4,7 @@ import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Meta from 'components/atoms/Meta/Meta'
 import Loading from 'components/Loading'
+import Sidebar from 'components/Sidebar'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { getBasket } from 'helpers'
@@ -240,6 +241,7 @@ const ProductDetails = ({ userData }: { userData: IParent }) => {
         userName={''}
       />
       <DashboardHeader userData={userData} />
+      <Sidebar />
 
       <NarrowLayout customMaxWidth="max-w-7xl">
         <div className="flex flex-col gap-y-24">

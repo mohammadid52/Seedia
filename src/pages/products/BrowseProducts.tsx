@@ -2,6 +2,7 @@ import { fetchAllProducts } from 'apis/queries'
 import Meta from 'components/atoms/Meta/Meta'
 import Section from 'components/atoms/products/Section'
 import Loading from 'components/Loading'
+import Sidebar from 'components/Sidebar'
 import NarrowLayout from 'containers/NarrowLayout'
 import { useRouter } from 'hooks/useRouter'
 import useUser from 'hooks/useUser'
@@ -38,6 +39,8 @@ const BrowseProducts = ({ userData }: { userData: IParent }) => {
           pageUrl={window.location.href}
           pageTitle={`Explore Products - ${userData?.fullName} - 13RMS `}
         />
+        <Sidebar />
+
         <NarrowLayout customMaxWidth="max-w-7xl" userData={userData}>
           <div className="">
             <ProfileCard

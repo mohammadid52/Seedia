@@ -128,47 +128,48 @@ const RequestView = ({ userData }: { userData?: IParent }) => {
   const { user } = requestData
 
   return (
-    <NarrowLayout
-      userData={userData}
-      customParentMaxWidth="max-w-360 relative"
-      customMaxWidth="max-w-360"
-    >
-      <Meta
-        pageUrl={window.location.href}
-        imageUrl={user && user.profilePicture}
-        pageTitle={`${requestData.title} | 13RMS `}
-        title={requestData.title}
-        description={requestData.description}
-        keywords={getTags(
-          `${requestData.description} ${
-            requestData.title
-          } ${requestData.skills.join('')}`
-        )}
-        // userName={''}
-      />
-      <div className="flex flex-col gap-y-12">
-        <TopCard
-          followingList={userData?.following || []}
-          views={requestData.views}
-          iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
-          userData={user}
+    <>
+      <NarrowLayout
+        userData={userData}
+        customParentMaxWidth="max-w-360 relative"
+        customMaxWidth="max-w-360"
+      >
+        <Meta
+          pageUrl={window.location.href}
+          imageUrl={user && user.profilePicture}
+          pageTitle={`${requestData.title} | 13RMS `}
+          title={requestData.title}
+          description={requestData.description}
+          keywords={getTags(
+            `${requestData.description} ${
+              requestData.title
+            } ${requestData.skills.join('')}`
+          )}
+          // userName={''}
         />
-        <Card
-          content={
-            <div className="dark:text-gray-400 grid grid-cols-1 gap-x-12 sm:grid-cols-3 text-gray-900">
-              <div className="sm:col-span-2">
-                <h1 className="dark:text-white text-gray-900 text-2xl  mb-4 font-semibold">
-                  Description
-                </h1>
-                <div className="whitespace-pre-line">
-                  {requestData.description}
+        <div className="flex flex-col gap-y-12">
+          <TopCard
+            followingList={userData?.following || []}
+            views={requestData.views}
+            iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+            userData={user}
+          />
+          <Card
+            content={
+              <div className="dark:text-gray-400 grid grid-cols-1 gap-x-12 sm:grid-cols-3 text-gray-900">
+                <div className="sm:col-span-2">
+                  <h1 className="dark:text-white text-gray-900 text-2xl  mb-4 font-semibold">
+                    Description
+                  </h1>
+                  <div className="whitespace-pre-line">
+                    {requestData.description}
+                  </div>
+                  <br />
                 </div>
-                <br />
               </div>
-            </div>
-          }
-        />
-        {/* <Card
+            }
+          />
+          {/* <Card
           content={
             <div className="dark:text-gray-400 grid grid-cols-1 gap-x-12 sm:grid-cols-3 text-gray-900">
               <div className="sm:col-span-2">
@@ -220,8 +221,9 @@ const RequestView = ({ userData }: { userData?: IParent }) => {
             </div>
           }
         /> */}
-      </div>
-    </NarrowLayout>
+        </div>
+      </NarrowLayout>
+    </>
   )
 }
 

@@ -4,6 +4,7 @@ import Meta from 'components/atoms/Meta/Meta'
 import PageTitle from 'components/atoms/PageTitle'
 import Section from 'components/atoms/products/Section'
 import Title from 'components/atoms/Title'
+import Sidebar from 'components/Sidebar'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { getBasket } from 'helpers'
@@ -81,6 +82,7 @@ const Cart = ({ userData }: { userData: IParent }) => {
     <>
       <Meta pageTitle={`My Cart - 13RMS`} />
       <DashboardHeader userData={userData} />
+      <Sidebar />
 
       <NarrowLayout customMaxWidth="max-w-7xl">
         {products.length > 0 ? (

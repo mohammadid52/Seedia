@@ -1,5 +1,6 @@
 import { fetchProjectById } from 'apis/queries'
 import Button from 'components/atoms/Button'
+import Sidebar from 'components/Sidebar'
 import Card from 'components/atoms/Card'
 import Meta from 'components/atoms/Meta/Meta'
 import Loading from 'components/Loading'
@@ -179,124 +180,131 @@ const ProjectView = ({ userData }: { userData?: IParent }) => {
   const { business, background } = company
 
   return (
-    <NarrowLayout userData={userData} customMaxWidth="max-w-7xl">
-      <Meta
-        pageUrl={window.location.href}
-        imageUrl={company && company.profilePicture}
-        pageTitle={`${business.name} | ${business.typeOfBusiness} | Jobs | 13RMS `}
-        title={business.name}
-        description={project.briefDescription}
-        keywords={getTags(project.briefDescription)}
-        // userName={''}
-      />
-      <div className="flex flex-col gap-y-12">
-        <TopCard
-          followingList={userData.following}
-          views={project.views}
-          websiteUrl={project.website}
-          iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
-          userData={company}
+    <>
+      <Sidebar />
+
+      <NarrowLayout userData={userData} customMaxWidth="max-w-7xl">
+        <Meta
+          pageUrl={window.location.href}
+          imageUrl={company && company.profilePicture}
+          pageTitle={`${business.name} | ${business.typeOfBusiness} | Jobs | 13RMS `}
+          title={business.name}
+          description={project.briefDescription}
+          keywords={getTags(project.briefDescription)}
+          // userName={''}
         />
-        <Card
-          content={
-            <div className="dark:text-gray-400 grid grid-cols-1 gap-x-12 sm:grid-cols-3 text-gray-900">
-              <div className="sm:col-span-2">
-                <h1 className="dark:text-white text-gray-900 text-2xl  mb-4 font-semibold">
-                  Description
-                </h1>
-                <div className="whitespace-pre-line">
-                  {project.briefDescription}
-                </div>
-                <br />
-                <div className="flex flex-col gap-y-4">
-                  {map(project.sections, (section) => (
-                    <Section title={section.title} content={section.content} />
-                  ))}
-                  <Section title={''} content={project.closure} />
-                </div>
-              </div>
-              <div>
-                <h1 className="dark:text-white text-gray-900 text-2xl mb-4 font-semibold">
-                  Function Description
-                </h1>
-                <dl className="">
-                  <DescriptionItem
-                    name={'Function Type'}
-                    value={join(project.functionType, 'name')}
-                  />
-                  <DescriptionItem
-                    name={'Salary'}
-                    value={`${salary.min} - ${salary.max} / ${salary.duration}`}
-                  />
-                  <DescriptionItem
-                    name={'Location'}
-                    value={`${location?.city || '--'}, ${
-                      location?.country || '--'
-                    }`}
-                  />
-                  <DescriptionItem
-                    name={'Posted'}
-                    value={getFromNowTime(project.postedOn)}
-                  />
-                </dl>
-              </div>
-            </div>
-          }
-        />
-        <Card
-          content={
-            <div className="dark:text-gray-400 grid grid-cols-1 gap-x-12 sm:grid-cols-3 text-gray-900">
-              <div className="sm:col-span-2">
-                <h1 className="dark:text-white text-gray-900 text-2xl  mb-4 font-semibold">
-                  About the company
-                </h1>
-                <div>
-                  <div className="sm:flex items-center">
-                    <div className="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
-                      <img
-                        className="h-12 w-12  cursor-pointer  shadow-xl"
-                        src={
-                          company?.profilePicture
-                            ? company?.profilePicture
-                            : avatarPlaceholder
-                        }
-                        alt=""
+        <div className="flex flex-col gap-y-12">
+          <TopCard
+            followingList={userData.following}
+            views={project.views}
+            websiteUrl={project.website}
+            iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+            userData={company}
+          />
+          <Card
+            content={
+              <div className="dark:text-gray-400 grid grid-cols-1 gap-x-12 sm:grid-cols-3 text-gray-900">
+                <div className="sm:col-span-2">
+                  <h1 className="dark:text-white text-gray-900 text-2xl  mb-4 font-semibold">
+                    Description
+                  </h1>
+                  <div className="whitespace-pre-line">
+                    {project.briefDescription}
+                  </div>
+                  <br />
+                  <div className="flex flex-col gap-y-4">
+                    {map(project.sections, (section) => (
+                      <Section
+                        title={section.title}
+                        content={section.content}
                       />
-                    </div>
-                    <h4 className="text-lg font-bold">{business?.name}</h4>
-                  </div>
-                  <div className="mt-4">
-                    <p className="dark:text-gray-400 text-gray-600">
-                      {background?.summary || 'Test summary'}
-                    </p>
-                    <br />
-                    <p className="dark:text-gray-400 text-gray-600">
-                      {business?.additionalInfo || 'Additional Info'}
-                    </p>
+                    ))}
+                    <Section title={''} content={project.closure} />
                   </div>
                 </div>
+                <div>
+                  <h1 className="dark:text-white text-gray-900 text-2xl mb-4 font-semibold">
+                    Function Description
+                  </h1>
+                  <dl className="">
+                    <DescriptionItem
+                      name={'Function Type'}
+                      value={join(project.functionType, 'name')}
+                    />
+                    <DescriptionItem
+                      name={'Salary'}
+                      value={`${salary.min} - ${salary.max} / ${salary.duration}`}
+                    />
+                    <DescriptionItem
+                      name={'Location'}
+                      value={`${location?.city || '--'}, ${
+                        location?.country || '--'
+                      }`}
+                    />
+                    <DescriptionItem
+                      name={'Posted'}
+                      value={getFromNowTime(project.postedOn)}
+                    />
+                  </dl>
+                </div>
               </div>
-              <div>
-                <h1 className="dark:text-white text-gray-900 text-2xl  mb-4 font-semibold">
-                  Company Details
-                </h1>
-                <DescriptionItem name={'Company Size'} value={'100'} />
-                <DescriptionItem
-                  name={'Type of business'}
-                  value={business.typeOfBusiness}
-                />
-                <DescriptionItem name={'Year of foundation'} value={'2007'} />
-                <DescriptionItem
-                  valueClassName="underline cursor-pointer tracking-wider"
-                  name={'Website'}
-                  value={project.website}
-                />
+            }
+          />
+          <Card
+            content={
+              <div className="dark:text-gray-400 grid grid-cols-1 gap-x-12 sm:grid-cols-3 text-gray-900">
+                <div className="sm:col-span-2">
+                  <h1 className="dark:text-white text-gray-900 text-2xl  mb-4 font-semibold">
+                    About the company
+                  </h1>
+                  <div>
+                    <div className="sm:flex items-center">
+                      <div className="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
+                        <img
+                          className="h-12 w-12  cursor-pointer  shadow-xl"
+                          src={
+                            company?.profilePicture
+                              ? company?.profilePicture
+                              : avatarPlaceholder
+                          }
+                          alt=""
+                        />
+                      </div>
+                      <h4 className="text-lg font-bold">{business?.name}</h4>
+                    </div>
+                    <div className="mt-4">
+                      <p className="dark:text-gray-400 text-gray-600">
+                        {background?.summary || 'Test summary'}
+                      </p>
+                      <br />
+                      <p className="dark:text-gray-400 text-gray-600">
+                        {business?.additionalInfo || 'Additional Info'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h1 className="dark:text-white text-gray-900 text-2xl  mb-4 font-semibold">
+                    Company Details
+                  </h1>
+                  <DescriptionItem name={'Company Size'} value={'100'} />
+                  <DescriptionItem
+                    name={'Type of business'}
+                    value={business.typeOfBusiness}
+                  />
+                  <DescriptionItem name={'Year of foundation'} value={'2007'} />
+                  <DescriptionItem
+                    valueClassName="underline cursor-pointer tracking-wider"
+                    name={'Website'}
+                    value={project.website}
+                  />
+                </div>
               </div>
-            </div>
-          }
-        />
-      </div>
-    </NarrowLayout>
+            }
+          />
+        </div>
+      </NarrowLayout>
+    </>
   )
 }
 

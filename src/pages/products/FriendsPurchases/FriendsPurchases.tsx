@@ -5,6 +5,7 @@ import Loading from 'components/Loading'
 import useUser from 'hooks/useUser'
 import { ErrorFallback } from 'index'
 import { IParent, IProduct, IShortProfile } from 'interfaces/UniversalInterface'
+import DashboardHeader from 'pages/DashboardHeader'
 import Product from 'pages/products/Product'
 import ProductLayout from 'pages/products/ProductLayout'
 import ProfileCard from 'pages/products/ProfileCard/ProfileCard'
@@ -54,6 +55,7 @@ const FriendsPurchases = ({ userData }: { userData: IParent }) => {
         pageUrl={window.location.href}
         pageTitle={`Friends Purchases | ${userData.fullName} | 13RMS`}
       />
+      <DashboardHeader userData={userData} />
 
       <ProfileCard
         userData={userData}
