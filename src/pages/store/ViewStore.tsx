@@ -20,6 +20,7 @@ import 'styles/store.scss'
 import { useMutation, useQuery } from 'react-query'
 import { publishStore } from 'apis/mutations'
 import { Redirect } from 'react-router'
+import { useNotifications } from 'context/NotificationContext'
 
 const ListProducts = ({ userId, onLoad }: { userId: string; onLoad?: any }) => {
   const { isLoading, data, isFetched, isSuccess } = useQuery(
@@ -91,12 +92,24 @@ const ViewStore = ({ userData }: { userData: IParent }) => {
   const titleOpacity =
     scroll < 70 ? 'opacity-100' : scroll >= 70 ? 'opacity-70' : 'opacity-10'
 
+  const { setNotification } = useNotifications()
+
+  const storeCreated = store && (iAmOwnerOfThisProfile || isPublished)
   if (!isFetched && isLoading) {
     return <Loading />
   }
-
-  // store.isPublished
-  if (store && (iAmOwnerOfThisProfile || isPublished)) {
+  if (!storeCreated) {
+    setNotification({
+      show: true,
+      // eslint-disable-next-line quotes
+      title: `${
+        iAmOwnerOfThisProfile ? 'You have' : `${userData.firstName} has`
+      } not opened store yet.`,
+      buttonText: iAmOwnerOfThisProfile ? 'Open now' : undefined,
+      buttonUrl: iAmOwnerOfThisProfile ? links.openStore() : undefined,
+    })
+    return <Redirect to={links.FEED} />
+  } else {
     return (
       <div className="smooth-scroll">
         <NewSectionModal open={newSectionModal} setOpen={setNewSectionModal} />
@@ -166,8 +179,6 @@ const ViewStore = ({ userData }: { userData: IParent }) => {
         )}
       </div>
     )
-  } else {
-    return <Redirect to="/feed/" />
   }
 }
 

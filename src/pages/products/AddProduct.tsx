@@ -11,7 +11,6 @@ import List from 'components/List'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { Form, Formik } from 'formik'
-import useAccountType from 'hooks/useAccountType'
 import { IParent, IProduct } from 'interfaces/UniversalInterface'
 import { map, times } from 'lodash'
 import UploadImages from 'pages/products/UploadImages'
@@ -28,14 +27,6 @@ const AddProduct = ({
   profileUrl: string
   userData: IParent
 }) => {
-  const { isBusiness } = useAccountType(userData)
-
-  // useEffect(() => {
-  //   if (!isBusiness) {
-  //     return history.push(links.FEED)
-  //   }
-  // }, [isBusiness])
-
   const minMsg = (field: string, number: number) =>
     `${field} must be atleast ${number} characters`
   const maxMsg = (field: string, number: number) =>
@@ -74,8 +65,7 @@ const AddProduct = ({
     highlights: [],
   }
 
-  const { mutate, isLoading, isError, error, isSuccess } =
-    useMutation(addProduct)
+  const { mutate, isLoading, isError, isSuccess } = useMutation(addProduct)
   const [imagesUploaded, setImagesUploaded] = useState(false)
 
   const history = useHistory()
@@ -90,9 +80,13 @@ const AddProduct = ({
     }
   }, [isSuccess])
 
+  const [error, setError] = useState('')
+
   const onSubmit = async (values: any) => {
     if (imagesUploaded) {
       mutate(values)
+    } else {
+      setError('Please upload image')
     }
   }
   return (
@@ -178,6 +172,8 @@ const AddProduct = ({
           <FormTagsInput name="tags" />
           <List name="features" />
           <List name="highlights" />
+
+          {error && <Error errors={[error.toString()]} />}
 
           <div className="flex items-center justify-end">
             <Button
