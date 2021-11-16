@@ -16,6 +16,7 @@ import {
   IParent,
 } from 'interfaces/UniversalInterface'
 import { map, remove, update } from 'lodash'
+import moment from 'moment'
 import { nanoid } from 'nanoid'
 import { Fragment, useState } from 'react'
 import { AiOutlineEdit } from 'react-icons/ai'
@@ -601,11 +602,12 @@ const Background = ({
                           <h4 className="job_title font-medium dark:text-white text-gray-900">
                             {exp.jobTitle}
                           </h4>
-                          <h5 className="company_name link-hover block text-left cursor-pointer ">
+                          <h5 className="company_name link-hover text-gray-500 dark:text-gray-600 block text-left cursor-pointer ">
                             {exp.companyName}
                           </h5>
-                          <span className="job_duration text-gray-300 font-semibold text-sm">
-                            {exp.joinDate} - {exp.leaveDate}
+                          <span className="job_duration text-gray-300 dark:text-gray-700 font-semibold text-sm">
+                            {moment(exp.joinDate).format('MMMM YYYY')} -
+                            {moment(exp.leaveDate).format('MMMM YYYY')}
                           </span>
                           <p className="company_description text-gray-400 mt-3">
                             {exp.description}
