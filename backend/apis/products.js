@@ -381,7 +381,12 @@ router.post('/add', auth, async (req, res) => {
         )
         return res
           .status(202)
-          .json(responseMsg('success', 'Product added successfully', {}))
+          .json(
+            responseMsg('success', 'Product added successfully', {
+              id: product.insertedId,
+              name: data.productName,
+            })
+          )
       } else {
       }
     } catch (error) {

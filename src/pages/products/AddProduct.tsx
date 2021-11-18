@@ -10,6 +10,7 @@ import Title from 'components/atoms/Title'
 import List from 'components/List'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
+import { useNotifications } from 'context/NotificationContext'
 import { Form, Formik } from 'formik'
 import { IParent, IProduct } from 'interfaces/UniversalInterface'
 import { map, times } from 'lodash'
@@ -65,7 +66,19 @@ const AddProduct = ({
     highlights: [],
   }
 
-  const { mutate, isLoading, isError, isSuccess } = useMutation(addProduct)
+  const { setNotification } = useNotifications()
+
+  const { mutate, isLoading, isError, isSuccess } = useMutation(addProduct, {
+    onSuccess: (data) => {
+      const { name, id } = data.data.data
+      setNotification({
+        show: true,
+        title: `You have successfully posted product ${name} on Tradingpost13RMS. Good luck with the sale.`,
+        buttonText: 'View',
+        buttonUrl: links.getProductUrl(id),
+      })
+    },
+  })
   const [imagesUploaded, setImagesUploaded] = useState(false)
 
   const history = useHistory()

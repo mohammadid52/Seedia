@@ -109,7 +109,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
       name: 'Sell products',
       link: _links.addProduct(),
     },
-    isBusiness && {
+    !isBusiness && {
       icon: MdWork,
       link: _links.placeRequest(),
       name: 'Place Request For Work',

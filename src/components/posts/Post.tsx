@@ -169,7 +169,7 @@ const Post = ({
   return (
     <div
       ref={postRef}
-      className="rounded-lg dark:bg-gray-800 border border-gray-200 bg-white dark:border-gray-700 "
+      className="rounded-lg overflow-x-hidden  dark:bg-gray-800 border border-gray-200 bg-white dark:border-gray-700 "
     >
       <div className="flex w-full items-center justify-between px-6">
         <div className="flex  py-4">

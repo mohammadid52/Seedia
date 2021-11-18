@@ -87,7 +87,16 @@ const OpenStore = ({ userData }: { userData: IParent }) => {
 
     mutate,
     isSuccess,
-  } = useMutation(openStore)
+  } = useMutation(openStore, {
+    onSuccess: () => {
+      setNotification({
+        show: true,
+        title: `Congratulations ${userData.firstName}. You have successfully opened a shop on Tradingpost13RMS. Good luck selling your stuff.`,
+        buttonText: 'View store',
+        buttonUrl: links.viewStore(userData.profileUrl),
+      })
+    },
+  })
 
   const history = useHistory()
 

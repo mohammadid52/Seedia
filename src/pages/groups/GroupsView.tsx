@@ -171,6 +171,7 @@ const GroupsView = ({ userData }: { userData: IParent }) => {
       >
         <div className=" min-w-132 max-w-164 min-h-56 max-h-132 overflow-y-auto">
           <CreateGroup
+            userData={userData}
             refetchGroup={refetch}
             onSuccess={() => setShowCreateGroupModal(false)}
           />

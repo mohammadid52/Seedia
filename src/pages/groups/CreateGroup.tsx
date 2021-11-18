@@ -3,8 +3,10 @@ import placeholder from 'assets/svg/placeholder.png'
 import Error from 'components/alerts/Error'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
+import { links } from 'constants/Links'
+import { useNotifications } from 'context/NotificationContext'
 import { Form, Formik } from 'formik'
-import { IGroup } from 'interfaces/UniversalInterface'
+import { IGroup, IParent } from 'interfaces/UniversalInterface'
 import { isEmpty, map } from 'lodash'
 import React, { useEffect, useRef, useState } from 'react'
 import { AiOutlineEdit } from 'react-icons/ai'
@@ -16,10 +18,12 @@ const CreateGroup = ({
   onSuccess,
   refetchGroup,
   groupData = null,
+  userData,
 }: {
   onSuccess?: () => void
   refetchGroup: any
   groupData?: IGroup
+  userData: IParent
 }) => {
   const validationSchema = Yup.object({
     groupName: Yup.string().required('Group Name is required').min(10).max(150),
@@ -37,11 +41,19 @@ const CreateGroup = ({
   }
 
   const formRef = useRef()
+  const { setNotification } = useNotifications()
 
   const { mutate, isLoading, isError, error, isSuccess } = useMutation(
     createGroup,
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        const groupName = data?.data?.data?.groupName
+        setNotification({
+          show: true,
+          title: `Dear ${userData.firstName}. You have successfully created the group ${groupName} `,
+          buttonText: 'View',
+          buttonUrl: links.viewStore(userData.profileUrl),
+        })
         refetchGroup()
       },
     }

@@ -8,6 +8,7 @@ import Title from 'components/atoms/Title'
 import List from 'components/List'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
+import { useNotifications } from 'context/NotificationContext'
 import { Form, Formik } from 'formik'
 import useAccountType from 'hooks/useAccountType'
 import { IParent, IRequest } from 'interfaces/UniversalInterface'
@@ -31,9 +32,21 @@ const PlaceRequest = ({ userData }: { userData: IParent }) => {
     description: '',
     skills: userData?.background?.skills || [],
   }
+  const { setNotification } = useNotifications()
 
-  const { mutate, isLoading, isError, error, isSuccess } =
-    useMutation(addRequest)
+  const { mutate, isLoading, isError, error, isSuccess } = useMutation(
+    addRequest,
+    {
+      onSuccess: () => {
+        setNotification({
+          show: true,
+          title: `Dear ${userData.firstName}. You have successfully placed a request on your profile. This will be seen by other users`,
+          buttonText: 'View',
+          buttonUrl: links.viewStore(userData.profileUrl),
+        })
+      },
+    }
+  )
   const { isBusiness } = useAccountType(userData)
 
   const [skillsError, setSkillsError] = useState('')
