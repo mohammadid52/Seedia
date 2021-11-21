@@ -1,7 +1,8 @@
-import { addProduct } from 'apis/mutations'
+import { addProduct, uploadMultipleImages } from 'apis/mutations'
 import Error from 'components/alerts/Error'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
+import lgZoom from 'lightgallery/plugins/zoom'
 import FormMultipleSelector from 'components/atoms/FormMultipleSelector'
 import FormSelector from 'components/atoms/FormSelector'
 import FormTagsInput from 'components/atoms/FormTagsInput'
@@ -12,14 +13,18 @@ import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { useNotifications } from 'context/NotificationContext'
 import { Form, Formik } from 'formik'
-import { IParent, IProduct } from 'interfaces/UniversalInterface'
-import { map, times } from 'lodash'
+import { IParent, IProduct, IProductImage } from 'interfaces/UniversalInterface'
+import LightGallery from 'lightgallery/react'
+
+import { forEach, map, times } from 'lodash'
 import UploadImages from 'pages/products/UploadImages'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMutation } from 'react-query'
 import { useHistory } from 'react-router'
 import { colorsList, sizeList } from 'values/values'
 import * as Yup from 'yup'
+import { AiOutlineCamera } from 'react-icons/ai'
+import { nanoid } from 'nanoid'
 
 const AddProduct = ({
   profileUrl,
@@ -79,7 +84,54 @@ const AddProduct = ({
       })
     },
   })
-  const [imagesUploaded, setImagesUploaded] = useState(false)
+
+  const [imageList, setImageList] = useState<any[]>([])
+
+  const productImageRef: React.LegacyRef<HTMLInputElement> = useRef()
+
+  const onImageSelect = (e: any): void => {
+    const imgs: File[] = Object.values(e.target.files)
+
+    if (imgs.length > 0) {
+      imgs.forEach((img) => imageList.push(img))
+
+      setImageList((prev) => [...prev])
+    }
+  }
+
+  const showFileExplorer = () => productImageRef?.current?.click()
+
+  const { mutate: imageUploadMutate, isLoading: imageUploadingLoading } =
+    useMutation(uploadMultipleImages, {
+      onSuccess: (data) => {
+        const finalImageList: IProductImage[] = map(
+          data.data.data,
+          (img, idx: number) => ({
+            id: nanoid(24),
+            url: img.location,
+            isCover: idx === 0,
+            alt: '',
+          })
+        )
+
+        if (formRef && formRef.current) {
+          // @ts-ignore
+          mutate({ ...formRef.current.values, images: finalImageList })
+        }
+      },
+    })
+
+  const upload = () => {
+    const fd = new FormData()
+
+    forEach(imageList, (image) => {
+      fd.append('images', image)
+    })
+
+    setTimeout(() => {
+      imageUploadMutate(fd)
+    }, 500)
+  }
 
   const history = useHistory()
   useEffect(() => {
@@ -95,18 +147,17 @@ const AddProduct = ({
 
   const [error, setError] = useState('')
 
-  const onSubmit = async (values: any) => {
-    if (imagesUploaded) {
-      mutate(values)
-    } else {
-      setError('Please upload image')
-    }
+  const onSubmit = async () => {
+    upload()
   }
+  const formRef = useRef()
+
   return (
     <NarrowLayout userData={userData}>
       <Meta pageTitle="Add Product" />
       <Title fontWeight="font-bold mb-8">Add New Product</Title>
       <Formik
+        innerRef={formRef}
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
@@ -119,7 +170,46 @@ const AddProduct = ({
             required
             placeholder="Eg. Programming T-shirts"
           />
-          <UploadImages setImagesUploaded={setImagesUploaded} />
+          {/* <UploadImages setImagesUploaded={setImagesUploaded} /> */}
+          <div>
+            {imageList && imageList.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-4 mb-8 gap-8">
+                {imageList.map(
+                  (image, idx) =>
+                    // <div key={idx}>
+                    image && (
+                      <LightGallery key={idx} speed={500} plugins={[lgZoom]}>
+                        <img
+                          className={`shadow-lg  rounded-lg`}
+                          src={URL.createObjectURL(image)}
+                          alt="People working on laptops"
+                        />
+                      </LightGallery>
+                    )
+                  // </div>
+                )}
+              </div>
+            )}
+            <input
+              ref={productImageRef}
+              className="hidden"
+              multiple
+              type="file"
+              onChange={onImageSelect}
+              accept="image/x-png,image/jpeg"
+            />
+            <div className="flex items-center gap-x-4">
+              <Button
+                onClick={showFileExplorer}
+                size="lg"
+                invert
+                // className="w-32"
+                gradient
+                Icon={AiOutlineCamera}
+                label="+ Add Images"
+              />
+            </div>
+          </div>
           <FormInput
             label="Product Description"
             id="productDescription"
@@ -192,7 +282,7 @@ const AddProduct = ({
             <Button
               type="submit"
               rounded="rounded-lg"
-              loading={isLoading}
+              loading={isLoading || imageUploadingLoading}
               gradient
               size="lg"
               label="Submit"

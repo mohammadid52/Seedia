@@ -32,7 +32,6 @@ const UploadImages = ({
   } = useMutation(uploadMultipleImages)
 
   const onImageSelect = (e: any): void => {
-    console.log('🚀 ~ file: UploadImages.tsx ~ line 43 ~ onImageSelect ~ e', e)
     const imgs: File[] = Object.values(e.target.files)
 
     if (imgs.length > 0) {

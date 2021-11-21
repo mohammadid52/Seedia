@@ -29,7 +29,7 @@ const ListProducts = ({ userId, onLoad }: { userId: string; onLoad: any }) => {
 
   const { setNotification } = useNotifications()
 
-  if (!products || products.length === 0) {
+  if (!products && products?.length === 0) {
     setNotification({
       show: true,
       // eslint-disable-next-line quotes

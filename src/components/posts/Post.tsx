@@ -207,7 +207,7 @@ const Post = ({
         </div>
       </div>
       <div className="px-6 pb-4">
-        <p className="text-gray-700 dark:text-gray-400 text-sm whitespace-pre-line">
+        <p className="text-gray-700 dark:text-gray-400 text-sm break-words">
           {post.text}
         </p>
       </div>

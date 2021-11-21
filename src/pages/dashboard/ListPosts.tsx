@@ -45,7 +45,7 @@ const ListPosts = ({ userData }: { userData: IParent }) => {
   }, [newPostAdded])
 
   const postCount =
-    !isLoading && isFetched && isSuccess ? data.data.data.count : 0
+    !isLoading && isFetched && isSuccess ? data?.data?.data?.count || 0 : 0
 
   return (
     <div className="">
