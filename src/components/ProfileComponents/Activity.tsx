@@ -41,7 +41,10 @@ const Activity = ({
                   const postUrl = links.postById(activity.postUrl)
                   const showUserImage = Boolean(activity.userImage)
                   return (
-                    <div key={activity.text + idx} className="sm:flex">
+                    <div
+                      key={activity.text + idx}
+                      className="sm:flex overflow-hidden"
+                    >
                       <div className="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
                         <img
                           src={
@@ -56,7 +59,7 @@ const Activity = ({
                         />
                       </div>
                       <a href={postUrl} className="group cursor-pointer">
-                        <h4 className="text-base line-clamp group-hover:underline dark:text-gray-200 font-bold">
+                        <h4 className="truncate text-base line-clamp group-hover:underline dark:text-gray-200 font-bold">
                           {activity.text}
                         </h4>
                         <span className="text-gray-500 dark:text-gray-600 group-hover:underline">

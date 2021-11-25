@@ -2,7 +2,6 @@ import { addProduct, uploadMultipleImages } from 'apis/mutations'
 import Error from 'components/alerts/Error'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
-import lgZoom from 'lightgallery/plugins/zoom'
 import FormMultipleSelector from 'components/atoms/FormMultipleSelector'
 import FormSelector from 'components/atoms/FormSelector'
 import FormTagsInput from 'components/atoms/FormTagsInput'
@@ -14,17 +13,14 @@ import NarrowLayout from 'containers/NarrowLayout'
 import { useNotifications } from 'context/NotificationContext'
 import { Form, Formik } from 'formik'
 import { IParent, IProduct, IProductImage } from 'interfaces/UniversalInterface'
-import LightGallery from 'lightgallery/react'
-
 import { forEach, map, times } from 'lodash'
-import UploadImages from 'pages/products/UploadImages'
+import { nanoid } from 'nanoid'
 import { useEffect, useRef, useState } from 'react'
+import { AiOutlineCamera } from 'react-icons/ai'
 import { useMutation } from 'react-query'
 import { useHistory } from 'react-router'
 import { colorsList, sizeList } from 'values/values'
 import * as Yup from 'yup'
-import { AiOutlineCamera } from 'react-icons/ai'
-import { nanoid } from 'nanoid'
 
 const AddProduct = ({
   profileUrl,
@@ -178,13 +174,13 @@ const AddProduct = ({
                   (image, idx) =>
                     // <div key={idx}>
                     image && (
-                      <LightGallery key={idx} speed={500} plugins={[lgZoom]}>
-                        <img
-                          className={`shadow-lg  rounded-lg`}
-                          src={URL.createObjectURL(image)}
-                          alt="People working on laptops"
-                        />
-                      </LightGallery>
+                      // <LightGallery key={idx} speed={500} plugins={[lgZoom]}>
+                      <img
+                        className={`shadow-lg  rounded-lg`}
+                        src={URL.createObjectURL(image)}
+                        alt="People working on laptops"
+                      />
+                      // </LightGallery>
                     )
                   // </div>
                 )}

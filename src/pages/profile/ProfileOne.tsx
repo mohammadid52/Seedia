@@ -51,7 +51,12 @@ const Profile = ({ userData }: { userData: IParent }) => {
 
   useEffect(() => {
     if (!isEmpty(user)) {
-      history.push(links.getProfile(user, iAmOwnerOfThisProfile))
+      history.push(
+        links.getProfile(
+          user,
+          iAmOwnerOfThisProfile ? viewMode === 'private' : false
+        )
+      )
     }
   }, [user])
 

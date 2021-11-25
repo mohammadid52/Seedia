@@ -94,6 +94,7 @@ const PersonalCard = ({
               {_image && (
                 <img
                   className={`shadow-xl md:h-32 md:w-32 sm:h-12 sm:w-12 rounded-full`}
+                  // @ts-ignore
                   src={URL.createObjectURL(_image)}
                   alt="People working on laptops"
                 />

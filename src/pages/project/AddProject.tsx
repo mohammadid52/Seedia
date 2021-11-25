@@ -64,13 +64,15 @@ const AddProject = ({ userData }: { userData: IParent }) => {
     addProject,
     {
       onSuccess: (data) => {
-        const { name, id } = data.data.data
-        setNotification({
-          show: true,
-          title: `You have successfully posted the project: ${name}`,
-          buttonText: 'View',
-          buttonUrl: links.viewProject(id),
-        })
+        if (data) {
+          const { name, id } = data.data.data
+          setNotification({
+            show: true,
+            title: `You have successfully posted the project: ${name}`,
+            buttonText: 'View',
+            buttonUrl: links.viewProject(id),
+          })
+        }
       },
     }
   )

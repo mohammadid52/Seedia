@@ -75,7 +75,7 @@ app.post('/add', auth, async (req, res) => {
           { new: true }
         )
 
-        return res.status(204).json(
+        return res.status(202).json(
           responseMsg('success', 'New project successfully added', {
             id: project.insertedId,
             name: projectData.title,

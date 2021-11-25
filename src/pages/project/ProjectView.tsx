@@ -54,7 +54,7 @@ const DescriptionItem = ({
       <dd
         className={classNames(
           valueClassName,
-          'mt-1 text-sm dark:text-white text-right text-gray-900 sm:mt-0 sm:col-span-1'
+          'mt-1 text-sm break-words dark:text-white text-right text-gray-900 sm:mt-0 sm:col-span-1'
         )}
       >
         {value}
@@ -277,9 +277,11 @@ const ProjectView = ({ userData }: { userData?: IParent }) => {
                         {background?.summary || 'Test summary'}
                       </p>
                       <br />
-                      <p className="dark:text-gray-400 text-gray-600">
-                        {business?.additionalInfo || 'Additional Info'}
-                      </p>
+                      {business?.additionalInfo && (
+                        <p className="dark:text-gray-400 text-gray-600">
+                          {business?.additionalInfo}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

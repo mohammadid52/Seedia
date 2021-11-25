@@ -126,6 +126,7 @@ const Cover = ({
                 className={`shadow-xl ${
                   isCover ? coverImageStyles : profileImageStyles
                 }`}
+                // @ts-ignore
                 src={URL.createObjectURL(_image)}
                 alt="People working on laptops"
               />
