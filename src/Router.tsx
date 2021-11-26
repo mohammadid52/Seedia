@@ -18,6 +18,7 @@ const Home = lazy(() => import('pages/home/Home')) // page
 const NotFound = lazy(() => import('pages/NotFound')) // page
 const RecentActivity = lazy(() => import('pages/posts/RecentActivity')) // page
 const SinglePostView = lazy(() => import('pages/posts/SinglePostView')) // page
+const SingleEventView = lazy(() => import('pages/event/SingleEvent')) // page
 const AddProduct = lazy(() => import('pages/products/AddProduct')) // page
 const BrowseProducts = lazy(() => import('pages/products/BrowseProducts')) // page
 const ProductDetails = lazy(() => import('pages/products/ProductDetails')) // page
@@ -157,6 +158,7 @@ const Router = ({
               >
                 <MyProjectsListView userData={userData} />
               </PrivateRoute>
+
               <PrivateRoute
                 // @ts-ignore
                 exact
@@ -185,8 +187,17 @@ const Router = ({
               >
                 <SingleGroupView userData={userData} />
               </PrivateRoute>
+              {/* See single event */}
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/events/:eventId"
+              >
+                <SingleEventView userData={userData} />
+              </PrivateRoute>
 
-              {/* See single group */}
+              {/* See single post */}
               <PrivateRoute
                 // @ts-ignore
                 exact

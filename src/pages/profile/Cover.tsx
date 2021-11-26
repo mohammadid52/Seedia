@@ -2,6 +2,7 @@ import {} from 'apis/mutations'
 import Badge from 'components/atoms/Badge'
 import Button from 'components/atoms/Button'
 import Modal from 'components/atoms/Modal'
+import { useNotifications } from 'context/NotificationContext'
 import { useUserContext } from 'context/UserContext'
 import { getAccessToken, network } from 'helpers'
 import { ICompany, IParent } from 'interfaces/UniversalInterface'
@@ -39,6 +40,7 @@ const Cover = ({
   }
 
   const { setValues } = useUserContext()
+  const { setNotification } = useNotifications()
 
   const onSave = async (e: any) => {
     e.preventDefault()
@@ -77,6 +79,10 @@ const Cover = ({
           }
         )
         setShowImageModal({ show: false, type: '' })
+        setNotification({
+          show: true,
+          title: `${isCover ? 'Cover' : 'Profile'} photo changed successfully`,
+        })
       }
     } catch (error) {
       // @ts-ignore
@@ -128,7 +134,7 @@ const Cover = ({
                 }`}
                 // @ts-ignore
                 src={URL.createObjectURL(_image)}
-                alt="People working on laptops"
+                alt=""
               />
             )}
           </div>

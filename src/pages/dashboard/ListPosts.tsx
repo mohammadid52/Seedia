@@ -52,7 +52,13 @@ const ListPosts = ({ userData }: { userData: IParent }) => {
       <Meta pageTitle={`(${postCount || 0}) Feed | 13RMS`} />
       {posts && posts.length > 0 ? (
         <InfiniteScroll
-          endMessage={<h1>Ended</h1>}
+          endMessage={
+            <div className="text-center">
+              <span className="dark:text-gray-600 text-center text-gray-400">
+                •
+              </span>
+            </div>
+          }
           dataLength={postCount}
           scrollableTarget="main_content"
           next={fetchMoreData}

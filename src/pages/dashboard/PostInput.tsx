@@ -1,6 +1,8 @@
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
+import CreateEvent from 'components/event/CreateEvent'
 import PostModal from 'pages/dashboard/PostModal'
+import PostPhotoModal from 'pages/dashboard/PostPhotoModal'
 import React, { useState } from 'react'
 import { BiCalendarEvent } from 'react-icons/bi'
 import { BsCameraVideo } from 'react-icons/bs'
@@ -20,6 +22,8 @@ const PostInput = ({
   disabled?: boolean
 }) => {
   const [showPostModal, setShowPostModal] = useState(false)
+  const [showOtherModals, setShowOtherModals] = useState('init')
+  const [showEventModal, setShowEventModal] = useState(false)
 
   const defaultButtons = (
     <>
@@ -29,6 +33,7 @@ const PostInput = ({
         // className="dark:border-gray-600"
         Icon={HiOutlinePhotograph}
         label="Photo"
+        onClick={() => setShowOtherModals('photo')}
       />
       <Button
         gradient
@@ -36,6 +41,7 @@ const PostInput = ({
         // className="dark:border-gray-600"
         bgColor="blue"
         invert
+        onClick={() => setShowOtherModals('video')}
         label="Video"
       />
       <Button
@@ -44,6 +50,7 @@ const PostInput = ({
         // className="dark:border-gray-600"
         invert
         bgColor="blue"
+        onClick={() => setShowEventModal(true)}
         label="Event"
       />
       <Button
@@ -62,6 +69,14 @@ const PostInput = ({
       {!disabled && (
         <PostModal open={showPostModal} setOpen={setShowPostModal} />
       )}
+      {(showOtherModals === 'photo' || showOtherModals === 'video') && (
+        <PostPhotoModal
+          isPhoto={showOtherModals === 'photo'}
+          open
+          setOpen={() => setShowOtherModals('init')}
+        />
+      )}
+      <CreateEvent open={showEventModal} setOpen={setShowEventModal} />
       <Card
         content={
           <div className="flex flex-col space-y-8">

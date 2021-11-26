@@ -112,9 +112,30 @@ const addNewSection = (data: any) =>
 const publishStore = (action: any) =>
   network.post(`/store/publish?action=${action}`)
 
+const createEvent = (data: any) =>
+  network.post(`/event/create-event`, { ...data })
+const deleteEvent = (eventId: string) => network.delete(`/event/${eventId}`)
+type SendEventInvite = {
+  targetIdArray: string[]
+  eventId: string
+}
+
+const sendEventInvite = (data: SendEventInvite) =>
+  network.post(`/event/send-invite/`, { ...data })
+
+type EventInvite = {
+  targetId: string
+  eventId: string
+  notificationId: string
+  type: 'accept' | 'decline'
+}
+const eventInvite = (data: EventInvite) =>
+  network.post(`/event/invite/`, { ...data })
+
 export {
   followUser,
   unFollowUser,
+  eventInvite,
   createReview,
   addProduct,
   uploadMultipleImages,
@@ -135,6 +156,9 @@ export {
   invite,
   saveProfile,
   exitGroup,
+  sendEventInvite,
+  createEvent,
   deleteProduct,
   doReviewAction,
+  deleteEvent,
 }

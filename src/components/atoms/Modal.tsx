@@ -12,6 +12,7 @@ const Modal = ({
   disableBackdropClose = true,
   hideCloseBtn = false,
   fixedBottom,
+  disablePadding = false,
 }: {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -20,6 +21,7 @@ const Modal = ({
 
   disableBackdropClose?: boolean
   hideCloseBtn?: boolean
+  disablePadding?: boolean
   fixedBottom?: React.ReactNode
   onClose?: () => void
 }) => {
@@ -65,7 +67,9 @@ const Modal = ({
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div
-              className={`inline-block align-bottom  bg-white dark:bg-gray-900 rounded-lg px-4 pt-5  text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-top  sm:p-6 pb-4`}
+              className={`inline-block align-bottom  bg-white dark:bg-gray-900 rounded-lg ${
+                disablePadding ? '' : 'px-4 sm:p-6'
+              } pt-5  text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-top   pb-4`}
             >
               {!hideCloseBtn && (
                 <div className="hidden sm:block absolute top-0 right-0 pt-6 pr-6">
@@ -81,8 +85,8 @@ const Modal = ({
               )}
               <div className="modal-body">
                 {header && (
-                  <div className="modal-header divider dark:divider ">
-                    <h3 className="dark:text-white text-gray-900 text-2xl font-semibold">
+                  <div className="modal-header divider dark:divider px-4">
+                    <h3 className="dark:text-white text-gray-900 text-xl font-normal">
                       {header}
                     </h3>
                   </div>

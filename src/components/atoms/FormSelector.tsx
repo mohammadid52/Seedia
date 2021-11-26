@@ -67,13 +67,13 @@ const FormSelector = ({
             >
               <span
                 className={`block truncate ${
-                  !field.value
+                  !field?.value
                     ? 'dark:text-gray-500 text-gray-400 '
                     : 'dark:text-white text-gray-900'
                 }`}
               >
-                {field.value.length > 0
-                  ? field.value
+                {field?.value?.length > 0
+                  ? field?.value
                   : selectedItem || placeholder}
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">

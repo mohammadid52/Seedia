@@ -13,6 +13,7 @@ const requestsRouter = require('./apis/requests')
 const groupsRouter = require('./apis/groups')
 const postRouter = require('./apis/posts')
 const storeRouter = require('./apis/store')
+const eventRouter = require('./apis/event')
 
 const app = express()
 const bodyParser = require('body-parser')
@@ -49,6 +50,7 @@ client.connect(
     const requestsCollection = db.collection('requests')
     const groupsCollection = db.collection('groups')
     const postCollection = db.collection('posts')
+    const eventCollection = db.collection('events')
 
     const passUserCollection = async (req, res, next) => {
       res.locals.usersCollection = usersCollection
@@ -77,17 +79,18 @@ client.connect(
       res.locals.postCollection = postCollection
       next()
     }
+    const passEventCollection = (req, res, next) => {
+      res.locals.eventCollection = eventCollection
+      next()
+    }
 
     app.use((req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*')
-      // res.header(
-      //   'Access-Control-Allow-Headers',
-      //   'Origin, X-Requested-With, Content-Type, Accept'
-      // )
       next()
     })
 
     app.use('/user', passUserCollection, userRouter)
+    app.use('/event', passUserCollection, passEventCollection, eventRouter)
     app.use(
       '/project',
       passUserCollection,

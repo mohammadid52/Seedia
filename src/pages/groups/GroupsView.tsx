@@ -143,20 +143,24 @@ const GroupsView = ({ userData }: { userData: IParent }) => {
   const [onYourGroups, onRequested] = helpers
 
   useEffect(() => {
-    if (requestedGroupsData && requestedGroupsData.length > 0 && onRequested) {
-      setLocalGroups([...requestedGroupsData])
-    } else {
-      setLocalGroups([])
-    }
-  }, [requestedGroupsData, onRequested])
-
-  useEffect(() => {
-    if (groups && groups.length > 0 && onYourGroups) {
-      setLocalGroups([...groups])
-    } else {
-      setLocalGroups([])
+    if (onYourGroups) {
+      if (groups && groups.length > 0) {
+        setLocalGroups([...groups])
+      } else {
+        setLocalGroups([])
+      }
     }
   }, [groups, onYourGroups])
+
+  useEffect(() => {
+    if (onRequested) {
+      if (requestedGroupsData && requestedGroupsData.length > 0) {
+        setLocalGroups([...requestedGroupsData])
+      } else {
+        setLocalGroups([])
+      }
+    }
+  }, [requestedGroupsData, onRequested])
 
   const groupsLen = localGroups ? localGroups.length : 0
 
@@ -201,7 +205,7 @@ const GroupsView = ({ userData }: { userData: IParent }) => {
             </div>
             {isLoading && !isFetched ? (
               <Spinner />
-            ) : groupsLen > 0 ? (
+            ) : localGroups.length > 0 ? (
               <div className="mt-4">
                 <AnimatedContainer show={onYourGroups}>
                   {onYourGroups && (

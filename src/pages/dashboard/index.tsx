@@ -14,7 +14,10 @@ interface DashboardProps extends NavProps {
 }
 
 const Dashboard = ({ userData }: DashboardProps) => {
-  const { isFetched, isLoading } = useUser(userData._id, userData)
+  const { isFetched, isLoading, iAmOwnerOfThisProfile } = useUser(
+    userData._id,
+    userData
+  )
 
   if (isLoading && !isFetched) {
     return <Loading />
@@ -33,7 +36,10 @@ const Dashboard = ({ userData }: DashboardProps) => {
           firstColClass={`max-h-152 lg:block  xl:block w-full  `}
           firstCol={
             <div className="flex flex-col gap-y-12">
-              <PersonalCard userData={userData} />
+              <PersonalCard
+                authUser={iAmOwnerOfThisProfile}
+                userData={userData}
+              />
               {/* <GroupList secondary userId={userData._id} /> */}
             </div>
           }

@@ -56,6 +56,10 @@ const fetchActivity = (userId: string, limit: number) =>
 const fetchedSavedItems = () => network.get(`/post/s`)
 const fetchedSavedProfiles = () => network.get(`/post/savedProfiles`)
 
+const fetchEvents = (short?: boolean) =>
+  network.get(`/event/list?short=${short || false}`)
+const fetchSingleEvent = (eventId: string) => network.get(`/event/e/${eventId}`)
+
 export {
   fetchProductDetails,
   fetchAllProducts,
@@ -80,4 +84,6 @@ export {
   fetchedSavedItems,
   fetchRequestedGroups,
   fetchedSavedProfiles,
+  fetchEvents,
+  fetchSingleEvent,
 }

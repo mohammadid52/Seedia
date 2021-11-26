@@ -22,9 +22,9 @@ app.post('/add-post', auth, async (req, res) => {
   const token = req.user
 
   const { postData } = req.body
-  const { postType = 'normal', text = '' } = postData
+  const { postType = 'normal' } = postData
 
-  if (text && postType) {
+  if (postType) {
     const postCollection = res.locals.postCollection
     const usersCollection = res.locals.usersCollection
     try {
@@ -49,7 +49,7 @@ app.post('/add-post', auth, async (req, res) => {
           subtext: `${user.firstName} posted this`,
           postMedia:
             updatedPost?.links && updatedPost?.links.length
-              ? updatedPost?.links[0]
+              ? updatedPost?.links[0].url
               : null,
           userImage: user?.profilePicture,
           activityIdx: user?.activity?.length || 0,

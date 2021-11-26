@@ -1,6 +1,7 @@
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
+import { useNotifications } from 'context/NotificationContext'
 import { useUserContext } from 'context/UserContext'
 import { getAccessToken, network } from 'helpers'
 import useAccountType from 'hooks/useAccountType'
@@ -27,7 +28,8 @@ const Cover = ({
     setShowModal(true)
   }
   const { setValues } = useUserContext()
-  const token = getAccessToken()
+
+  const { setNotification } = useNotifications()
 
   const onSave = async () => {
     setSaving(true)
@@ -38,7 +40,6 @@ const Cover = ({
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: token,
       },
     }
 
@@ -55,16 +56,15 @@ const Cover = ({
 
         setValues({ ...updatedData })
 
-        await network.post(
-          '/user/update',
-          {
-            ...updatedData,
-          },
-          {
-            headers: { Authorization: token },
-          }
-        )
+        await network.post('/user/update', {
+          ...updatedData,
+        })
         setShowModal(false)
+
+        setNotification({
+          show: true,
+          title: `Profile photo changed successfully`,
+        })
       }
     } catch (error) {
       console.error(error.message)

@@ -73,10 +73,12 @@ const FormInput = ({
           className="block dark:text-white text-sm font-medium text-gray-700"
         >
           {label}{' '}
-          {required && (
+          {required ? (
             <span className="text-red-500 dark:text-red-400 font-medium text-base">
               *
             </span>
+          ) : (
+            <span className="text-red-500 dark:text-red-400 font-medium text-base"></span>
           )}
         </label>
         {optional && (
@@ -97,7 +99,7 @@ const FormInput = ({
               id={id}
               placeholder={placeholder}
               onChange={onChange}
-              className={`block border w-full pr-10 ${
+              className={`block border w-full pr-2 ${
                 error ? errorClass : ''
               } ${textClass} p-2 ${
                 hideBorders
@@ -151,7 +153,7 @@ const FormInput = ({
               type={
                 showPasswordButton ? (showPass ? 'text' : 'password') : type
               }
-              className={`block border w-full pr-10 ${
+              className={`unstyled block border w-full pr-2 ${
                 error ? errorClass : ''
               } sm:text-sm p-2 ${
                 hideBorders

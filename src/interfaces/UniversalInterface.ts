@@ -129,6 +129,24 @@ export interface IParent {
   featuredPosts?: string[]
   savedProfiles?: string[]
   notifications?: INotification[]
+  events: string[]
+}
+
+export interface IEvent {
+  _id: string
+  eventName: string
+  eventDescription: string
+  timezone?: string
+  startTime?: Date | string
+  startDate?: Date | string
+  endTime?: Date | string
+  endDate?: Date | string
+  coverPicture?: string
+  profilePicture?: string
+  eventBy: IShortProfile
+  invites?: string[]
+  isOnline: boolean
+  attendees: IShortProfile[]
 }
 
 export interface INotification {
@@ -420,8 +438,14 @@ export interface IPost {
   postUrl?: string
   postedBy?: string
   viewedBy?: string[]
-  links?: string[]
+  links?: IPostLink[]
   likes: string[]
   postType?: string
   user?: IParent
+}
+
+export interface IPostLink {
+  id: string
+  url: string
+  type: 'image' | 'video'
 }

@@ -3,19 +3,25 @@
 import { Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import { MenuAlt2Icon } from '@heroicons/react/solid'
-import { invite } from 'apis/mutations'
+import { eventInvite, invite } from 'apis/mutations'
 import EmptyState from 'components/atoms/EmptyState'
 import Selector from 'components/atoms/Selector'
 import CountryListDropdown from 'components/CountryListDropdown'
 import Toggle from 'components/ThemeToggle'
 import { links as _links } from 'constants/Links'
+import { useNotifications } from 'context/NotificationContext'
 import { useUserContext } from 'context/UserContext'
 import useAccountType from 'hooks/useAccountType'
 import useTheme from 'hooks/useTheme'
-import { INotification, IParent } from 'interfaces/UniversalInterface'
+import {
+  IEvent,
+  IGroup,
+  INotification,
+  IParent,
+} from 'interfaces/UniversalInterface'
 import { isEmpty } from 'lodash'
 import find from 'lodash/find'
-import { Fragment, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import {
   AiOutlineArrowRight,
   AiOutlineHome,
@@ -41,14 +47,33 @@ import { avatarPlaceholder } from 'state/Redux/constants'
 import { classNames } from 'utils/classNames'
 import { callsToAction, departmentsArray, productsArray } from 'values/values'
 
+interface INotiProps {
+  userData: IParent
+  notification: INotification
+  setNotifications: React.Dispatch<React.SetStateAction<INotification[]>>
+}
+
 const GroupInviteNotification = ({
   userData,
   notification,
-}: {
-  userData: IParent
-  notification: INotification
-}) => {
-  const { mutate } = useMutation(invite)
+  setNotifications,
+}: INotiProps) => {
+  const { setNotification } = useNotifications()
+  const customData: IGroup = notification?.data
+
+  const { mutate } = useMutation(invite, {
+    onSuccess: (data) => {
+      const userNotifications: INotification[] = data?.data?.data
+
+      setNotifications([...userNotifications])
+      setNotification({
+        show: true,
+        title: 'Successfully invite accepted',
+        buttonText: 'View',
+        buttonUrl: _links.groupById(customData._id),
+      })
+    },
+  })
   const onGroupInvite = (
     group: any,
     type: 'accept' | 'decline',
@@ -94,11 +119,81 @@ const GroupInviteNotification = ({
   )
 }
 
+const EventInviteNotification = ({
+  userData,
+  notification,
+  setNotifications,
+}: INotiProps) => {
+  const { setNotification } = useNotifications()
+  const customData: IEvent = notification?.data
+
+  const { mutate } = useMutation(eventInvite, {
+    onSuccess: (data) => {
+      const userNotifications: INotification[] = data?.data?.data
+
+      setNotifications([...userNotifications])
+      setNotification({
+        show: true,
+        title: 'Successfully invite accepted',
+        buttonText: 'View',
+        buttonUrl: _links.viewEvent(customData._id),
+      })
+    },
+  })
+  const onEventInvite = (
+    event: IEvent,
+    type: 'accept' | 'decline',
+    notificationId: string
+  ) => {
+    mutate({ type, eventId: event._id, notificationId, targetId: userData._id })
+  }
+
+  return (
+    <div
+      className={`${
+        userData?.notifications.length > 1
+          ? 'border-b border-gray-200 dark:border-gray-700'
+          : ''
+      } flex items-center pb-2 `}
+    >
+      <div className="w-0 flex-1 flex justify-start">
+        <p className=" text-sm font-medium dark:text-white text-gray-900">
+          {notification.message}{' '}
+          <span className="underline">{customData.eventName}</span>
+        </p>
+
+        <div className="flex items-center">
+          <button
+            onClick={() =>
+              onEventInvite(customData, 'accept', notification._id)
+            }
+            className="ml-4 flex-shrink-0 dark:bg-gray-800 text-link bg-white rounded-md text-sm font-medium hover:underline   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Accept
+          </button>
+          <button
+            onClick={() =>
+              onEventInvite(customData, 'accept', notification._id)
+            }
+            className="ml-4 flex-shrink-0 dark:bg-gray-800 text-gray-500 bg-white rounded-md text-sm font-medium hover:underline   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Decline
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const DashboardHeader = ({ userData }: { userData?: IParent }) => {
   const { setDarkMode, showSidebar, setShowSidebar, darkMode } =
     useUserContext()
   const dispatch = useDispatch()
   const history = useHistory()
+
+  const [notifications, setNotifications] = useState(
+    userData?.notifications || []
+  )
 
   const { isBusiness } = useAccountType(userData)
   const isStoreOpened = !isEmpty(userData?.store)
@@ -804,11 +899,11 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                           <span className={navClass}>
                             <div className="relative">
                               <IoMdNotifications />
-                              {userData?.notifications?.length > 0 && (
+                              {notifications?.length > 0 && (
                                 <div className="absolute top-0 right-0">
-                                  <span className="flex h-3 w-3">
+                                  <span className="flex h-2 w-2">
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                                   </span>
                                 </div>
                               )}
@@ -843,24 +938,31 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                             <div className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 border border-gray-200 dark:border-gray-700 overflow-hidden">
                               <div className="relative dark:bg-gray-800 bg-white px-5 py-6 sm:gap-8 sm:p-8 ">
                                 <div className="grid grid-cols-1">
-                                  {userData?.notifications &&
-                                  userData?.notifications.length > 0 ? (
-                                    userData?.notifications?.map(
-                                      (notification) => {
-                                        const isGroupInvite =
-                                          notification.type ===
-                                          'group-invite-request'
-                                        if (isGroupInvite) {
-                                          return (
-                                            <GroupInviteNotification
-                                              userData={userData}
-                                              key={notification._id}
-                                              notification={notification}
-                                            />
-                                          )
-                                        }
+                                  {notifications && notifications.length > 0 ? (
+                                    notifications?.map((notification) => {
+                                      const isGroupInvite =
+                                        notification.type ===
+                                        'group-invite-request'
+                                      const isEventInvite =
+                                        notification.type ===
+                                        'event-invite-request'
+                                      const props = {
+                                        userData: userData,
+                                        key: notification._id,
+                                        notification: notification,
+                                        setNotifications: setNotifications,
                                       }
-                                    )
+
+                                      if (isGroupInvite) {
+                                        return (
+                                          <GroupInviteNotification {...props} />
+                                        )
+                                      } else if (isEventInvite) {
+                                        return (
+                                          <EventInviteNotification {...props} />
+                                        )
+                                      }
+                                    })
                                   ) : (
                                     <EmptyState
                                       hideBorders

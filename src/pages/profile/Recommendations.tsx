@@ -80,15 +80,16 @@ const Recommendations = ({
   const [currentTab, setCurrentTab] = useState('Received')
 
   useEffect(() => {
-    // @ts-ignore
-    if (
-      recommendation &&
-      recommendation?.received &&
-      recommendation?.received.length > 0 &&
-      fetchReceived.length === 0 &&
-      currentTab === 'Received'
-    ) {
-      fetchReceivedList()
+    if (currentTab === 'Received') {
+      // @ts-ignore
+      if (
+        recommendation &&
+        recommendation?.received &&
+        recommendation?.received.length > 0 &&
+        fetchReceived.length === 0
+      ) {
+        fetchReceivedList()
+      }
     }
   }, [recommendation?.received, fetchReceived, currentTab])
 
@@ -99,8 +100,7 @@ const Recommendations = ({
         recommendation &&
         recommendation?.given &&
         recommendation?.given.length > 0 &&
-        fetchGiven.length === 0 &&
-        currentTab === 'Given'
+        fetchGiven.length === 0
       ) {
         fetchGivenList()
       }

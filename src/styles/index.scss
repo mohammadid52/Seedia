@@ -468,3 +468,10 @@ button {
 .modal-body {
   overflow-y: inherit !important;
 }
+
+.dark {
+  ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
+}

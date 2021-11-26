@@ -3,10 +3,12 @@ import Button from 'components/atoms/Button'
 import Modal from 'components/atoms/Modal'
 import DiscoverCard from 'components/DiscoverButton'
 import { links } from 'constants/Links'
+import { useNotifications } from 'context/NotificationContext'
 import { useUserContext } from 'context/UserContext'
 import { network } from 'helpers'
 import useAccountType from 'hooks/useAccountType'
 import { IParent } from 'interfaces/UniversalInterface'
+import { noop } from 'lodash'
 import React, { useState } from 'react'
 import { BsFillBookmarkFill } from 'react-icons/bs'
 import { useQuery } from 'react-query'
@@ -14,10 +16,11 @@ import { avatarPlaceholder } from 'state/Redux/constants'
 
 const PersonalCard = ({
   className,
-
+  authUser,
   userData: user,
 }: {
   className?: string
+  authUser: boolean
   userData?: IParent
 }) => {
   const [showModal, setShowModal] = useState(false)
@@ -32,6 +35,7 @@ const PersonalCard = ({
   }
 
   const { setValues } = useUserContext()
+  const { setNotification } = useNotifications()
 
   const onSave = async () => {
     setSaving(true)
@@ -51,7 +55,7 @@ const PersonalCard = ({
       if (data && data.data && data.data.location) {
         const updatedData = {
           ...user,
-          profilePicture: data.data.location,
+          [isCover ? 'coverPicture' : 'profilePicture']: data.data.location,
         }
         //@ts-ignore
         delete updatedData.password
@@ -60,6 +64,11 @@ const PersonalCard = ({
 
         await network.post('/user/update', {
           ...updatedData,
+        })
+
+        setNotification({
+          show: true,
+          title: `${isCover ? 'Cover' : 'Profile'} photo changed successfully`,
         })
       }
     } catch (error) {
@@ -70,33 +79,63 @@ const PersonalCard = ({
     setSaving(false)
   }
 
-  const profileImageSelectorRef = React.useRef()
-
   const { isBusiness } = useAccountType(user)
 
   const { data } = useQuery('average-post-views', () => fetchAvgViews())
 
   const postViews = data?.data?.data || 0
 
+  const [isCover, setIsCover] = useState(false)
+
+  const profileImageSelectorRef = React.useRef()
+  const showFileExplorerForProfile = () =>
+    //@ts-ignore
+    {
+      setIsCover(false)
+      /*@ts-ignore*/
+      return profileImageSelectorRef?.current?.click()
+    }
+
+  const coverImageSelectorRef = React.useRef()
+  const showFileExplorerForCover = () => {
+    setIsCover(true)
+    //@ts-ignore
+    coverImageSelectorRef?.current?.click()
+  }
+  const coverImageStyles =
+    'max-h-72 rounded-md sm:overflow-hidden w-full  object-cover'
+  const profileImageStyles = 'md:h-32 md:w-32 sm:h-12 sm:w-12 rounded-full'
   return (
     <>
-      {showModal && (
+      {authUser && (
         <Modal
-          header={`Profile Photo`}
+          header={`${isCover ? 'Cover' : 'Profile'} Photo`}
           disableBackdropClose
           open={showModal}
           setOpen={setShowModal}
         >
-          <div className={`sm:min-w-64 sm:min-h-64`}>
+          <div
+            className={`${
+              isCover
+                ? ' lg:min-w-256 sm:min-w-172 min-w-32'
+                : 'sm:min-w-64 sm:min-h-64'
+            }`}
+          >
             <div
-              className={`relative min-h-48 flex items-center justify-center`}
+              className={`relative ${
+                isCover
+                  ? 'sm:min-h-72 min-h-48'
+                  : 'min-h-48 flex items-center justify-center'
+              } `}
             >
               {_image && (
                 <img
-                  className={`shadow-xl md:h-32 md:w-32 sm:h-12 sm:w-12 rounded-full`}
+                  className={`shadow-xl ${
+                    isCover ? coverImageStyles : profileImageStyles
+                  }`}
                   // @ts-ignore
                   src={URL.createObjectURL(_image)}
-                  alt="People working on laptops"
+                  alt=""
                 />
               )}
             </div>
@@ -106,16 +145,26 @@ const PersonalCard = ({
                 loading={saving}
                 disabled={saving}
                 onClick={onSave}
+                type="submit"
                 label="Save"
               />
             </div>
           </div>
         </Modal>
       )}
-      {/* HIDDEN IMAGE INPUT */}
+      {/* HIDDEN IMAGE INPUT -- For Profile Picture*/}
       <input
         // @ts-ignore
         ref={profileImageSelectorRef}
+        className="hidden"
+        type="file"
+        onChange={onImageSelect}
+        accept="image/x-png,image/jpeg"
+      />
+      {/* HIDDEN IMAGE INPUT -- For Cover Picture*/}
+      <input
+        // @ts-ignore
+        ref={coverImageSelectorRef}
         className="hidden"
         type="file"
         onChange={onImageSelect}
@@ -134,13 +183,16 @@ const PersonalCard = ({
                 : 'https://source.unsplash.com/1600x900/?nature,water'
             })`,
           }}
-          className="w-full lg:h-20 sm:h-24 bg-center bg-no-repeat bg-cover h-20"
+          onClick={() => (authUser ? showFileExplorerForCover() : noop)}
+          className="w-full lg:h-20 cursor-pointer sm:h-24 bg-center bg-no-repeat bg-cover h-20"
         />
         <div className="flex justify-center -mt-8">
           <img
             alt=""
+            title="change photo"
+            onClick={() => (authUser ? showFileExplorerForProfile() : noop)}
             src={user.profilePicture ? user.profilePicture : avatarPlaceholder}
-            className="rounded-full border-solid lg:h-16 lg:w-16 h-12 w-12  border-white border-2 -mt-3"
+            className="rounded-full cursor-pointer border-solid lg:h-16 lg:w-16 h-12 w-12  border-white border-2 -mt-3"
           />
         </div>
         <div className="text-center px-3 pb-6 pt-2">

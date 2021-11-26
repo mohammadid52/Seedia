@@ -206,14 +206,25 @@ const Post = ({
           <Dropdown list={iAmOwnerOfThisPost ? myDropdownList : dropdownList} />
         </div>
       </div>
-      <div className="px-6 pb-4">
-        <p className="text-gray-700 dark:text-gray-400 text-sm break-words">
-          {post.text}
-        </p>
-      </div>
-      {post.links && post.links.length > 0 && (
-        <img className="w-full" src={post.links[0]} alt="Mountain" />
+      {post?.text && (
+        <div className="px-6 pb-4">
+          <p className="text-gray-700 dark:text-gray-400 text-sm break-words">
+            {post.text}
+          </p>
+        </div>
       )}
+      {post.links &&
+        post.links.length > 0 &&
+        (post.links[0].type === 'image' ? (
+          <img className="w-full" src={post.links[0].url} alt="" />
+        ) : (
+          <video
+            controls
+            className="w-full"
+            controlsList="nodownload"
+            src={post.links[0].url}
+          />
+        ))}
 
       {/* <div className="px-6 pt-4 pb-2">
         <span className="inline-block bg-gray-200 dark:bg-gray-700 dark:text-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
