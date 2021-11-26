@@ -178,11 +178,11 @@ app.get('/s', auth, async (req, res) => {
         })
         if (posts && posts.length > 0) {
           const users = await getManyItems(usersCollection, {
-            _id: { $in: posts.map((p) => addObjectId(p.postedBy)) },
+            _id: { $in: posts.map((p) => addObjectId(p?.postedBy)) },
           })
           posts = posts.map((post) => {
             const user = users.find(
-              (user) => user._id.toString() === post.postedBy.toString()
+              (user) => user._id.toString() === post?.postedBy.toString()
             )
             return {
               ...post,
@@ -331,7 +331,7 @@ app.delete('/', auth, async (req, res) => {
     const post = await getItem(postCollection, postId)
     const user = await getItem(usersCollection, token.id)
 
-    if (post.postedBy === token.id.toString()) {
+    if (post?.postedBy.toString() === token.id.toString()) {
       if (post) {
         try {
           let savedPosts = getPosts(user, post._id, 'savedPosts')
@@ -473,7 +473,7 @@ app.get('/feed', auth, async (req, res) => {
         if (posts && posts.length > 0) {
           posts = posts.map((post) => {
             const user = users.find(
-              (user) => user._id.toString() === post.postedBy.toString()
+              (user) => user._id.toString() === post?.postedBy.toString()
             )
             return {
               ...post,
@@ -566,8 +566,8 @@ app.get('/p', async (req, res) => {
   if (postUrl) {
     try {
       let post = await postCollection.findOne({ postUrl: postUrl })
-      const user = await getItem(usersCollection, post.postedBy)
       if (post) {
+        const user = await getItem(usersCollection, post?.postedBy)
         post = {
           ...post,
           user,
