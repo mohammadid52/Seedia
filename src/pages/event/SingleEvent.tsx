@@ -111,8 +111,8 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
       <Meta
         pageTitle={`${eventData.eventName} | event | 13RMS`}
         imageUrl={eventData?.profilePicture}
-        title={eventData.eventName}
-        description={eventData.eventDescription}
+        title={eventData?.eventName}
+        description={eventData?.eventDescription}
       />
 
       {showEditEventModal && eventData && (
@@ -124,7 +124,7 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
       )}
 
       <UsersListModal
-        title={`All attendees (${eventData?.attendees.length})`}
+        title={`All attendees (${eventData?.attendees?.length})`}
         userList={eventData?.attendees}
         open={showAttendeesModal}
         setOpen={setShowAttendeesModal}
@@ -134,7 +134,7 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
         <EventInviteModal
           refetchGroup={refetch}
           event={eventData}
-          followingList={userData.following}
+          followingList={userData?.following}
           open={showModal}
           setOpen={setShowModal}
         />
@@ -153,20 +153,15 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                     <img
                       alt=""
                       src={
-                        eventData?.coverPicture
-                          ? eventData?.coverPicture
-                          : 'https://source.unsplash.com/1600x900/?nature,water'
+                        eventData?.coverPicture ||
+                        'https://source.unsplash.com/1600x900/?nature,water'
                       }
                       className="w-full lg:h-44 sm:h-38 object-cover h-20"
                     />
                     <div className="flex justify-start mx-8 -mt-5">
                       <img
                         alt=""
-                        src={
-                          eventData?.profilePicture
-                            ? eventData?.profilePicture
-                            : avatarPlaceholder
-                        }
+                        src={eventData?.profilePicture || avatarPlaceholder}
                         className=" border-solid lg:h-24 lg:w-24 h-32 w-32  border-white border-2 -mt-3"
                       />
                     </div>
@@ -192,14 +187,14 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                       </div>
                       <div className="flex dark:text-gray-500 font-normal mt-1 text-sm text-gray-600 items-center justify-start">
                         <AiFillCalendar className="mr-2" />
-                        {moment(eventData.startDate).format(
+                        {moment(eventData?.startDate).format(
                           'ddd, MMM Do,'
                         )}{' '}
-                        {eventData.startTime}{' '}
-                        {getAMPM(eventData.startTime.toString())} -{' '}
-                        {moment(eventData.endDate).format('llll')}{' '}
-                        {eventData.endTime}{' '}
-                        {getAMPM(eventData.endTime.toString())} (your local
+                        {eventData?.startTime}{' '}
+                        {getAMPM(eventData?.startTime.toString())} -{' '}
+                        {moment(eventData?.endDate).format('llll')}{' '}
+                        {eventData?.endTime}{' '}
+                        {getAMPM(eventData?.endTime.toString())} (your local
                         time)
                       </div>
                       <div className="flex items-center mt-4 space-x-2">
@@ -226,8 +221,8 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                           }
                           className="hover:underline mx-4 text-sm dark:text-gray-300 text-gray-800 "
                         >
-                          {eventData?.attendees.length} attendee
-                          {eventData?.attendees.length > 1 ? 's' : ''}
+                          {eventData?.attendees?.length} attendee
+                          {eventData?.attendees?.length > 1 ? 's' : ''}
                         </button>
                       </div>
                       {authorized && (
@@ -267,7 +262,7 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                     profilePicture={userData?.profilePicture}
                   />
 
-                  {posts && posts.length > 0 ? (
+                  {posts?.length > 0 ? (
                     <InfiniteScroll
                       endMessage={
                         <div className="text-center">
@@ -276,10 +271,10 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                           </span>
                         </div>
                       }
-                      dataLength={posts.length}
+                      dataLength={posts?.length}
                       scrollableTarget="main_content"
                       next={fetchMoreData}
-                      hasMore={false}
+                      hasMore={postCount > posts?.length}
                       loader={<h4>Loading...</h4>}
                     >
                       <div className="grid grid-cols-1 gap-y-6">

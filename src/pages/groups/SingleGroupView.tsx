@@ -310,7 +310,7 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                         dataLength={posts.length}
                         scrollableTarget="main_content"
                         next={fetchMoreData}
-                        hasMore={false}
+                        hasMore={postCount > posts?.length}
                         loader={<h4>Loading...</h4>}
                       >
                         <div className="grid grid-cols-1 gap-y-6">
