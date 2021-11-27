@@ -42,14 +42,26 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
   )
 
   const eventData: IEvent = isFetched && !isLoading ? data?.data?.data : []
+  const _deleteEvent = useMutation(deleteEvent)
+
+  const [showModal, setShowModal] = useState(false)
+
+  const [showAttendeesModal, setShowAttendeesModal] = useState(false)
+
+  const history = useHistory()
+  useEffect(() => {
+    if (_deleteEvent.isSuccess) {
+      history.push(links.FEED)
+    }
+  }, [_deleteEvent.isSuccess])
+
+  const [showEditEventModal, setShowEditEventModal] = useState(false)
 
   const fetchPost = useQuery(
     'event-data',
     () => fetchMultiplePostsById(eventData?.posts as string[]),
     { enabled: !!eventData?.posts?.length && !(isLoading && !isFetched) }
   )
-
-  const _deleteEvent = useMutation(deleteEvent)
 
   const dropdownList = [
     {
@@ -78,19 +90,6 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
     },
   ]
 
-  const [showModal, setShowModal] = useState(false)
-
-  const [showAttendeesModal, setShowAttendeesModal] = useState(false)
-
-  const history = useHistory()
-  useEffect(() => {
-    if (_deleteEvent.isSuccess) {
-      history.push(links.FEED)
-    }
-  }, [_deleteEvent.isSuccess])
-
-  const [showEditEventModal, setShowEditEventModal] = useState(false)
-
   if (isLoading && !isFetched) {
     return <Loading />
   }
@@ -102,6 +101,10 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
   const authorized = userData?._id === eventData?.eventBy?._id
 
   const posts = (fetchPost.data?.data?.data.posts as IPost[]) || []
+  console.log(
+    '🚀 ~ file: SingleEvent.tsx ~ line 104 ~ SingleEventView ~ posts',
+    posts
+  )
   const postCount = fetchPost.data?.data?.data.count || 0
 
   const fetchMoreData = () => {}
@@ -193,10 +196,10 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                           'ddd, MMM Do,'
                         )}{' '}
                         {eventData?.startTime}{' '}
-                        {getAMPM(eventData?.startTime.toString())} -{' '}
+                        {getAMPM(eventData?.startTime?.toString())} -{' '}
                         {moment(eventData?.endDate).format('llll')}{' '}
                         {eventData?.endTime}{' '}
-                        {getAMPM(eventData?.endTime.toString())} (your local
+                        {getAMPM(eventData?.endTime?.toString())} (your local
                         time)
                       </div>
                       <div className="flex items-center mt-4 space-x-2">
@@ -264,7 +267,10 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                     profilePicture={userData?.profilePicture}
                   />
 
-                  {posts?.length > 0 ? (
+                  {(fetchPost.isLoading || !fetchPost.isFetched) && <Spinner />}
+
+                  {!(fetchPost.isLoading || !fetchPost.isFetched) &&
+                  posts?.length > 0 ? (
                     <InfiniteScroll
                       endMessage={
                         <div className="text-center">
