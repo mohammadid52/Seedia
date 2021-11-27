@@ -9,8 +9,8 @@ import { links } from 'constants/Links'
 import { useNotifications } from 'context/NotificationContext'
 import { Form, Formik } from 'formik'
 import { IEvent } from 'interfaces/UniversalInterface'
-import { map } from 'lodash'
-import React, { useRef, useState } from 'react'
+import { isEmpty, map } from 'lodash'
+import React, { useEffect, useRef, useState } from 'react'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { useMutation } from 'react-query'
 import { avatarPlaceholder } from 'state/Redux/constants'
@@ -20,9 +20,11 @@ import * as Yup from 'yup'
 const CreateEvent = ({
   open,
   setOpen,
+  eventData,
 }: {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  eventData?: IEvent
 }) => {
   const validationSchema = Yup.object({
     eventName: Yup.string().required('Event Name is required').min(10).max(150),
@@ -36,13 +38,13 @@ const CreateEvent = ({
 
   // @ts-ignore
   const initialValues: IEvent = {
-    eventName: '',
-    eventDescription: '',
-    startDate: new Date(),
-    endDate: new Date(),
-    startTime: '',
-    endTime: '',
-    timezone: '',
+    eventName: eventData?.eventName || '',
+    eventDescription: eventData?.eventDescription || '',
+    startDate: eventData?.startDate || new Date(),
+    endDate: eventData?.endDate || new Date(),
+    startTime: eventData?.startTime || '',
+    endTime: eventData?.endTime || '',
+    timezone: eventData?.timezone || '',
   }
 
   const formRef = useRef()
@@ -108,6 +110,16 @@ const CreateEvent = ({
     uploadFunction()
   }
 
+  const editMode = !isEmpty(eventData)
+
+  useEffect(() => {
+    if (editMode) {
+      setCoverPhoto(eventData.coverPicture)
+      setProfilePhoto(eventData.profilePicture)
+      setSelectedTimeZone(eventData?.timezone || timezone[0].text)
+    }
+  }, [editMode])
+
   const profileImageSelectorRef = useRef()
 
   const showFileExplorerForProfile = () =>
@@ -123,6 +135,8 @@ const CreateEvent = ({
   const [profilePhoto, setProfilePhoto] = useState<any>()
 
   const [coverPhoto, setCoverPhoto] = useState<any>()
+
+  const [selectedTimeZone, setSelectedTimeZone] = useState(timezone[0].text)
 
   return (
     <Modal disablePadding setOpen={setOpen} header="Create event" open={open}>
@@ -149,7 +163,7 @@ const CreateEvent = ({
 
           <Formik
             initialValues={initialValues}
-            enableReinitialize
+            enableReinitialize={editMode}
             innerRef={formRef}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
@@ -164,7 +178,11 @@ const CreateEvent = ({
                     alt=""
                     onClick={() => showFileExplorerForCover()}
                     src={
-                      coverPhoto ? URL.createObjectURL(coverPhoto) : placeholder
+                      coverPhoto
+                        ? editMode
+                          ? coverPhoto
+                          : URL.createObjectURL(coverPhoto)
+                        : placeholder
                     }
                     className="w-full lg:h-36 sm:h-24 object-cover h-20"
                   />
@@ -175,7 +193,9 @@ const CreateEvent = ({
                     alt=""
                     src={
                       profilePhoto
-                        ? URL.createObjectURL(profilePhoto)
+                        ? editMode
+                          ? profilePhoto
+                          : URL.createObjectURL(profilePhoto)
                         : avatarPlaceholder
                     }
                     className=" border-solid  lg:h-24 lg:w-24 h-16 w-16  border-white border-2 -mt-3"
@@ -197,7 +217,7 @@ const CreateEvent = ({
                   label="Timezone"
                   required
                   name="timezone"
-                  selectedItem={timezone[0].text}
+                  selectedItem={selectedTimeZone}
                   list={timezone.map((t) => ({ name: t.text, id: t.value }))}
                   placeholder="What is the purpose of this group?"
                 />

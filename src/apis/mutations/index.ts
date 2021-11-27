@@ -1,4 +1,5 @@
 import { network } from 'helpers'
+import { IPost, IPostLink } from 'interfaces/UniversalInterface'
 
 // follow & Unfollow
 const followUser = (id: string) => network.post(`/user/follow/${id}`)
@@ -92,7 +93,17 @@ const invite = (data: Invite) => network.post(`/groups/invite/`, { ...data })
 const exitGroup = (data: Exit) => network.post(`/groups/exit/`, { ...data })
 
 // Posts
-const addPost = (data: any) => network.post(`/post/add-post`, { ...data })
+
+type PostData = {
+  text?: string
+  links?: IPostLink[]
+  postType?: string
+  postedIn?: IPost['postedIn']
+  customInId?: string
+}
+
+const addPost = (data: { postData: PostData }) =>
+  network.post(`/post/add-post`, { ...data })
 const deletePost = (postId: any) => network.delete(`/post?postId=${postId}`)
 const viewPost = (postId: string) => network.post(`/post/view?postId=${postId}`)
 const saveUnsavePost = ({

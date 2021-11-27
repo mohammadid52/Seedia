@@ -124,7 +124,7 @@ const MyItems = ({ userData }: { userData: IParent }) => {
                       <div className="flex transition-all item-center px-4 py-1  dark:hover:bg-gray-700 justify-between">
                         <h6 className="font-medium ">Followers</h6>
                         <a
-                          href={links.followers()}
+                          href={links.followers(userData.profileUrl)}
                           className="hover:underline cursor-pointer text-link font-semibold"
                         >
                           {userData?.followers?.length || 0}

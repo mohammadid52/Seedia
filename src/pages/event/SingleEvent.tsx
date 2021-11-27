@@ -1,15 +1,17 @@
-import { deleteEvent, exitGroup } from 'apis/mutations'
-import { fetchSingleEvent } from 'apis/queries'
+import { deleteEvent } from 'apis/mutations'
+import { fetchMultiplePostsById, fetchSingleEvent } from 'apis/queries'
 import NoPosts from 'assets/svg/no-posts.svg'
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import Meta from 'components/atoms/Meta/Meta'
-import Modal from 'components/atoms/Modal'
 import Dropdown from 'components/Dropdown/Dropdown'
+import CreateEvent from 'components/event/CreateEvent'
 import Loading from 'components/Loading'
+import Post from 'components/posts/Post'
 import Spinner from 'components/Spinner'
+import UsersListModal from 'components/UserListModal'
 import { links } from 'constants/Links'
-import { IEvent, IParent } from 'interfaces/UniversalInterface'
+import { IEvent, IParent, IPost } from 'interfaces/UniversalInterface'
 import moment from 'moment'
 import PostInput from 'pages/dashboard/PostInput'
 import DashboardHeader from 'pages/DashboardHeader'
@@ -20,51 +22,15 @@ import { AiFillCalendar } from 'react-icons/ai'
 import { BsCameraVideo, BsFillCameraVideoFill } from 'react-icons/bs'
 import { CgPoll } from 'react-icons/cg'
 import { HiOutlinePhotograph } from 'react-icons/hi'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import { useMutation, useQuery } from 'react-query'
 import { useHistory, useParams } from 'react-router'
 import { avatarPlaceholder } from 'state/Redux/constants'
 
-const ExitGroup = ({
-  userId,
-  groupId,
-}: {
-  userId: string
-  groupId: string
-}) => {
-  const [showModal, setShowModal] = useState(false)
-  const history = useHistory()
-  const { mutate } = useMutation(exitGroup, {
-    onSuccess: () => {
-      history.push(links.groups())
-    },
-  })
-
-  return (
-    <>
-      <Modal header="Confirm" open={showModal} setOpen={setShowModal}>
-        <div className=" ">
-          <p className="dark:text-gray-400 text-gray-500 text-lg">
-            Are you sure you want to exit this group?
-          </p>
-          <div className="flex items-center p-4 justify-end">
-            <Button
-              label="Confirm"
-              gradient
-              onClick={() => mutate({ targetId: userId, groupId: groupId })}
-            />
-          </div>
-        </div>
-      </Modal>
-      <div className="rounded-lg border dark:border-gray-700  border-gray-200  overflow-hidden lg:max-w-xs bg-white dark:bg-gray-800 ">
-        <h1
-          onClick={() => setShowModal(true)}
-          className="text-center hover:bg-red-500 hover:text-white rounded-lg p-2 cursor-pointer text-red-500"
-        >
-          Exit group
-        </h1>
-      </div>
-    </>
-  )
+const getAMPM = (time: string): string => {
+  let f = time.split(':')[0]
+  let n: number = Number(f)
+  return n > 12 ? 'PM' : 'AM'
 }
 
 const SingleEventView = ({ userData }: { userData: IParent }) => {
@@ -74,20 +40,24 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
   const { data, isLoading, isFetched, refetch } = useQuery('event-data', () =>
     fetchSingleEvent(eventId)
   )
+
   const eventData: IEvent = isFetched && !isLoading ? data?.data?.data : []
 
-  const getAMPM = (time: string): string => {
-    let f = time.split(':')[0]
-    let n: number = Number(f)
-    return n > 12 ? 'PM' : 'AM'
-  }
+  const fetchPost = useQuery(
+    'event-data',
+    () => fetchMultiplePostsById(eventData?.posts as string[]),
+    { enabled: !!eventData?.posts?.length && !(isLoading && !isFetched) }
+  )
+
   const _deleteEvent = useMutation(deleteEvent)
 
   const dropdownList = [
     {
       id: '1',
       name: `Edit event`,
-      onClick: () => {},
+      onClick: () => {
+        setShowEditEventModal(true)
+      },
     },
     {
       id: '2',
@@ -110,12 +80,17 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
 
   const [showModal, setShowModal] = useState(false)
 
+  const [showAttendeesModal, setShowAttendeesModal] = useState(false)
+
   const history = useHistory()
   useEffect(() => {
     if (_deleteEvent.isSuccess) {
       history.push(links.FEED)
     }
   }, [_deleteEvent.isSuccess])
+
+  const [showEditEventModal, setShowEditEventModal] = useState(false)
+
   if (isLoading && !isFetched) {
     return <Loading />
   }
@@ -126,10 +101,34 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
 
   const authorized = userData?._id === eventData?.eventBy?._id
 
+  const posts = (fetchPost.data?.data?.data.posts as IPost[]) || []
+  const postCount = fetchPost.data?.data?.data.count || 0
+
+  const fetchMoreData = () => {}
   return (
     <div className="relative  dark:bg-gray-900 bg-gray-100 min-h-screen ">
       <DashboardHeader userData={userData} />
-      <Meta pageTitle={`Post | Feed | 13RMS`} />
+      <Meta
+        pageTitle={`${eventData.eventName} | event | 13RMS`}
+        imageUrl={eventData?.profilePicture}
+        title={eventData.eventName}
+        description={eventData.eventDescription}
+      />
+
+      {showEditEventModal && eventData && (
+        <CreateEvent
+          open={showEditEventModal}
+          eventData={eventData}
+          setOpen={setShowEditEventModal}
+        />
+      )}
+
+      <UsersListModal
+        title={`All attendees (${eventData?.attendees.length})`}
+        userList={eventData?.attendees}
+        open={showAttendeesModal}
+        setOpen={setShowAttendeesModal}
+      />
 
       {authorized && (
         <EventInviteModal
@@ -221,10 +220,15 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                             +{eventData?.attendees?.length - 4}
                           </span>
                         ) : null}
-                        <p className="mx-4 text-sm dark:text-gray-300 text-gray-800 ">
+                        <button
+                          onClick={() =>
+                            setShowAttendeesModal(!showAttendeesModal)
+                          }
+                          className="hover:underline mx-4 text-sm dark:text-gray-300 text-gray-800 "
+                        >
                           {eventData?.attendees.length} attendee
                           {eventData?.attendees.length > 1 ? 's' : ''}
-                        </p>
+                        </button>
                       </div>
                       {authorized && (
                         <div className="mt-4">
@@ -240,8 +244,8 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                   </div>
 
                   <PostInput
-                    // for now
-                    disabled
+                    customInId={eventData?._id}
+                    postingIn={'event'}
                     placeholder="Start a post in this event"
                     customButtons={
                       <>
@@ -263,33 +267,60 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                     profilePicture={userData?.profilePicture}
                   />
 
-                  <Card
-                    content={
-                      <div className="m-4 text-center flex items-center justify-center flex-col">
-                        <img
-                          src={NoPosts}
-                          alt=""
-                          className="h-28 sm:h-32 lg:h-36 xl:h-40 w-full"
-                        />
-                        <h3 className="mt-4 text-xl font-medium dark:text-gray-300 text-gray-900">
-                          Create the first post
-                        </h3>
-                        <p className="mt-1 text-base text-gray-500">
-                          Get the conversation going. Be the first to post in
-                          this event!
-                        </p>
+                  {posts && posts.length > 0 ? (
+                    <InfiniteScroll
+                      endMessage={
+                        <div className="text-center">
+                          <span className="dark:text-gray-600 text-center text-gray-400">
+                            •
+                          </span>
+                        </div>
+                      }
+                      dataLength={posts.length}
+                      scrollableTarget="main_content"
+                      next={fetchMoreData}
+                      hasMore={false}
+                      loader={<h4>Loading...</h4>}
+                    >
+                      <div className="grid grid-cols-1 gap-y-6">
+                        {posts.map((post) => (
+                          <Post
+                            userData={userData}
+                            userId={userData._id}
+                            post={post}
+                          />
+                        ))}
                       </div>
-                    }
-                  />
+                    </InfiniteScroll>
+                  ) : (
+                    <Card
+                      content={
+                        <div className="m-4 text-center flex items-center justify-center flex-col">
+                          <img
+                            src={NoPosts}
+                            alt=""
+                            className="h-28 sm:h-32 lg:h-36 xl:h-40 w-full"
+                          />
+                          <h3 className="mt-4 text-xl font-medium dark:text-gray-300 text-gray-900">
+                            Create the first post
+                          </h3>
+                          <p className="mt-1 text-base text-gray-500">
+                            Get the conversation going. Be the first to post in
+                            this event!
+                          </p>
+                        </div>
+                      }
+                    />
+                  )}
                 </div>
               )}
             </div>
           }
-          thirdColClass="lg:block"
+          thirdColClass="xl:block hidden"
           thirdCol={
-            <div className="space-y-12 lg:max-w-84 max-w-sm">
+            <div className="space-y-12 lg:max-w-84 max-w-full">
               <Card
-                cardTitle="About this group"
+                cardTitle="About this event"
                 content={
                   <p className="text-gray-900 dark:text-gray-200 line-clamp ">
                     {eventData.eventDescription}

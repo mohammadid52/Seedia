@@ -69,17 +69,20 @@ const AddProduct = ({
 
   const { setNotification } = useNotifications()
 
-  const { mutate, isLoading, isError, isSuccess } = useMutation(addProduct, {
-    onSuccess: (data) => {
-      const { name, id } = data.data.data
-      setNotification({
-        show: true,
-        title: `You have successfully posted product ${name} on Tradingpost13RMS. Good luck with the sale.`,
-        buttonText: 'View',
-        buttonUrl: links.getProductUrl(id),
-      })
-    },
-  })
+  const { mutate, isLoading, isError, error, isSuccess } = useMutation(
+    addProduct,
+    {
+      onSuccess: (data) => {
+        const { name, id } = data.data.data
+        setNotification({
+          show: true,
+          title: `You have successfully posted product ${name} on Tradingpost13RMS. Good luck with the sale.`,
+          buttonText: 'View',
+          buttonUrl: links.getProductUrl(id),
+        })
+      },
+    }
+  )
 
   const [imageList, setImageList] = useState<any[]>([])
 
@@ -140,8 +143,6 @@ const AddProduct = ({
       )
     }
   }, [isSuccess])
-
-  const [error, setError] = useState('')
 
   const onSubmit = async () => {
     upload()
@@ -271,8 +272,6 @@ const AddProduct = ({
           <FormTagsInput name="tags" />
           <List name="features" />
           <List name="highlights" />
-
-          {error && <Error errors={[error.toString()]} />}
 
           <div className="flex items-center justify-end">
             <Button

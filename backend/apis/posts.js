@@ -22,11 +22,13 @@ app.post('/add-post', auth, async (req, res) => {
   const token = req.user
 
   const { postData } = req.body
-  const { postType = 'normal' } = postData
+  const { postType = 'normal', postedIn = 'general' } = postData
 
   if (postType) {
     const postCollection = res.locals.postCollection
     const usersCollection = res.locals.usersCollection
+    const groupsCollection = res.locals.groupsCollection
+    const eventCollection = res.locals.eventCollection
     try {
       const user = await getItem(usersCollection, token.id)
       if (user) {
@@ -37,6 +39,7 @@ app.post('/add-post', auth, async (req, res) => {
           postedBy: token.id,
           postedOn: new Date(),
           viewedBy: [],
+          postedIn: postedIn,
         }
         const afterInsertPost = await postCollection.insertOne(updatedPost)
         const postUrl = `${user?.firstName}_${
@@ -72,6 +75,25 @@ app.post('/add-post', auth, async (req, res) => {
         await updateData(postCollection, afterInsertPost.insertedId, {
           postUrl: postUrl,
         })
+
+        if (postedIn === 'group' && postData.customInId) {
+          const group = await getItem(groupsCollection, postData.customInId)
+          await updateData(groupsCollection, postData.customInId, {
+            posts:
+              group?.posts?.length > 0
+                ? [...group.posts, afterInsertPost.insertedId]
+                : [afterInsertPost.insertedId],
+          })
+        }
+        if (postedIn === 'event' && postData.customInId) {
+          const event = await getItem(eventCollection, postData.customInId)
+          await updateData(eventCollection, postData.customInId, {
+            posts:
+              event?.posts?.length > 0
+                ? [...event.posts, afterInsertPost.insertedId]
+                : [afterInsertPost.insertedId],
+          })
+        }
 
         return res
           .status(202)
@@ -459,7 +481,10 @@ app.get('/feed', auth, async (req, res) => {
           _id: { $in: idListObjectId },
         })
         const filter = {
-          $and: [{ postedBy: { $in: idListStringed } }],
+          $and: [
+            { postedBy: { $in: idListStringed } },
+            { $eq: { postedIn: 'general' } },
+          ],
         }
         const postsCount = await postCollection.find(filter).count()
 
@@ -503,6 +528,82 @@ app.get('/feed', auth, async (req, res) => {
       .status(204)
       .json(responseMsg('error', 'Something went wrong. Please try again', {}))
   }
+})
+
+// Fetch Multiple Posts By Ids
+app.post('/list/fetchById', auth, async (req, res) => {
+  const token = req.user
+  const { limit = 10, skip = 0 } = req.query
+  const { postIds = [] } = req.body
+
+  const _limit = Number(limit)
+  const _skip = Number(skip)
+
+  if (postIds?.length > 0) {
+    const postCollection = res.locals.postCollection
+    const usersCollection = res.locals.usersCollection
+    try {
+      const user = await getItem(usersCollection, token.id)
+      if (user) {
+        let idListStringed = unique(postIds.map(convertToString))
+        let idListObjectId = unique(postIds.map(addObjectId))
+
+        if (idListStringed.length > 0 && idListObjectId.length > 0) {
+          const filter = {
+            $and: [{ _id: { $in: idListObjectId } }],
+          }
+          const postsCount = await postCollection.find(filter).count()
+
+          let posts = await postCollection
+            .find(filter)
+            .skip(_skip)
+            .limit(_limit)
+            .sort({ postedOn: -1 })
+            .toArray()
+
+          if (posts && posts.length > 0) {
+            const users = await getManyItems(usersCollection, {
+              _id: { $in: posts?.map((p) => addObjectId(p?.postedBy)) },
+            })
+            posts = posts.map((post) => {
+              const user = users.find(
+                (user) => user._id.toString() === post?.postedBy.toString()
+              )
+              return {
+                ...post,
+                user: user,
+              }
+            })
+            return res.status(202).json(
+              responseMsg('success', 'Posts fetched successfully', {
+                posts,
+                count: postsCount,
+              })
+            )
+          } else {
+            return res
+              .status(409)
+              .json(responseMsg('error', 'No posts found', {}))
+          }
+        } else {
+          return res.status(204).json(responseMsg('error', 'empty array', {}))
+        }
+      } else {
+        return res
+          .status(204)
+          .json(responseMsg('error', 'Cannot find user ', {}))
+      }
+    } catch (error) {
+      console.error(error)
+      return res
+        .status(204)
+        .json(
+          responseMsg('error', 'Something went wrong. Please try again', {})
+        )
+    }
+  }
+
+  return res.status(404).json(responseMsg('error', 'Empty id list', {}))
 })
 
 // ~~~~~~~~~~~~~~~~~~~Recent Activity ~~~~~~~~~~~~~~~~~~~~ //
@@ -578,9 +679,7 @@ app.get('/p', async (req, res) => {
       } else {
         return res
           .status(204)
-          .json(
-            responseMsg('error', 'Post is removed by the owner', { user: user })
-          )
+          .json(responseMsg('error', 'Post is removed by the owner', {}))
       }
     } catch (error) {
       console.error(error)

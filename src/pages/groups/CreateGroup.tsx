@@ -8,7 +8,7 @@ import { useNotifications } from 'context/NotificationContext'
 import { Form, Formik } from 'formik'
 import { IGroup, IParent } from 'interfaces/UniversalInterface'
 import { isEmpty, map } from 'lodash'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { useMutation } from 'react-query'
 import { avatarPlaceholder } from 'state/Redux/constants'
@@ -47,12 +47,13 @@ const CreateGroup = ({
     createGroup,
     {
       onSuccess: (data) => {
-        const groupName = data?.data?.data?.groupName
+        const group = data?.data?.data
+        const groupName = group?.groupName
         setNotification({
           show: true,
           title: `Dear ${userData.firstName}. You have successfully created the group ${groupName} `,
           buttonText: 'View',
-          buttonUrl: links.viewStore(userData.profileUrl),
+          buttonUrl: links.groupById(group._id),
         })
         refetchGroup()
       },
@@ -100,8 +101,8 @@ const CreateGroup = ({
 
   useEffect(() => {
     if (editMode) {
-      setCoverPhoto(groupData.coverPicture)
-      setProfilePhoto(groupData.profilePicture)
+      setCoverPhoto(groupData?.coverPicture)
+      setProfilePhoto(groupData?.profilePicture)
     }
   }, [editMode])
 

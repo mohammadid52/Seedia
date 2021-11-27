@@ -30,7 +30,7 @@ const Login = () => {
   const [isVerified, setIsVerified] = useState(false)
 
   const onSubmit = async (values) => {
-    if (true) {
+    if (isVerified) {
       setLoading(true)
       try {
         const { data } = await network.post(

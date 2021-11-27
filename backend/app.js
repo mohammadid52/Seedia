@@ -116,7 +116,14 @@ client.connect(
       requestsRouter
     )
     app.use('/groups', passUserCollection, passGroupsCollection, groupsRouter)
-    app.use('/post', passUserCollection, passPostCollection, postRouter)
+    app.use(
+      '/post',
+      passUserCollection,
+      passGroupsCollection,
+      passEventCollection,
+      passPostCollection,
+      postRouter
+    )
     app.use('/store', passUserCollection, passPostCollection, storeRouter)
 
     app.use('/auth', passUserCollection, authenticationRouter)

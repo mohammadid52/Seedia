@@ -45,7 +45,7 @@ const PostPhotoModal = ({
           links: [
             {
               id: nanoid(12),
-              url: a.data.data.location,
+              url: a?.data?.data?.location,
               type: isPhoto ? 'image' : 'video',
             },
           ],

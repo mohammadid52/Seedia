@@ -1,6 +1,7 @@
 import Button from 'components/atoms/Button'
 import Card from 'components/atoms/Card'
 import CreateEvent from 'components/event/CreateEvent'
+import { IPost } from 'interfaces/UniversalInterface'
 import PostModal from 'pages/dashboard/PostModal'
 import PostPhotoModal from 'pages/dashboard/PostPhotoModal'
 import React, { useState } from 'react'
@@ -15,11 +16,15 @@ const PostInput = ({
   customButtons = null,
   placeholder = 'Start a post',
   disabled,
+  postingIn = 'general',
+  customInId,
 }: {
   profilePicture?: string
   customButtons?: React.ReactNode
   placeholder?: string
   disabled?: boolean
+  postingIn?: IPost['postedIn']
+  customInId?: string
 }) => {
   const [showPostModal, setShowPostModal] = useState(false)
   const [showOtherModals, setShowOtherModals] = useState('init')
@@ -67,7 +72,13 @@ const PostInput = ({
   return (
     <>
       {!disabled && (
-        <PostModal open={showPostModal} setOpen={setShowPostModal} />
+        <PostModal
+          customInId={customInId}
+          postingIn={postingIn}
+          setShowOtherModals={setShowOtherModals}
+          open={showPostModal}
+          setOpen={setShowPostModal}
+        />
       )}
       {(showOtherModals === 'photo' || showOtherModals === 'video') && (
         <PostPhotoModal

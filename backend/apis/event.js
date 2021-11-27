@@ -45,6 +45,7 @@ app.post('/create-event', auth, async (req, res) => {
         createdOn: new Date(),
         createdBy: token.id,
         coverPicture: coverPhoto,
+        posts: [],
         profilePicture: profilePhoto,
       }
 
@@ -139,8 +140,8 @@ app.get('/e/:eventId', auth, async (req, res) => {
       shortUser
     )
 
-    const eventBy = users.find(
-      (ev) => ev._id.toString() === event.eventBy.toString()
+    const eventBy = users?.find(
+      (ev) => ev?._id?.toString() === event?.eventBy?.toString()
     )
 
     const eventDetails = {

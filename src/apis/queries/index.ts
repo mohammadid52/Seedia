@@ -50,6 +50,8 @@ const fetchFeed = ({ limit = 10, skip = 0 }: FeedInput) =>
   network.get(`/post/feed?limit=${limit}&skip=${skip}`)
 const fetchPostById = (postUrl: string) =>
   network.get(`/post/p?postUrl=${postUrl}`)
+const fetchMultiplePostsById = (ids: string[] = []) =>
+  network.post(`/post/list/fetchById`, { postIds: ids })
 const fetchAvgViews = () => network.get(`/post/averagePostViews`)
 const fetchActivity = (userId: string, limit: number) =>
   network.get(`/post/recent-activity?limit=${limit}&userId=${userId}`)
@@ -61,6 +63,7 @@ const fetchEvents = (short?: boolean) =>
 const fetchSingleEvent = (eventId: string) => network.get(`/event/e/${eventId}`)
 
 export {
+  fetchMultiplePostsById,
   fetchProductDetails,
   fetchAllProducts,
   fetchReviewsByProduct,

@@ -20,7 +20,7 @@ const Activity = ({
       content={
         <div>
           {iAmOwnerOfThisProfile ? (
-            <a href={links.followers()} className="block">
+            <a href={links.followers(userData.profileUrl)} className="block">
               <div className="-mt-2 mb-2 text-link hover:underline font-medium tracking-wide ">
                 {userData?.followers?.length} followers
               </div>

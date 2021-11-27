@@ -68,10 +68,7 @@ const AdditionalInfo = ({
 
   const onCancel = () => {
     if (unsavedChanges) {
-      setShowUnsaveModal(true)
     } else {
-      setShowUnsaveModal(false)
-
       setUnsavedChanges(false)
       if (!showModal) {
         setLocalFields(initialState)
@@ -80,7 +77,6 @@ const AdditionalInfo = ({
     setShowModal(false)
   }
   const [unsavedChanges, setUnsavedChanges] = useState(false)
-  const [showUnsaveModal, setShowUnsaveModal] = useState(false)
 
   const updateState = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target

@@ -33,17 +33,17 @@ const Post = ({
   userId: string
   userData: IParent
 }) => {
-  const user = post.user
-  const postId: string = post._id.toString()
+  const user = post?.user
+  const postId: string = post?._id?.toString()
 
   const { mutate } = useMutation(() => viewPost(postId))
 
   const postRef = useRef(null)
   const isCardOnScreen = useOnScreen(postRef)
 
-  const isViewed = post.viewedBy.includes(userId)
+  const isViewed = post?.viewedBy?.includes(userId)
 
-  const iAmOwnerOfThisPost = user._id.toString() === userId
+  const iAmOwnerOfThisPost = user?._id?.toString() === userId
   const { setNotification } = useNotifications()
 
   const saveMutations = useMutation(saveUnsavePost)
@@ -84,7 +84,7 @@ const Post = ({
           })
         } else {
           // @ts-ignore
-          saveMutations.mutate({ action: 'save', postId: postId.toString() })
+          saveMutations.mutate({ action: 'save', postId: postId?.toString() })
           setSaved(true)
           setNotification({
             buttonText: 'My items',
@@ -102,7 +102,7 @@ const Post = ({
       name: 'Copy link to post',
       onClick: () => {
         navigator.clipboard.writeText(
-          window.origin + links.postById(post.postUrl)
+          window.origin + links.postById(post?.postUrl)
         )
       },
     },
@@ -112,7 +112,7 @@ const Post = ({
     ...commonDropdownList,
     {
       id: '3',
-      name: `Unfollow ${user?.fullName || user.firstName}`,
+      name: `Unfollow ${user?.fullName || user?.firstName}`,
       onClick: () => {},
     },
   ]
@@ -176,7 +176,7 @@ const Post = ({
           <div className="mr-4 flex-shrink-0">
             <img
               src={
-                user.profilePicture ? user.profilePicture : avatarPlaceholder
+                user?.profilePicture ? user?.profilePicture : avatarPlaceholder
               }
               alt="13RMS"
               className="sm:h-14 h-12 w-12 sm:w-14  border-gradient border-transparent border-2 rounded-full"
@@ -197,7 +197,7 @@ const Post = ({
             <span className="text-gray-500 text-xs dark:text-gray-500">
               {user?.followers?.length || 0} followers{' '}
               <span className="text-xs dark:text-gray-500 text-gray-500 font-medium">
-                • {moment(post.postedOn).fromNow()}
+                • {moment(post?.postedOn).fromNow()}
               </span>
             </span>
           </div>
@@ -209,12 +209,11 @@ const Post = ({
       {post?.text && (
         <div className="px-6 pb-4">
           <p className="text-gray-700 dark:text-gray-400 text-sm break-words">
-            {post.text}
+            {post?.text}
           </p>
         </div>
       )}
-      {post.links &&
-        post.links.length > 0 &&
+      {post?.links?.length > 0 &&
         (post.links[0].type === 'image' ? (
           <img className="w-full" src={post.links[0].url} alt="" />
         ) : (

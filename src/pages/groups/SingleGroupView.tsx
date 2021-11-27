@@ -1,4 +1,4 @@
-import { fetchGroupById } from 'apis/queries'
+import { fetchGroupById, fetchMultiplePostsById } from 'apis/queries'
 import { exitGroup } from 'apis/mutations'
 import NoPosts from 'assets/svg/no-posts.svg'
 import Button from 'components/atoms/Button'
@@ -10,7 +10,12 @@ import Spinner from 'components/Spinner'
 import VerticalProfileCard from 'components/VerticalProfileCard'
 import { links } from 'constants/Links'
 import useAccountType from 'hooks/useAccountType'
-import { IGroup, IParent } from 'interfaces/UniversalInterface'
+import {
+  IGroup,
+  IParent,
+  IPost,
+  IShortProfile,
+} from 'interfaces/UniversalInterface'
 import moment from 'moment'
 import PostInput from 'pages/dashboard/PostInput'
 import DashboardHeader from 'pages/DashboardHeader'
@@ -24,6 +29,9 @@ import { useMutation, useQuery } from 'react-query'
 import { useHistory, useParams } from 'react-router'
 import Modal from 'components/atoms/Modal'
 import { avatarPlaceholder } from 'state/Redux/constants'
+import UsersListModal from 'components/UserListModal'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import Post from 'components/posts/Post'
 
 const ExitGroup = ({
   userId,
@@ -105,10 +113,18 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
   const { data, isLoading, isFetched, refetch } = useQuery('group-data', () =>
     fetchGroupById(groupId)
   )
-  const groupData: IGroup = isFetched && !isLoading && data.data.data
+  const groupData: IGroup = isFetched && !isLoading ? data?.data?.data : []
+
+  const fetchPost = useQuery(
+    'group-posts',
+    () => fetchMultiplePostsById(groupData?.posts as string[]),
+    { enabled: !!groupData?.posts?.length && !(isLoading && !isFetched) }
+  )
 
   const { getType } = useAccountType(userData)
   const [showModal, setShowModal] = useState(false)
+
+  const [showGroupMembersModal, setShowGroupMembersModal] = useState(false)
 
   if (isLoading && !isFetched) {
     return <Loading />
@@ -116,8 +132,12 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
 
   const isOwner = groupData?.createdBy?.toString() === userData._id
   const isAdmin = groupData?.admin?.includes(userData._id)
-
+  const members = (groupData?.members as IShortProfile[]) || []
   const authorized = isOwner || isAdmin
+
+  const posts = (fetchPost.data?.data?.data.posts as IPost[]) || []
+  const postCount = fetchPost.data?.data?.data.count || 0
+  const fetchMoreData = () => {}
 
   return (
     isMember && (
@@ -135,11 +155,18 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
           />
         )}
 
+        <UsersListModal
+          title={`Group members (${members?.length})`}
+          userList={members}
+          open={showGroupMembersModal}
+          setOpen={setShowGroupMembersModal}
+        />
+
         <div
           className={`h-auto pt-4 relative flow-root  transition-all duration-500 `}
         >
           <DashboardLayout
-            firstColClass={`   max-h-152 lg:block  xl:block w-full `}
+            firstColClass={`   max-h-152 hidden  xl:block w-full `}
             firstCol={
               <div className="flex flex-col gap-y-12">
                 {isFetched && !isLoading ? (
@@ -168,7 +195,7 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                                   Requests to join
                                 </h6>
                                 <a
-                                  href={links.followers()}
+                                  href={links.followers(userData.profileUrl)}
                                   className="hover:underline text-link cursor-pointer font-semibold"
                                 >
                                   {groupData?.requests?.length || 0}
@@ -248,8 +275,8 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                     </div>
 
                     <PostInput
-                      // for now
-                      disabled
+                      postingIn="group"
+                      customInId={groupData._id}
                       placeholder="Start a post in this group"
                       customButtons={
                         <>
@@ -271,31 +298,58 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                       profilePicture={userData?.profilePicture}
                     />
 
-                    <Card
-                      content={
-                        <div className="m-4 text-center flex items-center justify-center flex-col">
-                          <img
-                            src={NoPosts}
-                            alt=""
-                            className="h-28 sm:h-32 lg:h-36 xl:h-40 w-full"
-                          />
-                          <h3 className="mt-4 text-xl font-medium dark:text-gray-300 text-gray-900">
-                            Create the first post
-                          </h3>
-                          <p className="mt-1 text-base text-gray-500">
-                            Get the conversation going. Be the first to post in
-                            this group!
-                          </p>
+                    {posts && posts.length > 0 ? (
+                      <InfiniteScroll
+                        endMessage={
+                          <div className="text-center">
+                            <span className="dark:text-gray-600 text-center text-gray-400">
+                              •
+                            </span>
+                          </div>
+                        }
+                        dataLength={posts.length}
+                        scrollableTarget="main_content"
+                        next={fetchMoreData}
+                        hasMore={false}
+                        loader={<h4>Loading...</h4>}
+                      >
+                        <div className="grid grid-cols-1 gap-y-6">
+                          {posts.map((post) => (
+                            <Post
+                              userData={userData}
+                              userId={userData._id}
+                              post={post}
+                            />
+                          ))}
                         </div>
-                      }
-                    />
+                      </InfiniteScroll>
+                    ) : (
+                      <Card
+                        content={
+                          <div className="m-4 text-center flex items-center justify-center flex-col">
+                            <img
+                              src={NoPosts}
+                              alt=""
+                              className="h-28 sm:h-32 lg:h-36 xl:h-40 w-full"
+                            />
+                            <h3 className="mt-4 text-xl font-medium dark:text-gray-300 text-gray-900">
+                              Create the first post
+                            </h3>
+                            <p className="mt-1 text-base text-gray-500">
+                              Get the conversation going. Be the first to post
+                              in this event!
+                            </p>
+                          </div>
+                        }
+                      />
+                    )}
                   </div>
                 )}
               </div>
             }
             thirdColClass="lg:block"
             thirdCol={
-              <div className="space-y-12 lg:max-w-84 max-w-sm">
+              <div className="space-y-12 lg:max-w-84 max-w-full">
                 <Card
                   cardTitle={`${groupData.members.length} member${
                     groupData.members.length > 1 ? 's' : ''
@@ -315,26 +369,40 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                             />
                           ))}
                       </div>
-                      {authorized && (
+                      <div className="flex gap-x-4 items-center justify-start">
+                        {authorized && (
+                          <Button
+                            onClick={() => setShowModal(true)}
+                            gradient
+                            rounded="rounded-full"
+                            className="mt-4"
+                            label="Invite connections"
+                          />
+                        )}
                         <Button
-                          onClick={() => setShowModal(true)}
+                          onClick={() =>
+                            setShowGroupMembersModal(!showGroupMembersModal)
+                          }
                           gradient
                           rounded="rounded-full"
+                          invert
                           className="mt-4"
-                          label="Invite connections"
+                          label="see all members"
                         />
-                      )}
+                      </div>
                     </div>
                   }
                 />
-                <Card
-                  cardTitle="About this group"
-                  content={
-                    <p className="text-gray-900 dark:text-gray-200 line-clamp ">
-                      {groupData.groupDescription}
-                    </p>
-                  }
-                />
+                {groupData?.groupDescription && (
+                  <Card
+                    cardTitle="About this group"
+                    content={
+                      <p className="text-gray-900 dark:text-gray-200 line-clamp ">
+                        {groupData?.groupDescription}
+                      </p>
+                    }
+                  />
+                )}
                 {groupData.groupRules && (
                   <Card
                     cardTitle="Group rules"

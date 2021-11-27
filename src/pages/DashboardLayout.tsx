@@ -42,7 +42,7 @@ const DashboardLayout = ({
         )}
 
         {secondCol && (
-          <div className="bg-gray-100 dark:bg-gray-900 lg:min-w-0 lg:pl-6 pl-0 lg:flex-1 ">
+          <div className="bg-gray-100 dark:bg-gray-900 lg:min-w-0 xl:pl-6 pl-0 lg:flex-1 ">
             <div className="h-full py-6 px-0 lg:px-6 xl:px-8">
               {/* Start main area*/}
               <div className="relative h-full " style={{}}>
@@ -58,7 +58,7 @@ const DashboardLayout = ({
         style={{ ...thirdColStyles }}
         className={`${thirdColClass} bg-gray-100 dark:bg-gray-900 px-4 lg:px-0 lg:flex-shrink-0 `}
       >
-        <div className="h-full pl-0 lg:pl-6  py-6 ">
+        <div className="h-full pl-0 lg:pl-6  py-6 xl:pr-0 pr-6 ">
           {/* Start right column area */}
           <div className="h-full relative" style={{ minHeight: '16rem' }}>
             {thirdCol}

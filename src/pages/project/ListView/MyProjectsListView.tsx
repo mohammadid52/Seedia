@@ -1,7 +1,6 @@
 import { fetchMyProjects } from 'apis/queries'
 import Meta from 'components/atoms/Meta/Meta'
 import SectionTitle from 'components/atoms/SectionTitle'
-import Sidebar from 'components/Sidebar'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import useAccountType from 'hooks/useAccountType'

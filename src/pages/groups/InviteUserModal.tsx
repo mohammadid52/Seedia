@@ -6,7 +6,7 @@ import Button from 'components/atoms/Button'
 import Modal from 'components/atoms/Modal'
 import Spinner from 'components/Spinner'
 import useAccountType from 'hooks/useAccountType'
-import { IGroup, IParent } from 'interfaces/UniversalInterface'
+import { IGroup, IGroupMember, IParent } from 'interfaces/UniversalInterface'
 import { findIndex, remove } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
@@ -97,6 +97,8 @@ const InviteUserModal = ({
     setLocalUsers([...searchedList])
   }
 
+  const members = group.members as IGroupMember[]
+
   return (
     <Modal
       fixedBottom={
@@ -138,13 +140,12 @@ const InviteUserModal = ({
               <div className="col-span-3 min-h-136 pb-12  max-h-136 flex flex-col  overflow-y-scroll overflow-x-hidden ">
                 {localUsers.map((user: IParent) => {
                   const { isBusiness, isPersonal } = getType(user)
-                  const alreadyMember = Boolean(
-                    // @ts-ignore
-                    group.members.find((g) => g._id === user._id)
+                  const alreadyMember = !!members?.find(
+                    (g) => g._id === user._id
                   )
-                  const requestSent = Boolean(
-                    // @ts-ignore
-                    group.requests.find((g) => g === user._id)
+
+                  const requestSent = !!group?.requests?.find(
+                    (g) => g === user._id
                   )
                   return (
                     <div
@@ -162,19 +163,19 @@ const InviteUserModal = ({
                           // onChange={(e) => onUserClick(user)}
                           name="candidates"
                           checked={Boolean(
-                            selectedUsers.find((d) => d._id === user._id)
+                            selectedUsers?.find((d) => d._id === user._id)
                           )}
                           type="checkbox"
                           className="focus:ring-yellow-500 mr-4 h-5 w-5 text-yellow-600 border-gray-300 rounded"
                         />
                         <img
-                          src={user.profilePicture || avatarPlaceholder}
+                          src={user?.profilePicture || avatarPlaceholder}
                           alt=""
                           className="rounded-full mr-2 h-12 w-12"
                         />
                         <div>
                           <h4 className="dark:text-white text-gray-900">
-                            {user.fullName}
+                            {user?.fullName}
                           </h4>
                           <p className="dark:text-gray-500 text-gray-600 text-sm">
                             {isBusiness
@@ -197,7 +198,7 @@ const InviteUserModal = ({
               </div>
               <div className="col-span-2 ml-2">
                 <div className="border-b text-sm border-gray-200 dark:border-gray-800  text-gray-500 dark:text-gray-400 p-4 flex items-center justify-between">
-                  <p>{selectedUsers.length} selected</p>
+                  <p>{selectedUsers?.length} selected</p>
                   <button
                     onClick={unselectAll}
                     className="font-medium dark:text-gray-300"
@@ -206,8 +207,7 @@ const InviteUserModal = ({
                   </button>
                 </div>
                 <div className="p-4 pr-0 flex flex-col gap-y-4 max-w-56 min-w-56  max-h-136 pb-20 overflow-y-scroll mx-2">
-                  {selectedUsers &&
-                    selectedUsers.length > 0 &&
+                  {selectedUsers?.length > 0 &&
                     selectedUsers.map((user: IParent) => (
                       <div className="flex  items-center  justify-between">
                         <div className="flex items-center">

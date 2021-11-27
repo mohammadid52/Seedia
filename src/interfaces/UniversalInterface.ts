@@ -147,6 +147,7 @@ export interface IEvent {
   invites?: string[]
   isOnline: boolean
   attendees: IShortProfile[]
+  posts: IPost[] | string[]
 }
 
 export interface INotification {
@@ -422,6 +423,7 @@ export interface IGroup {
   profilePicture?: string
   groupRules?: string
   requests?: string[]
+  posts: IPost[] | string[]
 }
 
 // ~~~~~~~~~~~~~~~~~~~Post Interfaces~~~~~~~~~~~~~~~~~~~~ //
@@ -442,10 +444,13 @@ export interface IPost {
   likes: string[]
   postType?: string
   user?: IParent
+  postedIn?: 'group' | 'event' | 'general' // whether it is posted in group or event
+  comments?: IComment[]
+  customInId?: string // could be groupId or eventId
 }
 
 export interface IPostLink {
   id: string
   url: string
-  type: 'image' | 'video'
+  type: 'image' | 'video' | string
 }

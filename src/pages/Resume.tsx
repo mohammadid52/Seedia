@@ -29,7 +29,6 @@ import {
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { useHistory } from 'react-router'
 import { wait } from 'utils/wait'
 
 const RenderHtml = ({ userData }: { userData: IParent }) => {
@@ -217,7 +216,6 @@ const RenderHtml = ({ userData }: { userData: IParent }) => {
   }
   const [showResumeValidityModal, setShowResumeValidityModal] = useState(false)
 
-  const history = useHistory()
   useEffect(() => {
     const isValid = checkValidity()
 

@@ -66,8 +66,8 @@ export const links = {
   recentActivity: (profileUrl: string) => `/${profileUrl}/recent-activity`,
 
   // Followers
-  followers: () => `/feed/followers`,
-  followings: () => `/feed/followings`,
+  followers: (profileUrl: string) => `/${profileUrl}/followers`,
+  followings: (profileUrl: string) => `/${profileUrl}/followings`,
 
   // Store
   openStore: () => `/open-store/`,

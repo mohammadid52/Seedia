@@ -6,15 +6,24 @@ import { links } from 'constants/Links'
 import { useNotifications } from 'context/NotificationContext'
 import { usePostContext } from 'context/PostContext'
 import { Form, Formik } from 'formik'
+import { IPost } from 'interfaces/UniversalInterface'
 import { useRef } from 'react'
+import { BsCameraVideo } from 'react-icons/bs'
+import { HiOutlinePhotograph } from 'react-icons/hi'
 import { useMutation } from 'react-query'
 
 const PostModal = ({
   open,
   setOpen,
+  setShowOtherModals,
+  postingIn = 'general',
+  customInId,
 }: {
   open: boolean
+  postingIn?: IPost['postedIn']
+  customInId?: string
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setShowOtherModals: React.Dispatch<React.SetStateAction<string>>
 }) => {
   const { setNotification } = useNotifications()
   const { setNewPostAdded } = usePostContext()
@@ -38,10 +47,13 @@ const PostModal = ({
   const formRef = useRef()
 
   const onSubmit = (values: { text: string }) => {
-    const modifiedData = {
-      postData: { text: values.text },
-    }
-    mutate(modifiedData)
+    mutate({
+      postData: {
+        text: values.text,
+        postedIn: postingIn,
+        customInId: postingIn !== 'general' ? customInId : null,
+      },
+    })
   }
 
   return (
@@ -63,7 +75,32 @@ const PostModal = ({
               id="text"
               textarea
             />
-            <div className="mt-5 m-1 sm:mt-4 flex justify-end  items-center">
+            <div className="mt-5 m-1 sm:mt-4 flex justify-between  items-center">
+              <div className="flex items-center gap-x-4">
+                <Button
+                  gradient
+                  invert
+                  // className="dark:border-gray-600"
+                  Icon={HiOutlinePhotograph}
+                  label="Photo"
+                  onClick={() => {
+                    setOpen(false)
+                    setShowOtherModals('photo')
+                  }}
+                />
+                <Button
+                  gradient
+                  Icon={BsCameraVideo}
+                  // className="dark:border-gray-600"
+                  bgColor="blue"
+                  invert
+                  onClick={() => {
+                    setOpen(false)
+                    return setShowOtherModals('video')
+                  }}
+                  label="Video"
+                />
+              </div>
               <Button
                 gradient
                 loading={isLoading}

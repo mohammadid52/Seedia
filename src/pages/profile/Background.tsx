@@ -10,11 +10,7 @@ import Selector from 'components/atoms/Selector'
 import { useUserContext } from 'context/UserContext'
 import { getAccessToken, network } from 'helpers'
 import useAccountType from 'hooks/useAccountType'
-import {
-  IBackground,
-  IExperience,
-  IParent,
-} from 'interfaces/UniversalInterface'
+import { IBackground, IParent } from 'interfaces/UniversalInterface'
 import { map, remove, update } from 'lodash'
 import moment from 'moment'
 import { nanoid } from 'nanoid'

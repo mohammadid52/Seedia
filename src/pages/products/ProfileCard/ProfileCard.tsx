@@ -1,10 +1,10 @@
-import Card from 'components/atoms/Card'
-import { avatarPlaceholder } from 'state/Redux/constants'
-import useFollow from 'hooks/useFollow'
-import SectionTitle from 'components/atoms/SectionTitle'
-import { IParent } from 'interfaces/UniversalInterface'
 import Button from 'components/atoms/Button'
+import Card from 'components/atoms/Card'
+import SectionTitle from 'components/atoms/SectionTitle'
+import useFollow from 'hooks/useFollow'
 import useUser from 'hooks/useUser'
+import { IParent } from 'interfaces/UniversalInterface'
+import { avatarPlaceholder } from 'state/Redux/constants'
 
 const ProfileCard = ({
   userData,
@@ -17,10 +17,7 @@ const ProfileCard = ({
   targetId?: string
   sectionTitle?: string
 }) => {
-  const { iAmOwnerOfThisProfile, refetch: refetchProfile } = useUser(
-    userData.profileUrl,
-    userData
-  )
+  const { iAmOwnerOfThisProfile } = useUser(userData.profileUrl, userData)
   const { following, addFollow, removeFollow } = useFollow(
     userData?.following,
     targetId

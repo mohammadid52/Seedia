@@ -271,7 +271,7 @@ const Router = ({
                 // @ts-ignore
                 exact
                 isUser={isUser}
-                path="/feed/followers"
+                path="/:profileUrl/followers"
               >
                 {/* @ts-ignore */}
                 <UserFollowers userData={userData} />
@@ -289,7 +289,7 @@ const Router = ({
                 // @ts-ignore
                 exact
                 isUser={isUser}
-                path="/feed/followings"
+                path="/:profileUrl/followings"
               >
                 {/* @ts-ignore */}
                 <UserFollowers userData={userData} />

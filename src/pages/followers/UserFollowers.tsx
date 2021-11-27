@@ -5,7 +5,9 @@ import Tabs from 'components/Tabs'
 import User from 'components/User'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
+import { useRouter } from 'hooks/useRouter'
 import useTabs from 'hooks/useTabs'
+import useUser from 'hooks/useUser'
 import { IParent } from 'interfaces/UniversalInterface'
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
@@ -17,11 +19,18 @@ const UserFollowers = ({ userData }: { userData: IParent }) => {
     { name: 'Followings' },
   ]
 
+  const route: any = useRouter()
+  const { profileUrl } = route?.match?.params
+
   const { currentTab, setCurrentTab, helpers } = useTabs(tabs)
   const [onFollowers, onFollowings] = helpers
 
+  const { iAmOwnerOfThisProfile, otherUserData } = useUser(profileUrl, userData)
+
+  const user: IParent = iAmOwnerOfThisProfile ? userData : otherUserData
+
   const config = {
-    users: onFollowers ? userData.followers : userData.following,
+    users: onFollowers ? user?.followers : user?.following,
   }
 
   const { data, isLoading, isFetched, isSuccess } = useQuery(
@@ -35,9 +44,9 @@ const UserFollowers = ({ userData }: { userData: IParent }) => {
   const history = useHistory()
   useEffect(() => {
     if (onFollowers) {
-      history.push(links.followers())
+      history.push(links.followers(user.profileUrl))
     } else {
-      history.push(links.followings())
+      history.push(links.followings(user.profileUrl))
     }
   }, [onFollowers, onFollowings])
 
@@ -45,7 +54,7 @@ const UserFollowers = ({ userData }: { userData: IParent }) => {
     <NarrowLayout userData={userData} customMaxWidth="max-w-7xl">
       <Meta
         pageTitle={`${onFollowers ? 'Followers' : 'Followings'} | ${
-          userData.fullName
+          user.fullName
         } | 13RMS`}
       />
       <div className="flex flex-col gap-y-12">

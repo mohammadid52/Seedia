@@ -58,7 +58,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
 
   const [unsavedChanges, setUnsavedChanges] = useState(false)
 
-  const [showUnsaveModal, setShowUnsaveModal] = useState(false)
+  const [_, setShowUnsaveModal] = useState(false)
   const { setValues } = useUserContext()
 
   const onCancel = () => {

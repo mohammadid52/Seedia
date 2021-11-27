@@ -1,20 +1,17 @@
 import { fetchReviewsByProduct } from 'apis/queries'
 import Button from 'components/atoms/Button'
-import Card from 'components/atoms/Card'
+import Tabs from 'components/Tabs'
+import { links } from 'constants/Links'
+import useTabs from 'hooks/useTabs'
+import { IProduct, IReview } from 'interfaces/UniversalInterface'
+import { find, forEach, orderBy, times } from 'lodash'
+import ReviewList from 'pages/products/Review/ReviewList'
+import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
 // @ts-ignore
 // eslint-disable-next-line
 import ReactStars from 'react-rating-stars-component'
-import Title from 'components/atoms/Title'
-import { links } from 'constants/Links'
-import { ErrorFallback } from 'index'
-import { IProduct, IReview } from 'interfaces/UniversalInterface'
-import { find, forEach, isObject, orderBy, times } from 'lodash'
-import ReviewList from 'pages/products/Review/ReviewList'
-import { useQuery } from 'react-query'
 import { classNames } from 'utils/classNames'
-import Tabs from 'components/Tabs'
-import useTabs from 'hooks/useTabs'
-import { useEffect, useState } from 'react'
 
 const WriteReviewButton = ({ productId }: { productId: string }) => {
   return (

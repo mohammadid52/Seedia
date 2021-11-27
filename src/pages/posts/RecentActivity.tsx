@@ -64,15 +64,17 @@ const RecentActivity = ({ userData }: { userData: IParent }) => {
                           : user.company.jobTitle}
                       </p>
                       <div className="flex mt-4 gap-y-2  flex-col border-t py-2 text-xs font-medium text-gray-500 dark:text-gray-500 border-gray-200 dark:border-gray-700">
-                        <div className="flex transition-all item-center px-4 py-1  dark:hover:bg-gray-700 justify-between">
-                          <h6 className="font-medium ">Followers</h6>
-                          <a
-                            href={links.followers()}
-                            className="hover:underline cursor-pointer text-link font-semibold"
-                          >
-                            {user?.followers?.length || 0}
-                          </a>
-                        </div>
+                        <a
+                          href={links.followers(userData.profileUrl)}
+                          className="hover:underline cursor-pointer "
+                        >
+                          <div className="flex transition-all item-center px-4 py-1  dark:hover:bg-gray-700 justify-between">
+                            <h6 className="font-medium ">Followers</h6>
+                            <span className="text-link font-semibold">
+                              {user?.followers?.length || 0}
+                            </span>
+                          </div>
+                        </a>
                       </div>
                     </div>
                   }

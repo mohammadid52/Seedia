@@ -40,6 +40,7 @@ app.post('/create-group', auth, async (req, res) => {
       coverPicture: coverPhoto,
       profilePicture: profilePhoto,
       messages: [], // not important for now
+      posts: [],
     }
 
     const group = await groupsCollection.insertOne(data)
@@ -151,11 +152,12 @@ app.get('/g/:groupId', auth, async (req, res) => {
   // collection
   const groupsCollection = res.locals.groupsCollection
   const usersCollection = res.locals.usersCollection
+
   try {
     const group = await getItem(groupsCollection, groupId)
     if (group) {
-      let membersId = group.members.map(addObjectId)
-      let adminsId = group.admin.map(addObjectId)
+      let membersId = group?.members?.map(addObjectId)
+      let adminsId = group?.admin?.map(addObjectId)
 
       const users = await getManyItems(
         usersCollection,
