@@ -58,8 +58,8 @@ const Post = ({
     }
   }, [isCardOnScreen, isViewed])
 
-  const isSaved = userData?.savedPosts?.includes(postId.toString())
-  const isFeatured = userData?.featuredPosts?.includes(postId.toString())
+  const isSaved = userData?.savedPosts?.includes(postId?.toString())
+  const isFeatured = userData?.featuredPosts?.includes(postId?.toString())
 
   const [saved, setSaved] = useState(isSaved)
   const [featured, setFeatured] = useState(isFeatured)

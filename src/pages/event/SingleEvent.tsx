@@ -283,7 +283,7 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                       loader={<h4>Loading...</h4>}
                     >
                       <div className="grid grid-cols-1 gap-y-6">
-                        {posts.map((post) => (
+                        {posts?.map((post) => (
                           <Post
                             userData={userData}
                             userId={userData._id}
