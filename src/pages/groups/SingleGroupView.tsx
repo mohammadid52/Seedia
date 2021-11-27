@@ -195,7 +195,7 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                                   Requests to join
                                 </h6>
                                 <a
-                                  href={links.followers(userData.profileUrl)}
+                                  href={links.followers(userData?.profileUrl)}
                                   className="hover:underline text-link cursor-pointer font-semibold"
                                 >
                                   {groupData?.requests?.length || 0}

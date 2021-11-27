@@ -172,15 +172,17 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                       <h3 className="dark:text-white text-gray-800 text-xl font-semibold ">
                         {eventData?.eventName}
                       </h3>
-                      <h6 className="text-sm dark:text-gray-500 text-gray-700 mb-2">
-                        Event by{' '}
-                        <a
-                          className="hover:underline"
-                          href={links.getProfile(eventData?.eventBy)}
-                        >
-                          {eventData?.eventBy?.fullName}
-                        </a>
-                      </h6>
+                      {eventData?.eventBy?.profileUrl && (
+                        <h6 className="text-sm dark:text-gray-500 text-gray-700 mb-2">
+                          Event by{' '}
+                          <a
+                            className="hover:underline"
+                            href={links.getProfile(eventData?.eventBy)}
+                          >
+                            {eventData?.eventBy?.fullName}
+                          </a>
+                        </h6>
+                      )}
                       <div className="flex text-sm dark:text-gray-500 text-gray-600 items-center justify-start">
                         <BsFillCameraVideoFill className="mr-2" />
                         Online

@@ -12,7 +12,7 @@ export const links = {
     viewMode: string = 'private'
   ) => `/${id}/${template || 1}/${viewMode || 'private'}`,
   getProfile: (user: any, isPrivate: boolean = false) =>
-    `/${user.profileUrl}/${user?.other?.template || 1}/${
+    `/${user?.profileUrl}/${user?.other?.template || 1}/${
       isPrivate ? 'private' : 'public'
     }`,
   FEED: '/feed',
