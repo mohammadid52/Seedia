@@ -58,7 +58,7 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
   const [showEditEventModal, setShowEditEventModal] = useState(false)
 
   const fetchPost = useQuery(
-    'event-data',
+    'event-posts',
     () => fetchMultiplePostsById(eventData?.posts as string[]),
     { enabled: !!eventData?.posts?.length && !(isLoading && !isFetched) }
   )
