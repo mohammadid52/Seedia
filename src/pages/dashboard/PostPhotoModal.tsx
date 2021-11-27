@@ -5,6 +5,7 @@ import NormalFormInput from 'components/atoms/NormalFormInput'
 import { links } from 'constants/Links'
 import { useNotifications } from 'context/NotificationContext'
 import { usePostContext } from 'context/PostContext'
+import { IPost } from 'interfaces/UniversalInterface'
 import { nanoid } from 'nanoid'
 import React, { useRef, useState } from 'react'
 import { useMutation } from 'react-query'
@@ -13,8 +14,12 @@ const PostPhotoModal = ({
   open,
   setOpen,
   isPhoto = true,
+  postingIn = 'general',
+  customInId,
 }: {
   open: boolean
+  postingIn?: IPost['postedIn']
+  customInId?: string
   isPhoto: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
@@ -42,6 +47,8 @@ const PostPhotoModal = ({
         postData: {
           postType: 'withPhoto',
           text: altText || '',
+          postedIn: postingIn,
+          customInId: customInId,
           links: [
             {
               id: nanoid(12),

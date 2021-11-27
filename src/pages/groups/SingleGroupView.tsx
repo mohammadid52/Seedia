@@ -32,6 +32,8 @@ import { avatarPlaceholder } from 'state/Redux/constants'
 import UsersListModal from 'components/UserListModal'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Post from 'components/posts/Post'
+import PostPhotoModal from 'pages/dashboard/PostPhotoModal'
+import { usePostContext } from 'context/PostContext'
 
 const ExitGroup = ({
   userId,
@@ -121,10 +123,25 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
     { enabled: !!groupData?.posts?.length && !(isLoading && !isFetched) }
   )
 
+  const { newPostAdded, setNewPostAdded } = usePostContext()
+
+  useEffect(() => {
+    if (newPostAdded) {
+      try {
+        refetch()
+        fetchPost.refetch()
+        setNewPostAdded(false)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }, [newPostAdded])
+
   const { getType } = useAccountType(userData)
   const [showModal, setShowModal] = useState(false)
 
   const [showGroupMembersModal, setShowGroupMembersModal] = useState(false)
+  const [showOtherModals, setShowOtherModals] = useState('init')
 
   if (isLoading && !isFetched) {
     return <Loading />
@@ -152,6 +169,16 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
             followingList={userData.following}
             open={showModal}
             setOpen={setShowModal}
+          />
+        )}
+
+        {(showOtherModals === 'photo' || showOtherModals === 'video') && (
+          <PostPhotoModal
+            postingIn={'group'}
+            customInId={groupData._id}
+            isPhoto={showOtherModals === 'photo'}
+            open
+            setOpen={() => setShowOtherModals('init')}
           />
         )}
 
@@ -285,11 +312,13 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                             invert
                             Icon={HiOutlinePhotograph}
                             label="Photo"
+                            onClick={() => setShowOtherModals('photo')}
                           />
                           <Button
                             gradient
                             Icon={BsCameraVideo}
                             invert
+                            onClick={() => setShowOtherModals('video')}
                             label="Video"
                           />
                           <Button gradient Icon={CgPoll} invert label="Poll" />
@@ -316,6 +345,7 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                         <div className="grid grid-cols-1 gap-y-6">
                           {posts.map((post) => (
                             <Post
+                              key={post._id}
                               userData={userData}
                               userId={userData._id}
                               post={post}

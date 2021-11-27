@@ -39,7 +39,7 @@ app.post('/add-post', auth, async (req, res) => {
           postedBy: token.id,
           postedOn: new Date(),
           viewedBy: [],
-          postedIn: postedIn,
+          postedIn: postedIn || 'general',
         }
         const afterInsertPost = await postCollection.insertOne(updatedPost)
         const postUrl = `${user?.firstName}_${
@@ -483,7 +483,7 @@ app.get('/feed', auth, async (req, res) => {
         const filter = {
           $and: [
             { postedBy: { $in: idListStringed } },
-            { $eq: { postedIn: 'general' } },
+            { postedIn: { $eq: 'general' } },
           ],
         }
         const postsCount = await postCollection.find(filter).count()

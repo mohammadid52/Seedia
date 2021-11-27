@@ -16,7 +16,6 @@ const Review = ({ review, userId }: { review: IReview; userId: string }) => {
     value: review.rating,
     edit: false,
   }
-  console.log('🚀 ~ file: Review.tsx ~ line 14 ~ Review ~ review', review)
 
   const mutation = useMutation(doReviewAction)
 

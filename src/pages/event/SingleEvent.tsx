@@ -11,9 +11,11 @@ import Post from 'components/posts/Post'
 import Spinner from 'components/Spinner'
 import UsersListModal from 'components/UserListModal'
 import { links } from 'constants/Links'
+import { usePostContext } from 'context/PostContext'
 import { IEvent, IParent, IPost } from 'interfaces/UniversalInterface'
 import moment from 'moment'
 import PostInput from 'pages/dashboard/PostInput'
+import PostPhotoModal from 'pages/dashboard/PostPhotoModal'
 import DashboardHeader from 'pages/DashboardHeader'
 import DashboardLayout from 'pages/DashboardLayout'
 import EventInviteModal from 'pages/event/EventInviteModal'
@@ -90,6 +92,22 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
     },
   ]
 
+  const [showOtherModals, setShowOtherModals] = useState('init')
+
+  const { newPostAdded, setNewPostAdded } = usePostContext()
+
+  useEffect(() => {
+    if (newPostAdded) {
+      try {
+        refetch()
+        fetchPost.refetch()
+        setNewPostAdded(false)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }, [newPostAdded])
+
   if (isLoading && !isFetched) {
     return <Loading />
   }
@@ -101,10 +119,6 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
   const authorized = userData?._id === eventData?.eventBy?._id
 
   const posts = (fetchPost.data?.data?.data.posts as IPost[]) || []
-  console.log(
-    '🚀 ~ file: SingleEvent.tsx ~ line 45 ~ SingleEventView ~ eventData',
-    eventData
-  )
 
   const postCount = fetchPost.data?.data?.data.count || 0
 
@@ -124,6 +138,16 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
           open={showEditEventModal}
           eventData={eventData}
           setOpen={setShowEditEventModal}
+        />
+      )}
+
+      {(showOtherModals === 'photo' || showOtherModals === 'video') && (
+        <PostPhotoModal
+          isPhoto={showOtherModals === 'photo'}
+          open
+          postingIn={'event'}
+          customInId={eventData._id}
+          setOpen={() => setShowOtherModals('init')}
         />
       )}
 
@@ -255,12 +279,14 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                           invert
                           Icon={HiOutlinePhotograph}
                           label="Photo"
+                          onClick={() => setShowOtherModals('photo')}
                         />
                         <Button
                           gradient
                           Icon={BsCameraVideo}
                           invert
                           label="Video"
+                          onClick={() => setShowOtherModals('video')}
                         />
                         <Button gradient Icon={CgPoll} invert label="Poll" />
                       </>
@@ -289,6 +315,7 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                       <div className="grid grid-cols-1 gap-y-6">
                         {posts?.map((post) => (
                           <Post
+                            key={post?._id}
                             userData={userData}
                             userId={userData._id}
                             post={post}
