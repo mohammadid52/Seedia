@@ -27,7 +27,7 @@ import { useMutation, useQuery } from 'react-query'
 import { useHistory, useParams } from 'react-router'
 import { avatarPlaceholder } from 'state/Redux/constants'
 
-const getAMPM = (time: string): string => {
+const getAMPM = (time: string = '00:00'): string => {
   let f = time.split(':')[0]
   let n: number = Number(f)
   return n > 12 ? 'PM' : 'AM'
@@ -102,9 +102,10 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
 
   const posts = (fetchPost.data?.data?.data.posts as IPost[]) || []
   console.log(
-    '🚀 ~ file: SingleEvent.tsx ~ line 104 ~ SingleEventView ~ posts',
-    posts
+    '🚀 ~ file: SingleEvent.tsx ~ line 45 ~ SingleEventView ~ eventData',
+    eventData
   )
+
   const postCount = fetchPost.data?.data?.data.count || 0
 
   const fetchMoreData = () => {}
@@ -112,7 +113,7 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
     <div className="relative  dark:bg-gray-900 bg-gray-100 min-h-screen ">
       <DashboardHeader userData={userData} />
       <Meta
-        pageTitle={`${eventData.eventName} | event | 13RMS`}
+        pageTitle={`${eventData?.eventName} | event | 13RMS`}
         imageUrl={eventData?.profilePicture}
         title={eventData?.eventName}
         description={eventData?.eventDescription}
