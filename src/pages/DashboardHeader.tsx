@@ -204,7 +204,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
       name: 'Sell products',
       link: _links.addProduct(),
     },
-    !isBusiness && {
+    {
       icon: MdWork,
       link: _links.placeRequest(),
       name: 'Place Request For Work',
@@ -226,7 +226,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
       link: _links.addProduct(),
     },
 
-    isBusiness && {
+    {
       icon: BsFilePost,
       link: _links.addProject(),
       name: 'Post A Job/Project',

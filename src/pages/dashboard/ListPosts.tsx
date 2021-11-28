@@ -4,15 +4,15 @@ import EmptyState from 'components/atoms/EmptyState'
 import Meta from 'components/atoms/Meta/Meta'
 import Post from 'components/posts/Post'
 import { usePostContext } from 'context/PostContext'
-import { IParent } from 'interfaces/UniversalInterface'
-import { useEffect, useState } from 'react'
+import { IParent, IPost } from 'interfaces/UniversalInterface'
+import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useQuery } from 'react-query'
 
 const ListPosts = ({ userData }: { userData: IParent }) => {
   const [skip, setSkip] = useState(0)
 
-  const [posts, setPosts] = useState([])
+  const { setPosts, posts } = usePostContext()
 
   const { data, refetch, isLoading, isFetched, isSuccess } = useQuery(
     'list-posts',
@@ -23,7 +23,7 @@ const ListPosts = ({ userData }: { userData: IParent }) => {
       onSuccess: (data) => {
         const _posts = data?.data?.data?.posts
         if (_posts && _posts.length > 0) {
-          setPosts([...posts, ..._posts])
+          setPosts([..._posts])
         }
       },
     }
@@ -34,16 +34,6 @@ const ListPosts = ({ userData }: { userData: IParent }) => {
     refetch()
   }
 
-  const { newPostAdded, setNewPostAdded } = usePostContext()
-
-  useEffect(() => {
-    if (newPostAdded) {
-      refetch().then(() => {
-        setNewPostAdded(false)
-      })
-    }
-  }, [newPostAdded])
-
   const postCount =
     !isLoading && isFetched && isSuccess ? data?.data?.data?.count || 0 : 0
 
@@ -51,27 +41,28 @@ const ListPosts = ({ userData }: { userData: IParent }) => {
     <div className="">
       <Meta pageTitle={`(${postCount || 0}) Feed | 13RMS`} />
       {posts && posts.length > 0 ? (
-        <InfiniteScroll
-          endMessage={
-            <div className="text-center">
-              <span className="dark:text-gray-600 text-center text-gray-400">
-                •
-              </span>
-            </div>
-          }
-          dataLength={postCount}
-          scrollableTarget="main_content"
-          next={fetchMoreData}
-          hasMore={postCount > posts.length}
-          loader={<h4>Loading...</h4>}
-        >
-          <div className="grid grid-cols-1 gap-y-6">
-            {posts.map((post) => (
-              <Post userData={userData} userId={userData._id} post={post} />
-            ))}
-          </div>
-        </InfiniteScroll>
+        <div className="grid pb-24 grid-cols-1 gap-y-6">
+          {posts.map((post: IPost) => (
+            <Post userData={userData} userId={userData._id} post={post} />
+          ))}
+        </div>
       ) : (
+        // <InfiniteScroll
+        //   endMessage={
+        //     <div className="text-center">
+        //       <span className="dark:text-gray-600 text-center text-gray-400">
+        //         •
+        //       </span>
+        //     </div>
+        //   }
+        //   dataLength={postCount}
+        //   scrollableTarget="main_content"
+        //   next={fetchMoreData}
+        //   hasMore={postCount > posts.length}
+        //   loader={<h4>Loading...</h4>}
+        // >
+
+        // </InfiniteScroll>
         <EmptyState animation={animationData} title="You're all caught up" />
       )}
     </div>

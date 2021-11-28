@@ -45,7 +45,10 @@ const Dashboard = ({ userData }: DashboardProps) => {
           }
           secondCol={
             <div className="flex gap-y-4 mx-auto lg:max-w-2xl  flex-col">
-              <PostInput profilePicture={userData?.profilePicture} />
+              <PostInput
+                fullName={userData.fullName}
+                profilePicture={userData?.profilePicture}
+              />
               <ListPosts userData={userData} />
             </div>
           }

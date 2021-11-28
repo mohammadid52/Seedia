@@ -11,6 +11,7 @@ import ProjectCard from 'pages/project/ProjectCard'
 import { useQuery } from 'react-query'
 import { Redirect } from 'react-router'
 import { getTags } from 'utils/functions'
+
 const ProjectsListView = ({ userData }: { userData: IParent }) => {
   const skills = userData?.background
     ? map(userData?.background.skills, (d) => d.name)
@@ -25,10 +26,8 @@ const ProjectsListView = ({ userData }: { userData: IParent }) => {
     isLoading,
     data: relatedJobsData,
     isFetched,
-  } = useQuery(
-    'related-jobs',
-    () => fetchRelatedJobs([...skills, ...jobTitleTags, ...jobTypeTags]),
-    { enabled: !isBusiness }
+  } = useQuery('related-jobs', () =>
+    fetchRelatedJobs([...skills, ...jobTitleTags, ...jobTypeTags])
   )
 
   const relatedJobs: IProject[] =

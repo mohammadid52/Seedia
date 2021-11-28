@@ -175,7 +175,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                 header={renderModalHeader(showModal.type)}
               >
                 <div className="">
-                  <div className="overflow-y-auto min-w-132  custom-scroll-mini darker my-4 px-1">
+                  <div className="min-w-132  custom-scroll-mini darker my-4 px-1">
                     {renderModalContentByType(showModal.type)}
                   </div>
                 </div>
@@ -235,10 +235,16 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                   </div>
 
                   {!isBusiness && <Education {...commonBlockProps} />}
-                  <Activity
-                    userData={commonBlockProps.userData}
-                    iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
-                  />
+
+                  {iAmOwnerOfThisProfile && (
+                    <Following
+                      list={userData.following}
+                      interests={userData?.background?.interests}
+                    />
+                  )}
+                  <div className="grid-cols-1 grid   ">
+                    <Languages {...commonBlockProps} />
+                  </div>
                   <Recommendations
                     secondary
                     iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
@@ -246,31 +252,14 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                     recommendation={commonProps?.userData?.recommendation}
                   />
 
-                  {/* {!isBusiness && ( */}
-                  <div className="grid-cols-1 grid   ">
-                    <Languages {...commonBlockProps} />
-                  </div>
-                  {/* )} */}
-                  {iAmOwnerOfThisProfile && (
-                    <Following
-                      list={userData.following}
-                      interests={userData?.background?.interests}
-                    />
-                  )}
+                  <Activity
+                    userData={commonBlockProps.userData}
+                    iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
+                  />
                 </div>
               }
               thirdCol={
                 <div className="space-y-12">
-                  {iAmOwnerOfThisProfile && viewMode === 'public' && (
-                    <Button
-                      gradient
-                      fullWidth
-                      label="Edit profile"
-                      target=""
-                      className="mb-6"
-                      link={links.getProfile(userData, true)}
-                    />
-                  )}
                   {showAllButtons && (
                     <div className="">
                       <PublicProfileCard secondary userData={userData} />

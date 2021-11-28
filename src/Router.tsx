@@ -1,5 +1,6 @@
 import { links } from 'constants/Links'
 import AuthContainer from 'containers/AuthContainer'
+import EditProduct from 'pages/products/EditProduct'
 import UsersList from 'pages/UserList'
 import { lazy } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
@@ -103,7 +104,7 @@ const Router = ({
                 isUser={userData}
                 path="/create-review/:productId"
               >
-                <CreateReview />
+                <CreateReview userData={userData} />
               </PrivateRoute>
               <PrivateRoute
                 // @ts-ignore
@@ -145,10 +146,15 @@ const Router = ({
                 isUser={userData}
                 path="/add-product"
               >
-                <AddProduct
-                  userData={userData}
-                  profileUrl={userData?.profileUrl}
-                />
+                <AddProduct userData={userData} />
+              </PrivateRoute>
+              <PrivateRoute
+                // @ts-ignore
+                exact
+                isUser={userData}
+                path="/edit-product/:productId"
+              >
+                <EditProduct userData={userData} />
               </PrivateRoute>
               <PrivateRoute
                 // @ts-ignore

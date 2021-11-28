@@ -18,12 +18,14 @@ const PostInput = ({
   disabled,
   postingIn = 'general',
   customInId,
+  fullName = '',
 }: {
   profilePicture?: string
   customButtons?: React.ReactNode
   placeholder?: string
   disabled?: boolean
   postingIn?: IPost['postedIn']
+  fullName: string
   customInId?: string
 }) => {
   const [showPostModal, setShowPostModal] = useState(false)
@@ -87,7 +89,11 @@ const PostInput = ({
           setOpen={() => setShowOtherModals('init')}
         />
       )}
-      <CreateEvent open={showEventModal} setOpen={setShowEventModal} />
+      <CreateEvent
+        fullName={fullName}
+        open={showEventModal}
+        setOpen={setShowEventModal}
+      />
       <Card
         content={
           <div className="flex flex-col space-y-8">

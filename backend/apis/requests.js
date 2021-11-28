@@ -9,7 +9,7 @@ const {
   updateData,
   shortUser,
 } = require('../utils')
-var ObjectId = require('mongodb').ObjectId
+
 require('dotenv').config()
 
 app.post('/add', auth, async (req, res) => {
@@ -34,9 +34,16 @@ app.post('/add', auth, async (req, res) => {
           ? [...user?.requests, request.insertedId]
           : [request.insertedId]
       await updateData(usersCollection, token.id, { requests: updatedRequests })
+
       return res
         .status(200)
-        .json(responseMsg('success', 'New Request Placed Successfully', {}))
+        .json(
+          responseMsg(
+            'success',
+            `Dear ${user.firstName}. You have successfully placed a request on your profile. This will be seen by other users`,
+            request.insertedId
+          )
+        )
     }
   } else {
     return res

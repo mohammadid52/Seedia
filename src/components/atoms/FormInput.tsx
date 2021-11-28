@@ -27,6 +27,7 @@ const FormInput = ({
   textClass = 'sm:text-sm',
   cols,
   info = '',
+  autoFocus = false,
   ...props
 }: {
   label?: string
@@ -50,7 +51,7 @@ const FormInput = ({
   disabled?: boolean
   withButton?: any
   textClass?: string
-
+  autoFocus?: boolean
   setUnsavedChanges?: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const errorClass = `border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500`
@@ -94,7 +95,8 @@ const FormInput = ({
             <textarea
               rows={rows}
               cols={cols}
-              autoFocus
+              autoFocus={autoFocus}
+              value={field.value}
               // ref={inputRef}
               id={id}
               placeholder={placeholder}
@@ -147,9 +149,12 @@ const FormInput = ({
               disabled={disabled}
               id={id}
               // ref={inputRef}
-              autoFocus
+              autoFocus={autoFocus}
+              step={type === 'number' ? '0.01' : undefined}
+              min={type === 'number' ? '0.1' : undefined}
               onChange={onChange}
               placeholder={placeholder}
+              value={field.value}
               type={
                 showPasswordButton ? (showPass ? 'text' : 'password') : type
               }
@@ -160,7 +165,9 @@ const FormInput = ({
                   ? 'border-transparent '
                   : 'dark:border-gray-700 border-gray-300'
               } rounded-md dark:bg-gray-900 dark:text-white`}
+              {...props}
             />
+
             <div className="flex items-center absolute transition-all duration-200 inset-y-0 right-0 pr-3 ">
               {meta.touched && meta.error && (
                 <div className=" pointer-events-none">

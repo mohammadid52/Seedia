@@ -1,4 +1,4 @@
-import { createGroup, uploadMultipleImages } from 'apis/mutations'
+import { addPost, createGroup, uploadMultipleImages } from 'apis/mutations'
 import placeholder from 'assets/svg/placeholder.png'
 import Error from 'components/alerts/Error'
 import Button from 'components/atoms/Button'
@@ -43,26 +43,39 @@ const CreateGroup = ({
   const formRef = useRef()
   const { setNotification } = useNotifications()
 
-  const { mutate, isLoading, isError, error, isSuccess } = useMutation(
-    createGroup,
-    {
-      onSuccess: (data) => {
-        const group = data?.data?.data
-        const groupName = group?.groupName
-        setNotification({
-          show: true,
-          title: `Dear ${userData.firstName}. You have successfully created the group ${groupName} `,
-          buttonText: 'View',
-          buttonUrl: links.groupById(group._id),
-        })
-        refetchGroup()
-      },
-    }
-  )
+  const postMutation = useMutation(addPost, {
+    onSuccess: () => {
+      onSuccess()
+    },
+  })
+
+  const { mutate, isLoading, isError, error } = useMutation(createGroup, {
+    onSuccess: (data) => {
+      const group = data?.data?.data
+      const groupName = group?.groupName
+
+      setNotification({
+        show: true,
+        title: `Dear ${userData.firstName}. You have successfully created the group ${groupName} `,
+        buttonText: 'View',
+        buttonUrl: links.groupById(group._id),
+      })
+
+      refetchGroup()
+
+      postMutation.mutate({
+        postData: {
+          text: `${userData.fullName} created group: ${groupName}`,
+          postType: 'group',
+          customInId: group._id,
+        },
+      })
+    },
+  })
 
   const upload = useMutation(uploadMultipleImages, {
-    onSuccess: (a, b) => {
-      const finalImageList: any[] = map(a.data.data, (img, idx: number) => img)
+    onSuccess: (a) => {
+      const finalImageList: any[] = map(a.data.data, (img) => img)
       // @ts-ignore
       if (formRef?.current && formRef?.current?.values) {
         mutate({
@@ -79,12 +92,6 @@ const CreateGroup = ({
       }
     },
   })
-
-  useEffect(() => {
-    if (isSuccess && upload.isSuccess) {
-      onSuccess()
-    }
-  }, [isSuccess, upload.isSuccess])
 
   const uploadFunction = () => {
     const fd = new FormData()
@@ -106,7 +113,7 @@ const CreateGroup = ({
     }
   }, [editMode])
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async () => {
     uploadFunction()
   }
 
@@ -223,7 +230,7 @@ const CreateGroup = ({
               disabled={upload.isLoading || isLoading}
               gradient
               size="lg"
-              label="Submit"
+              label="Create group"
             />
           </div>
 

@@ -23,7 +23,9 @@ const List = ({
 }) => {
   const [field, meta, helpers] = useField(name)
 
-  const [features, setFeatures] = useState<{ name: string; id: string }[]>([])
+  const [features, setFeatures] = useState<{ name: string; id: string }[]>([
+    ...field.value,
+  ])
 
   useEffect(() => {
     if (initialValues) {

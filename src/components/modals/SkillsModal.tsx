@@ -116,7 +116,7 @@ const SkillsModal = ({
   }
 
   return (
-    <div className="min-h-156 relative min-w-160 overflow-x-hidden">
+    <div className="min-h-156 relative min-w-160">
       <div className="my-2">
         <div className="overflow-y-auto max-h-112  custom-scroll-mini darker">
           {localFields.skills && localFields.skills.length > 0 && (

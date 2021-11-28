@@ -1,4 +1,4 @@
-import { addProject } from 'apis/mutations'
+import { addPost, addProject } from 'apis/mutations'
 import Error from 'components/alerts/Error'
 import Info from 'components/alerts/Info'
 import Button from 'components/atoms/Button'
@@ -60,34 +60,35 @@ const AddProject = ({ userData }: { userData: IParent }) => {
 
   const { setNotification } = useNotifications()
 
-  const { mutate, isLoading, isError, error, isSuccess } = useMutation(
-    addProject,
-    {
-      onSuccess: (data) => {
-        if (data) {
-          const { name, id } = data.data.data
-          setNotification({
-            show: true,
-            title: `You have successfully posted the project: ${name}`,
-            buttonText: 'View',
-            buttonUrl: links.viewProject(id),
-          })
-        }
-      },
-    }
-  )
-
   const history = useHistory()
-  useEffect(() => {
-    if (isSuccess) {
-      history.push(
-        links.getProfileById(
-          userData.profileUrl,
-          userData?.other?.template || 1
-        )
-      )
-    }
-  }, [isSuccess])
+
+  const postMutation = useMutation(addPost, {
+    onSuccess: () => {
+      history.push(links.FEED)
+    },
+  })
+
+  const { mutate, isLoading, isError, error } = useMutation(addProject, {
+    onSuccess: (data) => {
+      if (data) {
+        const { name, id } = data.data.data
+        setNotification({
+          show: true,
+          title: `You have successfully posted the project: ${name}`,
+          buttonText: 'View',
+          buttonUrl: links.viewProject(id),
+        })
+
+        postMutation.mutate({
+          postData: {
+            text: `${userData.fullName} added new project.`,
+            postType: 'project',
+            customInId: id,
+          },
+        })
+      }
+    },
+  })
 
   const functionTypeList = [
     { name: 'Full-time', id: '1' },
@@ -156,8 +157,9 @@ const AddProject = ({ userData }: { userData: IParent }) => {
   }
 
   return (
-    <NarrowLayout>
+    <NarrowLayout userData={userData}>
       <Meta pageTitle="Add Project" />
+
       <Title fontWeight="font-bold mb-8">Add Project</Title>
       <Formik
         initialValues={initialValues}
@@ -286,7 +288,7 @@ const AddProject = ({ userData }: { userData: IParent }) => {
           </div>
 
           <FormInput
-            label="Website"
+            label="Apply URL"
             id="website"
             name="website"
             required

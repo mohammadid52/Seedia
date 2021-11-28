@@ -18,7 +18,7 @@ const Section = ({
   noDataText?: string
 }) => {
   return (
-    <div ref={_ref} className="py-16 ">
+    <div ref={_ref} className="">
       {title && <h2 className="sr-only">{title}</h2>}
       {title && <SectionTitle title={title} />}
 

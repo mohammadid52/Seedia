@@ -121,10 +121,10 @@ const LanguagesModal = ({
   }
   return (
     <div>
-      <div className="overflow-y-auto min-w-132  custom-scroll-mini darker my-4">
-        {localFields.languages && localFields.languages.length > 0 && (
+      <div className=" min-w-132  custom-scroll-mini darker my-4">
+        {localFields?.languages?.length > 0 && (
           <ol className="space-y-6 list-disc p-4 ">
-            {map(localFields.languages, (lang, langIdx) => (
+            {map(localFields.languages, (lang) => (
               <li
                 className="flex items-center on-hover-container relative text-gray-900 dark:text-white  cursor-pointer text-left"
                 key={lang.id}

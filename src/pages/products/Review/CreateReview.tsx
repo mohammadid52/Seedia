@@ -12,11 +12,11 @@ import { useMutation, useQuery } from 'react-query'
 import { Redirect } from 'react-router'
 import * as Yup from 'yup'
 import Meta from 'components/atoms/Meta/Meta'
-import { IProduct } from 'interfaces/UniversalInterface'
+import { IParent, IProduct } from 'interfaces/UniversalInterface'
 import { fetchProductDetails } from 'apis/queries'
 import Loading from 'components/Loading'
 
-const CreateReview = () => {
+const CreateReview = ({ userData }: { userData: IParent }) => {
   const initialValues = { reviewText: '', rating: 3 }
 
   const route: any = useRouter()
@@ -57,7 +57,7 @@ const CreateReview = () => {
   }
 
   return (
-    <NarrowLayout>
+    <NarrowLayout userData={userData}>
       <Meta pageTitle={`Create Review - ${product.productName}`} />
 
       <Title fontWeight="font-bold mb-8">Write you review</Title>

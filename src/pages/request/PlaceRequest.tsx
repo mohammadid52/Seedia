@@ -1,4 +1,4 @@
-import { addRequest } from 'apis/mutations'
+import { addPost, addRequest } from 'apis/mutations'
 import Error from 'components/alerts/Error'
 import Info from 'components/alerts/Info'
 import Button from 'components/atoms/Button'
@@ -10,9 +10,8 @@ import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { useNotifications } from 'context/NotificationContext'
 import { Form, Formik } from 'formik'
-import useAccountType from 'hooks/useAccountType'
 import { IParent, IRequest } from 'interfaces/UniversalInterface'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useMutation } from 'react-query'
 import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
@@ -34,34 +33,36 @@ const PlaceRequest = ({ userData }: { userData: IParent }) => {
   }
   const { setNotification } = useNotifications()
 
-  const { mutate, isLoading, isError, error, isSuccess } = useMutation(
-    addRequest,
-    {
-      onSuccess: () => {
-        setNotification({
-          show: true,
-          title: `Dear ${userData.firstName}. You have successfully placed a request on your profile. This will be seen by other users`,
-          buttonText: 'View',
-          buttonUrl: links.viewStore(userData.profileUrl),
-        })
-      },
-    }
-  )
-  const { isBusiness } = useAccountType(userData)
+  const postMutation = useMutation(addPost, {
+    onSuccess: () => {
+      history.push(links.FEED)
+    },
+  })
+
+  const { mutate, isLoading, isError, error } = useMutation(addRequest, {
+    onSuccess: (data) => {
+      const requestId = data.data.data
+      const message = data.data.message
+      setNotification({
+        show: true,
+        title: message,
+        buttonText: 'View',
+        buttonUrl: links.viewRequestById(requestId),
+      })
+
+      postMutation.mutate({
+        postData: {
+          text: `${userData.fullName} has placed request for work.`,
+          postType: 'request',
+          customInId: requestId,
+        },
+      })
+    },
+  })
 
   const [skillsError, setSkillsError] = useState('')
 
   const history = useHistory()
-  useEffect(() => {
-    if (isSuccess || isBusiness) {
-      history.push(
-        links.getProfileById(
-          userData.profileUrl,
-          userData?.other?.template || 1
-        )
-      )
-    }
-  }, [isSuccess, isBusiness])
 
   const onSubmit = async (values: any) => {
     if (values.skills.length > 0) {
@@ -77,7 +78,7 @@ const PlaceRequest = ({ userData }: { userData: IParent }) => {
   }
 
   return (
-    <NarrowLayout>
+    <NarrowLayout userData={userData}>
       <Meta pageTitle="Place Request | Jobs | 13RMS" />
       <Title fontWeight="font-bold mb-8">Place Request</Title>
       <Formik
@@ -121,7 +122,7 @@ const PlaceRequest = ({ userData }: { userData: IParent }) => {
               loading={isLoading}
               gradient
               size="lg"
-              label="Submit"
+              label="Place request"
             />
           </div>
 

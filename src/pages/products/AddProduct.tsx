@@ -1,4 +1,4 @@
-import { addProduct, uploadMultipleImages } from 'apis/mutations'
+import { addPost, addProduct, uploadMultipleImages } from 'apis/mutations'
 import Error from 'components/alerts/Error'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
@@ -22,13 +22,7 @@ import { useHistory } from 'react-router'
 import { colorsList, sizeList } from 'values/values'
 import * as Yup from 'yup'
 
-const AddProduct = ({
-  profileUrl,
-  userData,
-}: {
-  profileUrl: string
-  userData: IParent
-}) => {
+const AddProduct = ({ userData }: { userData: IParent }) => {
   const minMsg = (field: string, number: number) =>
     `${field} must be atleast ${number} characters`
   const maxMsg = (field: string, number: number) =>
@@ -68,17 +62,27 @@ const AddProduct = ({
   }
 
   const { setNotification } = useNotifications()
+  const postMutation = useMutation(addPost)
 
   const { mutate, isLoading, isError, error, isSuccess } = useMutation(
     addProduct,
     {
       onSuccess: (data) => {
-        const { name, id } = data.data.data
+        const { id, name: productName } = data.data.data
+        const message = data.data.message
         setNotification({
           show: true,
-          title: `You have successfully posted product ${name} on Tradingpost13RMS. Good luck with the sale.`,
+          title: message,
           buttonText: 'View',
           buttonUrl: links.getProductUrl(id),
+        })
+
+        postMutation.mutate({
+          postData: {
+            text: `${userData.fullName} has posted a product: ${productName}.`,
+            postType: 'product',
+            customInId: id,
+          },
         })
       },
     }
@@ -164,6 +168,7 @@ const AddProduct = ({
             label="Product Name"
             id="productName"
             name="productName"
+            autoFocus
             required
             placeholder="Eg. Programming T-shirts"
           />
@@ -252,6 +257,11 @@ const AddProduct = ({
               label="Product Price"
               id="price"
               gridClass="w-1/2"
+              type="number"
+              props={{
+                step: '2',
+                min: 0,
+              }}
               name="price"
               required
               placeholder="99"
@@ -280,7 +290,7 @@ const AddProduct = ({
               loading={isLoading || imageUploadingLoading}
               gradient
               size="lg"
-              label="Submit"
+              label="Add product"
             />
           </div>
 

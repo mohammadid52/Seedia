@@ -26,17 +26,19 @@ const PostModal = ({
   setShowOtherModals: React.Dispatch<React.SetStateAction<string>>
 }) => {
   const { setNotification } = useNotifications()
-  const { setNewPostAdded } = usePostContext()
+  const { setPosts, posts } = usePostContext()
+
   const { mutate, isLoading, isError, error } = useMutation(addPost, {
     onSuccess: (data) => {
-      const postUrl = data.data.data
-      setNewPostAdded(true)
+      const post = data.data.data
+      posts.unshift(post)
+      setPosts([...posts])
       setOpen(false)
       setNotification({
         show: true,
         title: 'New post added.',
         buttonText: 'View',
-        buttonUrl: links.postById(postUrl),
+        buttonUrl: links.postById(post.postUrl),
       })
     },
   })
@@ -44,6 +46,7 @@ const PostModal = ({
   const initialValues = {
     text: '',
   }
+
   const formRef = useRef()
 
   const onSubmit = (values: { text: string }) => {

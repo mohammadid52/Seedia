@@ -12,13 +12,24 @@ import { IParent, IProduct, IProductImage } from 'interfaces/UniversalInterface'
 import { map } from 'lodash'
 import DashboardHeader from 'pages/DashboardHeader'
 import ReviewSection from 'pages/products/Review/ReviewSection'
+import { AiOutlineEdit } from 'react-icons/ai'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router'
+import { useParams, useHistory } from 'react-router'
 import { addToBasket, removeFromBasket } from 'state/Redux/Actions/userActions'
 import 'styles/productDetails.scss'
 import { classNames } from 'utils/classNames'
+
+const verifyOwner = (userId: string, postedBy: string): boolean => {
+  let isOwner = false
+  if (userId === postedBy) {
+    isOwner = true
+  } else {
+    isOwner = false
+  }
+  return isOwner
+}
 
 // @ts-nocheck
 const INIT = {
@@ -65,9 +76,17 @@ const INIT = {
     'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
 }
 
-const FirstCol = ({ product }: { product: IProduct }) => {
+const FirstCol = ({
+  product,
+  userId,
+}: {
+  product: IProduct
+  userId: string
+}) => {
   const [selectedImage, setSelectedImage] = useState(product?.images[1]?.url)
+
   const dispatch = useDispatch()
+
   const _addToBasket = () => {
     dispatch(addToBasket(product))
   }
@@ -81,10 +100,24 @@ const FirstCol = ({ product }: { product: IProduct }) => {
     (p: any) => p._id === product._id
   )
 
+  const verified = verifyOwner(userId, product.postedBy)
+
   return (
     <Card
       content={
-        <div className="grid grid-cols-2">
+        <div className="relative grid grid-cols-2">
+          {verified && (
+            <div className="absolute top-0 right-0">
+              <Button
+                label="Edit"
+                Icon={AiOutlineEdit}
+                size="sm"
+                invert
+                link={links.editProduct(product._id)}
+                gradient
+              />
+            </div>
+          )}
           <div className="col-md-6 _boxzoom ">
             <div className="zoom-thumb">
               <ul className="piclist mr-4 grid grid-cols-1 gap-y-4">
@@ -225,8 +258,14 @@ const ProductDetails = ({ userData }: { userData: IParent }) => {
   //   product ? product.availableSizes[1] : { name: 'XXS', inStock: false }
   // )
 
+  const history = useHistory()
+
   if (isLoading) {
     return <Loading />
+  }
+
+  if (productId === 'undefined' || !productId) {
+    history.push(links.FEED)
   }
 
   return (
@@ -245,7 +284,7 @@ const ProductDetails = ({ userData }: { userData: IParent }) => {
 
       <NarrowLayout customMaxWidth="max-w-7xl">
         <div className="flex flex-col gap-y-24">
-          <FirstCol product={product} />
+          <FirstCol userId={userData._id} product={product} />
 
           {product?._id && (
             <Card

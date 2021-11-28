@@ -1,4 +1,4 @@
-import { createEvent, uploadMultipleImages } from 'apis/mutations'
+import { addPost, createEvent, uploadMultipleImages } from 'apis/mutations'
 import placeholder from 'assets/svg/placeholder.png'
 import Error from 'components/alerts/Error'
 import Button from 'components/atoms/Button'
@@ -21,10 +21,12 @@ const CreateEvent = ({
   open,
   setOpen,
   eventData,
+  fullName = '',
 }: {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   eventData?: IEvent
+  fullName: string
 }) => {
   const validationSchema = Yup.object({
     eventName: Yup.string().required('Event Name is required').min(10).max(150),
@@ -50,6 +52,8 @@ const CreateEvent = ({
   const formRef = useRef()
   const { setNotification } = useNotifications()
 
+  const postMutation = useMutation(addPost)
+
   const { mutate, isLoading, isError, error } = useMutation(createEvent, {
     onSuccess: (data) => {
       // console.log(data)
@@ -60,6 +64,14 @@ const CreateEvent = ({
         title: message,
         buttonText: 'View',
         buttonUrl: links.viewEvent(eventId),
+      })
+
+      postMutation.mutate({
+        postData: {
+          text: `${fullName} has organized an event.`,
+          postType: 'event',
+          customInId: eventId,
+        },
       })
     },
   })

@@ -110,8 +110,9 @@ const RequestView = ({ userData }: { userData?: IParent }) => {
   const params: any = useParams()
   const requestId = params.requestId
 
-  const { isLoading, data, isFetched } = useQuery('request-view', () =>
-    fetchSellerById(requestId)
+  const { isLoading, data, isFetched } = useQuery(
+    `request-view-${requestId}`,
+    () => fetchSellerById(requestId)
   )
   const requestData: IRequest = isFetched && !isLoading ? data.data.data : {}
 

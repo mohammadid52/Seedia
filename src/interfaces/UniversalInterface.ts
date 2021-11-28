@@ -448,6 +448,14 @@ export interface IPost {
   comments?: IComment[]
   customInId?: string // could be groupId or eventId
 }
+export interface IPostInput {
+  text?: string
+  links?: IPostLink[]
+  postType?: string
+  user?: IParent
+  postedIn?: 'group' | 'event' | 'general' // whether it is posted in group or event
+  customInId?: string // could be groupId or eventId
+}
 
 export interface IPostLink {
   id: string

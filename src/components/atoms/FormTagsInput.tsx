@@ -6,7 +6,7 @@ import find from 'lodash/find'
 import map from 'lodash/map'
 import remove from 'lodash/remove'
 import { nanoid } from 'nanoid'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdCancel } from 'react-icons/md'
 
 const FormTagsInput = ({
@@ -16,10 +16,12 @@ const FormTagsInput = ({
   name: string
   className?: string
 }) => {
-  const [tags, setTags] = useState<{ name: string; id: string }[]>([])
-
   const [tagField, setTagField] = useState('')
   const [field, meta, helpers] = useField(name)
+
+  const [tags, setTags] = useState<{ name: string; id: string }[]>([
+    ...field.value,
+  ])
 
   const { setTouched, setError: $setError, setValue } = helpers
 
@@ -31,7 +33,8 @@ const FormTagsInput = ({
       )
       if (!exist) {
         setError('')
-        setTags((prev) => [...prev, { name: tagField, id: nanoid(4) }])
+        tags.push({ name: tagField, id: nanoid(4) })
+        setTags(tags)
         setValue(tags)
         setTouched(true)
         $setError(undefined)
@@ -72,7 +75,6 @@ const FormTagsInput = ({
               id="tags"
               placeholder="Enter tag"
               className="w-full"
-              //   gridClass="col-span-2"
               onChange={onChange}
             />
             <Button

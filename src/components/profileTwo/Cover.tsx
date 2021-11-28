@@ -145,17 +145,18 @@ const Cover = ({
                 <div className=" px-4 pb-5 sm:px-6">
                   {isBusiness ? (
                     <div className="dark:text-white text-gray-900 text-base font-medium border-b border-gray-200 dark:border-gray-600 pb-4 ">
-                      {userData?.business?.name}{' '}
+                      {userData?.business?.name}
                       <span className="ml-2 dark:text-gray-400 text-gray-500 text-xs">
-                        - {location?.address}, {location?.city},{' '}
-                        {location?.state} {location?.country}
+                        {userData?.business?.name ? '- ' : ''}
+                        {location?.address}, {location?.city}, {location?.state}{' '}
+                        {location?.country}
                       </span>
                     </div>
                   ) : (
                     <div className="dark:text-white text-gray-900 text-base font-medium border-b border-gray-200 dark:border-gray-600 pb-4 ">
-                      {userData?.company?.jobTitle}{' '}
+                      {userData?.company?.jobTitle}
                       <span className="ml-2 dark:text-gray-400 text-gray-500 text-xs">
-                        -{' '}
+                        {userData?.company?.jobTitle ? '- ' : ''}
                         {userData?.company?.companyName ||
                           userData?.company?.currentCompany}
                       </span>
@@ -186,64 +187,70 @@ const Cover = ({
                         {userData?.email}
                       </dd>
                     </div>
-                    {isBusiness ? (
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          Business type
-                        </dt>
-                        <dd
-                          title={userData?.business?.typeOfBusiness}
-                          className="mt-1 text-sm text-gray-900 dark:text-white"
-                        >
-                          {userData?.business?.typeOfBusiness}
-                        </dd>
-                      </div>
-                    ) : (
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          Company
-                        </dt>
-                        <dd
-                          title={
-                            userData?.company?.companyName ||
-                            userData?.company?.currentCompany
-                          }
-                          className="mt-1 text-sm text-gray-900 dark:text-white"
-                        >
-                          {userData?.company?.companyName ||
-                            userData?.company?.currentCompany}
-                        </dd>
-                      </div>
-                    )}
-                    {isBusiness ? (
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          Relationship to business
-                        </dt>
-                        <div
-                          title={userData?.business?.relationshipToBusiness}
-                          className="mt-1 text-sm text-gray-900 dark:text-white"
-                        >
-                          {userData?.business?.relationshipToBusiness}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          Company address
-                        </dt>
-                        <dd
-                          title={
-                            userData?.location?.address ||
-                            userData?.location?.livesIn
-                          }
-                          className="mt-1 text-sm text-gray-900 dark:text-white"
-                        >
-                          {userData?.location?.address ||
-                            userData?.location?.livesIn}
-                        </dd>
-                      </div>
-                    )}
+                    {isBusiness
+                      ? userData?.business?.typeOfBusiness && (
+                          <div className="sm:col-span-1">
+                            <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                              Business type
+                            </dt>
+                            <dd
+                              title={userData?.business?.typeOfBusiness}
+                              className="mt-1 text-sm text-gray-900 dark:text-white"
+                            >
+                              {userData?.business?.typeOfBusiness}
+                            </dd>
+                          </div>
+                        )
+                      : (userData?.company?.companyName ||
+                          userData?.company?.currentCompany) && (
+                          <div className="sm:col-span-1">
+                            <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                              Company
+                            </dt>
+                            <dd
+                              title={
+                                userData?.company?.companyName ||
+                                userData?.company?.currentCompany
+                              }
+                              className="mt-1 text-sm text-gray-900 dark:text-white"
+                            >
+                              {userData?.company?.companyName ||
+                                userData?.company?.currentCompany}
+                            </dd>
+                          </div>
+                        )}
+                    {isBusiness
+                      ? userData?.business?.relationshipToBusiness && (
+                          <div className="sm:col-span-1">
+                            <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                              Relationship to business
+                            </dt>
+                            <div
+                              title={userData?.business?.relationshipToBusiness}
+                              className="mt-1 text-sm text-gray-900 dark:text-white"
+                            >
+                              {userData?.business?.relationshipToBusiness}
+                            </div>
+                          </div>
+                        )
+                      : (userData?.location?.address ||
+                          userData?.location?.livesIn) && (
+                          <div className="sm:col-span-1">
+                            <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                              Company address
+                            </dt>
+                            <dd
+                              title={
+                                userData?.location?.address ||
+                                userData?.location?.livesIn
+                              }
+                              className="mt-1 text-sm text-gray-900 dark:text-white"
+                            >
+                              {userData?.location?.address ||
+                                userData?.location?.livesIn}
+                            </dd>
+                          </div>
+                        )}
                   </dl>
                 </div>
               </div>

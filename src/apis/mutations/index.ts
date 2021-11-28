@@ -1,5 +1,5 @@
 import { network } from 'helpers'
-import { IPost, IPostLink } from 'interfaces/UniversalInterface'
+import { IPost, IPostInput, IPostLink } from 'interfaces/UniversalInterface'
 
 // follow & Unfollow
 const followUser = (id: string) => network.post(`/user/follow/${id}`)
@@ -30,6 +30,9 @@ const doReviewAction = ({ action, reviewId }: ReviewAction) =>
 
 const addProduct = (values: any) =>
   network.post('/products/add', { newProductData: values })
+
+const editProduct = (values: any) =>
+  network.post('/products/edit', { updatedProductData: values })
 
 const deleteProduct = (productId: any) =>
   network.delete(`/products/delete-product?productId=${productId}`)
@@ -94,15 +97,7 @@ const exitGroup = (data: Exit) => network.post(`/groups/exit/`, { ...data })
 
 // Posts
 
-type PostData = {
-  text?: string
-  links?: IPostLink[]
-  postType?: string
-  postedIn?: IPost['postedIn']
-  customInId?: string
-}
-
-const addPost = (data: { postData: PostData }) =>
+const addPost = (data: { postData: IPostInput }) =>
   network.post(`/post/add-post`, { ...data })
 const deletePost = (postId: any) => network.delete(`/post?postId=${postId}`)
 const viewPost = (postId: string) => network.post(`/post/view?postId=${postId}`)
@@ -150,6 +145,7 @@ export {
   createReview,
   addProduct,
   uploadMultipleImages,
+  editProduct,
   addProject,
   addRequest,
   addNewSection,

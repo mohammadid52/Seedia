@@ -33,13 +33,15 @@ const Dropdown = ({ list }: { list: Item[] }) => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items
+          style={{ zIndex: 999 }}
+          className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none"
+        >
           <div className="py-1">
             {map(list, (item) => (
               <Menu.Item>
                 {({ active }) => (
                   <div
-                    style={{ zIndex: 999 }}
                     onClick={(e) => {
                       e.stopPropagation()
                       if (typeof item.onClick === 'function') {

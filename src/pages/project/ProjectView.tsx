@@ -160,7 +160,7 @@ const ProjectView = ({ userData }: { userData?: IParent }) => {
   const params: any = useParams()
   const projectId = params.projectId
 
-  const { isLoading, data, isFetched } = useQuery('project', () =>
+  const { isLoading, data, isFetched } = useQuery(`project-${projectId}`, () =>
     fetchProjectById(projectId)
   )
   const project: IProject = isFetched && !isLoading ? data.data.data : {}
@@ -195,9 +195,9 @@ const ProjectView = ({ userData }: { userData?: IParent }) => {
         />
         <div className="flex flex-col gap-y-12">
           <TopCard
-            followingList={userData.following}
-            views={project.views}
-            websiteUrl={project.website}
+            followingList={userData?.following}
+            views={project?.views}
+            websiteUrl={project?.website}
             iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}
             userData={company}
           />

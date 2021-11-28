@@ -94,20 +94,6 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
 
   const [showOtherModals, setShowOtherModals] = useState('init')
 
-  const { newPostAdded, setNewPostAdded } = usePostContext()
-
-  useEffect(() => {
-    if (newPostAdded) {
-      try {
-        refetch()
-        fetchPost.refetch()
-        setNewPostAdded(false)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-  }, [newPostAdded])
-
   if (isLoading && !isFetched) {
     return <Loading />
   }
@@ -135,6 +121,7 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
 
       {showEditEventModal && eventData && (
         <CreateEvent
+          fullName={userData.fullName}
           open={showEditEventModal}
           eventData={eventData}
           setOpen={setShowEditEventModal}
@@ -270,6 +257,7 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
 
                   <PostInput
                     customInId={eventData?._id}
+                    fullName={userData.fullName}
                     postingIn={'event'}
                     placeholder="Start a post in this event"
                     customButtons={

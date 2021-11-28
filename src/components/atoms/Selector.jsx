@@ -72,7 +72,6 @@ const Selector = ({
                 {list.map((item, idx) => (
                   <Listbox.Option
                     title={item[keyName]}
-                    style={{ zIndex: 9999 }}
                     disabled={item.hasOwnProperty('disabled')}
                     key={item.name + idx}
                     className={({ active }) =>

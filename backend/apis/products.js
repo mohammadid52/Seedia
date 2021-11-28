@@ -20,11 +20,11 @@ require('dotenv').config()
 router.get('/postedBy/:userId', auth, async (req, res) => {
   const userId = req.params.userId
   const productsCollection = res.locals.productsCollection
-  const products = await getManyItems(productsCollection, {
-    postedBy: ObjectId(userId),
-  })
 
   try {
+    const products = await getManyItems(productsCollection, {
+      postedBy: ObjectId(userId),
+    })
     if (products && products.length) {
       return res
         .status(202)
@@ -339,9 +339,7 @@ router.post('/add', auth, async (req, res) => {
       newProductData.productName ||
       newProductData.productPrice ||
       newProductData.productDescription ||
-      newProductData.availableColors ||
-      newProductData.estimatedDelivery ||
-      newProductData.tags
+      newProductData.estimatedDelivery
     )
   ) {
     return res
@@ -379,16 +377,70 @@ router.post('/add', auth, async (req, res) => {
           },
           { new: true }
         )
-        return res
-          .status(202)
-          .json(
-            responseMsg('success', 'Product added successfully', {
+        return res.status(202).json(
+          responseMsg(
+            'success',
+            `You have successfully added product ${data.productName} on Tradingpost13RMS. Good luck with the sale.`,
+            {
               id: product.insertedId,
               name: data.productName,
-            })
+            }
           )
+        )
       } else {
       }
+    } catch (error) {
+      console.error(error)
+      return res
+        .status(204)
+        .json(
+          responseMsg(
+            'error',
+            'Oops! Something went wrong. Please try again',
+            {}
+          )
+        )
+    }
+  }
+})
+
+router.post('/edit', auth, async (req, res) => {
+  const token = req.user
+  const { updatedProductData } = req.body
+
+  if (
+    !(
+      updatedProductData.productName ||
+      updatedProductData.productPrice ||
+      updatedProductData.productDescription ||
+      updatedProductData.estimatedDelivery
+    )
+  ) {
+    return res
+      .status(204)
+      .json(responseMsg('error', 'Please add all required fields', {}))
+  } else {
+    const productsCollection = res.locals.productsCollection
+
+    // first check if the token.id exists in products collection or not
+    // if yes then add it to products collection
+    // else create new doc and add it to products collection
+
+    try {
+      let copy = { ...updatedProductData }
+      delete copy._id
+
+      await updateData(productsCollection, updatedProductData._id, copy)
+
+      return res
+        .status(202)
+        .json(
+          responseMsg(
+            'success',
+            `You have successfully edited product ${copy.productName}.`,
+            { id: updatedProductData._id }
+          )
+        )
     } catch (error) {
       console.error(error)
       return res

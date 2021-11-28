@@ -123,20 +123,6 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
     { enabled: !!groupData?.posts?.length && !(isLoading && !isFetched) }
   )
 
-  const { newPostAdded, setNewPostAdded } = usePostContext()
-
-  useEffect(() => {
-    if (newPostAdded) {
-      try {
-        refetch()
-        fetchPost.refetch()
-        setNewPostAdded(false)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-  }, [newPostAdded])
-
   const { getType } = useAccountType(userData)
   const [showModal, setShowModal] = useState(false)
 
@@ -302,6 +288,7 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                     </div>
 
                     <PostInput
+                      fullName={userData.fullName}
                       postingIn="group"
                       customInId={groupData._id}
                       placeholder="Start a post in this group"

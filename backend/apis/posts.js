@@ -95,9 +95,13 @@ app.post('/add-post', auth, async (req, res) => {
           })
         }
 
-        return res
-          .status(202)
-          .json(responseMsg('success', 'Post added successfully', postUrl))
+        return res.status(202).json(
+          responseMsg('success', 'Post added successfully', {
+            ...updatedPost,
+            postUrl,
+            user: user,
+          })
+        )
       } else {
         return res
           .status(204)
@@ -370,31 +374,31 @@ app.delete('/', auth, async (req, res) => {
             featuredPosts: featuredPosts,
             activity: activity,
           })
-          await postCollection.deleteOne({ _id: post._id })
 
+          await postCollection.deleteOne({ _id: post._id })
           return res
             .status(202)
-            .json(responseMsg('success', 'Post deleted successfully', {}))
+            .json(responseMsg('success', 'Post deleted successfully', posts))
         } catch (error) {
           return res.status(203).json(responseMsg('error', error.message))
         }
       } else {
         return res
-          .status(203)
+          .status(403)
           .json(
             responseMsg('error', 'Cannot find post. Please check credentials')
           )
       }
     } else {
       return res
-        .status(203)
+        .status(403)
         .json(
           responseMsg('error', 'Cannot verify auth. Please check credentials')
         )
     }
   } catch (error) {
     console.error(error.message)
-    return res.status(203).json(responseMsg('error', error.message))
+    return res.status(403).json(responseMsg('error', error.message))
   }
 })
 

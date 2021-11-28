@@ -43,10 +43,13 @@ const FormMultipleSelector = ({
   disableFieldOption = false,
 }: SelecterProps) => {
   const [field, meta, helpers] = useField(name)
-  const { setTouched, setError, setValue } = helpers
-  const [disable, setDisable] = useState(disableFieldOption)
 
-  const [values, setValues] = useState<any[]>([])
+  const { setTouched, setError, setValue } = helpers
+  const [disable, setDisable] = useState(
+    disableFieldOption && field.value.length === 0
+  )
+
+  const [values, setValues] = useState<any[]>([...field.value])
 
   const onOptionSelect = (selectedOption: { name: string }) => {
     if (!find(values, ['name', selectedOption.name])) {
@@ -76,6 +79,7 @@ const FormMultipleSelector = ({
             {disableFieldOption && (
               <div className="flex items-center h-5">
                 <input
+                  checked={!disable}
                   onChange={(e) => setDisable(!e.target.checked)}
                   aria-describedby="disable-field"
                   type="checkbox"
