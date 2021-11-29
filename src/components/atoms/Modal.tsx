@@ -85,7 +85,7 @@ const Modal = ({
               )}
               <div className="modal-body">
                 {header && (
-                  <div className="modal-header divider dark:divider px-4">
+                  <div className="modal-header divider dark:divider px-2">
                     <h3 className="dark:text-white text-gray-900 text-xl font-normal">
                       {header}
                     </h3>

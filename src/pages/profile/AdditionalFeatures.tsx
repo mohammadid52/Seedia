@@ -9,7 +9,7 @@ import Modal from 'components/atoms/Modal'
 import { links } from 'constants/Links'
 import { useNotifications } from 'context/NotificationContext'
 import { IParent } from 'interfaces/UniversalInterface'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMutation } from 'react-query'
 import animation from 'assets/animation/searching-user.json'
 import { wait } from 'utils/wait'
@@ -126,7 +126,7 @@ const AdditionalFeatures = ({
     return isValid
   }
 
-  const onResumeBtnClick = () => {
+  const onResumeBtnClick = (showModal: boolean = true) => {
     const isValid = checkValidity()
 
     if (isValid) {
@@ -134,8 +134,14 @@ const AdditionalFeatures = ({
     } else {
       setIsSuccess(false)
     }
-    setShowResumeValidityModal(true)
+    if (showModal) {
+      setShowResumeValidityModal(true)
+    }
   }
+
+  useEffect(() => {
+    onResumeBtnClick(false)
+  }, [])
 
   const onAdd = () => {
     setShowResumeValidityModal(false)
@@ -179,31 +185,41 @@ const AdditionalFeatures = ({
           )}
         </div>
       </Modal>
-      <Card
-        // className={`${!isBusiness && iAmOwnerOfThisProfile ? 'block' : 'hidden'}`}
-        cardTitle="Additional Features"
-        content={
-          <div className="flex flex-col gap-y-6">
-            <Button onClick={onResumeBtnClick} label={'See resume'} gradient />
-            {!isBusiness && iAmOwnerOfThisProfile && (
-              <>
-                <Button
-                  link={links.viewMyRequests()}
-                  label="View My Requests"
-                  gradient
-                />
-              </>
-            )}
-            {!iAmOwnerOfThisProfile && (
-              <Button
-                onClick={() => _saveProfile()}
-                label={saved ? 'Unsave profile' : 'Save profile'}
-                gradient
-              />
-            )}
-          </div>
-        }
-      />
+      {isSuccess ||
+        (!isBusiness && iAmOwnerOfThisProfile) ||
+        (!iAmOwnerOfThisProfile && (
+          <Card
+            // className={`${!isBusiness && iAmOwnerOfThisProfile ? 'block' : 'hidden'}`}
+            cardTitle="Additional Features"
+            content={
+              <div className="flex flex-col gap-y-6">
+                {isSuccess && (
+                  <Button
+                    onClick={onResumeBtnClick}
+                    label={'See resume'}
+                    gradient
+                  />
+                )}
+                {!isBusiness && iAmOwnerOfThisProfile && (
+                  <>
+                    <Button
+                      link={links.viewMyRequests()}
+                      label="View My Requests"
+                      gradient
+                    />
+                  </>
+                )}
+                {!iAmOwnerOfThisProfile && (
+                  <Button
+                    onClick={() => _saveProfile()}
+                    label={saved ? 'Unsave profile' : 'Save profile'}
+                    gradient
+                  />
+                )}
+              </div>
+            }
+          />
+        ))}
     </>
   )
 }

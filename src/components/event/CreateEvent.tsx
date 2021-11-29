@@ -151,7 +151,12 @@ const CreateEvent = ({
   const [selectedTimeZone, setSelectedTimeZone] = useState(timezone[0].text)
 
   return (
-    <Modal disablePadding setOpen={setOpen} header="Create event" open={open}>
+    <Modal
+      disablePadding
+      setOpen={setOpen}
+      header={`${editMode ? 'Edit' : 'Create'} event`}
+      open={open}
+    >
       <div className=" min-w-200 pb-4  max-w-200 min-h-164 max-h-164 overflow-y-auto">
         <div className="px-1">
           {/* HIDDEN IMAGE INPUT */}
@@ -191,7 +196,7 @@ const CreateEvent = ({
                     onClick={() => showFileExplorerForCover()}
                     src={
                       coverPhoto
-                        ? editMode
+                        ? typeof coverPhoto === 'string'
                           ? coverPhoto
                           : URL.createObjectURL(coverPhoto)
                         : placeholder
@@ -205,7 +210,7 @@ const CreateEvent = ({
                     alt=""
                     src={
                       profilePhoto
-                        ? editMode
+                        ? typeof profilePhoto === 'string'
                           ? profilePhoto
                           : URL.createObjectURL(profilePhoto)
                         : avatarPlaceholder

@@ -47,7 +47,7 @@ const TopCard = ({
                 <div className="">
                   <span className="sr-only">13RMS</span>
                   <img
-                    className="h-36 w-36 sm:h-36 sm:w-36 cursor-pointer rounded-full shadow-xl"
+                    className="h-36 w-36 sm:h-36 sm:w-36 border-gradient border-transparent border-4 cursor-pointer rounded-full shadow-xl"
                     src={
                       userData?.profilePicture
                         ? userData?.profilePicture
@@ -61,8 +61,13 @@ const TopCard = ({
                     {userData?.fullName}
                   </h1>
                   <h5 className="text-base leading-6 font-light mt-2 max-w-132 dark:text-gray-400 text-gray-900">
-                    {userData?.location.address || ''},{' '}
-                    {userData?.location.city}, {userData?.location.country}
+                    {userData?.location?.address
+                      ? `${userData?.location?.address}, `
+                      : ''}
+                    {userData?.location.city
+                      ? `${userData?.location.city}, `
+                      : ''}{' '}
+                    {userData?.location.country}
                   </h5>
                   <h5 className="text-base leading-6 font-light mt-2 max-w-132 dark:text-gray-400 text-gray-900">
                     {userData?.email}

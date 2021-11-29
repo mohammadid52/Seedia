@@ -1,4 +1,5 @@
 import Button from 'components/atoms/Button'
+import { AiOutlineEdit } from 'react-icons/ai'
 import Card from 'components/atoms/Card'
 import Modal from 'components/atoms/Modal'
 import { useNotifications } from 'context/NotificationContext'
@@ -7,8 +8,26 @@ import { network } from 'helpers'
 import useAccountType from 'hooks/useAccountType'
 import { IParent } from 'interfaces/UniversalInterface'
 import { noop } from 'lodash'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { avatarPlaceholder } from 'state/Redux/constants'
+import NormalFormInput from 'components/atoms/NormalFormInput'
+import Selector from 'components/atoms/Selector'
+
+const businessInitState = {
+  businessName: '',
+  fullName: '',
+  email: '',
+  relationshipToBusiness: '',
+  typeOfBusiness: '',
+}
+
+const companyInitState = {
+  fullName: '',
+  email: '',
+  jobTitle: '',
+  currentCompany: '',
+  address: '',
+}
 
 const Cover = ({
   userData,
@@ -81,8 +100,210 @@ const Cover = ({
   const isBusiness = useAccountType(userData)
   const { location } = userData
 
+  // Edit personal info section
+  const [showEditModal, setShowEditModal] = useState(false)
+  const initialState = !isBusiness ? companyInitState : businessInitState
+
+  const [localFields, setLocalFields] = useState<any>(initialState)
+
+  useEffect(() => {
+    if (!isBusiness) {
+      setLocalFields({
+        ...initialState,
+        fullName: userData?.fullName || '',
+        email: userData?.email || '',
+        jobTitle: userData?.company?.jobTitle || '',
+        currentCompany: userData?.company?.companyName || '',
+        address: userData?.location?.address || '',
+      })
+    } else {
+      setLocalFields({
+        ...initialState,
+        fullName: userData?.fullName || '',
+        email: userData?.email || '',
+        businessName: userData?.business?.name || '',
+        typeOfBusiness: userData?.business?.typeOfBusiness || '',
+        relationshipToBusiness:
+          userData?.business?.relationshipToBusiness || '',
+      })
+    }
+  }, [userData])
+
+  const updateState = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+
+    setLocalFields({
+      ...localFields,
+      [name]: value,
+    })
+  }
+
+  const onEditSave = async () => {
+    try {
+      let updatedData = {}
+      if (!isBusiness) {
+        updatedData = {
+          ...userData,
+          fullName: localFields.fullName,
+          email: localFields.email,
+          company: {
+            ...userData.company,
+            jobTitle: localFields.jobTitle,
+            companyName: localFields.currentCompany,
+            address: localFields.address,
+          },
+        }
+      } else {
+        updatedData = {
+          ...userData,
+          fullName: localFields.fullName,
+          email: localFields.email,
+          business: {
+            ...userData.business,
+            name: localFields.businessName,
+            relationshipToBusiness: localFields.relationshipToBusiness,
+            typeOfBusiness: localFields.typeOfBusiness,
+          },
+        }
+      }
+
+      setValues({ ...updatedData })
+      if (!showEditModal) {
+        setLocalFields(initialState)
+      }
+      await network.post('/user/update', {
+        ...updatedData,
+      })
+      setNotification({
+        show: true,
+        title: `Profile updated successfully`,
+      })
+    } catch (error) {
+      console.error(error)
+      setNotification({
+        show: true,
+        title: `Something went wrong.`,
+      })
+    } finally {
+      setShowEditModal(false)
+    }
+  }
+
   return (
     <div className="exportContent">
+      {authUser && showEditModal && (
+        <Modal
+          onClose={() => setShowEditModal(false)}
+          open={showEditModal}
+          disableBackdropClose={false}
+          setOpen={() => setShowEditModal(false)}
+          header="Edit Personal Info"
+        >
+          <div>
+            <div className="min-w-256 p-2 custom-scroll-mini darker my-4">
+              {!isBusiness ? (
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <NormalFormInput
+                    name="fullName"
+                    required
+                    label="Full name"
+                    value={localFields.fullName}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="email"
+                    required
+                    label="Email"
+                    value={localFields.email}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="currentCompany"
+                    label="Current Company"
+                    value={localFields.currentCompany}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="jobTitle"
+                    label="Job Title"
+                    value={localFields.jobTitle}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="address"
+                    label="Address"
+                    value={localFields.address}
+                    onChange={updateState}
+                  />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <NormalFormInput
+                    name="fullName"
+                    required
+                    label="Your Fullname"
+                    value={localFields.fullName}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="email"
+                    required
+                    label="Email"
+                    value={localFields.email}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="businessName"
+                    required
+                    label="Business Company"
+                    value={localFields.businessName}
+                    onChange={updateState}
+                  />
+                  <Selector
+                    list={[
+                      { name: 'Test business 1' },
+                      { name: 'Test business 2' },
+                    ]}
+                    selectedItem={localFields.typeOfBusiness}
+                    placeholder="Select type of business"
+                    label="Type of business"
+                    required
+                    onSelect={(type) =>
+                      setLocalFields({
+                        ...localFields,
+                        typeOfBusiness: type.name,
+                      })
+                    }
+                  />
+                  <Selector
+                    list={[
+                      { name: 'Owner' },
+                      { name: 'CEO' },
+                      { name: 'Human Resources Manager' },
+                      { name: 'Business Administrator' },
+                    ]}
+                    selectedItem={localFields.relationshipToBusiness}
+                    required
+                    label="Relationship to business"
+                    onSelect={(type) =>
+                      setLocalFields({
+                        ...localFields,
+                        relationshipToBusiness: type.name,
+                      })
+                    }
+                    placeholder="Select relationship"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="mt-5 sm:mt-4 flex justify-end space-x-4 items-center">
+              <Button gradient onClick={onEditSave} label="Save" />
+            </div>
+          </div>
+        </Modal>
+      )}
+
       {authUser && (
         <Modal
           header={`Profile Photo`}
@@ -131,6 +352,20 @@ const Cover = ({
                 alt=""
               />
             </div>
+
+            {/* Edit button here */}
+
+            <div className="absolute top-0 p-4 right-0">
+              <Button
+                label="Edit"
+                onClick={() => setShowEditModal(true)}
+                Icon={AiOutlineEdit}
+                size="sm"
+                invert
+                gradient
+              />
+            </div>
+
             {/* HIDDEN IMAGE INPUT */}
             <input
               // @ts-ignore

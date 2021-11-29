@@ -4,6 +4,7 @@ import FormInput from 'components/atoms/FormInput'
 import Label from 'components/atoms/Label'
 import Modal from 'components/atoms/Modal'
 import { Form, Formik } from 'formik'
+import { IStoreSection } from 'interfaces/UniversalInterface'
 import BannerImage from 'pages/store/BannerImage'
 import React, { useEffect, useRef, useState } from 'react'
 import { useMutation } from 'react-query'
@@ -12,8 +13,12 @@ import * as Yup from 'yup'
 const NewSectionModal = ({
   open,
   setOpen,
+  setSections,
+  sections,
 }: {
   open: boolean
+  setSections: React.Dispatch<React.SetStateAction<IStoreSection[]>>
+  sections: IStoreSection[]
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const formRef = useRef()
@@ -45,6 +50,8 @@ const NewSectionModal = ({
           ...values,
         }
 
+        sections.push(finalInput)
+        setSections(sections)
         mutate({ section: finalInput })
       }
     },

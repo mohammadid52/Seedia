@@ -34,7 +34,7 @@ const Activity = ({
             <div>
               <div
                 className={`grid gap-4 ${
-                  userData?.activity?.length > 1 ? 'grid-cols-2' : 'grid-cols-1'
+                  userData?.activity?.length > 1 ? 'grid-cols-1' : 'grid-cols-1'
                 }`}
               >
                 {slicedList.map((activity: IActivity, idx) => {
@@ -60,8 +60,19 @@ const Activity = ({
                       </div>
                       <a href={postUrl} className="group cursor-pointer">
                         <h4 className="truncate text-base line-clamp group-hover:underline dark:text-gray-200 font-bold">
-                          {activity.text}
+                          {activity.text || ''}
                         </h4>
+
+                        {activity.postMedia &&
+                          (activity.postMedia.includes('mp4') ? (
+                            <video src={activity.postMedia} />
+                          ) : (
+                            <img
+                              src={activity.postMedia}
+                              alt=""
+                              className="sm:h-56 lg:h-40 my-2 rounded-xl"
+                            />
+                          ))}
                         <span className="text-gray-500 dark:text-gray-600 group-hover:underline">
                           {activity.subtext}
                         </span>

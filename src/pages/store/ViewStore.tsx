@@ -1,11 +1,13 @@
+import { publishStore } from 'apis/mutations'
 import { fetchAllProducts } from 'apis/queries'
 import Button from 'components/atoms/Button'
 import Meta from 'components/atoms/Meta/Meta'
-import Loading from 'components/Loading'
 import ProductSection from 'components/atoms/products/Section'
+import Loading from 'components/Loading'
 import Spinner from 'components/Spinner'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
+import { useNotifications } from 'context/NotificationContext'
 import { useRouter } from 'hooks/useRouter'
 import useScrollPosition from 'hooks/useScrollPosition'
 import useUser from 'hooks/useUser'
@@ -16,11 +18,9 @@ import NewSectionModal from 'pages/store/NewSection'
 import { useState } from 'react'
 import { MdPublish } from 'react-icons/md'
 import { VscEdit } from 'react-icons/vsc'
-import 'styles/store.scss'
 import { useMutation, useQuery } from 'react-query'
-import { publishStore } from 'apis/mutations'
 import { Redirect } from 'react-router'
-import { useNotifications } from 'context/NotificationContext'
+import 'styles/store.scss'
 
 const ListProducts = ({ userId, onLoad }: { userId: string; onLoad?: any }) => {
   const { isLoading, data, isFetched, isSuccess } = useQuery(
@@ -52,7 +52,7 @@ const ListProducts = ({ userId, onLoad }: { userId: string; onLoad?: any }) => {
 
 const Section = ({ sectionData }: { sectionData: IStoreSection }) => {
   return (
-    <div className="w-full min-w-full max-h-84 min-h-84 border dark:border-gray-700   border-gray-200  lg:max-w-xs bg-white grid grid-cols-1 lg:grid-cols-2 dark:bg-gray-800 px-12">
+    <div className="w-full relative min-w-full max-h-84 min-h-84 border dark:border-gray-700   border-gray-200  lg:max-w-xs bg-white grid grid-cols-1 lg:grid-cols-2 dark:bg-gray-800 px-12">
       <img
         src={sectionData.image}
         alt=""
@@ -87,6 +87,8 @@ const ViewStore = ({ userData }: { userData: IParent }) => {
 
   const store = user?.store
 
+  const [sections, setSections] = useState(store?.section)
+
   const [isPublished, setIsPublished] = useState(store?.isPublished)
 
   const titleOpacity =
@@ -112,7 +114,12 @@ const ViewStore = ({ userData }: { userData: IParent }) => {
   } else {
     return (
       <div className="smooth-scroll">
-        <NewSectionModal open={newSectionModal} setOpen={setNewSectionModal} />
+        <NewSectionModal
+          sections={sections}
+          setSections={setSections}
+          open={newSectionModal}
+          setOpen={setNewSectionModal}
+        />
         <Meta
           pageTitle={`Store | ${user.fullName} | 13RMS`}
           title={`Store | ${user.fullName}`}
@@ -138,13 +145,15 @@ const ViewStore = ({ userData }: { userData: IParent }) => {
               {user?.business?.name || 'Store'}
             </h1>
           </div>
-          {store.section.length > 0 && (
+          {sections?.length > 0 && (
             <NarrowLayout className="mt-12" customMaxWidth="max-w-7xl">
               <div className="grid grid-cols-1 gap-y-24">
-                {store?.section.map((sec: any) => (
+                {sections.map((sec: any) => (
                   <div>
                     <Section sectionData={sec} />
-                    <ListProducts userId={user._id} />
+                    <div className=" mt-12 border-b border-gray-200 pb-12 dark:border-gray-700">
+                      <ListProducts userId={user._id} />
+                    </div>
                   </div>
                 ))}
               </div>

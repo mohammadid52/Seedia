@@ -141,7 +141,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
                     </div>
                   }
                   thirdCol={
-                    <div className="space-y-8 ">
+                    <div className="gap-y-12 flex flex-col ">
                       {iAmOwnerOfThisProfile && (
                         <PublicProfileCard userData={userData} />
                       )}
@@ -149,7 +149,7 @@ const Profile = ({ userData }: { userData: IParent }) => {
                         <ProfileStrength {...commonProps} />
                       )}
 
-                      <div className="xl:hidden space-y-12 block">
+                      <div className="xl:hidden gap-y-12 flex flex-col ">
                         <About {...commonProps} />
                         <AdditionalInfo
                           refetch={refetchProfile}
