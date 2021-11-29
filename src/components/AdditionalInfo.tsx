@@ -52,7 +52,7 @@ const AdditionalInfo = ({
     if (authUser && !isEmpty(userData)) {
       function getUrl(type: string) {
         if (userData?.socialMedia) {
-          return userData?.socialMedia.find((s) => s.name === type).url
+          return userData?.socialMedia.find((s) => s?.name === type)?.url
         }
       }
       setLocalFields({
@@ -232,7 +232,7 @@ const AdditionalInfo = ({
             />
             {userData?.socialMedia &&
               userData?.socialMedia?.map((media) => (
-                <KeyValue key={media.id} label={media.name} text={media.url} />
+                <KeyValue key={media.id} label={media.name} text={media?.url} />
               ))}
           </div>
         }
