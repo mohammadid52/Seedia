@@ -41,7 +41,7 @@ const VerticalProfileCard = ({
         <img
           alt=""
           src={user.profilePicture ? user.profilePicture : avatarPlaceholder}
-          className="rounded-full border-solid lg:h-16 lg:w-16 h-12 w-12 dark:border-gray-800 border-white  border-2 -mt-3"
+          className="rounded-full  border-gradient border-transparent  lg:h-16 lg:w-16 h-12 w-12 dark:border-gray-800 border-white  border-2 -mt-3"
         />
       </div>
       <div className={`text-center ${content ? '' : 'px-3 pb-6 pt-2'}`}>

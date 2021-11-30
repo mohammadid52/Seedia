@@ -35,7 +35,7 @@ const RequestCard = ({
               <div className="bg-gray-400 h-12 w-12 mb-4 cursor-pointer rounded-lg shadow-md"></div>
             ) : (
               <img
-                className="h-12 w-12 mb-4 cursor-pointer rounded-lg shadow-md"
+                className="border-gradient border-transparent border-2 h-12 w-12 mb-4 cursor-pointer rounded-lg shadow-md"
                 src={
                   user?.profilePicture
                     ? user?.profilePicture

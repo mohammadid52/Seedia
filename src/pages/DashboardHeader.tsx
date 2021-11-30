@@ -577,7 +577,7 @@ const DashboardHeader = ({ userData }: { userData?: IParent }) => {
                               <div className="flex px-5 py-5 bg-white border-t dark:border-gray-700 border-gray-200 dark:bg-gray-800 space-y-6 sm:flex sm:space-y-0 sm:px-8">
                                 <div className=" flex-shrink-0">
                                   <img
-                                    className="h-10 mr-6 rounded-full w-10 drop-shadow-lg"
+                                    className="border-gradient border-transparent border-2 h-10 mr-6 rounded-full w-10 drop-shadow-lg"
                                     src={
                                       userData?.profilePicture
                                         ? userData?.profilePicture

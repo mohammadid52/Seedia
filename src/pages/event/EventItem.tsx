@@ -61,7 +61,7 @@ const EventItem = ({ event, userId }: { event: IEvent; userId: string }) => {
             src={
               event.profilePicture ? event.profilePicture : avatarPlaceholder
             }
-            className="h-14 w-14  2 -mt-3"
+            className="border-gradient border-transparent border-2 h-14 w-14  2 -mt-3"
           />
           <div className="min-w-0 ml-2 flex-1 sm:flex sm:items-center sm:justify-between">
             <div className="truncate">

@@ -37,7 +37,7 @@ const GroupItem = ({ group, userId }: { group: IGroup; userId: string }) => {
             src={
               group.profilePicture ? group.profilePicture : avatarPlaceholder
             }
-            className="h-14 w-14  2 -mt-3"
+            className="h-14 border-gradient border-transparent border-2 rounded-lg shadow-md w-14  2 -mt-3"
           />
           <div className="min-w-0 ml-2 flex-1 sm:flex sm:items-center sm:justify-between">
             <div className="truncate">

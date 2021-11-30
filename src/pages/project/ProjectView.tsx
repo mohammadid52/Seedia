@@ -98,7 +98,7 @@ const TopCard = ({
                 <div className="">
                   <span className="sr-only">13RMS</span>
                   <img
-                    className="h-36 w-36 sm:h-36 sm:w-36 cursor-pointer rounded-full shadow-xl"
+                    className="h-36 w-36 sm:h-36 sm:w-36 cursor-pointer rounded-full shadow-xl border-gradient border-transparent border-2"
                     src={
                       userData?.profilePicture
                         ? userData?.profilePicture
@@ -261,7 +261,7 @@ const ProjectView = ({ userData }: { userData?: IParent }) => {
                     <div className="sm:flex items-center">
                       <div className="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
                         <img
-                          className="h-12 w-12  cursor-pointer  shadow-xl"
+                          className="h-12 w-12 border-gradient border-transparent border-2 cursor-pointer  shadow-xl"
                           src={
                             company?.profilePicture
                               ? company?.profilePicture

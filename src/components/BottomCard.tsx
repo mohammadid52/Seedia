@@ -32,7 +32,7 @@ const BottomCard = ({
           <div className="flex">
             <div className="mr-4 flex-shrink-0">
               <img
-                className="inline-block lg:h-12 lg:w-12 h-12 w-12 rounded-full ring-2 dark:ring-transparent ring-white"
+                className="inline-block lg:h-12 lg:w-12 h-12 w-12 rounded-full  border-gradient border-transparent border-2 ring-2 dark:ring-transparent ring-white"
                 src={
                   userData?.profilePicture
                     ? userData?.profilePicture

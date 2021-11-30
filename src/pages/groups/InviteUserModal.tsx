@@ -171,7 +171,7 @@ const InviteUserModal = ({
                         <img
                           src={user?.profilePicture || avatarPlaceholder}
                           alt=""
-                          className="rounded-full mr-2 h-12 w-12"
+                          className="border-gradient border-transparent border-2 rounded-full mr-2 h-12 w-12"
                         />
                         <div>
                           <h4 className="dark:text-white text-gray-900">
@@ -214,7 +214,7 @@ const InviteUserModal = ({
                           <img
                             src={user.profilePicture || avatarPlaceholder}
                             alt=""
-                            className="rounded-full mr-2 h-8 w-8"
+                            className="border-gradient border-transparent border-2 rounded-full mr-2 h-8 w-8"
                           />
                           <h4 className="dark:text-white">{user.fullName}</h4>
                         </div>

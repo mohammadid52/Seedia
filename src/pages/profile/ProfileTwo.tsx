@@ -136,16 +136,16 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const history = useHistory()
 
   const user = commonProps?.userData
-  // useEffect(() => {
-  //   if (!isEmpty(user)) {
-  //     history.push(
-  //       links.getProfile(
-  //         user,
-  //         iAmOwnerOfThisProfile ? viewMode === 'private' : false
-  //       )
-  //     )
-  //   }
-  // }, [user])
+  useEffect(() => {
+    if (!isEmpty(user)) {
+      history.push(
+        links.getProfile(
+          user,
+          iAmOwnerOfThisProfile ? viewMode === 'private' : false
+        )
+      )
+    }
+  }, [user])
 
   if (isLoading && !isFetched) {
     return <Loading />
@@ -236,12 +236,6 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
 
                   {!isBusiness && <Education {...commonBlockProps} />}
 
-                  {iAmOwnerOfThisProfile && (
-                    <Following
-                      list={userData.following}
-                      interests={userData?.background?.interests}
-                    />
-                  )}
                   <div className="grid-cols-1 grid   ">
                     <Languages {...commonBlockProps} />
                   </div>
@@ -252,6 +246,12 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                     recommendation={commonProps?.userData?.recommendation}
                   />
 
+                  {iAmOwnerOfThisProfile && (
+                    <Following
+                      list={userData.following}
+                      interests={userData?.background?.interests}
+                    />
+                  )}
                   <Activity
                     userData={commonBlockProps.userData}
                     iAmOwnerOfThisProfile={iAmOwnerOfThisProfile}

@@ -176,7 +176,7 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                       <img
                         alt=""
                         src={eventData?.profilePicture || avatarPlaceholder}
-                        className=" border-solid lg:h-24 lg:w-24 h-32 w-32  border-white border-2 -mt-3"
+                        className="border-gradient border-transparent border-4 border-solid lg:h-24 lg:w-24 h-32 w-32  border-white  -mt-3"
                       />
                     </div>
                     <div className="absolute right-5 ">
@@ -218,7 +218,7 @@ const SingleEventView = ({ userData }: { userData: IParent }) => {
                           {eventData?.attendees?.slice(0, 4).map((attendee) => (
                             <img
                               key={attendee?._id}
-                              className="max-w-none h-8 w-8 rounded-full ring-2 ring-white"
+                              className="max-w-none border-gradient border-transparent border h-8 w-8 rounded-full ring-2 ring-white"
                               src={
                                 attendee?.profilePicture || avatarPlaceholder
                               }

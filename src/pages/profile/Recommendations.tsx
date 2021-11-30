@@ -290,7 +290,7 @@ const Recommendations = ({
                                 : avatarPlaceholder
                             }
                             alt="by-name"
-                            className="h-6 w-6 rounded-full ml-2"
+                            className="h-6 w-6 border-gradient border-transparent border-2 rounded-full ml-2"
                           />
                         </span>
                       </div>

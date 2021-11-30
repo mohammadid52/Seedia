@@ -34,7 +34,7 @@ const ProjectCard = ({
               <div className="bg-gray-400 h-12 w-12 mb-4 cursor-pointer rounded-lg shadow-md"></div>
             ) : (
               <img
-                className="h-12 w-12 mb-4 cursor-pointer rounded-lg shadow-md"
+                className="h-12 w-12 border-gradient border-transparent border-2 mb-4 cursor-pointer rounded-lg shadow-md"
                 src={
                   company?.profilePicture
                     ? company?.profilePicture

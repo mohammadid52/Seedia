@@ -277,7 +277,7 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                               ? groupData.profilePicture
                               : avatarPlaceholder
                           }
-                          className=" border-solid lg:h-16 lg:w-16 h-12 w-12  border-white border-2 -mt-3"
+                          className="lg:h-16 lg:w-16 h-12 w-12  border-gradient border-transparent border-2 -mt-3"
                         />
                       </div>
                       <div className="text-left mx-8 mt-2 pb-6 pt-2">
@@ -380,7 +380,7 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                           .map((member: IParent) => (
                             <img
                               key={member._id}
-                              className="inline-block lg:h-12 lg:w-12 h-12 w-12 rounded-full ring-2 dark:ring-transparent ring-white"
+                              className="inline-block lg:h-12 lg:w-12 h-12 w-12 rounded-full ring-2 dark:ring-transparent border-gradient border-transparent border-2"
                               src={member.profilePicture}
                               alt={''}
                             />
@@ -448,7 +448,7 @@ const SingleGroupView = ({ userData }: { userData: IParent }) => {
                                     ? _admin.profilePicture
                                     : avatarPlaceholder
                                 }
-                                className="rounded-full border-solid lg:h-12 lg:w-12 h-12 w-12  border-white border-2 -mt-3"
+                                className="rounded-full lg:h-12 lg:w-12 h-12 w-12 border-gradient border-transparent  border-2 -mt-3"
                               />
                             </div>
                             <div>

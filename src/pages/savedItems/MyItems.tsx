@@ -42,7 +42,7 @@ const User = ({
         <img
           src={user.profilePicture || avatarPlaceholder}
           alt=""
-          className="rounded-full mr-2 h-12 w-12"
+          className="rounded-full  border-gradient border-transparent border-2 mr-2 h-12 w-12"
         />
         <div>
           <h4 className="dark:text-white text-gray-900">{user.fullName}</h4>

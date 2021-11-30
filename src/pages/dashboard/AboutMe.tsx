@@ -192,7 +192,7 @@ const PersonalCard = ({
             title="change photo"
             onClick={() => (authUser ? showFileExplorerForProfile() : noop)}
             src={user.profilePicture ? user.profilePicture : avatarPlaceholder}
-            className="rounded-full cursor-pointer border-solid lg:h-16 lg:w-16 h-12 w-12  border-white border-2 -mt-3"
+            className="rounded-full border-gradient border-transparent cursor-pointer border-solid lg:h-16 lg:w-16 h-12 w-12 border-2 shadow-xl -mt-3"
           />
         </div>
         <div className="text-center px-3 pb-6 pt-2">
