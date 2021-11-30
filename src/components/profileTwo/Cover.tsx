@@ -400,10 +400,7 @@ const Cover = ({
                       <p>{userData?.business?.name}</p>
                       <p className="ml-2 dark:text-gray-400 text-gray-500 text-xs  break-words w-96">
                         {userData?.business?.name ? '- ' : ''}
-                        {location?.address ? `${location?.address}, ` : ''}
-                        {location?.city ? `${location?.city}, ` : ''}{' '}
-                        {location?.state ? `${location?.state}, ` : ''}{' '}
-                        {location?.country}
+                        {location?.address ? `${location?.address}` : ''}
                       </p>
                     </div>
                   ) : (
