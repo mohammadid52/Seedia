@@ -355,7 +355,7 @@ const Cover = ({
 
             {/* Edit button here */}
 
-            <div className="absolute top-0 p-4 right-0">
+            <div className="absolute ml-2 top-0 p-4 right-0">
               <Button
                 label="Edit"
                 onClick={() => setShowEditModal(true)}
@@ -380,21 +380,23 @@ const Cover = ({
                 <div className=" px-4 pb-5 sm:px-6">
                   {isBusiness ? (
                     <div className="dark:text-white text-gray-900 text-base font-medium border-b border-gray-200 dark:border-gray-600 pb-4 ">
-                      {userData?.business?.name}
-                      <span className="ml-2 dark:text-gray-400 text-gray-500 text-xs">
+                      <p>{userData?.business?.name}</p>
+                      <p className="ml-2 dark:text-gray-400 text-gray-500 text-xs  break-words w-96">
                         {userData?.business?.name ? '- ' : ''}
-                        {location?.address}, {location?.city}, {location?.state}{' '}
+                        {location?.address ? `${location?.address}, ` : ''}
+                        {location?.city ? `${location?.city}, ` : ''}{' '}
+                        {location?.state ? `${location?.state}, ` : ''}{' '}
                         {location?.country}
-                      </span>
+                      </p>
                     </div>
                   ) : (
                     <div className="dark:text-white text-gray-900 text-base font-medium border-b border-gray-200 dark:border-gray-600 pb-4 ">
                       {userData?.company?.jobTitle}
-                      <span className="ml-2 dark:text-gray-400 text-gray-500 text-xs">
+                      <p className="ml-2 dark:text-gray-400 text-gray-500 text-xs  break-words w-96">
                         {userData?.company?.jobTitle ? '- ' : ''}
                         {userData?.company?.companyName ||
                           userData?.company?.currentCompany}
-                      </span>
+                      </p>
                     </div>
                   )}
 
