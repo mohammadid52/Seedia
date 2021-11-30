@@ -136,16 +136,16 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
   const history = useHistory()
 
   const user = commonProps?.userData
-  useEffect(() => {
-    if (!isEmpty(user)) {
-      history.push(
-        links.getProfile(
-          user,
-          iAmOwnerOfThisProfile ? viewMode === 'private' : false
-        )
-      )
-    }
-  }, [user])
+  // useEffect(() => {
+  //   if (!isEmpty(user)) {
+  //     history.push(
+  //       links.getProfile(
+  //         user,
+  //         iAmOwnerOfThisProfile ? viewMode === 'private' : false
+  //       )
+  //     )
+  //   }
+  // }, [user])
 
   if (isLoading && !isFetched) {
     return <Loading />
@@ -259,7 +259,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                 </div>
               }
               thirdCol={
-                <div className="space-y-12">
+                <div className="flex flex-col gap-y-12">
                   {showAllButtons && (
                     <div className="">
                       <PublicProfileCard secondary userData={userData} />
@@ -302,13 +302,13 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
                       />
                     )}
                   </div>
-                  {iAmOwnerOfThisProfile && (
-                    <PeopleAlsoViewed
-                      // showSingleCard={false}
-                      {...commonBlockProps2}
-                      secondary
-                    />
-                  )}
+                  {/* {iAmOwnerOfThisProfile && ( */}
+                  <PeopleAlsoViewed
+                    // showSingleCard={false}
+                    {...commonBlockProps2}
+                    secondary
+                  />
+                  {/* )} */}
                 </div>
               }
             />

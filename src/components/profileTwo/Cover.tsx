@@ -18,6 +18,7 @@ const businessInitState = {
   fullName: '',
   email: '',
   relationshipToBusiness: '',
+  address: '',
   typeOfBusiness: '',
 }
 
@@ -122,6 +123,7 @@ const Cover = ({
         fullName: userData?.fullName || '',
         email: userData?.email || '',
         businessName: userData?.business?.name || '',
+        address: userData?.location?.address || '',
         typeOfBusiness: userData?.business?.typeOfBusiness || '',
         relationshipToBusiness:
           userData?.business?.relationshipToBusiness || '',
@@ -150,6 +152,9 @@ const Cover = ({
             ...userData.company,
             jobTitle: localFields.jobTitle,
             companyName: localFields.currentCompany,
+          },
+          location: {
+            ...userData.location,
             address: localFields.address,
           },
         }
@@ -163,6 +168,10 @@ const Cover = ({
             name: localFields.businessName,
             relationshipToBusiness: localFields.relationshipToBusiness,
             typeOfBusiness: localFields.typeOfBusiness,
+          },
+          location: {
+            ...userData.location,
+            address: localFields.address,
           },
         }
       }
@@ -257,6 +266,12 @@ const Cover = ({
                     required
                     label="Business Company"
                     value={localFields.businessName}
+                    onChange={updateState}
+                  />
+                  <NormalFormInput
+                    name="address"
+                    label="Business address"
+                    value={localFields.address}
                     onChange={updateState}
                   />
                   <Selector
