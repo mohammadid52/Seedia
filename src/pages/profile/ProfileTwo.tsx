@@ -225,7 +225,7 @@ const ProfileTwo = ({ userData }: { userData: IParent }) => {
               }
               secondCol={
                 <div className="flex flex-col space-y-12">
-                  <Cover authUser={iAmOwnerOfThisProfile} userData={user} />
+                  <Cover {...commonProps} />
 
                   <Experiences {...commonBlockProps} />
 
