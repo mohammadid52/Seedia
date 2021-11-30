@@ -47,8 +47,8 @@ const BottomCard = ({
               </h4>
               <p className=" text-sm font-medium dark:text-gray-400 text-gray-600 ">
                 {isBusiness
-                  ? userData.business.name
-                  : userData.company.jobTitle}{' '}
+                  ? userData?.business?.name
+                  : userData?.company?.jobTitle}{' '}
                 <span className="text-xs dark:text-gray-500 text-gray-500 font-medium">
                   • {userData?.followers?.length || 0} followers{' '}
                 </span>
