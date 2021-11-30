@@ -120,6 +120,103 @@ app.post('/add-post', auth, async (req, res) => {
   }
 })
 
+// ~~~~~~~~~~~~~~~~~~~ Edit Post ~~~~~~~~~~~~~~~~~~~~ //
+
+app.post('/edit-post', auth, async (req, res) => {
+  const token = req.user
+
+  const { postData } = req.body
+  const { postType = 'normal' } = postData
+
+  if (postType) {
+    const postCollection = res.locals.postCollection
+    const usersCollection = res.locals.usersCollection
+
+    try {
+      const post = await getItem(
+        postCollection,
+        postData.postUrl,
+        'postUrl',
+        false
+      )
+
+      const user = await getItem(usersCollection, token.id)
+      if (user) {
+        const oldActivity = user?.activity.find(
+          (a) => a.postUrl === postData.postUrl
+        )
+
+        const updatedCurrentActivity = {
+          ...oldActivity,
+          text: postData?.text || '',
+        }
+
+        let allActivities = [...user?.activity]
+        let idx = allActivities.findIndex((a) => a.postUrl === postData.postUrl)
+        allActivities[idx] = updatedCurrentActivity
+
+        await updateData(usersCollection, token.id, {
+          activity: allActivities,
+        })
+        await updateData(postCollection, post._id, {
+          text: postData?.text,
+        })
+
+        return res.status(202).json(
+          responseMsg('success', 'Post updated successfully', {
+            ...postData,
+            user: user,
+          })
+        )
+      } else {
+        return res
+          .status(204)
+          .json(responseMsg('error', 'Cannot find user ', {}))
+      }
+    } catch (error) {
+      console.error(error)
+      return res
+        .status(204)
+        .json(
+          responseMsg('error', 'Something went wrong. Please try again', {})
+        )
+    }
+  } else {
+    return res.status(204).json(responseMsg('error', 'Missing post data', {}))
+  }
+})
+
+app.post('/like-dislike', auth, async (req, res) => {
+  const token = req.user
+  const { action = 'like', postUrl = '' } = req.query
+
+  try {
+    const postCollection = res.locals.postCollection
+    const post = await getItem(postCollection, postUrl, 'postUrl', false)
+    let likes = [...post?.likes]
+    if (action === 'like') {
+      likes = [...likes, token.id]
+      await updateData(postCollection, post._id, {
+        likes: likes,
+      })
+    } else {
+      likes = post?.likes.filter((l) => l !== token.id)
+      await updateData(postCollection, post._id, {
+        likes: likes,
+      })
+    }
+
+    return res
+      .status(202)
+      .json(responseMsg('success', 'Action done successfully', {}))
+  } catch (error) {
+    console.error(error)
+    return res
+      .status(404)
+      .json(responseMsg('error', 'Something went wrong', {}))
+  }
+})
+
 app.post('/view', auth, async (req, res) => {
   const { postId = '' } = req.query
   const token = req.user

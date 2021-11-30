@@ -29,6 +29,7 @@ import {
 } from 'interfaces/UniversalInterface'
 import moment from 'moment'
 import { nanoid } from 'nanoid'
+import PostModal from 'pages/dashboard/PostModal'
 import EventItem from 'pages/event/EventItem'
 import GroupItem from 'pages/groups/GroupItem'
 import Product from 'pages/products/Product'
@@ -311,11 +312,16 @@ const Post = ({
       },
       Icon: featured ? AiFillStar : AiOutlineStar,
     },
-    {
+    (!post?.hasOwnProperty('postType') ||
+      post?.postType === 'normal' ||
+      post?.postType === 'withPhoto' ||
+      post?.postType === 'withVideo') && {
       id: '4',
       name: `Edit post`,
       Icon: AiOutlineEdit,
-      onClick: () => {},
+      onClick: () => {
+        setShowEditModal(true)
+      },
     },
     {
       id: '5',
@@ -325,13 +331,25 @@ const Post = ({
         deleteMutations.mutate(postId)
       },
     },
-  ]
+  ].filter(Boolean)
+
+  const [showEditModal, setShowEditModal] = useState(false)
+
+  const hashtags = post?.text?.match(/#\w+/g)
+  const filtered = hashtags?.filter((d) => d.length >= 2)
 
   return (
     <div
       ref={postRef}
       className="rounded-lg dark:bg-gray-800 border border-gray-200 bg-white dark:border-gray-700 "
     >
+      {showEditModal && (
+        <PostModal
+          post={post}
+          open={showEditModal}
+          setOpen={setShowEditModal}
+        />
+      )}
       <div className="flex w-full items-center justify-between px-6">
         <div className="flex  py-4">
           <div className="mr-4 flex-shrink-0">
@@ -374,19 +392,19 @@ const Post = ({
           </p>
         </div>
       )}
-      {post.postType === 'request' && (
+      {post?.postType === 'request' && (
         <EmbeddedRequest userData={userData} requestId={post?.customInId} />
       )}
-      {post.postType === 'project' && (
+      {post?.postType === 'project' && (
         <EmbeddedProject userData={userData} projectId={post?.customInId} />
       )}
-      {post.postType === 'group' && (
+      {post?.postType === 'group' && (
         <EmbeddedGroup userData={userData} groupId={post?.customInId} />
       )}
-      {post.postType === 'event' && (
+      {post?.postType === 'event' && (
         <EmbeddedEvent userData={userData} eventId={post?.customInId} />
       )}
-      {post.postType === 'product' && (
+      {post?.postType === 'product' && (
         <EmbeddedProduct userData={userData} productId={post?.customInId} />
       )}
       {post?.links?.length > 0 &&
@@ -401,19 +419,17 @@ const Post = ({
           />
         ))}
 
-      {/* <div className="px-6 pt-4 pb-2">
-        <span className="inline-block bg-gray-200 dark:bg-gray-700 dark:text-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-          #photography
-        </span>
-        <span className="inline-block bg-gray-200 dark:bg-gray-700 dark:text-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-          #travel
-        </span>
-        <span className="inline-block bg-gray-200 dark:bg-gray-700 dark:text-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-          #winter
-        </span>
-      </div> */}
+      {filtered?.length > 0 && (
+        <div className="px-6 pt-4 pb-2">
+          {filtered.map((hashtag) => (
+            <span className="inline-block bg-gray-200 dark:bg-gray-700 dark:text-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+              {hashtag}
+            </span>
+          ))}
+        </div>
+      )}
 
-      <PostBottom />
+      <PostBottom post={post} userId={userId} />
     </div>
   )
 }

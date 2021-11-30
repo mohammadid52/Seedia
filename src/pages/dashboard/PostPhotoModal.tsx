@@ -49,7 +49,7 @@ const PostPhotoModal = ({
     onSuccess: (a) => {
       const modifiedData = {
         postData: {
-          postType: 'withPhoto',
+          postType: isPhoto ? 'withPhoto' : 'withVideo',
           text: altText || '',
           postedIn: postingIn,
           customInId: customInId,

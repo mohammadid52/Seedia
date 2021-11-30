@@ -165,8 +165,7 @@ export interface IStore {
   buttonLink: string
   createdOn?: Date
   createdBy?: string
-  isPublished?: boolean
-  products?: IProduct[]
+
   section?: IStoreSection[]
 }
 export interface IStoreSection {
@@ -174,6 +173,7 @@ export interface IStoreSection {
   title?: string
   image?: string
   content?: string
+  products?: IProduct[]
 }
 export type ActivityType = 'posted' | 'shared' | 'commented' | 'replied'
 

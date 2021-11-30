@@ -370,16 +370,18 @@ const Cover = ({
 
             {/* Edit button here */}
 
-            <div className="absolute ml-2 top-0 p-4 right-0">
-              <Button
-                label="Edit"
-                onClick={() => setShowEditModal(true)}
-                Icon={AiOutlineEdit}
-                size="sm"
-                invert
-                gradient
-              />
-            </div>
+            {authUser && (
+              <div className="absolute ml-2 top-0 p-4 right-0">
+                <Button
+                  label="Edit"
+                  onClick={() => setShowEditModal(true)}
+                  Icon={AiOutlineEdit}
+                  size="sm"
+                  invert
+                  gradient
+                />
+              </div>
+            )}
 
             {/* HIDDEN IMAGE INPUT */}
             <input

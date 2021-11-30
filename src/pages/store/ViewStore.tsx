@@ -1,51 +1,41 @@
-import { publishStore } from 'apis/mutations'
-import { fetchAllProducts } from 'apis/queries'
+import { fetchStore } from 'apis/queries'
 import Button from 'components/atoms/Button'
 import Meta from 'components/atoms/Meta/Meta'
 import ProductSection from 'components/atoms/products/Section'
 import Loading from 'components/Loading'
-import Spinner from 'components/Spinner'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { useNotifications } from 'context/NotificationContext'
 import { useRouter } from 'hooks/useRouter'
 import useScrollPosition from 'hooks/useScrollPosition'
 import useUser from 'hooks/useUser'
-import { IParent, IProduct, IStoreSection } from 'interfaces/UniversalInterface'
+import {
+  IParent,
+  IProduct,
+  IStore,
+  IStoreSection,
+} from 'interfaces/UniversalInterface'
 import DashboardHeader from 'pages/DashboardHeader'
 import Product from 'pages/products/Product'
 import NewSectionModal from 'pages/store/NewSection'
-import { useState } from 'react'
-import { MdPublish } from 'react-icons/md'
-import { VscEdit } from 'react-icons/vsc'
-import { useMutation, useQuery } from 'react-query'
+import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
 import { Redirect } from 'react-router'
 import 'styles/store.scss'
 
-const ListProducts = ({ userId, onLoad }: { userId: string; onLoad?: any }) => {
-  const { isLoading, data, isFetched, isSuccess } = useQuery(
-    'list-all-my-products',
-    () => fetchAllProducts(userId)
-  )
-  const products: IProduct[] = isFetched && !isLoading && data.data.data
-
-  if (isSuccess && products && products?.length > 0) {
-    if (onLoad) {
-      onLoad(products)
-    }
-  }
-
+const ListProducts = ({
+  userId,
+  products,
+}: {
+  userId: string
+  products: IProduct[]
+}) => {
   return (
     <ProductSection showChildren>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        products &&
-        products?.length > 0 &&
+      {products &&
         products?.map((product) => (
           <Product userId={userId} key={product._id} product={product} />
-        ))
-      )}
+        ))}
     </ProductSection>
   )
 }
@@ -60,7 +50,7 @@ const Section = ({ sectionData }: { sectionData: IStoreSection }) => {
       />
       <div className="text-left text-xl dark:text-white flex flex-col justify-center ml-12 lg:ml-24">
         <h1 className="text-left ">{sectionData.title}</h1>
-        <p className="mt-4 text-base border-l-2 pl-2 max-w-96 border-yellow-500 dark:text-gray-400">
+        <p className="mt-4 text-base border-l-2 pl-2 w-96 border-yellow-500 dark:text-gray-400 break-words">
           {sectionData.content}
         </p>
       </div>
@@ -75,28 +65,35 @@ const ViewStore = ({ userData }: { userData: IParent }) => {
   const { otherUserData, iAmOwnerOfThisProfile, isFetched, isLoading } =
     useUser(profileUrl, userData)
 
-  const { mutate } = useMutation(publishStore, {
-    onSuccess: () => setIsPublished(!isPublished),
-  })
-
   const scroll = useScrollPosition()
 
   const [newSectionModal, setNewSectionModal] = useState(false)
 
   const user = iAmOwnerOfThisProfile ? userData : otherUserData
 
-  const store = user?.store
+  const fetchedStore = useQuery(`store-${userData?._id}`, () =>
+    fetchStore(user._id)
+  )
+
+  const store: IStore =
+    !fetchedStore.isLoading && fetchedStore.isFetched
+      ? fetchedStore?.data?.data?.data
+      : {}
 
   const [sections, setSections] = useState(store?.section)
 
-  const [isPublished, setIsPublished] = useState(store?.isPublished)
+  useEffect(() => {
+    if (store?.section?.length > 0) {
+      setSections([...store?.section])
+    }
+  }, [store?.section])
 
   const titleOpacity =
     scroll < 70 ? 'opacity-100' : scroll >= 70 ? 'opacity-70' : 'opacity-10'
 
   const { setNotification } = useNotifications()
 
-  const storeCreated = store && (iAmOwnerOfThisProfile || isPublished)
+  const storeCreated = store && iAmOwnerOfThisProfile
   if (!isFetched && isLoading) {
     return <Loading />
   }
@@ -115,6 +112,7 @@ const ViewStore = ({ userData }: { userData: IParent }) => {
     return (
       <div className="smooth-scroll">
         <NewSectionModal
+          userId={userData._id}
           sections={sections}
           setSections={setSections}
           open={newSectionModal}
@@ -148,40 +146,33 @@ const ViewStore = ({ userData }: { userData: IParent }) => {
           {sections?.length > 0 && (
             <NarrowLayout className="mt-12" customMaxWidth="max-w-7xl">
               <div className="grid grid-cols-1 gap-y-24">
-                {sections.map((sec: any) => (
-                  <div>
-                    <Section sectionData={sec} />
-                    <div className=" mt-12 border-b border-gray-200 pb-12 dark:border-gray-700">
-                      <ListProducts userId={user._id} />
-                    </div>
-                  </div>
-                ))}
+                {sections.map((sec) => {
+                  if (sec) {
+                    return (
+                      <div>
+                        <Section sectionData={sec} />
+                        {sec?.products?.length > 0 && (
+                          <div className=" mt-12 border-b border-gray-200 pb-12 dark:border-gray-700">
+                            <ListProducts
+                              products={sec.products}
+                              userId={user._id}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )
+                  }
+                })}
               </div>
             </NarrowLayout>
           )}
         </div>
         {iAmOwnerOfThisProfile && (
-          <div className="fixed bottom-10 right-10 grid grid-cols-1 lg:grid-cols-3 gap-6 dark:text-white">
+          <div className="fixed bottom-10 right-10  gap-6 dark:text-white">
             <Button
               onClick={() => setNewSectionModal(true)}
               label="+ Add Section"
               gradient
-              size="lg"
-            />
-            <Button
-              // link={links.exploreJobs()}
-              label="Edit Store"
-              gradient
-              Icon={VscEdit}
-              size="lg"
-            />
-            <Button
-              onClick={() => {
-                mutate(!isPublished)
-              }}
-              label={isPublished ? 'Unpublish' : 'Publish'}
-              gradient
-              Icon={MdPublish}
               size="lg"
             />
           </div>

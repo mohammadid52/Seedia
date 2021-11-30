@@ -4,10 +4,7 @@ import UserContextProvider from 'context/UserContext'
 import HeaderContextProvider from 'context/HeaderContext'
 import NotificationContextProvider from 'context/NotificationContext'
 import PostContextProvider from 'context/PostContext'
-import 'lightgallery/css/lg-thumbnail.css'
-import 'lightgallery/css/lg-zoom.css'
-// import styles
-import 'lightgallery/css/lightgallery.css'
+
 import NotFound from 'pages/NotFound'
 import { Suspense } from 'react'
 import 'react-datepicker/dist/react-datepicker.css'

@@ -1,4 +1,4 @@
-import { addPost } from 'apis/mutations'
+import { addPost, editPost } from 'apis/mutations'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
 import Modal from 'components/atoms/Modal'
@@ -7,6 +7,7 @@ import { useNotifications } from 'context/NotificationContext'
 import { usePostContext } from 'context/PostContext'
 import { Form, Formik } from 'formik'
 import { IPost } from 'interfaces/UniversalInterface'
+import { isEmpty } from 'lodash'
 import { useRef } from 'react'
 import { BsCameraVideo } from 'react-icons/bs'
 import { HiOutlinePhotograph } from 'react-icons/hi'
@@ -18,49 +19,83 @@ const PostModal = ({
   setShowOtherModals,
   postingIn = 'general',
   customInId,
+  post,
 }: {
   open: boolean
+  post?: IPost
   postingIn?: IPost['postedIn']
   customInId?: string
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  setShowOtherModals: React.Dispatch<React.SetStateAction<string>>
+  setShowOtherModals?: React.Dispatch<React.SetStateAction<string>>
 }) => {
   const { setNotification } = useNotifications()
   const { setPosts, posts } = usePostContext()
 
-  const { mutate, isLoading, isError, error } = useMutation(addPost, {
-    onSuccess: (data) => {
-      const post = data.data.data
-      posts.unshift(post)
-      setPosts([...posts])
-      setOpen(false)
-      setNotification({
-        show: true,
-        title: 'New post added.',
-        buttonText: 'View',
-        buttonUrl: links.postById(post.postUrl),
-      })
-    },
-  })
+  const editMode = !isEmpty(post)
+
+  const { mutate, isLoading, isError, error } = useMutation(
+    editMode ? editPost : addPost,
+    {
+      onSuccess: (data: any) => {
+        const post = data.data.data
+        const message = data.data.message
+        if (!editMode) {
+          posts.unshift(post)
+          setPosts([...posts])
+        } else {
+          let postsCopy = [...posts]
+          const index = postsCopy.findIndex((d) => d._id === post._id)
+          if (index !== -1) {
+            postsCopy[index] = post
+            setPosts([...postsCopy])
+          }
+        }
+        setOpen(false)
+        setNotification({
+          show: true,
+          title: message,
+          buttonText: 'View',
+          buttonUrl: links.postById(post.postUrl),
+        })
+      },
+    }
+  )
 
   const initialValues = {
-    text: '',
+    text: post?.text || '',
   }
 
   const formRef = useRef()
 
   const onSubmit = (values: { text: string }) => {
-    mutate({
-      postData: {
+    let postData = {}
+    if (editMode) {
+      postData = {
+        ...post,
         text: values.text,
         postedIn: postingIn,
+        postType: 'normal',
         customInId: postingIn !== 'general' ? customInId : null,
-      },
+      }
+    } else {
+      postData = {
+        text: values.text,
+        postedIn: postingIn,
+        postType: 'normal',
+        customInId: postingIn !== 'general' ? customInId : null,
+      }
+    }
+    mutate({
+      postData: postData,
     })
   }
 
   return (
-    <Modal setOpen={setOpen} header="Create a post" open={open}>
+    <Modal
+      setOpen={setOpen}
+      header={`${editMode ? 'Edit' : 'Create'} a post`}
+      open={open}
+    >
       <div className=" min-w-132 min-h-56 max-h-132 overflow-y-auto">
         <Formik
           innerRef={formRef}

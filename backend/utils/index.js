@@ -9,9 +9,14 @@ const unique = (list) => [...new Set(list)]
 const addObjectId = (id) => ObjectId(id)
 const convertToString = (id = '') => id.toString()
 
-const getItem = async (collection, targetId, fieldName = '_id') => {
+const getItem = async (
+  collection,
+  targetId,
+  fieldName = '_id',
+  objId = true
+) => {
   return await collection.findOne({
-    [fieldName]: ObjectId(targetId),
+    [fieldName]: objId ? ObjectId(targetId) : targetId,
   })
 }
 const getManyItems = async (collection, condition, projection = {}) => {

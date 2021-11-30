@@ -1,65 +1,21 @@
 import { openStore, uploadMediaToServer } from 'apis/mutations'
-import { fetchAllProducts } from 'apis/queries'
+import Info from 'components/alerts/Info'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
 import Label from 'components/atoms/Label'
 import Meta from 'components/atoms/Meta/Meta'
-import Section from 'components/atoms/products/Section'
 import Title from 'components/atoms/Title'
-import Spinner from 'components/Spinner'
 import { links } from 'constants/Links'
 import NarrowLayout from 'containers/NarrowLayout'
 import { useNotifications } from 'context/NotificationContext'
 import { Form, Formik } from 'formik'
-import { IParent, IProduct, IStore } from 'interfaces/UniversalInterface'
+import { IParent, IStore } from 'interfaces/UniversalInterface'
 import { isEmpty } from 'lodash'
-import Product from 'pages/products/Product'
 import BannerImage from 'pages/store/BannerImage'
 import { useEffect, useRef, useState } from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation } from 'react-query'
 import { Redirect, useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
-
-const ListProducts = ({ userId, onLoad }: { userId: string; onLoad: any }) => {
-  const { isLoading, data, isFetched, isSuccess } = useQuery(
-    'list-all-my-products',
-    () => fetchAllProducts(userId)
-  )
-  const products: IProduct[] = isFetched && !isLoading ? data.data.data : []
-
-  const { setNotification } = useNotifications()
-
-  if (!products && products?.length === 0) {
-    setNotification({
-      show: true,
-      // eslint-disable-next-line quotes
-      title: "You don't have enough products for store.",
-      buttonText: 'Add now',
-      buttonUrl: links.addProduct(),
-    })
-    return <Redirect to={links.FEED} />
-  }
-
-  if (isSuccess && products && products?.length > 0) {
-    if (onLoad) {
-      onLoad(products)
-    }
-  }
-
-  return (
-    <Section showChildren>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        products &&
-        products?.length > 0 &&
-        products?.map((product) => (
-          <Product userId={userId} key={product._id} product={product} />
-        ))
-      )}
-    </Section>
-  )
-}
 
 const OpenStore = ({ userData }: { userData: IParent }) => {
   const isStoreOpened = !isEmpty(userData?.store)
@@ -71,7 +27,7 @@ const OpenStore = ({ userData }: { userData: IParent }) => {
       if (formRef?.current && values) {
         const finalInput = {
           bannerImage: a.data.data.location,
-          products: selectedProducts,
+
           ...values,
         }
 
@@ -79,8 +35,6 @@ const OpenStore = ({ userData }: { userData: IParent }) => {
       }
     },
   })
-
-  const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([])
 
   const {
     isLoading: creatingStore,
@@ -195,13 +149,11 @@ const OpenStore = ({ userData }: { userData: IParent }) => {
                   />
                 </div>
               </div>
+              <div className="mt-4">
+                <Info text="You will be able to add products later once you create store " />
+              </div>
             </div>
             <div>
-              <Label text="Select product" />
-              <ListProducts
-                onLoad={(products: IProduct[]) => setSelectedProducts(products)}
-                userId={userData._id}
-              />
               <div>
                 <div className="flex items-center justify-end">
                   <Button

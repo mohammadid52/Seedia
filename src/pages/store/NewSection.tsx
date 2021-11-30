@@ -1,31 +1,103 @@
 import { addNewSection, uploadMediaToServer } from 'apis/mutations'
+import { fetchAllProducts } from 'apis/queries'
 import Button from 'components/atoms/Button'
 import FormInput from 'components/atoms/FormInput'
 import Label from 'components/atoms/Label'
 import Modal from 'components/atoms/Modal'
 import { Form, Formik } from 'formik'
-import { IStoreSection } from 'interfaces/UniversalInterface'
+import { IProduct, IStoreSection } from 'interfaces/UniversalInterface'
 import BannerImage from 'pages/store/BannerImage'
 import React, { useEffect, useRef, useState } from 'react'
-import { useMutation } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import * as Yup from 'yup'
+
+const ChooseProducts = ({
+  products,
+  selectedProducts,
+  onSelectProduct,
+}: {
+  onSelectProduct: (productId: string) => void
+  selectedProducts: IProduct[]
+  products: IProduct[]
+}) => {
+  return (
+    <div>
+      <Label text="Choose products" />
+      <div className="grid grid-cols-4 gap-6 lg:grid-cols-6">
+        {products?.map((product: IProduct) => {
+          const isSelected = selectedProducts?.find(
+            (d) => d._id === product._id
+          )
+          return (
+            <div key={product._id} className="group">
+              <div className="w-full aspect-w-1 aspect-h-1  rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                {product?.images?.length > 0 ? (
+                  <div
+                    className="relative"
+                    onClick={() => onSelectProduct(product._id)}
+                  >
+                    <img
+                      src={product.images[0].url}
+                      alt={product.images[0].alt}
+                      className="w-full h-full cursor-pointer object-center object-cover group-hover:opacity-75 transition-all"
+                    />
+                    {isSelected && (
+                      <div className="bg-green-500 rounded-tr-xl p-1 absolute bottom-0 text-gray-900 dark:text-white">
+                        Checked
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div />
+                )}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 
 const NewSectionModal = ({
   open,
   setOpen,
   setSections,
   sections,
+  userId,
 }: {
   open: boolean
   setSections: React.Dispatch<React.SetStateAction<IStoreSection[]>>
   sections: IStoreSection[]
+  userId: string
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const formRef = useRef()
 
+  const fetchedProducts = useQuery(`list-all-products-${userId}`, () =>
+    fetchAllProducts(userId)
+  )
+  const products: IProduct[] =
+    fetchedProducts.isFetched && !fetchedProducts.isLoading
+      ? fetchedProducts.data.data.data
+      : []
+
   const initialValues = {
     title: '',
     content: '',
+  }
+
+  const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([])
+
+  const onSelectProduct = (productId: string) => {
+    if (selectedProducts?.find((p) => p._id === productId)) {
+      setSelectedProducts([
+        ...selectedProducts.filter((p) => p._id !== productId),
+      ])
+    } else {
+      const product = products.find((p) => p._id === productId)
+      setSelectedProducts([...selectedProducts, product])
+    }
   }
 
   const {
@@ -47,11 +119,13 @@ const NewSectionModal = ({
       if (formRef?.current && values) {
         const finalInput = {
           image: a.data.data.location,
+          products: selectedProducts.map((p) => p._id),
           ...values,
         }
-
-        sections.push(finalInput)
-        setSections(sections)
+        if (sections) {
+          sections.push({ ...finalInput, products: selectedProducts })
+          setSections(sections)
+        }
         mutate({ section: finalInput })
       }
     },
@@ -83,7 +157,7 @@ const NewSectionModal = ({
 
   return (
     <Modal header="Add Section" open={open} setOpen={setOpen}>
-      <div>
+      <div className="min-w-256 max-w-440">
         <Formik
           initialValues={initialValues}
           innerRef={formRef}
@@ -117,6 +191,16 @@ const NewSectionModal = ({
                     />
                   </div>
                 </div>
+              </div>
+              {/* Choose products */}
+              <div>
+                {products && (
+                  <ChooseProducts
+                    onSelectProduct={onSelectProduct}
+                    selectedProducts={selectedProducts}
+                    products={products}
+                  />
+                )}
               </div>
               <div className="flex items-center justify-end">
                 <Button

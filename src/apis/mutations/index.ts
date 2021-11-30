@@ -99,6 +99,8 @@ const exitGroup = (data: Exit) => network.post(`/groups/exit/`, { ...data })
 
 const addPost = (data: { postData: IPostInput }) =>
   network.post(`/post/add-post`, { ...data })
+const editPost = (data: { postData: IPostInput }) =>
+  network.post(`/post/edit-post`, { ...data })
 const deletePost = (postId: any) => network.delete(`/post?postId=${postId}`)
 const viewPost = (postId: string) => network.post(`/post/view?postId=${postId}`)
 const saveUnsavePost = ({
@@ -138,6 +140,14 @@ type EventInvite = {
 const eventInvite = (data: EventInvite) =>
   network.post(`/event/invite/`, { ...data })
 
+type PostActionType = {
+  action: 'like' | 'dislike'
+  postUrl: string
+}
+
+const postAction = ({ action, postUrl }: PostActionType) =>
+  network.post(`/post/like-dislike?action=${action}&postUrl=${postUrl}`)
+
 export {
   followUser,
   unFollowUser,
@@ -150,6 +160,8 @@ export {
   addRequest,
   addNewSection,
   createGroup,
+  postAction,
+  editPost,
   publishStore,
   makeGroupAdmin,
   addPost,

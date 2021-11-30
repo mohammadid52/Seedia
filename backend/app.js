@@ -124,7 +124,13 @@ client.connect(
       passPostCollection,
       postRouter
     )
-    app.use('/store', passUserCollection, passPostCollection, storeRouter)
+    app.use(
+      '/store',
+      passUserCollection,
+      passProductsCollection,
+      passPostCollection,
+      storeRouter
+    )
 
     app.use('/auth', passUserCollection, authenticationRouter)
 

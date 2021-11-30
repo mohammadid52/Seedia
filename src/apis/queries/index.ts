@@ -60,6 +60,10 @@ const fetchedSavedProfiles = () => network.get(`/post/savedProfiles`)
 
 const fetchEvents = (short?: boolean) =>
   network.get(`/event/list?short=${short || false}`)
+
+const fetchStore = (userId: string) =>
+  network.get(`/store/store-products?userId=${userId}`)
+
 const fetchSingleEvent = (eventId: string) => network.get(`/event/e/${eventId}`)
 
 export {
@@ -68,6 +72,7 @@ export {
   fetchAllProducts,
   fetchReviewsByProduct,
   fetchFriendsPurchase,
+  fetchStore,
   fetchActivity,
   fetchProjectById,
   fetchUsers,
