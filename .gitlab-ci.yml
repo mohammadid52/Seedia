@@ -1,0 +1,16 @@
+image: google/cloud-sdk:alpine
+
+deploy_prod:
+  stage: deploy
+  environment:
+    name: staging
+  only:
+    - master
+  script:
+    - echo $SERVICE_ACCOUNT_PROD > /tmp/$CI_PIPELINE_ID.json
+    - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
+    - gcloud builds submit --tag gcr.io/$PROJECT_ID_PROD/remotein-app . --project $PROJECT_ID_PROD
+    - gcloud --quiet beta compute instance-groups managed rolling-action replace $NODE_GROUP_APP_PROD --zone us-central1-a --project $PROJECT_ID_PROD --min-ready 10 --max-unavailable 0
+
+after_script:
+  - rm /tmp/$CI_PIPELINE_ID.json
